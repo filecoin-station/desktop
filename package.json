@@ -12,6 +12,7 @@
     "test:e2e": "shx echo \"WARN: no e2e tests specified\"",
     "postinstall": "run-s install-app-deps",
     "install-app-deps": "electron-builder install-app-deps",
+    "clean": "shx echo \"clean here\"",
     "build": "shx echo \"build here\"",
     "package": "shx rm -rf dist/ && run-s build && electron-builder --publish onTag"
   },

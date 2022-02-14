@@ -1,6 +1,5 @@
 const { app, dialog } = require('electron')
 
-
 // Provisional logger
 const console = require('console')
 app.console = new console.Console(process.stdout, process.stderr)
@@ -11,7 +10,6 @@ function handleError (err) {
 }
 process.on('uncaughtException', handleError)
 process.on('unhandledRejection', handleError)
-
 
 // Various fixups we had to add over the years
 const weltschmerzFixups = () => {
@@ -30,7 +28,6 @@ const weltschmerzFixups = () => {
   }
 }
 weltschmerzFixups()
-
 
 // Only one instance can run at a time
 if (!app.requestSingleInstanceLock()) {
