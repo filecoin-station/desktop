@@ -1,0 +1,7 @@
+node_modules
+dist
+.cache
+.env
+config.gypi
+*.nupkg
+*.bak

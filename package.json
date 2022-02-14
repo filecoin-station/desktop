@@ -1,0 +1,44 @@
+{
+  "name": "filecoin-station",
+  "productName": "Filecoin Station",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Desktop application for Filecoin Retrieval Markets",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development electron .",
+    "lint": "standard",
+    "test": "shx echo \"WARN: no test specified\"",
+    "test:e2e": "shx echo \"WARN: no e2e tests specified\"",
+    "postinstall": "run-s install-app-deps",
+    "install-app-deps": "electron-builder install-app-deps",
+    "build": "shx echo \"build here\"",
+    "package": "shx rm -rf dist/ && run-s build && electron-builder --publish onTag"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filecoin-project/filecoin-station.git"
+  },
+  "keywords": [
+    "filecoin"
+  ],
+  "author": "Protocol Labs",
+  "license": "(Apache-2.0 AND MIT)",
+  "bugs": {
+    "url": "https://github.com/filecoin-project/filecoin-station/issues"
+  },
+  "homepage": "https://github.com/filecoin-project/filecoin-station#readme",
+  "dependencies": {
+    "electron-store": "^8.0.1",
+    "electron-updater": "^4.6.5"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^17.0.0",
+    "electron-builder": "^22.14.13",
+    "electron-notarize": "^1.1.1",
+    "npm-run-all": "^4.1.5",
+    "shx": "^0.3.4",
+    "standard": "^16.0.4"
+  }
+}

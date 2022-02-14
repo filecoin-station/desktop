@@ -1,0 +1,55 @@
+appId: io.filecoin.station
+generateUpdatesFilesForAllChannels: true
+
+files:
+  - filter:
+    - src/**/*
+    - node_modules/**/*
+    - package.json
+
+asarUnpack: 'src/**/scripts/**/*'
+
+afterSign: 'build/notarize-macos.js'
+
+mac:
+  category: public.app-category.utilities
+  darkModeSupport: true
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: 'build/entitlements.mac.plist'
+  entitlementsInherit: 'build/entitlements.mac.plist'
+
+dmg:
+  iconSize: 160
+  iconTextSize: 12
+  window:
+    width: 660
+    height: 400
+  contents:
+    - x: 180
+      y: 170
+      type: file
+    - x: 480
+      y: 170
+      type: link
+      path: /Applications
+
+nsis:
+  oneClick: false
+  warningsAsErrors: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+
+linux:
+  artifactName: ${name}-${version}-${os}-${arch}.${ext}
+  executableName: filecoin-station
+  icon: filecoin-station
+  category: Network;FileTransfer;P2P
+  synopsis: A desktop client for Filecoin Retrieval Markets
+  maintainer: changeme@example.com
+  target:
+    - AppImage
+
+publish:
+  - github
