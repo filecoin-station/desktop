@@ -1,4 +1,6 @@
 const { app, dialog } = require('electron')
+const setupUI = require('./ui')
+const setupTray = require('./tray')
 
 // Provisional logger
 const console = require('console')
@@ -34,6 +36,8 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0)
 }
 
+const ctx = {}
+
 /* TODO: app init goes here
  * For now it only shows BrowserWindow with filecoin.io */
 async function run () {
@@ -45,11 +49,9 @@ async function run () {
   }
 
   try {
-    const { BrowserWindow } = require('electron')
-    const win = new BrowserWindow({ show: false })
-    win.loadURL('https://filecoin.io/')
-    // UX trick to avoid jittery UI while browser initializes chrome
-    win.once('ready-to-show', () => win.show())
+    // Interface
+    await setupTray(ctx)
+    await setupUI(ctx)
   } catch (e) {
     handleError(e)
   }
