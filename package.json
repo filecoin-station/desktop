@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/filecoin-project/filecoin-station#readme",
   "dependencies": {
+    "electron-log": "^4.4.6",
     "electron-store": "^8.0.1",
     "electron-updater": "^4.6.5"
   },

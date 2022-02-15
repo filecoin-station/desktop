@@ -5,3 +5,4 @@ dist
 config.gypi
 *.nupkg
 *.bak
+dev-app-update.yml

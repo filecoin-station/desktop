@@ -4,6 +4,7 @@ generateUpdatesFilesForAllChannels: true
 files:
   - filter:
     - src/**/*
+    - assets/**/*
     - node_modules/**/*
     - package.json
 

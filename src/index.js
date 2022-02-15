@@ -1,13 +1,11 @@
 const { app, dialog } = require('electron')
+const log = require('electron-log')
 const setupUI = require('./ui')
 const setupTray = require('./tray')
+const setupUpdater = require('./updater')
 
-// Provisional logger
-const console = require('console')
-app.console = new console.Console(process.stdout, process.stderr)
-const logger = app.console
 function handleError (err) {
-  logger.error(err)
+  log.error(err)
   dialog.showErrorBox('Error occured', err.stack)
 }
 process.on('uncaughtException', handleError)
@@ -38,8 +36,6 @@ if (!app.requestSingleInstanceLock()) {
 
 const ctx = {}
 
-/* TODO: app init goes here
- * For now it only shows BrowserWindow with filecoin.io */
 async function run () {
   try {
     await app.whenReady()
@@ -52,6 +48,7 @@ async function run () {
     // Interface
     await setupTray(ctx)
     await setupUI(ctx)
+    await setupUpdater(ctx)
   } catch (e) {
     handleError(e)
   }

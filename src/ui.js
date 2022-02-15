@@ -35,9 +35,7 @@ module.exports = async function (ctx) {
   // When true quit is triggered we need to remove listeners
   // that were added to keep app running when the UI is closed.
   // (Without this, the app would run forever and/or fail to update)
-  const removeCloseListeners = () => ui.removeAllListeners('close')
-  app.on('before-quit', removeCloseListeners)
-  app.on('before-quit-for-update', removeCloseListeners)
+  app.on('before-quit', () => ui.removeAllListeners('close'))
 
   return ui
 }
