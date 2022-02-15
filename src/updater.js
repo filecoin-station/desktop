@@ -1,7 +1,10 @@
-const { BrowserWindow, app, dialog } = require('electron')
+const { BrowserWindow, app, dialog, Notification } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const fs = require('fs')
 const log = require('electron-log').scope('updater')
+
+// must be global to avoid gc
+let updateNotification = null
 
 function setup (ctx) {
   autoUpdater.autoDownload = false // we download manually in 'update-available'
@@ -21,18 +24,27 @@ function setup (ctx) {
   })
   autoUpdater.on('update-downloaded', ({ version }) => {
     log.info(`update to ${version} downloaded`)
-    const opt = dialog.showMessageBoxSync({
-      title: 'Update downloaded',
-      message: `Update to Filecoin Station ${version} is ready. When do you want to install it?`,
-      type: 'info',
-      buttons: ['Later', 'Install now']
-    })
-    if (opt === 1) { // Force install on restart
-      setImmediate(async () => {
-        await beforeQuitCleanup()
-        autoUpdater.quitAndInstall()
+    const showUpdateDialog = () => {
+      const opt = dialog.showMessageBoxSync({
+        title: 'Update Filecoin Station',
+        message: `An update to Filecoin Station ${version} is available. Would you like to install it now?`,
+        type: 'info',
+        buttons: ['Later', 'Install now']
       })
+      if (opt === 1) { // install now
+        setImmediate(async () => {
+          await beforeQuitCleanup()
+          autoUpdater.quitAndInstall()
+        })
+      }
     }
+    // show unobtrusive notification + dialog on click
+    updateNotification = new Notification({
+      title: 'Filecoin Station Update',
+      body: `An update to Filecoin Station ${version} is available.`
+    })
+    updateNotification.on('click', showUpdateDialog)
+    updateNotification.show()
   })
   const beforeQuitCleanup = async () => {
     BrowserWindow.getAllWindows().forEach(w => w.removeAllListeners('close'))
