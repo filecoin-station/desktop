@@ -2,6 +2,11 @@ const { Menu, Tray, app } = require('electron')
 const path = require('path')
 const { IS_MAC } = require('./consts')
 
+// Be warned, this one is pretty ridiculous:
+// Tray must be global or it will break due to.. GC.
+// https://www.electronjs.org/docs/faq#my-apps-tray-disappeared-after-a-few-minutes
+let tray = null
+
 const on = 'on'
 // const off = 'off'
 function icon (state) {
@@ -11,7 +16,7 @@ function icon (state) {
 }
 
 module.exports = function (ctx) {
-  const tray = new Tray(icon(on))
+  tray = new Tray(icon(on))
   const contextMenu = Menu.buildFromTemplate([
     {
       id: 'showUi',

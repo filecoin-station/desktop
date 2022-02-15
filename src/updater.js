@@ -23,7 +23,7 @@ function setup (ctx) {
     log.info(`update to ${version} downloaded`)
     const opt = dialog.showMessageBoxSync({
       title: 'Update downloaded',
-      message: `Downloaded update to ${version}. Install on exit later, or now?`,
+      message: `Update to Filecoin Station ${version} is ready. When do you want to install it?`,
       type: 'info',
       buttons: ['Later', 'Install now']
     })
