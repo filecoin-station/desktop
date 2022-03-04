@@ -1,6 +1,6 @@
-const { Menu, Tray, app } = require('electron')
+const { Menu, Tray, shell, app } = require('electron')
 const path = require('path')
-const { IS_MAC } = require('./consts')
+const { IS_MAC, STATION_VERSION } = require('./consts')
 
 // Be warned, this one is pretty ridiculous:
 // Tray must be global or it will break due to.. GC.
@@ -18,6 +18,11 @@ function icon (state) {
 module.exports = function (ctx) {
   tray = new Tray(icon(on))
   const contextMenu = Menu.buildFromTemplate([
+    {
+      label: `Filecoin Station v${STATION_VERSION}`,
+      click: () => { shell.openExternal(`https://github.com/filecoin-project/filecoin-station/releases/v${STATION_VERSION}`) }
+    },
+    { type: 'separator' },
     {
       id: 'showUi',
       label: 'Show UI',
