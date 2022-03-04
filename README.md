@@ -24,6 +24,10 @@ Each release has packages for desktop platforms:
 
 See [`/docs`](./docs)
 
+## Security
+
+See [`SECURITY.md`](./SECURITY.md)
+
 ## License
 
 [SPDX-License-Identifier: Apache-2.0 OR MIT](LICENSE.md)
