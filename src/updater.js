@@ -56,7 +56,7 @@ function setup (ctx) {
 }
 
 module.exports = async function (ctx) {
-  if (process.env.NODE_ENV === 'development') {
+  if (['test', 'development'].includes(process.env.NODE_ENV)) {
     // skip init in dev if we are not debugging updater
     if (!fs.existsSync('dev-app-update.yml')) return
   }
