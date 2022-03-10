@@ -6,3 +6,30 @@ config.gypi
 *.nupkg
 *.bak
 dev-app-update.yml
+
+# dependencies
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+.next
+/renderer/.next/
+/renderer/out/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

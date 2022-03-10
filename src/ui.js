@@ -12,11 +12,15 @@ module.exports = async function (ctx) {
     width: store.get('ui.width', dimensions.width < 1440 ? dimensions.width : 1440),
     height: store.get('ui.height', dimensions.height < 900 ? dimensions.height : 900),
     autoHideMenuBar: true,
-    titleBarStyle: 'hiddenInset'
+    titleBarStyle: 'hiddenInset',
+    webPreferences: {
+      nodeIntegration: false,
+      preload: ctx.preload
+    }
   })
 
   // PoC for BrowserWindow with HTML UI
-  ui.loadURL('https://filecoin.io/')
+  ui.loadURL(ctx.url)
 
   // UX trick to avoid jittery UI while browser initializes chrome
   ctx.showUI = () => {
