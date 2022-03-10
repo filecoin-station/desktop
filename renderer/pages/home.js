@@ -27,7 +27,7 @@ const Home = () => {
 
       <form onSubmit={handleSubmit}>
         <input
-          type="text"
+          type='text'
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -38,7 +38,8 @@ const Home = () => {
           color: red;
           font-size: 50px;
         }
-      `}</style>
+      `}
+      </style>
     </div>
   )
 }
