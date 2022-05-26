@@ -6,7 +6,7 @@ const log = require('electron-log').scope('updater')
 // must be global to avoid gc
 let updateNotification = null
 
-function setup (ctx) {
+function setup (/** @type {import('./typings').Context} */ ctx) {
   autoUpdater.autoDownload = false // we download manually in 'update-available'
 
   autoUpdater.on('error', err => log.error('error', err))
@@ -55,8 +55,8 @@ function setup (ctx) {
   require('electron').autoUpdater.on('before-quit-for-update', beforeQuitCleanup)
 }
 
-module.exports = async function (ctx) {
-  if (['test', 'development'].includes(process.env.NODE_ENV)) {
+module.exports = async function (/** @type {import('./typings').Context} */ ctx) {
+  if (['test', 'development'].includes(process.env.NODE_ENV ?? '')) {
     // skip init in dev if we are not debugging updater
     if (!fs.existsSync('dev-app-update.yml')) return
   }

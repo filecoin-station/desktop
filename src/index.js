@@ -5,9 +5,9 @@ const setupTray = require('./tray')
 const setupUpdater = require('./updater')
 const inTest = (process.env.NODE_ENV === 'test')
 
-function handleError (err) {
+function handleError (/** @type {any} */ err) {
   log.error(err)
-  dialog.showErrorBox('Error occured', err.stack)
+  dialog.showErrorBox('Error occured', err.stack ?? err.message ?? err)
 }
 
 // ensures there are no unhandled errors during initial dev
@@ -26,7 +26,10 @@ if (!app.requestSingleInstanceLock() && !inTest) {
   app.quit()
 }
 
-const ctx = {}
+/** @type {import('./typings').Context} */
+const ctx = {
+  showUI: () => { throw new Error('never get here') }
+}
 
 async function run () {
   try {

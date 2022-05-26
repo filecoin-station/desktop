@@ -14,10 +14,11 @@ test.describe.serial('Application launch', async () => {
     const userData = tmp.dirSync({ prefix: 'tmp_home_', unsafeCleanup: true }).name
     const electronApp = await electron.launch({
       args: [path.join(__dirname, '..', '..', 'src', 'index.js')],
-      env: Object.assign({}, process.env, {
+      env: {
+        ...process.env,
         NODE_ENV: 'test',
         HOME: userData
-      })
+      }
     })
 
     // Evaluation expression in the Electron context.
