@@ -35,13 +35,13 @@
     "electron-updater": "^5.0.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.19.2",
+    "@playwright/test": "^1.22.2",
     "cross-env": "^7.0.3",
     "electron": "^18.3.1",
     "electron-builder": "^23.0.3",
     "electron-notarize": "^1.2.1",
     "npm-run-all": "^4.1.5",
-    "playwright": "^1.19.2",
+    "playwright": "^1.22.2",
     "shx": "^0.3.4",
     "standard": "^16.0.4",
     "tmp": "^0.2.1",
