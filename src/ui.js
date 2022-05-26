@@ -1,11 +1,15 @@
 const { BrowserWindow, app, screen } = require('electron')
 const store = require('./store')
 
+/**
+ * @param {import('./typings').Context} ctx
+ * @returns {Promise<BrowserWindow>}
+ */
 module.exports = async function (ctx) {
   // Show docks only when UI is visible
   if (app.dock) app.dock.hide()
 
-  const dimensions = screen.getPrimaryDisplay()
+  const dimensions = screen.getPrimaryDisplay().size
   const ui = new BrowserWindow({
     title: 'Filecoin Station',
     show: false, // we show it via ready-to-show

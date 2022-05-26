@@ -9,13 +9,14 @@ let tray = null
 
 const on = 'on'
 // const off = 'off'
-function icon (state) {
+
+function icon (/** @type {'on' | 'off'} */ state) {
   const dir = path.resolve(path.join(__dirname, '../assets/tray'))
   if (IS_MAC) return path.join(dir, `${state}-macos.png`)
   return path.join(dir, `${state}.png`)
 }
 
-module.exports = function (ctx) {
+module.exports = function (/** @type {import('./typings').Context} */ ctx) {
   tray = new Tray(icon(on))
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -32,7 +33,7 @@ module.exports = function (ctx) {
     {
       label: 'Quit Station',
       click: () => app.quit(),
-      accelerator: IS_MAC ? 'Command+Q' : null
+      accelerator: IS_MAC ? 'Command+Q' : undefined
     }
   ])
   tray.setToolTip('Filecoin Station')
