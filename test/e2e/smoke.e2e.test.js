@@ -13,7 +13,7 @@ test.describe.serial('Application launch', async () => {
     // Launch Electron app against sandbox fake HOME dir
     const userData = tmp.dirSync({ prefix: 'tmp_home_', unsafeCleanup: true }).name
     const electronApp = await electron.launch({
-      args: [path.join(__dirname, '..', '..', 'src', 'index.js')],
+      args: [path.join(__dirname, '..', '..', 'main', 'index.js')],
       env: {
         ...process.env,
         NODE_ENV: 'test',
@@ -31,12 +31,13 @@ test.describe.serial('Application launch', async () => {
 
     // Get the first window that the app opens, wait if necessary.
     const window = await electronApp.firstWindow()
+    console.log('WebUI location', await window.url())
 
     // See what you can do with 'window':
     // https://playwright.dev/docs/api/class-electronapplication#electron-application-first-window
     // https://playwright.dev/docs/api/class-page
 
-    expect(await window.url()).toBe('https://filecoin.io/')
+    expect(await window.title()).toBe('Filecoin Station')
 
     // Direct Electron console to Node terminal.
     window.on('console', console.log)

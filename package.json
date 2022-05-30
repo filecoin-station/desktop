@@ -4,16 +4,17 @@
   "private": true,
   "version": "0.0.6",
   "description": "Desktop application for Filecoin Retrieval Markets",
-  "main": "src/index.js",
+  "main": "main/index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron .",
-    "lint": "ts-standard && tsc --noEmit -p tsconfig.json",
+    "lint": "ts-standard && tsc -p tsconfig.json && tsc -p renderer/tsconfig.json",
     "test": "run-s test:*",
+    "pretest:e2e": "run-s build",
     "test:e2e": "xvfb-maybe cross-env NODE_ENV=test playwright test 'test/e2e/.*.test.js'",
     "postinstall": "run-s install-app-deps",
     "install-app-deps": "electron-builder install-app-deps",
     "clean": "shx echo \"clean here\"",
-    "build": "shx echo \"build here\"",
+    "build": "vite build",
     "package": "shx rm -rf dist/ && run-s build && electron-builder --publish onTag"
   },
   "repository": {
@@ -32,15 +33,21 @@
   "dependencies": {
     "electron-log": "^4.4.7",
     "electron-store": "^8.0.1",
-    "electron-updater": "^5.0.1"
+    "electron-updater": "^5.0.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.22.2",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "@types/tmp": "^0.2.3",
     "@typescript-eslint/experimental-utils": "^5.26.0",
+    "@vitejs/plugin-react": "^1.3.0",
     "cross-env": "^7.0.3",
     "electron": "^18.3.1",
     "electron-builder": "^23.0.3",
+    "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.2.1",
     "npm-run-all": "^4.1.5",
     "playwright": "^1.22.2",
@@ -48,6 +55,13 @@
     "tmp": "^0.2.1",
     "ts-standard": "^11.0.0",
     "typescript": "^4.7.2",
+    "vite": "^2.9.9",
     "xvfb-maybe": "^0.2.1"
+  },
+  "ts-standard": {
+    "project": [
+      "tsconfig.json",
+      "renderer/tsconfig.json"
+    ]
   }
 }
