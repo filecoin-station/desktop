@@ -32,10 +32,12 @@
   "homepage": "https://github.com/filecoin-project/filecoin-station#readme",
   "dependencies": {
     "electron-log": "^4.4.7",
+    "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
     "electron-updater": "^5.0.1",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.22.2",

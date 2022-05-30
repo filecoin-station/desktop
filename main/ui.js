@@ -1,7 +1,5 @@
 const { BrowserWindow, app, screen } = require('electron')
 const store = require('./store')
-const path = require('node:path')
-const { pathToFileURL } = require('node:url')
 
 /**
  * @param {import('./typings').Context} ctx
@@ -29,7 +27,7 @@ module.exports = async function (ctx) {
   let devServer
 
   if (app.isPackaged || process.env.NODE_ENV !== 'development') {
-    ui.loadURL(pathToFileURL(path.join(__dirname, '../renderer/dist/index.html')).toString())
+    ctx.loadWebUIFromDist(ui)
   } else {
     console.log('Starting Vite DEV server')
     const { createServer } = require('vite')
