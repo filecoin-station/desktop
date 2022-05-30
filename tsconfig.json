@@ -19,7 +19,8 @@
   },
   "include": [
     "**/*.d.ts",
-    "src/**/*.js",
-    "test/**/*.js"
+    "main/**/*.js",
+    "test/**/*.js",
+    "vite.config.mjs",
   ]
 }

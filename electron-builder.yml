@@ -3,12 +3,13 @@ generateUpdatesFilesForAllChannels: true
 
 files:
   - filter:
-    - src/**/*
+    - main/**/*
     - assets/**/*
+    - renderer/dist/**/*
     - node_modules/**/*
     - package.json
 
-asarUnpack: 'src/**/scripts/**/*'
+asarUnpack: 'main/**/scripts/**/*'
 
 afterSign: 'build/notarize-macos.js'
 
