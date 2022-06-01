@@ -1,5 +1,11 @@
 name: ci
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
 
 env:
   XDG_CACHE_HOME: ${{ github.workspace }}/.cache
