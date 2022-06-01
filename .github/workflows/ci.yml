@@ -94,6 +94,7 @@ jobs:
 
       - name: Get tag
         id: tag
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: dawidd6/action-get-tag@12319896edaa290b27558e34a177804e9b8d077b # v1
         continue-on-error: true # empty steps.tag.outputs.tag will inform the next step
 
