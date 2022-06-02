@@ -1,8 +1,12 @@
 const { app, dialog } = require('electron')
 const log = require('electron-log')
+const serve = require('electron-serve')
+const path = require('node:path')
+
 const setupUI = require('./ui')
 const setupTray = require('./tray')
 const setupUpdater = require('./updater')
+
 const inTest = (process.env.NODE_ENV === 'test')
 
 function handleError (/** @type {any} */ err) {
@@ -28,7 +32,8 @@ if (!app.requestSingleInstanceLock() && !inTest) {
 
 /** @type {import('./typings').Context} */
 const ctx = {
-  showUI: () => { throw new Error('never get here') }
+  showUI: () => { throw new Error('never get here') },
+  loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
 }
 
 async function run () {
