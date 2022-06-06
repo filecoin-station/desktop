@@ -20,6 +20,7 @@
   "include": [
     "**/*.d.ts",
     "main/**/*.js",
+    "build/**/*.js",
     "test/**/*.js",
     "vite.config.mjs",
   ]

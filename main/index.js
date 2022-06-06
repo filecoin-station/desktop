@@ -6,6 +6,7 @@ const path = require('node:path')
 const setupUI = require('./ui')
 const setupTray = require('./tray')
 const setupUpdater = require('./updater')
+const setupSaturnNode = require('./saturn-node')
 
 const inTest = (process.env.NODE_ENV === 'test')
 
@@ -49,6 +50,8 @@ async function run () {
     await setupTray(ctx)
     await setupUI(ctx)
     await setupUpdater(ctx)
+
+    await setupSaturnNode(ctx)
   } catch (e) {
     handleError(e)
   }

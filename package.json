@@ -9,12 +9,13 @@
     "start": "cross-env NODE_ENV=development electron .",
     "lint": "ts-standard && tsc -p tsconfig.json && tsc -p renderer/tsconfig.json",
     "test": "run-s test:*",
-    "pretest:e2e": "run-s build",
     "test:e2e": "xvfb-maybe cross-env NODE_ENV=test playwright test 'test/e2e/.*.test.js'",
     "postinstall": "run-s install-app-deps",
     "install-app-deps": "electron-builder install-app-deps",
-    "clean": "shx echo \"clean here\"",
-    "build": "vite build",
+    "clean": "shx rm -rf dist/ build/saturn",
+    "build": "run-s clean build:*",
+    "build:webui": "vite build",
+    "build:saturn": "node ./build/download-saturn-l2.js",
     "package": "shx rm -rf dist/ && run-s build && electron-builder --publish onTag"
   },
   "repository": {
@@ -37,12 +38,15 @@
     "electron-updater": "^5.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "tar-fs": "^2.1.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.22.2",
+    "@types/gunzip-maybe": "^1.4.0",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/tar-fs": "^2.0.1",
     "@types/tmp": "^0.2.3",
     "@typescript-eslint/experimental-utils": "^5.26.0",
     "@vitejs/plugin-react": "^1.3.0",
@@ -51,12 +55,14 @@
     "electron-builder": "^23.0.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.2.1",
+    "gunzip-maybe": "^1.4.2",
     "npm-run-all": "^4.1.5",
     "playwright": "^1.22.2",
     "shx": "^0.3.4",
     "tmp": "^0.2.1",
     "ts-standard": "^11.0.0",
     "typescript": "^4.7.2",
+    "undici": "^5.4.0",
     "vite": "^2.9.9",
     "xvfb-maybe": "^0.2.1"
   },
