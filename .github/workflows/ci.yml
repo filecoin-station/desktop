@@ -45,6 +45,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test
         run: npm run test
@@ -95,9 +97,6 @@ jobs:
       - name: Install dependencies
         run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
 
-      - name: Build
-        run: npm run build
-
       - name: Get tag
         id: tag
         if: startsWith(github.ref, 'refs/tags/v')
@@ -123,6 +122,7 @@ jobs:
           # Apple notarization
           APPLEID: ${{ secrets.apple_id }}
           APPLEIDPASS: ${{ secrets.apple_id_pass }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Show dist/
         run: du -sh dist/ && ls -l dist/

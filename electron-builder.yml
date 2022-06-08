@@ -9,6 +9,11 @@ files:
     - node_modules/**/*
     - package.json
 
+extraResources:
+  - from: 'build/saturn/l2node-${platform}-${arch}'
+    to: 'saturn-l2-node'
+    filter: ['*']
+
 asarUnpack: 'main/**/scripts/**/*'
 
 afterSign: 'build/notarize-macos.js'

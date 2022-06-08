@@ -31,3 +31,5 @@ dev-app-update.yml
 *.njsproj
 *.sln
 *.sw?
+
+build/saturn

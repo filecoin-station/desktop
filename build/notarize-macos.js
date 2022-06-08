@@ -1,8 +1,12 @@
 const { notarize } = require('electron-notarize')
 
-const isSet = (value) => value && value !== 'false'
+const isSet = (/** @type {string | undefined} */ value) => value && value !== 'false'
 
-// electron-build hook responsible for Apple Notarization of signed DMG
+/**
+ * electron-build hook responsible for Apple Notarization of signed DMG
+ *
+ * @param {import('electron-builder').AfterPackContext} context
+ */
 exports.default = async function notarizing (context) {
   const { electronPlatformName, appOutDir } = context
   if (electronPlatformName !== 'darwin') return
