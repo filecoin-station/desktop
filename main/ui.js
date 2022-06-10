@@ -1,3 +1,5 @@
+const path = require('path')
+
 const { BrowserWindow, app, screen } = require('electron')
 const store = require('./store')
 
@@ -18,8 +20,8 @@ module.exports = async function (ctx) {
     autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      nodeIntegration: false
-      // TODO: preload: path.join(__dirname, 'preload.js')
+      nodeIntegration: false,
+      preload: path.join(__dirname, 'preload.js')
     }
   })
 
