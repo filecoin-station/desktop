@@ -6,11 +6,11 @@ const log = require('electron-log').scope('updater')
 // must be global to avoid gc
 let updateNotification = null
 
-function setup (/** @type {import('./typings').Context} */ ctx) {
+function setup (/** @type {import('./typings').Context} */ _ctx) {
   autoUpdater.autoDownload = false // we download manually in 'update-available'
 
   autoUpdater.on('error', err => log.error('error', err))
-  autoUpdater.on('update-available', async ({ version, releaseNotes }) => {
+  autoUpdater.on('update-available', async (/* { version, releaseNotes } */) => {
     try {
       log.info('update-available, downloading..')
       await autoUpdater.downloadUpdate()
@@ -19,7 +19,7 @@ function setup (/** @type {import('./typings').Context} */ ctx) {
       log.error('update-available error', err)
     }
   })
-  autoUpdater.on('update-not-available', ({ version }) => {
+  autoUpdater.on('update-not-available', (/* { version } */) => {
     log.info('update not available')
   })
   autoUpdater.on('update-downloaded', ({ version }) => {

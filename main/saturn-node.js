@@ -4,7 +4,7 @@ const { app } = require('electron')
 const path = require('path')
 const fs = require('node:fs/promises')
 
-module.exports = async function setupSaturnNode (/** @type {import('./typings').Context} */ ctx) {
+module.exports = async function setupSaturnNode (/** @type {import('./typings').Context} */ _ctx) {
   const saturnBinaryPath = getSaturnBinaryPath()
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
 
