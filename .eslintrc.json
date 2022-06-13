@@ -1,0 +1,33 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "standard"
+  ],
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_"
+    }]
+  },
+  "ignorePatterns": [
+    "assets/",
+    "dist/"
+  ],
+  "overrides": [
+    {
+      "files": ["build/**/*.js", "main/**/*.js", "test/**/*.js", "*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+    {
+      "files": ["renderer/**/*"],
+      "extends": [
+        "react-app"
+      ]
+    }
+  ]
+}
