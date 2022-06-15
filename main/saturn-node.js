@@ -17,7 +17,7 @@ let isReady = false
 /** @type {string | undefined} */
 let webUrl
 
-async function setup (/** @type {import('./typings').Context} */ ctx) {
+async function setup (/** @type {import('./typings').Context} */ _ctx) {
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
 
   const stat = await fs.stat(saturnBinaryPath)
