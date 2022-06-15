@@ -46,18 +46,20 @@ async function start () {
   }
 
   if (childProcess.stdout) {
-    childProcess.stdout.on('data', data => console.log(`stdout: ${data}`))
+    childProcess.stdout.on('data', data => forwardChunkFromSaturn(data, console.log))
   }
   if (childProcess.stderr) {
-    childProcess.stderr.on('data', data => console.log(`stderr: ${data}`))
+    childProcess.stderr.on('data', data => forwardChunkFromSaturn(data, console.error))
   }
 
   childProcess.on('close', code => {
-    console.log(`child process close all stdio with code ${code}`)
+    console.log(`Saturn node closed all stdio with code ${code}`)
   })
 
   childProcess.on('exit', code => {
-    console.log(`child process exited with code ${code}`)
+    console.log(`Saturn node exited with code ${code}`)
+    childProcess?.stderr?.removeAllListeners()
+    childProcess?.stdout?.removeAllListeners()
     childProcess = null
   })
 
@@ -78,4 +80,16 @@ function isOn () {
   return !!childProcess
 }
 
+  /**
+   * @param {Buffer} chunk
+   * @param {console["log"] | console["error"]} log
+   */
+  function forwardChunkFromSaturn(chunk, log) {
+    const lines = chunk.toString('utf-8').split(/\n/g);
+    for (const ln of lines) {
+      log('[SATURN] %s', ln)
+    }
+  }
+
 module.exports = { setup, start, stop, isOn }
+
