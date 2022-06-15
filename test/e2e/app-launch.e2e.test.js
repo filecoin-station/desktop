@@ -42,6 +42,8 @@ test.describe.serial('Application launch', async () => {
       )
     })
 
+    mainWindow.on('pageerror', (err) => { throw err })
+
     await mainWindow.waitForLoadState()
   })
 
@@ -67,5 +69,11 @@ test.describe.serial('Application launch', async () => {
     const response = await request(saturnWebUrl)
     expect(response.statusCode).toBe(200)
     expect(await response.body.text()).toMatch(/Saturn/)
+  })
+
+  test('renders Saturn section', async () => {
+    await mainWindow.goto(`${mainWindow.url()}saturn`)
+    const statusElem = await mainWindow.waitForSelector('#status', { timeout: 500 })
+    expect(await statusElem.isChecked(), 'Status switch shows ON').toBe(true)
   })
 })

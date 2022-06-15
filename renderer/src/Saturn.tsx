@@ -6,9 +6,7 @@ export default function Saturn (): JSX.Element {
   const [isRunning, setIsRunning] = useState(true)
 
   const updateStatus = (): void => {
-    isSaturnNodeOn()
-      .then(setIsRunning)
-      .catch(err => console.error('Cannot update Saturn status', err))
+    isSaturnNodeRunning().then(setIsRunning)
     // `useEffect` and `setInterval` do not support async functions.
     // We are running the update in background and not waiting for the promise to resolve.
   }
@@ -40,6 +38,7 @@ export default function Saturn (): JSX.Element {
       <p><Link to='/'>Station &gt;&gt;</Link></p>
       <label>
         <Switch
+          id='status'
           onChange={handleClick}
           checked={isRunning}
           width={62}
@@ -57,8 +56,8 @@ export default function Saturn (): JSX.Element {
   )
 }
 
-async function isSaturnNodeOn (): Promise<boolean> {
-  return await window.electron.isSaturnNodeOn()
+async function isSaturnNodeRunning (): Promise<boolean> {
+  return await window.electron.isSaturnNodeRunning()
 }
 
 async function toggleSaturnNode (turnOn: boolean): Promise<void> {
