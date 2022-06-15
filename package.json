@@ -9,14 +9,14 @@
     "start": "cross-env NODE_ENV=development electron .",
     "lint": "eslint . && tsc -p tsconfig.json && tsc -p renderer/tsconfig.json",
     "lint:fix": "eslint --fix .",
-    "test": "run-s test:*",
+    "test": "run-s build:* && run-s test:*",
     "test:e2e": "xvfb-maybe cross-env NODE_ENV=test playwright test 'test/e2e/.*.test.js'",
-    "postinstall": "run-s install-app-deps",
+    "postinstall": "run-s install-*",
     "install-app-deps": "electron-builder install-app-deps",
-    "clean": "shx rm -rf dist/ build/saturn",
+    "install-saturn": "shx rm -rf build/saturn && node ./build/download-saturn-l2.js",
+    "clean": "shx rm -rf dist/",
     "build": "run-s clean build:*",
     "build:webui": "vite build",
-    "build:saturn": "node ./build/download-saturn-l2.js",
     "package": "shx rm -rf dist/ && run-s build && electron-builder --publish onTag"
   },
   "repository": {
