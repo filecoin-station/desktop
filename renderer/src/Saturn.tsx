@@ -2,10 +2,16 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Switch from 'react-switch'
 
-export default function Saturn () {
+export default function Saturn (): JSX.Element {
   const [isOn, setIsOn] = useState(true)
 
-  const updateStatus = () => isSaturnNodeOn().then(setIsOn)
+  const updateStatus = (): void => {
+    isSaturnNodeOn()
+      .then(setIsOn)
+      .catch(err => console.error('Cannot update Saturn status', err))
+    // `useEffect` and `setInterval` do not support async functions.
+    // We are running the update in background and not waiting for the promise to resolve.
+  }
 
   useEffect(() => {
     updateStatus()
@@ -14,17 +20,17 @@ export default function Saturn () {
     return () => clearInterval(id)
   }, [])
 
-  async function handleClick () {
+  async function handleClick (): Promise<void> {
     await toggleSaturnNode(!isOn)
     updateStatus()
   }
 
   const textStyle = {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100%",
-    fontSize: 16,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    fontSize: 16
   }
 
   return (
@@ -37,7 +43,7 @@ export default function Saturn () {
           onChange={handleClick}
           checked={isOn}
           width={62}
-          activeBoxShadow="0px 0px 1px 2px #fffc35"
+          activeBoxShadow='0px 0px 1px 2px #fffc35'
           onColor='#15cd72'
           checkedIcon={
             <div style={textStyle}>On</div>
@@ -51,11 +57,11 @@ export default function Saturn () {
   )
 }
 
-async function isSaturnNodeOn () {
-  return window.electron.isSaturnNodeOn()
+async function isSaturnNodeOn (): Promise<boolean> {
+  return await window.electron.isSaturnNodeOn()
 }
 
-async function toggleSaturnNode (turnOn: boolean) {
+async function toggleSaturnNode (turnOn: boolean): Promise<void> {
   if (turnOn) {
     await window.electron.startSaturnNode()
   } else {
