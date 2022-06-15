@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom'
 import Switch from 'react-switch'
 
 export default function Saturn (): JSX.Element {
-  const [isOn, setIsOn] = useState(true)
+  const [isRunning, setIsRunning] = useState(true)
 
   const updateStatus = (): void => {
     isSaturnNodeOn()
-      .then(setIsOn)
+      .then(setIsRunning)
       .catch(err => console.error('Cannot update Saturn status', err))
     // `useEffect` and `setInterval` do not support async functions.
     // We are running the update in background and not waiting for the promise to resolve.
@@ -21,7 +21,7 @@ export default function Saturn (): JSX.Element {
   }, [])
 
   async function handleClick (): Promise<void> {
-    await toggleSaturnNode(!isOn)
+    await toggleSaturnNode(!isRunning)
     updateStatus()
   }
 
@@ -41,7 +41,7 @@ export default function Saturn (): JSX.Element {
       <label>
         <Switch
           onChange={handleClick}
-          checked={isOn}
+          checked={isRunning}
           width={62}
           activeBoxShadow='0px 0px 1px 2px #fffc35'
           onColor='#15cd72'

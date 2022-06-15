@@ -12,7 +12,7 @@ const saturnBinaryPath = getSaturnBinaryPath()
 /** @type {import('execa').ExecaChildProcess | null} */
 let childProcess = null
 
-let isReady = false
+let ready = false
 
 /** @type {string | undefined} */
 let webUrl
@@ -49,7 +49,7 @@ async function start () {
   childProcess = execa(saturnBinaryPath)
 
   /** @type {Promise<void>} */
-  const ready = new Promise(function startSaturnNodeChildProcess (resolve, reject) {
+  const readyPromise = new Promise(function startSaturnNodeChildProcess (resolve, reject) {
     if (!childProcess) {
       throw new Error('Unexpected error: child process is undefined after startup')
     }
@@ -78,8 +78,8 @@ async function start () {
       if (webuiMatch) {
         webUrl = webuiMatch[1]
 
-        console.log('Saturn node is up and ready')
-        isReady = true
+        console.log('Saturn node is up and ready (Web URL: %s)', webUrl)
+        ready = true
         stdout.off('data', readyHandler)
         resolve()
       }
@@ -98,12 +98,12 @@ async function start () {
     childProcess?.stderr?.removeAllListeners()
     childProcess?.stdout?.removeAllListeners()
     childProcess = null
-    isReady = false
+    ready = false
   })
 
   try {
     await Promise.race([
-      ready,
+      readyPromise,
       setTimeout(500)
     ])
   } catch (err) {
@@ -124,8 +124,16 @@ function stop () {
   childProcess = null
 }
 
-function isOn () {
-  return isReady
+function isRunning () {
+  return !!childProcess
+}
+
+function isReady () {
+  return ready
+}
+
+function getWebUrl () {
+  return webUrl
 }
 
 /**
@@ -143,6 +151,7 @@ module.exports = {
   setup,
   start,
   stop,
-  isOn,
-  webUrl
+  isRunning,
+  isReady,
+  getWebUrl
 }

@@ -3,7 +3,9 @@ export declare global {
     electron: {
       startSaturnNode: () => Promise<void>
       stopSaturnNode: () => Promise<void>
-      isSaturnNodeOn: () => Promise<boolean>
+      isSaturnNodeRunning: () => Promise<boolean>
+      isSaturnNodeReady: () => Promise<boolean>
+      getSaturnNodeWebUrl: () => Promise<string>
     }
   }
 }
