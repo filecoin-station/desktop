@@ -48,9 +48,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Test
-        run: npm run test
-
       - name: Test end-to-end
         uses: GabrielBB/xvfb-action@86d97bde4a65fe9b290c0b3fb92c2c4ed0e5302d # v1.6
         with:

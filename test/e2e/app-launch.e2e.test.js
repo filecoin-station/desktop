@@ -5,11 +5,11 @@ const { request } = require('undici')
 
 const tmp = require('tmp')
 
-if (process.env.CI === 'true') test.setTimeout(120000) // slow ci
-
 // Running test cases one after another
 // More examples: https://playwright.dev/docs/api/class-electron
 test.describe.serial('Application launch', async () => {
+  if (process.env.CI === 'true') test.setTimeout(120_000) // slow CI
+
   /** @type {import('playwright').ElectronApplication} */
   let electronApp
 
@@ -17,6 +17,8 @@ test.describe.serial('Application launch', async () => {
   let mainWindow
 
   test('starts the electron app', async () => {
+    test.slow()
+
     // Launch Electron app against sandbox fake HOME dir
     const userData = tmp.dirSync({ prefix: 'tmp_home_', unsafeCleanup: true }).name
     electronApp = await electron.launch({
@@ -60,7 +62,7 @@ test.describe.serial('Application launch', async () => {
   })
 
   test('wait for Saturn node to get ready', async () => {
-    await mainWindow.waitForFunction(() => window.electron.isSaturnNodeReady(), {}, { timeout: 100 })
+    await mainWindow.waitForFunction(() => window.electron.isSaturnNodeReady(), {})
   })
 
   test('saturn WebUI is available', async () => {
