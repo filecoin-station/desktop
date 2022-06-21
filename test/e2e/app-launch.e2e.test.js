@@ -73,9 +73,10 @@ test.describe.serial('Application launch', async () => {
     expect(await response.body.text()).toMatch(/Saturn/)
   })
 
-  test('renders Saturn section', async () => {
+  test('renders Saturn WebUI in <iframe>', async () => {
+    const saturnWebUrl = await mainWindow.evaluate(() => window.electron.getSaturnNodeWebUrl())
     await mainWindow.goto(`${mainWindow.url()}saturn`)
-    const statusElem = await mainWindow.waitForSelector('#status', { timeout: 500 })
-    expect(await statusElem.isChecked(), 'Status switch shows ON').toBe(true)
+    const iframeElem = await mainWindow.waitForSelector('#module-webui')
+    expect(await iframeElem.getAttribute('src'), 'iframe URL').toBe(saturnWebUrl)
   })
 })

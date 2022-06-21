@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import Switch from 'react-switch'
 
 export default function Saturn (): JSX.Element {
   const [isRunning, setIsRunning] = useState(true)
+  const [saturnNodeWebUrl, setSaturnNodeWebUrl] = useState('')
 
   const updateStatus = (): void => {
     isSaturnNodeRunning().then(setIsRunning)
+    getSaturnNodeWebUrl().then(setSaturnNodeWebUrl)
     // `useEffect` and `setInterval` do not support async functions.
-    // We are running the update in background and not waiting for the promise to resolve.
+    // We are running the update in background and not waiting for the promises to resolve.
   }
 
   useEffect(() => {
@@ -18,40 +19,19 @@ export default function Saturn (): JSX.Element {
     return () => clearInterval(id)
   }, [])
 
-  async function handleClick (): Promise<void> {
-    await toggleSaturnNode(!isRunning)
+  async function onRestartClick (): Promise<void> {
+    await window.electron.startSaturnNode()
     updateStatus()
   }
 
-  const textStyle = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    fontSize: 16
-  }
+  const content = isRunning && saturnNodeWebUrl
+    ? ModuleFrame({ saturnNodeWebUrl })
+    : ErrorNotRunning({ onRestartClick })
 
   return (
     <div>
-      <div className='logo'>🪐</div>
-      <h2>Welcome to Saturn</h2>
+      {content}
       <p><Link to='/'>Station &gt;&gt;</Link></p>
-      <label>
-        <Switch
-          id='status'
-          onChange={handleClick}
-          checked={isRunning}
-          width={62}
-          activeBoxShadow='0px 0px 1px 2px #fffc35'
-          onColor='#15cd72'
-          checkedIcon={
-            <div style={textStyle}>On</div>
-          }
-          uncheckedIcon={
-            <div style={textStyle}>Off</div>
-          }
-        />
-      </label>
     </div>
   )
 }
@@ -60,10 +40,37 @@ async function isSaturnNodeRunning (): Promise<boolean> {
   return await window.electron.isSaturnNodeRunning()
 }
 
-async function toggleSaturnNode (turnOn: boolean): Promise<void> {
-  if (turnOn) {
-    await window.electron.startSaturnNode()
-  } else {
-    await window.electron.stopSaturnNode()
+async function getSaturnNodeWebUrl () : Promise<string> {
+  return await window.electron.getSaturnNodeWebUrl()
+}
+
+function ErrorNotRunning ({ onRestartClick } : {onRestartClick: React.MouseEventHandler<HTMLButtonElement>}) {
+  const buttonStyle = {
+    justifyContent: 'center',
+    height: '100%',
+    borderRadius: '1em',
+    fontSize: '1rem',
+    padding: '1em',
+    border: 'none',
+    background: '#c2b280'
   }
+
+  return (
+    <div style={{ padding: '1em' }}>
+      <div className='logo'>🪐</div>
+      <p style={{ color: 'red' }}>ERROR: Saturn node not running.</p>
+      <div><button onClick={onRestartClick} style={buttonStyle}>Restart the node</button></div>
+    </div>
+  )
+}
+
+function ModuleFrame ({ saturnNodeWebUrl }: { saturnNodeWebUrl: string}) {
+  const iframeStyle : React.CSSProperties = {
+    width: '90vw',
+    height: 'calc(90vh - 8rem)',
+    border: '1px solid #c2b280'
+  }
+  return (
+    <iframe id='module-webui' src={saturnNodeWebUrl} title='Saturn Node' style={iframeStyle}/>
+  )
 }
