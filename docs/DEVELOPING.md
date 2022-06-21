@@ -41,8 +41,7 @@ Repositories:
 
 1. Install the latest LTS version of Node.js
 2. Clone this repository
-3. Run `npm install` to install all dependencies
-4. Run `npm run build:saturn` to download Saturn L2 Node.
+3. Run `npm install` to install all dependencies, including electron components and Saturn L2 Node.
 
 ### Making changes
 
