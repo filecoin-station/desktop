@@ -12,9 +12,9 @@ graph
   saturn-l2-repo(https://github.com/filecoin-project/saturn-l2)
   --> saturn-l2-go(Saturn L2 Node binary)
 
-  saturn-l2-webui-repo(github.com/filecoin-project/saturn-l2-webui)
-  --> saturn-l2-webui(Saturn L2 WebUI)
-  saturn-l2-webui --> saturn-l2-go
+  saturn-webui-repo(github.com/filecoin-project/saturn-webui)
+  --> saturn-webui(Saturn WebUI)
+  saturn-webui --> saturn-l2-go
 
   fil-stat-main --> fil-stat-distro(Desktop Application)
   fil-stat-webui --> fil-stat-distro
@@ -25,12 +25,12 @@ Repositories:
 
 - https://github.com/filecoin-project/filecoin-station
 - https://github.com/filecoin-project/saturn-l2
-- https://github.com/filecoin-project/saturn-l2-webui
+- https://github.com/filecoin-project/saturn-webui
 
 ### End-to-end release workflow
 
-1. `saturn-l2-webui` publishes a new release with WebUI assets
-2. `saturn-l2` is updated to use the new `saturn-l2-webui` version
+1. `saturn-webui` publishes a new release with WebUI assets
+2. `saturn-l2` is updated to use the new `saturn-webui` version
 3. `saturn-l2` publishes a new release
 4. `filecoin-station` is updated to use the new `saturn-l2 `version
 5. `filecoin-station` publishes a new release
