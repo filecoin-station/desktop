@@ -14,6 +14,9 @@ let childProcess = null
 
 let ready = false
 
+/** @type {string} */
+let childLog = ''
+
 /** @type {string | undefined} */
 let webUrl
 
@@ -46,6 +49,8 @@ async function start () {
     return
   }
 
+  childLog = ''
+  appendToChildLog('Starting Saturn node')
   childProcess = execa(saturnBinaryPath)
 
   /** @type {Promise<void>} */
@@ -78,6 +83,7 @@ async function start () {
       if (webuiMatch) {
         webUrl = webuiMatch[1]
 
+        appendToChildLog('Saturn node is up and ready')
         console.log('Saturn node is up and ready (Web URL: %s)', webUrl)
         ready = true
         stdout.off('data', readyHandler)
@@ -94,7 +100,11 @@ async function start () {
   })
 
   childProcess.on('exit', (code, signal) => {
-    console.log(`Saturn node exited with code ${code} signal ${signal}`)
+    const reason = signal ? `via signal ${signal}` : `with code: ${code}`
+    const msg = `Saturn node exited ${reason}`
+    console.log(msg)
+    appendToChildLog(msg)
+
     childProcess?.stderr?.removeAllListeners()
     childProcess?.stdout?.removeAllListeners()
     childProcess = null
@@ -107,9 +117,9 @@ async function start () {
       setTimeout(500)
     ])
   } catch (err) {
-    const error = err instanceof Error ? err : new Error('' + err)
-    error.message = `Cannot start Saturn node: ${error.message}`
-    throw error
+    const msg = err instanceof Error ? err.message : '' + err
+    appendToChildLog(`Cannot start Saturn node: ${msg}`)
+    console.error('Cannot start Saturn node:', err)
   }
 }
 
@@ -136,6 +146,10 @@ function getWebUrl () {
   return webUrl
 }
 
+function getLog () {
+  return childLog
+}
+
 /**
  * @param {Buffer} chunk
  * @param {console["log"] | console["error"]} log
@@ -147,11 +161,22 @@ function forwardChunkFromSaturn (chunk, log) {
   }
 }
 
+/**
+ * @param {string} text
+ */
+function appendToChildLog (text) {
+  childLog += text
+    .split(/\n/g)
+    .map(line => `[${new Date().toLocaleTimeString()}] ${line}\n`)
+    .join('')
+}
+
 module.exports = {
   setup,
   start,
   stop,
   isRunning,
   isReady,
+  getLog,
   getWebUrl
 }
