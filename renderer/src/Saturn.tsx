@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import './Saturn.css'
+
 export default function Saturn (): JSX.Element {
   const [isRunning, setIsRunning] = useState(true)
   const [saturnNodeWebUrl, setSaturnNodeWebUrl] = useState('')
+  const [saturnNodeLog, setSaturnNodeLog] = useState('')
 
   const updateStatus = (): void => {
     isSaturnNodeRunning().then(setIsRunning)
     getSaturnNodeWebUrl().then(setSaturnNodeWebUrl)
+    getSaturnNodeLog().then(setSaturnNodeLog)
     // `useEffect` and `setInterval` do not support async functions.
     // We are running the update in background and not waiting for the promises to resolve.
   }
@@ -26,7 +30,7 @@ export default function Saturn (): JSX.Element {
 
   const content = isRunning && saturnNodeWebUrl
     ? ModuleFrame({ saturnNodeWebUrl })
-    : ErrorNotRunning({ onRestartClick })
+    : ErrorNotRunning({ onRestartClick, saturnNodeLog })
 
   return (
     <div>
@@ -44,13 +48,18 @@ async function getSaturnNodeWebUrl () : Promise<string> {
   return await window.electron.getSaturnNodeWebUrl()
 }
 
-function ErrorNotRunning ({ onRestartClick } : {onRestartClick: React.MouseEventHandler<HTMLButtonElement>}) {
+async function getSaturnNodeLog () : Promise<string> {
+  return await window.electron.getSaturnNodeLog()
+}
+
+function ErrorNotRunning ({ onRestartClick, saturnNodeLog } : {onRestartClick: React.MouseEventHandler<HTMLButtonElement>, saturnNodeLog: string}) {
   const buttonStyle = {
     justifyContent: 'center',
     height: '100%',
     borderRadius: '1em',
     fontSize: '1rem',
     padding: '1em',
+    margin: '1em',
     border: 'none',
     background: '#c2b280'
   }
@@ -59,6 +68,7 @@ function ErrorNotRunning ({ onRestartClick } : {onRestartClick: React.MouseEvent
     <div style={{ padding: '1em' }}>
       <div className='logo'>🪐</div>
       <p style={{ color: 'red' }}>ERROR: Saturn node not running.</p>
+      <pre className='log'><code>{saturnNodeLog}</code></pre>
       <div><button onClick={onRestartClick} style={buttonStyle}>Restart the node</button></div>
     </div>
   )

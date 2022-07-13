@@ -7,5 +7,6 @@ module.exports = function () {
   ipcMain.handle('saturn:isReady', saturnNode.isReady)
   ipcMain.handle('saturn:start', saturnNode.start)
   ipcMain.handle('saturn:stop', saturnNode.stop)
+  ipcMain.handle('saturn:getLog', saturnNode.getLog)
   ipcMain.handle('saturn:getWebUrl', saturnNode.getWebUrl)
 }
