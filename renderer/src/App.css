@@ -5,8 +5,8 @@
 }
 
 .App header {
-  margin: 2em 0;
-
+  margin-top: 2em;
+  border-bottom: 1px dotted white;
 }
 
 .logo {

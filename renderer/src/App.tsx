@@ -1,7 +1,6 @@
+import { useEffect } from 'react'
 import {
-  Routes,
-  Route,
-  Link
+  Link, Route, Routes
 } from 'react-router-dom'
 import './App.css'
 import Saturn from './Saturn'
@@ -12,7 +11,7 @@ function App (): JSX.Element {
       <header>
         <h1>Filecoin Station</h1>
       </header>
-      <main className='App-header'>
+      <main>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/saturn' element={<Saturn />} />
@@ -25,11 +24,13 @@ function App (): JSX.Element {
 export default App
 
 function Home (): JSX.Element {
+  useEffect(() => { document.title = 'Filecoin Station' })
+
   return (
-    <div>
+    <div style={{ marginTop: '2em' }}>
       <div className='logo'>🛰</div>
       <h2>Welcome to Filecoin Station</h2>
-      <p><Link to='/saturn'> Saturn &gt;&gt;</Link></p>
+      <p><Link to='/saturn' id='link-to-saturn'> Saturn &gt;&gt;</Link></p>
     </div>
   )
 }
