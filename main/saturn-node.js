@@ -7,6 +7,9 @@ const { setTimeout } = require('timers/promises')
 const { app } = require('electron')
 const execa = require('execa')
 
+const Store = require('electron-store')
+const configStore = new Store()
+
 const saturnBinaryPath = getSaturnBinaryPath()
 
 /** @type {import('execa').ExecaChildProcess | null} */
@@ -19,6 +22,12 @@ let childLog = ''
 
 /** @type {string | undefined} */
 let webUrl
+
+const ConfigKeys = {
+  FilAddress: 'saturn.filAddress'
+}
+
+let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 
 async function setup (/** @type {import('./typings').Context} */ _ctx) {
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
@@ -37,12 +46,21 @@ async function setup (/** @type {import('./typings').Context} */ _ctx) {
 
 function getSaturnBinaryPath () {
   const name = 'saturn-l2' + (process.platform === 'win32' ? '.exe' : '')
+  // Recently built darwin-arm64 binaries cannot be started, they are immediately killed by SIGKILL
+  // Since we don't support Apple Silicon yet, we can use x64 for now.
+  // Note this is affecting only DEV. We are packaging the app for darwin-x64 only.
+  const arch = process.platform === 'darwin' && process.arch === 'arm64' ? 'x64' : process.arch
   return app.isPackaged
     ? path.resolve(process.resourcesPath, 'saturn-l2-node', name)
-    : path.resolve(__dirname, '..', 'build', 'saturn', `l2node-${process.platform}-${process.arch}`, name)
+    : path.resolve(__dirname, '..', 'build', 'saturn', `l2node-${process.platform}-${arch}`, name)
 }
 
 async function start () {
+  if (!filAddress) {
+    console.info('Saturn node requires FIL address. Please configure it in the Station UI.')
+    return
+  }
+
   console.log('Starting Saturn node...')
   if (childProcess) {
     console.log('Saturn node is already running.')
@@ -51,7 +69,11 @@ async function start () {
 
   childLog = ''
   appendToChildLog('Starting Saturn node')
-  childProcess = execa(saturnBinaryPath)
+  childProcess = execa(saturnBinaryPath, {
+    env: {
+      FIL_WALLET_ADDRESS: filAddress
+    }
+  })
 
   /** @type {Promise<void>} */
   const readyPromise = new Promise(function startSaturnNodeChildProcess (resolve, reject) {
@@ -69,8 +91,14 @@ async function start () {
       throw new Error('stderr was not defined on child process')
     }
 
-    stdout.on('data', data => forwardChunkFromSaturn(data, console.log))
-    stderr.on('data', data => forwardChunkFromSaturn(data, console.error))
+    stdout.setEncoding('utf-8')
+    stdout.on('data', (/** @type {string} */ data) => forwardChunkFromSaturn(data, console.log))
+
+    stderr.setEncoding('utf-8')
+    stderr.on('data', (/** @type {string} */ data) => {
+      forwardChunkFromSaturn(data, console.error)
+      appendToChildLog(data)
+    })
 
     let output = ''
     /**
@@ -96,7 +124,10 @@ async function start () {
   })
 
   childProcess.on('close', code => {
-    console.log(`Saturn node closed all stdio with code ${code}`)
+    console.log(`Saturn node closed all stdio with code ${code ?? '<no code>'}`)
+    childProcess?.stderr?.removeAllListeners()
+    childProcess?.stdout?.removeAllListeners()
+    childProcess = null
   })
 
   childProcess.on('exit', (code, signal) => {
@@ -105,9 +136,6 @@ async function start () {
     console.log(msg)
     appendToChildLog(msg)
 
-    childProcess?.stderr?.removeAllListeners()
-    childProcess?.stdout?.removeAllListeners()
-    childProcess = null
     ready = false
   })
 
@@ -151,11 +179,26 @@ function getLog () {
 }
 
 /**
- * @param {Buffer} chunk
+ * @returns {string | undefined}
+ */
+function getFilAddress () {
+  return filAddress
+}
+
+/**
+ * @param {string | undefined} address
+ */
+function setFilAddress (address) {
+  filAddress = address
+  configStore.set(ConfigKeys.FilAddress, address)
+}
+
+/**
+ * @param {string} chunk
  * @param {console["log"] | console["error"]} log
  */
 function forwardChunkFromSaturn (chunk, log) {
-  const lines = chunk.toString().split(/\n/g)
+  const lines = chunk.trimEnd().split(/\n/g)
   for (const ln of lines) {
     log('[SATURN] %s', ln)
   }
@@ -166,6 +209,7 @@ function forwardChunkFromSaturn (chunk, log) {
  */
 function appendToChildLog (text) {
   childLog += text
+    .trimEnd()
     .split(/\n/g)
     .map(line => `[${new Date().toLocaleTimeString()}] ${line}\n`)
     .join('')
@@ -178,5 +222,7 @@ module.exports = {
   isRunning,
   isReady,
   getLog,
-  getWebUrl
+  getWebUrl,
+  getFilAddress,
+  setFilAddress
 }

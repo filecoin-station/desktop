@@ -9,4 +9,6 @@ module.exports = function () {
   ipcMain.handle('saturn:stop', saturnNode.stop)
   ipcMain.handle('saturn:getLog', saturnNode.getLog)
   ipcMain.handle('saturn:getWebUrl', saturnNode.getWebUrl)
+  ipcMain.handle('saturn:getFilAddress', saturnNode.getFilAddress)
+  ipcMain.handle('saturn:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
 }

@@ -61,21 +61,39 @@ test.describe.serial('Application launch', async () => {
     expect(await mainWindow.title()).toBe('Filecoin Station')
   })
 
+  test('navigate to Saturn', async () => {
+    await mainWindow.click('#link-to-saturn')
+    expect(await mainWindow.title()).toBe('Saturn')
+  })
+
+  test('enter FIL address', async () => {
+    await mainWindow.fill('input.fil-address', 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
+    await mainWindow.click('button.submit-address')
+  })
+
   test('wait for Saturn node to get ready', async () => {
-    await mainWindow.waitForFunction(() => window.electron.isSaturnNodeReady(), {})
+    await mainWindow.waitForFunction(() => {
+      // waitForFunction does not support promises.
+      // As a workaround, we start the async task in background and store the result on `window`
+      window.electron.saturnNode
+        .isReady()
+        .then(ready => Object.assign(window, { __saturnNodeIsReady: ready }))
+
+      // Return the last observed value. It may be undefined if the promise above has not finished yet
+      return (/** @type {any} */(window)).__saturnNodeIsReady
+    }, [], { timeout: 1000 })
   })
 
   test('saturn WebUI is available', async () => {
-    const saturnWebUrl = await mainWindow.evaluate(() => window.electron.getSaturnNodeWebUrl())
+    const saturnWebUrl = await mainWindow.evaluate(() => window.electron.saturnNode.getWebUrl())
     console.log('Saturn WebUI URL: %s', saturnWebUrl)
     const response = await request(saturnWebUrl)
-    expect(response.statusCode).toBe(200)
-    expect(await response.body.text()).toMatch(/Saturn/)
+    expect(response.statusCode).toBe(303)
+    expect(response.headers.location).toMatch(/address\/f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa$/)
   })
 
   test('renders Saturn WebUI in <iframe>', async () => {
-    const saturnWebUrl = await mainWindow.evaluate(() => window.electron.getSaturnNodeWebUrl())
-    await mainWindow.goto(`${mainWindow.url()}saturn`)
+    const saturnWebUrl = await mainWindow.evaluate(() => window.electron.saturnNode.getWebUrl())
     const iframeElem = await mainWindow.waitForSelector('#module-webui')
     expect(await iframeElem.getAttribute('src'), 'iframe URL').toBe(saturnWebUrl)
   })

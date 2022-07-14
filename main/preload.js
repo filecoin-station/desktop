@@ -1,10 +1,14 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electron', {
-  startSaturnNode: () => ipcRenderer.invoke('saturn:start'),
-  stopSaturnNode: () => ipcRenderer.invoke('saturn:stop'),
-  isSaturnNodeRunning: () => ipcRenderer.invoke('saturn:isRunning'),
-  isSaturnNodeReady: () => ipcRenderer.invoke('saturn:isReady'),
-  getSaturnNodeLog: () => ipcRenderer.invoke('saturn:getLog'),
-  getSaturnNodeWebUrl: () => ipcRenderer.invoke('saturn:getWebUrl')
+  saturnNode: {
+    start: () => ipcRenderer.invoke('saturn:start'),
+    stop: () => ipcRenderer.invoke('saturn:stop'),
+    isRunning: () => ipcRenderer.invoke('saturn:isRunning'),
+    isReady: () => ipcRenderer.invoke('saturn:isReady'),
+    getLog: () => ipcRenderer.invoke('saturn:getLog'),
+    getWebUrl: () => ipcRenderer.invoke('saturn:getWebUrl'),
+    getFilAddress: () => ipcRenderer.invoke('saturn:getFilAddress'),
+    setFilAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('saturn:setFilAddress', address)
+  }
 })
