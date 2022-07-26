@@ -67,7 +67,7 @@ async function main () {
  */
 async function fetchReleaseMetadata () {
   const res = await request(
-    `https://api.github.com/repos/filecoin-project/saturn-l2/releases/tags/${SATURN_DIST_TAG}`,
+    `https://api.github.com/repos/filecoin-saturn/L2-node/releases/tags/${SATURN_DIST_TAG}`,
     {
       headers: {
         accept: 'application/vnd.github.v3+json',
