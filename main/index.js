@@ -7,7 +7,8 @@ const setupUI = require('./ui')
 const setupTray = require('./tray')
 const setupUpdater = require('./updater')
 const saturnNode = require('./saturn-node')
-const setupIpc = require('./ipc')
+const { setupIpcMain } = require('./ipc')
+const { setupAppMenu } = require('./app-menu')
 
 const inTest = (process.env.NODE_ENV === 'test')
 
@@ -34,6 +35,7 @@ if (!app.requestSingleInstanceLock() && !inTest) {
 
 /** @type {import('./typings').Context} */
 const ctx = {
+  manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
 }
@@ -49,9 +51,10 @@ async function run () {
   try {
     // Interface
     await setupTray(ctx)
+    await setupAppMenu(ctx)
     await setupUI(ctx)
     await setupUpdater(ctx)
-    await setupIpc()
+    await setupIpcMain()
 
     await saturnNode.setup(ctx)
   } catch (e) {

@@ -1,6 +1,7 @@
-const { Menu, Tray, shell, app } = require('electron')
+const { Menu, Tray, shell, app, ipcMain } = require('electron')
 const path = require('path')
 const { IS_MAC, STATION_VERSION } = require('./consts')
+const { ipcMainEvents } = require('./ipc')
 
 // Be warned, this one is pretty ridiculous:
 // Tray must be global or it will break due to.. GC.
@@ -23,6 +24,17 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
       label: `Filecoin Station v${STATION_VERSION}`,
       click: () => { shell.openExternal(`https://github.com/filecoin-project/filecoin-station/releases/v${STATION_VERSION}`) }
     },
+    {
+      id: 'checkForUpdates',
+      label: 'Check for Updates...',
+      click: () => { ctx.manualCheckForUpdates() }
+    },
+    {
+      id: 'checkingForUpdates',
+      label: 'Checking for Updates',
+      enabled: false,
+      visible: false
+    },
     { type: 'separator' },
     {
       id: 'showUi',
@@ -38,4 +50,32 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
   ])
   tray.setToolTip('Filecoin Station')
   tray.setContextMenu(contextMenu)
+
+  setupIpcEventListeners(contextMenu)
+}
+
+/**
+ * @param {Electron.Menu} contextMenu
+ */
+function setupIpcEventListeners (contextMenu) {
+  ipcMain.on(ipcMainEvents.UPDATE_CHECK_STARTED, () => {
+    getItemById('checkForUpdates').visible = false
+    getItemById('checkingForUpdates').visible = true
+  })
+
+  ipcMain.on(ipcMainEvents.UPDATE_CHECK_FINISHED, () => {
+    getItemById('checkForUpdates').visible = true
+    getItemById('checkingForUpdates').visible = false
+  })
+
+  /**
+   * Get an item from the Tray menu or fail with a useful error message.
+   * @param {string} id
+   * @returns {Electron.MenuItem}
+   */
+  function getItemById (id) {
+    const item = contextMenu.getMenuItemById(id)
+    if (!item) throw new Error(`Unknown tray menu item id: ${id}`)
+    return item
+  }
 }
