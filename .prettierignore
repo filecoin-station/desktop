@@ -1,0 +1,9 @@
+# We are using https://standardjs.com coding style. It is unfortunately incompatible with Prettier;
+# see https://github.com/standard/standard/issues/996 and the linked issues.
+# Standard does not handle Markdown files though, so we want to use Prettier formatting.
+# The goal of the configuration below is to configure Prettier to lint only Markdown files.
+**/*
+!**/*.md
+
+# Let's keep LICENSE.md in the same formatting as we use in other PL repositories
+LICENSE.md

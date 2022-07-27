@@ -7,8 +7,8 @@
   "main": "main/index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development electron .",
-    "lint": "eslint . && tsc -p tsconfig.json && tsc -p renderer/tsconfig.json",
-    "lint:fix": "eslint --fix .",
+    "lint": "eslint . && tsc -p tsconfig.json && tsc -p renderer/tsconfig.json && prettier --check .",
+    "lint:fix": "eslint --fix . && prettier --write .",
     "test": "run-s build:* && run-s test:*",
     "test:e2e": "xvfb-maybe cross-env NODE_ENV=test playwright test 'test/e2e/.*.test.js'",
     "postinstall": "run-s install-*",
@@ -39,6 +39,7 @@
     "electron-store": "^8.0.1",
     "electron-updater": "^5.0.1",
     "execa": "^5.1.1",
+    "prettier": "^2.7.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",

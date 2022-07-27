@@ -22,6 +22,10 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
+      - name: Fix CRLF handling on Windows
+        if: matrix.os == 'windows-latest'
+        run: git config --global core.autocrlf false
+
       - name: Check out Git repository
         uses: actions/checkout@v2
 
