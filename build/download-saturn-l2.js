@@ -2,7 +2,7 @@
 
 'use strict'
 
-const SATURN_DIST_TAG = 'v0.0.6'
+const SATURN_DIST_TAG = 'v0.0.8'
 
 const { mkdir } = require('node:fs/promises')
 const path = require('node:path')
@@ -31,7 +31,7 @@ async function main () {
   await Promise.all(
     assets
       .map(async ({ name, browser_download_url: url }) => {
-        const match = name.match(/^saturn-l2_\d+\.\d+\.\d+_([A-Za-z0-9]+)_([A-Za-z0-9_]+)\.tar\.gz$/)
+        const match = name.match(/^L2-node_\d+\.\d+\.\d+_([A-Za-z0-9]+)_([A-Za-z0-9_]+)\.tar\.gz$/)
         const platform = match && getPlatform(match[1])
         if (!match || platform !== process.platform) {
           console.log(' ⨯ skipping %s', name)
