@@ -8,6 +8,7 @@ const { app } = require('electron')
 const execa = require('execa')
 
 const Store = require('electron-store')
+const consts = require('./consts')
 const configStore = new Store()
 
 const saturnBinaryPath = getSaturnBinaryPath()
@@ -71,7 +72,8 @@ async function start () {
   appendToChildLog('Starting Saturn node')
   childProcess = execa(saturnBinaryPath, {
     env: {
-      FIL_WALLET_ADDRESS: filAddress
+      FIL_WALLET_ADDRESS: filAddress,
+      ROOT_DIR: path.join(consts.CACHE_HOME, 'saturn')
     }
   })
 
