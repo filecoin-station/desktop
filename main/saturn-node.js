@@ -45,7 +45,7 @@ async function setup (/** @type {import('./typings').Context} */ _ctx) {
 }
 
 function getSaturnBinaryPath () {
-  const name = 'saturn-l2' + (process.platform === 'win32' ? '.exe' : '')
+  const name = 'saturn-L2-node' + (process.platform === 'win32' ? '.exe' : '')
   // Recently built darwin-arm64 binaries cannot be started, they are immediately killed by SIGKILL
   // Since we don't support Apple Silicon yet, we can use x64 for now.
   // Note this is affecting only DEV. We are packaging the app for darwin-x64 only.
