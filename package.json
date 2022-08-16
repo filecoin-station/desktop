@@ -56,9 +56,9 @@
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/experimental-utils": "^5.26.0",
     "@typescript-eslint/parser": "^5.27.1",
-    "@vitejs/plugin-react": "^1.3.0",
+    "@vitejs/plugin-react": "^2.0.1",
     "cross-env": "^7.0.3",
-    "electron": "^19.0.2",
+    "electron": "^20.0.2",
     "electron-builder": "^23.0.3",
     "electron-devtools-installer": "^3.2.0",
     "electron-notarize": "^1.2.1",
@@ -77,7 +77,7 @@
     "tmp": "^0.2.1",
     "typescript": "^4.7.2",
     "undici": "^5.8.0",
-    "vite": "^2.9.9",
+    "vite": "^3.0.8",
     "xvfb-maybe": "^0.2.1"
   },
   "ts-standard": {
