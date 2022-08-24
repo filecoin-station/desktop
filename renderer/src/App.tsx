@@ -1,36 +1,10 @@
-import { useEffect } from 'react'
-import {
-  Link, Route, Routes
-} from 'react-router-dom'
+import AppRoutes from './configs/Routes'
 import './App.css'
-import Saturn from './Saturn'
 
-function App (): JSX.Element {
+const App = ():JSX.Element => {
   return (
-    <div className='App'>
-      <header>
-        <h1>Filecoin Station</h1>
-      </header>
-      <main>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/saturn' element={<Saturn />} />
-        </Routes>
-      </main>
-    </div>
+    <AppRoutes />
   )
 }
 
 export default App
-
-function Home (): JSX.Element {
-  useEffect(() => { document.title = 'Filecoin Station' })
-
-  return (
-    <div style={{ marginTop: '2em' }}>
-      <div className='logo'>🛰</div>
-      <h2>Welcome to Filecoin Station</h2>
-      <p><Link to='/saturn' id='link-to-saturn'> Saturn &gt;&gt;</Link></p>
-    </div>
-  )
-}
