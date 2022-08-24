@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react'
 import FilAddressForm from '../components/FilAddressForm'
 import Modal from '../components/Modal.js'
 import Onboarding from '../components/Onboarding'
-import PlayStoreBadge from './../assets/img/play-store-badge.svg'
-import AppStoreBadge from './../assets/img/app-store-badge.svg'
-import StationLogo from './../assets/img/station-logo.svg'
+import StationLogoLight from './../assets/img/station-logo-light.svg'
 import { Navigate } from 'react-router-dom'
 import { setStationFilAddress, getStationFilAddress } from './../components/InterfaceCalls'
 import Consent from '../components/Consent'
@@ -106,7 +104,7 @@ const Welcome = () : JSX.Element => {
         <div className="col-span-2 h-full bg-neutral-100">
           <div className='flex flex-col h-full mx-20'>
             <div className="basis-1/4">
-              <img className="left-0 pt-10" src={StationLogo} width="200px" alt="Station Logo" />
+              <img className="left-0 pt-10" src={StationLogoLight} width="200px" alt="Station Logo" />
             </div>
 
             <div className="basis-2/4 flex place-items-center">

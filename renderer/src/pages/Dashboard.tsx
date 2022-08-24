@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { isSaturnNodeRunning, getSaturnNodeWebUrl, getSaturnNodeLog, getSaturnNodeFilAddress, stopSaturnNode, setStationFilAddress, startSaturnNode } from './../components/InterfaceCalls'
 
-import './Saturn.css'
+import './../Saturn.css'
 
 export default function Dashboard (): JSX.Element {
   const [isRunning, setIsRunning] = useState(true)
