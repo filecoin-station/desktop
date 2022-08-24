@@ -10,5 +10,9 @@ contextBridge.exposeInMainWorld('electron', {
     getWebUrl: () => ipcRenderer.invoke('saturn:getWebUrl'),
     getFilAddress: () => ipcRenderer.invoke('saturn:getFilAddress'),
     setFilAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('saturn:setFilAddress', address)
+  },
+  stationConfig: {
+    getFilAddress: () => ipcRenderer.invoke('station:getFilAddress'),
+    setFilAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('station:setFilAddress', address)
   }
 })
