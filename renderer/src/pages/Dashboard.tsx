@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { isSaturnNodeRunning, getSaturnNodeWebUrl, getSaturnNodeLog, getSaturnNodeFilAddress, stopSaturnNode, setStationFilAddress, startSaturnNode } from './../components/InterfaceCalls'
+import { isSaturnNodeRunning, getSaturnNodeWebUrl, getSaturnNodeLog, stopSaturnNode, setStationFilAddress, startSaturnNode, getStationFilAddress } from './../components/InterfaceCalls'
 
 import './../Saturn.css'
 
@@ -14,7 +14,7 @@ export default function Dashboard (): JSX.Element {
     isSaturnNodeRunning().then(setIsRunning)
     getSaturnNodeWebUrl().then(setSaturnNodeWebUrl)
     getSaturnNodeLog().then(setSaturnNodeLog)
-    getSaturnNodeFilAddress().then(setFilAddress)
+    getStationFilAddress().then(setFilAddress)
     // `useEffect` and `setInterval` do not support async functions.
     // We are running the update in background and not waiting for the promises to resolve.
   }
@@ -38,7 +38,9 @@ export default function Dashboard (): JSX.Element {
   }
 
   const disconnect = () => {
-    stopSaturnNode().then(() => { setStationFilAddress('') })
+    stopSaturnNode().then(() => { 
+      setStationFilAddress('').then(() => { setFilAddress(''); })
+    })
   }
 
   const content = isRunning
@@ -48,7 +50,8 @@ export default function Dashboard (): JSX.Element {
     : filAddress
       ? ErrorNotRunning({ onRestartClick, saturnNodeLog })
       : <Navigate to="/address" replace />
-
+  
+    
   return (
     <div className="h-full v-full">
       {content}

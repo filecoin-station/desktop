@@ -4,7 +4,7 @@ import Modal from '../components/Modal.js'
 import Onboarding from '../components/Onboarding'
 import StationLogoLight from './../assets/img/station-logo-light.svg'
 import { Navigate } from 'react-router-dom'
-import { setStationFilAddress, getStationFilAddress } from './../components/InterfaceCalls'
+import { setStationFilAddress, getStationFilAddress, getStationUserSawOnboarding, setStationUserSawOnboarding, getStationUserConsent, setStationUserConsent} from './../components/InterfaceCalls'
 import Consent from '../components/Consent'
 
 const Loading = () => {
@@ -27,12 +27,6 @@ const CreateWalletInfo = () => {
             <h1 className="font-bold text-3xl mb-10">Don't have filecoin address?
               Check Station website and create one new.</h1>
             <div className="flex gap-6">
-              {/* <a href="https://filwallet.co/" target="_blank" rel="noreferrer" >
-                <img src={PlayStoreBadge} width="134" alt="Play Store badge" />
-              </a>
-              <a href="https://filwallet.co/" target="_blank" rel="noreferrer" >
-                <img src={AppStoreBadge} width="120" alt="App Store badge" />
-              </a> */}
             </div>
           </div>
         </div>
@@ -42,18 +36,20 @@ const CreateWalletInfo = () => {
 }
 
 const Welcome = () : JSX.Element => {
-  const [filAddress, setFilAddress] = useState<string | undefined>()
-  const [loadingState, setLoadingState] = useState<boolean>(true)
-  const [userOnboarded, setUserOnboarded] = useState<boolean>(false)
-  const [userConsent, setUserConsent] = useState<boolean>(false)
-  const [isOpen, setIsOpen] = useState(!userOnboarded)
+  const [filAddress, setFilAddress] = useState<string | undefined>(undefined)
+  const [userOnboarded, setUserOnboarded] = useState<boolean | undefined>()
+  const [userConsent, setUserConsent] = useState<boolean | undefined>()
+  const [isOpen, setIsOpen] = useState(!!userOnboarded)
 
   const updateStatus = (): void => {
-    getStationFilAddress().then((sysFilAddress): void => {
-      // test purposes: animation
-      setTimeout(() => { setLoadingState(false) }, 3000)
-      setFilAddress(sysFilAddress)
+    getStationFilAddress().then(setFilAddress)
+    getStationUserConsent().then((res) => {
+      setTimeout(() => {setUserConsent(res)}, 5000)
     })
+    getStationUserSawOnboarding().then((res) => {
+      setTimeout(() => {setUserOnboarded(res)}, 5000)
+    })
+    
   }
 
   useEffect(() => {
@@ -68,14 +64,11 @@ const Welcome = () : JSX.Element => {
   }
 
   const manageConsent = (decision: boolean) => {
-    // electron: setStationUserOnboarded
-    setUserConsent(decision)
+    setStationUserConsent(decision).then(() => {setUserConsent(decision)})
   }
 
   const finishOnboarding = () => {
-    // electron: setStationUserOnboarded
-    setIsOpen(false)
-    setUserOnboarded(true)
+    setStationUserSawOnboarding().then(() => {setUserOnboarded(true)})
   }
 
   const openOnboarding = () => {
@@ -90,16 +83,18 @@ const Welcome = () : JSX.Element => {
   const [modalContent, setModalContent] = useState(<Onboarding onFinish={finishOnboarding} />)
 
   const afterSetFilAddress = (address: string | undefined) => {
-    openConsent(() => { manageConsent(true); setSysFilAddress(address) })
+    openConsent(() => { 
+      manageConsent(true); 
+      setSysFilAddress(address) })
   }
 
   if (filAddress && filAddress !== '' && userConsent) {
     return <Navigate to="/" replace />
   }
-
+  
   return (
     <>
-      {loadingState === true && <Loading />}
+      {(typeof(userOnboarded) === 'undefined' || typeof(userConsent) === 'undefined') ? <Loading />  : ''}
       <div className="grid grid-cols-3 h-full">
         <div className="col-span-2 h-full bg-neutral-100">
           <div className='flex flex-col h-full mx-20'>
