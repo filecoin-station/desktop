@@ -13,7 +13,11 @@ export declare global {
       },
       stationConfig: {
         getFilAddress: () => Promise<string | undefined>,
-        setFilAddress: (address: string | undefined) => Promise<void>
+        setFilAddress: (address: string | undefined) => Promise<void>,
+        getSawOnboarding: () => Promise<boolean>,
+        setSawOnboarding: () => Promise<void>,
+        getUserConsent: () => Promisse<boolean>,
+        setUserConsent: (consent: boolean) => Promisse<void>
       }
     }
   }
