@@ -15,6 +15,9 @@ export default function Saturn (): JSX.Element {
     getSaturnNodeWebUrl().then(setSaturnNodeWebUrl)
     getSaturnNodeLog().then(setSaturnNodeLog)
     getSaturnNodeFilAddress().then(setFilAddress)
+    getStationUserSawOnboarding().then((res) => { console.log('>>>>>>> getStationUserSawOnboarding', res)})
+    getStationUserConsent().then((res) => { console.log('>>>>>>> getStationUserSawOnboarding', res)})
+
     // `useEffect` and `setInterval` do not support async functions.
     // We are running the update in background and not waiting for the promises to resolve.
   }
@@ -83,6 +86,22 @@ async function getSaturnNodeFilAddress (): Promise<string | undefined> {
 
 async function setSaturnNodeFilAddress (address: string | undefined): Promise<void> {
   return await window.electron.saturnNode.setFilAddress(address)
+}
+
+async function getStationUserSawOnboarding (): Promise<boolean> {
+  return await window.electron.stationConfig.getSawOnboarding();
+}
+
+async function setStationUserOnboarding (): Promise<void> {
+  return await window.electron.stationConfig.setSawOnboarding();
+}
+
+async function getStationUserConsent (): Promise<boolean> {
+  return await window.electron.stationConfig.getUserConsent();
+}
+
+async function setStationUserConsent (consent: boolean): Promise<void> {
+  return await window.electron.stationConfig.setUserConsent(consent);
 }
 
 function ErrorNotRunning ({ onRestartClick, saturnNodeLog } : {onRestartClick: React.MouseEventHandler<HTMLButtonElement>, saturnNodeLog: string}) {

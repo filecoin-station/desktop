@@ -20,6 +20,10 @@ function setupIpcMain () {
   ipcMain.handle('saturn:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
   ipcMain.handle('station:getFilAddress', stationConfig.getFilAddress)
   ipcMain.handle('station:setFilAddress', (_event, address) => stationConfig.setFilAddress(address))
+  ipcMain.handle('station:getSawOnboarding', stationConfig.getSawOnboarding)
+  ipcMain.handle('station:setSawOnboarding', (_event) => stationConfig.setSawOnboarding())
+  ipcMain.handle('station:getUserConsent', stationConfig.getUserConsent)
+  ipcMain.handle('station:setUserConsent', (_event, consent) => stationConfig.setUserConsent(consent))
 }
 
 module.exports = {
