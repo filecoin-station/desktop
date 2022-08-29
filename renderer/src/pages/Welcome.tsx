@@ -83,9 +83,13 @@ const Welcome = () : JSX.Element => {
   const [modalContent, setModalContent] = useState(<Onboarding onFinish={finishOnboarding} />)
 
   const afterSetFilAddress = (address: string | undefined) => {
-    openConsent(() => { 
-      manageConsent(true); 
-      setSysFilAddress(address) })
+    if(userConsent !== true) {
+      openConsent(() => { 
+        manageConsent(true); 
+        setSysFilAddress(address) })
+    } else {
+      setSysFilAddress(address)
+    }
   }
 
   if (filAddress && filAddress !== '' && userConsent) {
