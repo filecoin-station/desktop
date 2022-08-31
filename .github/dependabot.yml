@@ -15,3 +15,8 @@ updates:
     reviewers:
       - "bajtos"
       - "juliangruber"
+    ignore:
+      # requires electron main process esm support
+      # https://github.com/electron/electron/issues/21457
+      - dependency-name: "execa"
+        versions: [">=6"]
