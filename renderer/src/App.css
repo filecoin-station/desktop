@@ -72,8 +72,8 @@
 
   .link-primary-dark {
     @apply text-white underline decoration-white/70
-     hover:text-white hover:decoration-primary-hover/70
-     visited:text-white visited:decoration-primary-click/70
+     hover:text-white hover:decoration-white/70
+     visited:text-white visited:decoration-white/70
   }
 
   .gradient-space-marine {
