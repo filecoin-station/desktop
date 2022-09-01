@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/filecoin-project/filecoin-station#readme",
   "dependencies": {
-    "@glif/filecoin-address": "^2.0.0-beta.16",
+    "@glif/filecoin-address": "^2.0.1",
     "electron-log": "^4.4.7",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
