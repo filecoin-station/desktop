@@ -55,7 +55,7 @@
     "@types/tmp": "^0.2.3",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/experimental-utils": "^5.36.1",
-    "@typescript-eslint/parser": "^5.27.1",
+    "@typescript-eslint/parser": "^5.36.1",
     "@vitejs/plugin-react": "^2.0.1",
     "cross-env": "^7.0.3",
     "electron": "^20.0.2",
