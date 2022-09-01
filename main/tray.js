@@ -41,6 +41,16 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
       label: 'Show UI',
       click: () => ctx.showUI()
     },
+    {
+      label: 'Start at login',
+      type: 'checkbox',
+      click: function () {
+        const openAtLogin = !app.getLoginItemSettings().openAtLogin
+        app.setLoginItemSettings({ openAtLogin })
+        this.checked = openAtLogin
+      },
+      checked: app.getLoginItemSettings().openAtLogin
+    },
     { type: 'separator' },
     {
       label: 'Quit Station',
