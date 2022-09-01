@@ -42,7 +42,6 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
       click: () => ctx.showUI()
     },
     {
-      id: 'openAtLogin',
       label: 'Start at login',
       type: 'checkbox',
       click: function () {
