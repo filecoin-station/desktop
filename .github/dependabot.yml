@@ -11,6 +11,7 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "deps"
+      prefix-development: "deps(dev)"
       include: "scope"
     reviewers:
       - "bajtos"

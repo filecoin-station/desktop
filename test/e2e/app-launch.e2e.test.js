@@ -3,6 +3,8 @@ const { test, expect } = require('@playwright/test')
 const path = require('path')
 const { request } = require('undici')
 
+const TIMEOUT_MULTIPLIER = process.env.CI ? 10 : 1
+
 const tmp = require('tmp')
 
 // Running test cases one after another
@@ -81,7 +83,7 @@ test.describe.serial('Application launch', async () => {
 
       // Return the last observed value. It may be undefined if the promise above has not finished yet
       return (/** @type {any} */(window)).__saturnNodeIsReady
-    }, [], { timeout: 1000 })
+    }, [], { timeout: 1000 * TIMEOUT_MULTIPLIER })
   })
 
   test('saturn WebUI is available', async () => {
