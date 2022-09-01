@@ -49,7 +49,7 @@
   "devDependencies": {
     "@playwright/test": "^1.22.2",
     "@types/gunzip-maybe": "^1.4.0",
-    "@types/react": "^18.0.0",
+    "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.0",
     "@types/tar-fs": "^2.0.1",
     "@types/tmp": "^0.2.3",
