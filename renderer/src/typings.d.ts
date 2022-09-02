@@ -2,7 +2,7 @@ export declare global {
   interface Window {
     electron: {
       saturnNode: {
-        start:() => Promise<void>,
+        start: () => Promise<void>,
         stop: () => Promise<void>,
         isRunning: () => Promise<boolean>,
         isReady: () => Promise<boolean>,
@@ -21,4 +21,12 @@ export declare global {
       }
     }
   }
+}
+
+
+
+export type ActivityEventMessage = {
+  time: EpochTimeStamp,
+  type: "Info" | "Error" | "Warning",
+  msg: string
 }

@@ -49,3 +49,18 @@ export async function stopSaturnNode(): Promise<void> {
 export async function startSaturnNode(): Promise<void> {
   return await window.electron.saturnNode.start()
 }
+
+import { ActivityEventMessage } from '../typings'
+export async function getStationActivityLog(): Promise<ActivityEventMessage[] | []> {
+  return [{ time: (new Date("2022/02/01")).getMilliseconds(), msg: "A job just arrive", type: "Info" },
+          { time: (new Date("2022/03/01")).getMilliseconds(), msg: "Job completed", type: "Info" },
+          {time: (new Date("2022/04/01")).getMilliseconds(), msg: "Oopss", type: "Warning"}]
+}
+
+export async function getStationTotalEarnings(): Promise<number | undefined> {
+  return 3
+}
+
+export async function getStationTotalJobs(): Promise<number | undefined> {
+  return 33
+}
