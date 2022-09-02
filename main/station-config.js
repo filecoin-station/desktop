@@ -6,7 +6,7 @@ const configStore = new Store()
 const ConfigKeys = {
   // FilAddress: 'station.filAddress',
   OnboardingCompleted: 'station.sawOnborading',
-  UserConsent: 'station.userConsent',
+  UserConsent: 'station.userConsent'
 }
 
 // let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
@@ -31,12 +31,12 @@ let userConsent = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys
 /**
  * @returns {boolean}
  */
- function getOnboardingCompleted () {
+function getOnboardingCompleted () {
   return !!OnboardingCompleted
 }
 
 /**
- * 
+ *
  */
 function setOnboardingCompleted () {
   OnboardingCompleted = true
@@ -46,7 +46,7 @@ function setOnboardingCompleted () {
 /**
  * @returns {boolean}
  */
- function getUserConsent () {
+function getUserConsent () {
   return !!userConsent
 }
 

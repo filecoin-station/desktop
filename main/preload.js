@@ -17,6 +17,6 @@ contextBridge.exposeInMainWorld('electron', {
     getOnboardingCompleted: () => ipcRenderer.invoke('station:getOnboardingCompleted'),
     setOnboardingCompleted: () => ipcRenderer.invoke('station:setOnboardingCompleted'),
     getUserConsent: () => ipcRenderer.invoke('station:getUserConsent'),
-    setUserConsent: (/** @type {boolean} */ consent) => ipcRenderer.invoke('station:setUserConsent', consent),
+    setUserConsent: (/** @type {boolean} */ consent) => ipcRenderer.invoke('station:setUserConsent', consent)
   }
 })
