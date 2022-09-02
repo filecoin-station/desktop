@@ -49,6 +49,7 @@ const Dashboard = (): JSX.Element => {
 
   useEffect(() => { document.title = 'Dashboard' })
 
+
   useEffect(() => {
     reload()
     startSaturnNode()
