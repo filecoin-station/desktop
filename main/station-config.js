@@ -5,12 +5,12 @@ const configStore = new Store()
 
 const ConfigKeys = {
   // FilAddress: 'station.filAddress',
-  SawOnboarding: 'station.sawOnborading',
+  OnboardingCompleted: 'station.sawOnborading',
   UserConsent: 'station.userConsent',
 }
 
 // let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
-let sawOnboarding = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.SawOnboarding))
+let OnboardingCompleted = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.OnboardingCompleted))
 let userConsent = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.UserConsent))
 
 // /**
@@ -31,16 +31,16 @@ let userConsent = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys
 /**
  * @returns {boolean}
  */
- function getSawOnboarding () {
-  return !!sawOnboarding
+ function getOnboardingCompleted () {
+  return !!OnboardingCompleted
 }
 
 /**
  * 
  */
-function setSawOnboarding () {
-  sawOnboarding = true
-  configStore.set(ConfigKeys.SawOnboarding, sawOnboarding)
+function setOnboardingCompleted () {
+  OnboardingCompleted = true
+  configStore.set(ConfigKeys.OnboardingCompleted, OnboardingCompleted)
 }
 
 /**
@@ -61,8 +61,8 @@ function setUserConsent (consent) {
 module.exports = {
   // getFilAddress,
   // setFilAddress,
-  getSawOnboarding,
-  setSawOnboarding,
+  getOnboardingCompleted,
+  setOnboardingCompleted,
   getUserConsent,
   setUserConsent
 }

@@ -86,12 +86,12 @@ async function setSaturnNodeFilAddress (address: string | undefined): Promise<vo
   return await window.electron.saturnNode.setFilAddress(address)
 }
 
-async function getStationUserSawOnboarding (): Promise<boolean> {
-  return await window.electron.stationConfig.getSawOnboarding();
+async function getStationUserOnboardingCompleted (): Promise<boolean> {
+  return await window.electron.stationConfig.getOnboardingCompleted();
 }
 
 async function setStationUserOnboarding (): Promise<void> {
-  return await window.electron.stationConfig.setSawOnboarding();
+  return await window.electron.stationConfig.setOnboardingCompleted();
 }
 
 async function getStationUserConsent (): Promise<boolean> {

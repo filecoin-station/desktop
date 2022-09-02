@@ -21,8 +21,8 @@ function setupIpcMain () {
   // temp
   ipcMain.handle('station:getFilAddress', saturnNode.getFilAddress)
   ipcMain.handle('station:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
-  ipcMain.handle('station:getSawOnboarding', stationConfig.getSawOnboarding)
-  ipcMain.handle('station:setSawOnboarding', (_event) => stationConfig.setSawOnboarding())
+  ipcMain.handle('station:getOnboardingCompleted', stationConfig.getOnboardingCompleted)
+  ipcMain.handle('station:setOnboardingCompleted', (_event) => stationConfig.setOnboardingCompleted())
   ipcMain.handle('station:getUserConsent', stationConfig.getUserConsent)
   ipcMain.handle('station:setUserConsent', (_event, consent) => stationConfig.setUserConsent(consent))
 }
