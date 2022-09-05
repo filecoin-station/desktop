@@ -1,8 +1,13 @@
-
+import StationLogoLight from './../assets/img/station-logo-light.svg'
+import StationLogoDark from './../assets/img/station-logo-dark.svg'
 
 const StyleGuide = () => {
   return (
     <>
+      <div className="pt-5 pb-5 flex flex-row">
+      <img className="left-0" src={StationLogoLight} width="200px" alt="Station Logo" />
+      <img className="left-0 bg-primary" src={StationLogoDark} width="200px" alt="Station Logo" />
+      </div>
       <div className="pt-5 pb-5">
         <h1 className="font-title text-header-xxl">Title font</h1>
         <h1 className="font-body text-body-xxl">Body font</h1>
@@ -65,7 +70,7 @@ const StyleGuide = () => {
       </div>
 
       <div className="pt-5 pb-5">
-        <a className="link-primary"> Link Primary  </a>
+        <a href="#" className="link-primary"> Link Primary  </a>
         <div className="bg-primary p-5">
           <a href="#" className="link-primary-dark">Link Primary dark</a>
         </div>
