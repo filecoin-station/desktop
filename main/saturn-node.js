@@ -85,7 +85,10 @@ async function start () {
     assert(stdout, 'stderr was not defined on child process')
 
     stdout.setEncoding('utf-8')
-    stdout.on('data', (/** @type {string} */ data) => forwardChunkFromSaturn(data, console.log))
+    stdout.on('data', (/** @type {string} */ data) => {
+      forwardChunkFromSaturn(data, console.log)
+      appendToChildLog(data)
+    })
 
     stderr.setEncoding('utf-8')
     stderr.on('data', (/** @type {string} */ data) => {
