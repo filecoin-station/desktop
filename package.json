@@ -12,7 +12,7 @@
     "test": "run-s build:* && run-s test:*",
     "test:e2e": "xvfb-maybe cross-env NODE_ENV=test playwright test 'test/e2e/.*.test.js'",
     "vitestpreview": "vite preview",
-    "vitest": "vitest",
+    "vitest": "vitest run",
     "vitest:ui": "vitest --ui",
     "postinstall": "run-s install-*",
     "install-app-deps": "electron-builder install-app-deps",
