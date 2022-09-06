@@ -1,6 +1,6 @@
 # Testing framework for the backend
 
-- Status: PROPOSED
+- Status: ACCEPTED
 
 ## Context
 
