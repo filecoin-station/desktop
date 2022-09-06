@@ -1,3 +1,5 @@
+'use strict'
+
 const { ipcMain } = require('electron')
 
 const saturnNode = require('./saturn-node')

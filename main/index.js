@@ -1,3 +1,5 @@
+'use strict'
+
 const { app, dialog } = require('electron')
 const log = require('electron-log')
 const serve = require('electron-serve')

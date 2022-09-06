@@ -1,3 +1,5 @@
+'use strict'
+
 const fs = require('node:fs/promises')
 const { Menu, MenuItem, ipcMain, dialog, BrowserWindow } = require('electron')
 const { ipcMainEvents } = require('./ipc')
