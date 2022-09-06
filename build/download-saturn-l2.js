@@ -2,7 +2,7 @@
 
 'use strict'
 
-const SATURN_DIST_TAG = 'v0.2.0'
+const SATURN_DIST_TAG = 'v0.3.0'
 
 const { mkdir } = require('node:fs/promises')
 const path = require('node:path')
