@@ -24,6 +24,19 @@
       }
     },
     {
+      "files": ["main/test/*.test.js"],
+      "env": {
+          "mocha": true
+      },
+      "extends": [
+        "plugin:mocha/recommended"
+      ],
+      "plugins": [
+        "mocha"
+      ]
+    },
+
+    {
       "files": ["renderer/**/*"],
       "extends": [
         "react-app"
