@@ -4,29 +4,12 @@ const Store = require('electron-store')
 const configStore = new Store()
 
 const ConfigKeys = {
-  // FilAddress: 'station.filAddress',
   OnboardingCompleted: 'station.onboardingCompleted',
   UserConsent: 'station.userConsent'
 }
 
-// let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 let OnboardingCompleted = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.OnboardingCompleted))
 let userConsent = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.UserConsent))
-
-// /**
-//  * @returns {string | undefined}
-//  */
-//  function getFilAddress () {
-//   return filAddress
-// }
-
-// /**
-//  * @param {string | undefined} address
-//  */
-// function setFilAddress (address) {
-//   filAddress = address
-//   configStore.set(ConfigKeys.FilAddress, address)
-// }
 
 /**
  * @returns {boolean}
@@ -59,8 +42,6 @@ function setUserConsent (consent) {
 }
 
 module.exports = {
-  // getFilAddress,
-  // setFilAddress,
   getOnboardingCompleted,
   setOnboardingCompleted,
   getUserConsent,
