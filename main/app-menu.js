@@ -7,23 +7,7 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
   const menu = Menu.getApplicationMenu()
   if (!menu) return
 
-  if (process.platform === 'darwin') {
-    // Add "Check for updates..." item to the Application menu on MacOS
-    // GitHub issues tracking the work to add this menu item on other platforms:
-    //  - Windows: https://github.com/filecoin-project/filecoin-station/issues/63
-    //  - Linux: https://github.com/filecoin-project/filecoin-station/issues/64
-    menu.items[0].submenu?.insert(1, new MenuItem({
-      id: 'checkForUpdates',
-      label: 'Check For Updates...',
-      click: () => { ctx.manualCheckForUpdates() }
-    }))
-    menu.items[0].submenu?.insert(2, new MenuItem({
-      id: 'checkingForUpdates',
-      label: 'Checking For Updates',
-      enabled: false,
-      visible: false
-    }))
-  }
+  setupCheckForUpdatesMenuItem(ctx, menu)
 
   menu.items[1].submenu?.insert(1, new MenuItem({
     label: 'Save Module Logs As…',
@@ -41,6 +25,30 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
 
   Menu.setApplicationMenu(menu)
   setupIpcEventListeners(menu)
+}
+
+/**
+ * Add "Check for updates..." item to the Application menu on MacOS
+ * @param {import('./typings').Context} ctx
+ * @param {Electron.Menu} menu
+ */
+function setupCheckForUpdatesMenuItem (ctx, menu) {
+  // GitHub issues tracking the work to add this menu item on other platforms:
+  //  - Windows: https://github.com/filecoin-project/filecoin-station/issues/63
+  //  - Linux: https://github.com/filecoin-project/filecoin-station/issues/64
+  if (process.platform !== 'darwin') return
+
+  menu.items[0].submenu?.insert(1, new MenuItem({
+    id: 'checkForUpdates',
+    label: 'Check For Updates...',
+    click: () => { ctx.manualCheckForUpdates() }
+  }))
+  menu.items[0].submenu?.insert(2, new MenuItem({
+    id: 'checkingForUpdates',
+    label: 'Checking For Updates',
+    enabled: false,
+    visible: false
+  }))
 }
 
 /**
