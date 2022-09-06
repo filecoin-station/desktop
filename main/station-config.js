@@ -5,7 +5,7 @@ const configStore = new Store()
 
 const ConfigKeys = {
   // FilAddress: 'station.filAddress',
-  OnboardingCompleted: 'station.sawOnborading',
+  OnboardingCompleted: 'station.onboardingCompleted',
   UserConsent: 'station.userConsent'
 }
 
