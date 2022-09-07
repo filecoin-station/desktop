@@ -3,6 +3,7 @@
 const path = require('path')
 const fs = require('node:fs/promises')
 const { setTimeout } = require('timers/promises')
+const assert = require('node:assert')
 
 const { app } = require('electron')
 const execa = require('execa')
@@ -34,9 +35,7 @@ async function setup (/** @type {import('./typings').Context} */ _ctx) {
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
 
   const stat = await fs.stat(saturnBinaryPath)
-  if (!stat) {
-    throw new Error(`Invalid configuration or deployment. Saturn L2 Node was not found: ${saturnBinaryPath}`)
-  }
+  assert(stat, `Invalid configuration or deployment. Saturn L2 Node was not found: ${saturnBinaryPath}`)
 
   app.on('before-quit', () => {
     if (!childProcess) return
@@ -79,22 +78,17 @@ async function start () {
 
   /** @type {Promise<void>} */
   const readyPromise = new Promise(function startSaturnNodeChildProcess (resolve, reject) {
-    if (!childProcess) {
-      throw new Error('Unexpected error: child process is undefined after startup')
-    }
+    assert(childProcess, 'Unexpected error: child process is undefined after startup')
 
     const { stdout, stderr } = childProcess
-
-    if (!stderr) {
-      throw new Error('stderr was not defined on child process')
-    }
-
-    if (!stdout) {
-      throw new Error('stderr was not defined on child process')
-    }
+    assert(stderr, 'stderr was not defined on child process')
+    assert(stdout, 'stderr was not defined on child process')
 
     stdout.setEncoding('utf-8')
-    stdout.on('data', (/** @type {string} */ data) => forwardChunkFromSaturn(data, console.log))
+    stdout.on('data', (/** @type {string} */ data) => {
+      forwardChunkFromSaturn(data, console.log)
+      appendToChildLog(data)
+    })
 
     stderr.setEncoding('utf-8')
     stderr.on('data', (/** @type {string} */ data) => {
