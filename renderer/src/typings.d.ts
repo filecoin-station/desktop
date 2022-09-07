@@ -19,6 +19,9 @@ export declare global {
         getUserConsent: () => Promisse<boolean>,
         setUserConsent: (consent: boolean) => Promisse<void>
       }
+      onActivityLog: (callback) => () => void
+      onJobsCounter: (callback) => () => void
+      onEarningsCounter: (callback) => () => void
     }
   }
 }
@@ -27,6 +30,6 @@ export declare global {
 
 export type ActivityEventMessage = {
   time: EpochTimeStamp,
-  type: "Info" | "Error" | "Warning",
+  type: "info" | "error" | "warning",
   msg: string
 }

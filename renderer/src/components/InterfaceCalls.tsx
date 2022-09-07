@@ -52,9 +52,10 @@ export async function startSaturnNode(): Promise<void> {
 
 import { ActivityEventMessage } from '../typings'
 export async function getStationActivityLog(): Promise<ActivityEventMessage[] | []> {
-  return [{ time: (new Date("2022/02/01")).getMilliseconds(), msg: "A job just arrive", type: "Info" },
-          { time: (new Date("2022/03/01")).getMilliseconds(), msg: "Job completed", type: "Info" },
-          {time: (new Date("2022/04/01")).getMilliseconds(), msg: "Oopss", type: "Warning"}]
+  return [{ time: (new Date("2022-03-01T01:01:30+00:00")).getTime(), msg: "Job completed", type: "info" },
+          {time: (new Date("2022-04-01T01:01:30+00:00")).getTime(), msg: "Oopss", type: "warning"},
+          { time: (new Date("2022-02-01T01:01:30+00:00")).getTime(), msg: "A job just arrive", type: "info" },
+          { time: (new Date("2022-09-06T01:01:30+00:00")).getTime(), msg: "A job just arrive", type: "info" }]
 }
 
 export async function getStationTotalEarnings(): Promise<number | undefined> {
