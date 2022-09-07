@@ -15,6 +15,7 @@ export default function Saturn (): JSX.Element {
     getSaturnNodeWebUrl().then(setSaturnNodeWebUrl)
     getSaturnNodeLog().then(setSaturnNodeLog)
     getSaturnNodeFilAddress().then(setFilAddress)
+
     // `useEffect` and `setInterval` do not support async functions.
     // We are running the update in background and not waiting for the promises to resolve.
   }
