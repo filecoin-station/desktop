@@ -1,11 +1,33 @@
-import { useEffect, useState, useCallback } from 'react'
-import { getStationActivityLog, stopSaturnNode, setStationFilAddress,
-         startSaturnNode, getStationFilAddress, getStationTotalEarnings,
-         getStationTotalJobs } from '../components/InterfaceCalls'
+import { useEffect, useState, useCallback, FC } from 'react'
+import {
+  getStationActivityLog, stopSaturnNode, setStationFilAddress,
+  startSaturnNode, getStationFilAddress, getStationTotalEarnings,
+  getStationTotalJobs
+} from '../components/InterfaceCalls'
 import { ActivityEventMessage } from '../typings'
-import StationActivityLog from '../components/StationActivityLog'
-import StationStats from '../components/StationStats'
+import ActivityLog from '../components/ActivityLog'
+import StationStats from '../components/DashboardStats'
 import { useNavigate } from 'react-router-dom'
+
+type IFilWalletHeader = {
+  address: string | undefined;
+  disconnect: () => void;
+}
+
+const FilWalletHeader: FC<IFilWalletHeader> = ({ address, disconnect }) => {
+  const shortAddr = address?.substring(0, 4) + '...' + address?.substring(address.length - 4, address.length)
+
+  return (
+    <>
+      <span className='text-white text-right'>
+        {shortAddr}
+      </span>
+      <button className='text-white ml-4' onClick={disconnect}>
+        change
+      </button>
+    </>
+  )
+}
 
 export default function Dashboard(): JSX.Element {
   const navigate = useNavigate()
@@ -24,52 +46,31 @@ export default function Dashboard(): JSX.Element {
     getStationTotalJobs().then(setTotalJobs)
   }
 
-  const handleActivityLogEvent = useCallback((event: Event) => {
-    event.preventDefault()
-    const customEvent = event as CustomEvent
-    setActivityLog(previousLog => { return previousLog ? [...previousLog, customEvent.detail] : [customEvent.detail] })
+  const handleActivityLogEvent = useCallback((_event: any, value: ActivityEventMessage) => {
+    setActivityLog(previousLog => { return previousLog ? [...previousLog, value] : [value] })
   }, []);
 
-  const handleEarningsCounterEvent = useCallback((event: Event) => {
-    event.preventDefault()
-    const customEvent = event as CustomEvent
-    setTotalEarnigs((previousCounter) => previousCounter + customEvent.detail.amount)
+  const handleEarningsCounterEvent = useCallback((_event: any, value: number) => {
+    setTotalEarnigs((previousCounter) => previousCounter ? previousCounter + value : value)
   }, []);
 
-  const handleJobsCounterEvent = useCallback((event: Event) => {
-    event.preventDefault()
-    const customEvent = event as CustomEvent
-    setTotalJobs((previousCounter) => previousCounter + customEvent.detail.count)
+  const handleJobsCounterEvent = useCallback((_event: any, value: number) => {
+    setTotalJobs((previousCounter) => previousCounter ? previousCounter + value : value)
   }, []);
-
-  const startMessaging = () => {
-    const msgActivityLog = { time: Date.now(), msg: "New Job started", type: "Info" }
-    const customEventActivityLog = new CustomEvent('activityLog', { detail: msgActivityLog });
-    document.dispatchEvent(customEventActivityLog);
-
-    const msgEarningsCounter = { time: Date.now(), amount: Math.floor(Math.random() * 20) }
-    const customEventEarningsCounter = new CustomEvent('earningsCounter', { detail: msgEarningsCounter });
-    document.dispatchEvent(customEventEarningsCounter);
-
-    const msgJobsCounter = { time: Date.now(), count: Math.floor(Math.random() * 3) }
-    const customEventmsgJobsCounter = new CustomEvent('jobsCounter', { detail: msgJobsCounter });
-    document.dispatchEvent(customEventmsgJobsCounter);
-    setTimeout(() => { startMessaging() }, 5000)
-  }
 
 
   useEffect(() => {
     updateStatus()
     startSaturnNode()
-    document.addEventListener('activityLog', handleActivityLogEvent);
-    document.addEventListener('earningsCounter', handleEarningsCounterEvent);
-    document.addEventListener('jobsCounter', handleJobsCounterEvent);
-    startMessaging()
+    const unsubscribeActivityLog = window.electron.onActivityLog(handleActivityLogEvent)
+    const unsubscribeEarningsCounter = window.electron.onEarningsCounter(handleEarningsCounterEvent)
+    const unsubscribeJobsCounter = window.electron.onJobsCounter(handleJobsCounterEvent)
+
     return () => {
       stopSaturnNode();
-      document.removeEventListener("activityLog", handleActivityLogEvent)
-      document.removeEventListener('earningsCounter', handleEarningsCounterEvent);
-      document.removeEventListener('jobsCounter', handleJobsCounterEvent);
+      unsubscribeActivityLog();
+      unsubscribeEarningsCounter();
+      unsubscribeJobsCounter();
     }
   }, [])
 
@@ -80,16 +81,31 @@ export default function Dashboard(): JSX.Element {
     })
   }
 
+
   return (
     <div className="h-screen w-screen overflow-hidden">
-      <div className='h-[33%] flex justify-center bg-slate-900 '>
-        <StationStats filAddress={filAddress} disconnect={disconnect} totalJobs={totalJobs} totalEarns={totalEarnings} />
+
+      <div className='h-[33%] flex justify-center bg-slate-900'>
+        <div className="relative mt-10 mb-10 w-[80%] md:w-[60%] xl:w-[40%]">
+
+          <div className="flex justify-end">
+            <FilWalletHeader address={filAddress} disconnect={disconnect} />
+          </div>
+
+          <div className='h-full flex flex-row items-end pb-10'>
+            <StationStats totalJobs={totalJobs} totalEarns={totalEarnings} />
+          </div>
+
+        </div>
       </div>
+
       <div className='h-[67%] flex justify-center bg-[#f1f4f5]'>
-        <StationActivityLog logStream={activityLog} />
-      </div> 
+        <div className="w-[80%] md:w-[60%] xl:w-[40%] mt-10 pb-20 relative">
+          <h1 className='text-xl font-bold'>Activity log</h1>
+          <ActivityLog logStream={activityLog} />
+        </div>
+      </div>
     </div>
   )
 }
-
 
