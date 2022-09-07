@@ -9,6 +9,7 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
 
   setupCheckForUpdatesMenuItem(ctx, menu)
 
+  // File menu
   menu.items[1].submenu?.insert(1, new MenuItem({
     label: 'Save Module Logs As…',
     click: async () => {
@@ -38,6 +39,7 @@ function setupCheckForUpdatesMenuItem (ctx, menu) {
   //  - Linux: https://github.com/filecoin-project/filecoin-station/issues/64
   if (process.platform !== 'darwin') return
 
+  // App menu
   menu.items[0].submenu?.insert(1, new MenuItem({
     id: 'checkForUpdates',
     label: 'Check For Updates...',
