@@ -48,6 +48,20 @@ describe('ActivityLog', function () {
       { id: '2', message: 'second run' }
     ])
   })
+
+  it('limits the log to the most recent 50 entries', function () {
+    this.timeout(10000)
+
+    const log = new ActivityLog()
+    for (let i = 0; i < 110; i++) {
+      log.recordEvent(givenActivity({ message: `event ${i}` }))
+    }
+    const entries = log.getAllEntries()
+    assert.deepStrictEqual(
+      [entries.at(0)?.message, entries.at(-1)?.message],
+      ['event 10', 'event 109']
+    )
+  })
 })
 
 /**

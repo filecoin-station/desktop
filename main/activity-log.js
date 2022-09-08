@@ -35,6 +35,11 @@ class ActivityLog {
     Object.freeze(entry)
 
     this.#entries.push(entry)
+
+    if (this.#entries.length > 100) {
+      // Delete the oldest entry to keep ActivityLog at constant size
+      this.#entries.shift()
+    }
     this.#save()
     return entry
   }
