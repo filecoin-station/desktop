@@ -1,3 +1,5 @@
+'use strict'
+
 const { dialog } = require('electron')
 const { IS_MAC } = require('./consts')
 

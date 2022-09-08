@@ -1,3 +1,5 @@
+'use strict'
+
 const os = require('os')
 const packageJson = require('../package.json')
 const path = require('path')

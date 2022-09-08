@@ -19,7 +19,14 @@
   "overrides": [
     {
       "files": ["build/**/*.js", "main/**/*.js", "test/**/*.js", "*.js"],
+      "parserOptions": {
+        "sourceType": "commonjs"
+      },
+      "env": {
+        "node": true
+      },
       "rules": {
+        "strict": ["error", "global"],
         "@typescript-eslint/no-var-requires": "off"
       }
     },
