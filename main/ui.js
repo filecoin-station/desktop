@@ -4,6 +4,8 @@ const path = require('path')
 
 const { BrowserWindow, app, screen } = require('electron')
 const store = require('./store')
+const { ipcMain } = require('electron/main')
+const { ipcMainEvents } = require('./ipc')
 
 /**
  * @param {import('./typings').Context} ctx
@@ -66,8 +68,16 @@ module.exports = async function (ctx) {
   }
   ui.once('ready-to-show', ctx.showUI)
 
+  const onNewActivity = (/** @type {unknown[]} */ ...args) => {
+    if (ui.isDestroyed()) return // This happens when quitting the entire app
+    ui.webContents.send(ipcMainEvents.ACTIVITY_LOGGED, ...args)
+  }
+  ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
+
   // Don't exit when window is closed (Quit only via Tray icon menu)
   ui.on('close', (event) => {
+    console.log('---CLOSE WINDOW---')
+    ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     event.preventDefault()
     ui.hide()
     if (app.dock) app.dock.hide()

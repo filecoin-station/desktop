@@ -9,12 +9,18 @@ const setupUI = require('./ui')
 const setupTray = require('./tray')
 const setupUpdater = require('./updater')
 const saturnNode = require('./saturn-node')
-const { setupIpcMain } = require('./ipc')
+const { setupIpcMain, ipcMainEvents } = require('./ipc')
 const { setupAppMenu } = require('./app-menu')
 
 const { ActivityLog } = require('./activity-log')
+const { ipcMain } = require('electron/main')
 
 const inTest = (process.env.NODE_ENV === 'test')
+
+if (!app.isPackaged && !inTest) {
+  // Do not preserve old Activity entries in development mode
+  ActivityLog.reset()
+}
 
 function handleError (/** @type {any} */ err) {
   ctx.recordActivity({
@@ -45,6 +51,7 @@ if (!app.requestSingleInstanceLock() && !inTest) {
 
 /** @type {import('./typings').Context} */
 const ctx = {
+  getAllActivityLogEntries,
   recordActivity,
   manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
@@ -69,7 +76,7 @@ async function run () {
     await setupAppMenu(ctx)
     await setupUI(ctx)
     await setupUpdater(ctx)
-    await setupIpcMain()
+    await setupIpcMain(ctx)
 
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
 
@@ -86,8 +93,11 @@ const activityLog = new ActivityLog()
  */
 function recordActivity (event) {
   const entry = activityLog.recordEvent(event)
-  console.log('[ACTIVITY]', entry)
-  // TODO: send IPC event
+  ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, entry)
+}
+
+function getAllActivityLogEntries () {
+  return activityLog.getAllEntries()
 }
 
 run()

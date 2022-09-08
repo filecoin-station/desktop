@@ -3,6 +3,15 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electron', {
+  getActivityLog: () => ipcRenderer.invoke('station:getActivityLog'),
+
+  /**
+   * @param {(activityEntry: import('./typings').ActivityEntry) => void} callback
+   */
+  onActivityLogged (callback) {
+    ipcRenderer.on('station:activity-logged', (_event, entry) => callback(entry))
+  },
+
   saturnNode: {
     start: () => ipcRenderer.invoke('saturn:start'),
     stop: () => ipcRenderer.invoke('saturn:stop'),
