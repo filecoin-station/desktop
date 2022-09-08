@@ -1,3 +1,5 @@
+'use strict'
+
 const { _electron: electron } = require('playwright')
 const { test, expect } = require('@playwright/test')
 const path = require('path')

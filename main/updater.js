@@ -1,3 +1,5 @@
+'use strict'
+
 const { BrowserWindow, app, Notification, shell } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const { ipcMain } = require('electron/main')

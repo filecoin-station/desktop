@@ -1,3 +1,5 @@
+'use strict'
+
 const { Menu, Tray, shell, app, ipcMain } = require('electron')
 const path = require('path')
 const { IS_MAC, STATION_VERSION } = require('./consts')
