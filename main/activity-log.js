@@ -22,7 +22,7 @@ class ActivityLog {
     const nextId = ++this.#lastId
     /** @type {import('./typings').ActivityEntry} */
     const entry = {
-      id: '' + nextId,
+      id: String(nextId),
       timestamp: Date.now(),
       source,
       type,
