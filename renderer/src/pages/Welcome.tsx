@@ -4,7 +4,7 @@ import Modal from '../components/Modal.js'
 import Onboarding from '../components/Onboarding'
 import StationLogoLight from './../assets/img/station-logo-light.svg'
 import { Navigate } from 'react-router-dom'
-import { setStationFilAddress, getStationFilAddress, getStationUserSawOnboarding, setStationUserSawOnboarding, getStationUserConsent, setStationUserConsent} from './../components/InterfaceCalls'
+import { setStationFilAddress, getStationFilAddress, getStationUserSawOnboarding, setStationUserSawOnboarding, getStationUserConsent, setStationUserConsent } from './../components/InterfaceCalls'
 import Consent from '../components/Consent'
 
 const Loading = () => {
@@ -44,19 +44,15 @@ const Welcome = () : JSX.Element => {
   const updateStatus = (): void => {
     getStationFilAddress().then(setFilAddress)
     getStationUserConsent().then((res) => {
-      setTimeout(() => {setUserConsent(res)}, 5000)
+      setTimeout(() => { setUserConsent(res) }, 5000)
     })
     getStationUserSawOnboarding().then((res) => {
-      setTimeout(() => {setUserOnboarded(res)}, 5000)
+      setTimeout(() => { setUserOnboarded(res); setIsOpen(!res) }, 5000)
     })
-    
   }
 
   useEffect(() => {
     updateStatus()
-    // fixme: Is this needed? what for?
-    // const id = setInterval(updateStatus, 1000)
-    // return () => clearInterval(id)
   }, [filAddress])
 
   const setSysFilAddress = (address: string | undefined) => {
@@ -64,11 +60,11 @@ const Welcome = () : JSX.Element => {
   }
 
   const manageConsent = (decision: boolean) => {
-    setStationUserConsent(decision).then(() => {setUserConsent(decision)})
+    setStationUserConsent(decision).then(() => { setUserConsent(decision) })
   }
 
   const finishOnboarding = () => {
-    setStationUserSawOnboarding().then(() => {setUserOnboarded(true)})
+    setStationUserSawOnboarding().then(() => { setUserOnboarded(true); setIsOpen(false) })
   }
 
   const openOnboarding = () => {
@@ -83,10 +79,11 @@ const Welcome = () : JSX.Element => {
   const [modalContent, setModalContent] = useState(<Onboarding onFinish={finishOnboarding} />)
 
   const afterSetFilAddress = (address: string | undefined) => {
-    if(userConsent !== true) {
-      openConsent(() => { 
-        manageConsent(true); 
-        setSysFilAddress(address) })
+    if (userConsent !== true) {
+      openConsent(() => {
+        manageConsent(true)
+        setSysFilAddress(address)
+      })
     } else {
       setSysFilAddress(address)
     }
@@ -95,10 +92,10 @@ const Welcome = () : JSX.Element => {
   if (filAddress && filAddress !== '' && userConsent) {
     return <Navigate to="/" replace />
   }
-  
+
   return (
     <>
-      {(typeof(userOnboarded) === 'undefined' || typeof(userConsent) === 'undefined') ? <Loading />  : ''}
+      {(typeof (userOnboarded) === 'undefined' || typeof (userConsent) === 'undefined') ? <Loading /> : ''}
       <div className="grid grid-cols-3 h-full">
         <div className="col-span-2 h-full bg-neutral-100">
           <div className='flex flex-col h-full mx-20'>
