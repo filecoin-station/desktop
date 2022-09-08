@@ -76,7 +76,6 @@ module.exports = async function (ctx) {
 
   // Don't exit when window is closed (Quit only via Tray icon menu)
   ui.on('close', (event) => {
-    console.log('---CLOSE WINDOW---')
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     event.preventDefault()
     ui.hide()
