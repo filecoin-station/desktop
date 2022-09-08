@@ -13,6 +13,7 @@ export interface ActivityEntry extends ActivityEvent {
 }
 
 export interface Context {
+  recordActivity(event: ActivityEvent): void;
   showUI: () => void
   loadWebUIFromDist: import('electron-serve').loadURL
   manualCheckForUpdates: () => void

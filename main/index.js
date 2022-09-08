@@ -12,9 +12,17 @@ const saturnNode = require('./saturn-node')
 const { setupIpcMain } = require('./ipc')
 const { setupAppMenu } = require('./app-menu')
 
+const { ActivityLog } = require('./activity-log')
+
 const inTest = (process.env.NODE_ENV === 'test')
 
 function handleError (/** @type {any} */ err) {
+  ctx.recordActivity({
+    source: 'Station',
+    type: 'error',
+    message: `Station failed to start: ${err.message || err}`
+  })
+
   log.error(err)
   dialog.showErrorBox('Error occured', err.stack ?? err.message ?? err)
 }
@@ -37,10 +45,15 @@ if (!app.requestSingleInstanceLock() && !inTest) {
 
 /** @type {import('./typings').Context} */
 const ctx = {
+  recordActivity,
   manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
 }
+
+process.on('exit', () => {
+  ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station stopped.' })
+})
 
 async function run () {
   try {
@@ -58,10 +71,23 @@ async function run () {
     await setupUpdater(ctx)
     await setupIpcMain()
 
+    ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
+
     await saturnNode.setup(ctx)
   } catch (e) {
     handleError(e)
   }
+}
+
+const activityLog = new ActivityLog()
+
+/**
+ * @param {import('./typings').ActivityEvent} event
+ */
+function recordActivity (event) {
+  const entry = activityLog.recordEvent(event)
+  console.log('[ACTIVITY]', entry)
+  // TODO: send IPC event
 }
 
 run()
