@@ -18,18 +18,18 @@ export declare global {
         setSawOnboarding: () => Promise<void>,
         getUserConsent: () => Promisse<boolean>,
         setUserConsent: (consent: boolean) => Promisse<void>
+      },
+      stationEvents: {
+        onActivityLog: (callback) => () => void
+        onJobsCounter: (callback) => () => void
+        onEarningsCounter: (callback) => () => void
       }
-      onActivityLog: (callback) => () => void
-      onJobsCounter: (callback) => () => void
-      onEarningsCounter: (callback) => () => void
     }
   }
 }
 
-
-
 export type ActivityEventMessage = {
   time: EpochTimeStamp,
-  type: "info" | "error" | "warning",
+  type: 'info' | 'error' | 'warning' | undefined,
   msg: string
 }

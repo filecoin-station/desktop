@@ -29,17 +29,16 @@ const FilWalletHeader: FC<IFilWalletHeader> = ({ address, disconnect }) => {
   )
 }
 
-export default function Dashboard(): JSX.Element {
+export default function Dashboard (): JSX.Element {
   const navigate = useNavigate()
   const [filAddress, setFilAddress] = useState<string | undefined>()
   const [totalJobs, setTotalJobs] = useState<number | undefined>()
   const [totalEarnings, setTotalEarnigs] = useState<number | undefined>()
   const [activityLog, setActivityLog] = useState<ActivityEventMessage[]>()
 
-
   const updateStatus = (): void => {
     getStationFilAddress().then((addr) => {
-      addr && addr !== '' ? setFilAddress(addr) : navigate("/address", { replace: true })
+      addr && addr !== '' ? setFilAddress(addr) : navigate('/address', { replace: true })
     })
     getStationActivityLog().then(setActivityLog)
     getStationTotalEarnings().then(setTotalEarnigs)
@@ -48,39 +47,36 @@ export default function Dashboard(): JSX.Element {
 
   const handleActivityLogEvent = useCallback((_event: any, value: ActivityEventMessage) => {
     setActivityLog(previousLog => { return previousLog ? [...previousLog, value] : [value] })
-  }, []);
+  }, [])
 
   const handleEarningsCounterEvent = useCallback((_event: any, value: number) => {
     setTotalEarnigs((previousCounter) => previousCounter ? previousCounter + value : value)
-  }, []);
+  }, [])
 
   const handleJobsCounterEvent = useCallback((_event: any, value: number) => {
     setTotalJobs((previousCounter) => previousCounter ? previousCounter + value : value)
-  }, []);
-
+  }, [])
 
   useEffect(() => {
     updateStatus()
     startSaturnNode()
-    const unsubscribeActivityLog = window.electron.onActivityLog(handleActivityLogEvent)
-    const unsubscribeEarningsCounter = window.electron.onEarningsCounter(handleEarningsCounterEvent)
-    const unsubscribeJobsCounter = window.electron.onJobsCounter(handleJobsCounterEvent)
+    const unsubscribeActivityLog = window.electron.stationEvents.onActivityLog(handleActivityLogEvent)
+    const unsubscribeEarningsCounter = window.electron.stationEvents.onEarningsCounter(handleEarningsCounterEvent)
+    const unsubscribeJobsCounter = window.electron.stationEvents.onJobsCounter(handleJobsCounterEvent)
 
     return () => {
-      stopSaturnNode();
-      unsubscribeActivityLog();
-      unsubscribeEarningsCounter();
-      unsubscribeJobsCounter();
+      stopSaturnNode()
+      unsubscribeActivityLog()
+      unsubscribeEarningsCounter()
+      unsubscribeJobsCounter()
     }
   }, [])
-
 
   const disconnect = () => {
     stopSaturnNode().then(() => {
       setStationFilAddress('').then(() => { setFilAddress(''); })
     })
   }
-
 
   return (
     <div className="h-screen w-screen overflow-hidden">
@@ -108,4 +104,3 @@ export default function Dashboard(): JSX.Element {
     </div>
   )
 }
-
