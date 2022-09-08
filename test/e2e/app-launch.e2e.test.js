@@ -31,7 +31,8 @@ test.describe.serial('Application launch', async () => {
         ...process.env,
         NODE_ENV: 'test',
         HOME: userData
-      }
+      },
+      timeout: 30000 * TIMEOUT_MULTIPLIER
     })
 
     // Get the first window that the app opens, wait if necessary.
