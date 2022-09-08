@@ -25,19 +25,21 @@ export declare global {
         getFilAddress: () => Promise<string | undefined>,
         setFilAddress: (address: string | undefined) => Promise<void>,
         getOnboardingCompleted: () => Promise<boolean>,
-        setOnboardingCompleted: () => Promise<void>
+        setOnboardingCompleted: () => Promise<void>,
+        getUserConsent: () => Promisse<boolean>,
+        setUserConsent: (consent: boolean) => Promisse<void>
+      },
+      stationEvents: {
+        onActivityLog: (callback) => () => void
+        onJobsCounter: (callback) => () => void
+        onEarningsCounter: (callback) => () => void
       }
-      onActivityLog: (callback) => () => void
-      onJobsCounter: (callback) => () => void
-      onEarningsCounter: (callback) => () => void
     }
   }
 }
 
-
-
 export type ActivityEventMessage = {
   time: EpochTimeStamp,
-  type: "info" | "error" | "warning",
+  type: 'info' | 'error' | 'warning' | undefined,
   msg: string
 }
