@@ -34,6 +34,8 @@ module.exports = {
       'primary-hover': '#1A1199',
       'primary-click': '#2317CC',
       'accent': '#40ffc4',
+      'accent-hover': '#40eec4',
+      'accent-click': '#40ddc4',
       'secondary': '#30b7e8',
       'secondary-accent': '#d5f710',
       'tertiary-accent': '#330867',
@@ -45,6 +47,7 @@ module.exports = {
         600: '#cccccc',
         700: '#b3b3b3',
       },
+      'transparent': '#ffffff00',
       'success': '#33cc9d',
       'error': '#ff4d81',
       'warning': '#f76003'

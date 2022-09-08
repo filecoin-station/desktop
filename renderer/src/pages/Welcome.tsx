@@ -3,9 +3,11 @@ import FilAddressForm from '../components/FilAddressForm'
 import Modal from '../components/Modal.js'
 import Onboarding from '../components/Onboarding'
 import StationLogoLight from './../assets/img/station-logo-light.svg'
+import StationLogoDark from './../assets/img/station-logo-dark.svg'
 import { Navigate } from 'react-router-dom'
-import { setStationFilAddress, getStationFilAddress, getStationUserSawOnboarding, setStationUserSawOnboarding, getStationUserConsent, setStationUserConsent} from './../components/InterfaceCalls'
+import { setStationFilAddress, getStationFilAddress, getStationUserSawOnboarding, setStationUserSawOnboarding, getStationUserConsent, setStationUserConsent } from './../components/InterfaceCalls'
 import Consent from '../components/Consent'
+import video from './../assets/video/pexels-kindel-media-7649289.mp4'
 
 const Loading = () => {
   return (
@@ -20,22 +22,14 @@ const Loading = () => {
 
 const CreateWalletInfo = () => {
   return (
-    <div className='grid h-screen place-items-center mx-20'>
-      <div className="w-full">
-        <div className='w-full max-w-2xl'>
-          <div className="px-6 py-4">
-            <h1 className="font-bold text-3xl mb-10">Don't have filecoin address?
-              Check Station website and create one new.</h1>
-            <div className="flex gap-6">
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="">
+      <h2 className="subtitle text-white text-body-l">Don't have filecoin address?
+        Check Station website and create <span className='text-accent'>new one</span>.</h2>
     </div>
   )
 }
 
-const Welcome = () : JSX.Element => {
+const Welcome = (): JSX.Element => {
   const [filAddress, setFilAddress] = useState<string | undefined>(undefined)
   const [userOnboarded, setUserOnboarded] = useState<boolean | undefined>()
   const [userConsent, setUserConsent] = useState<boolean | undefined>()
@@ -44,12 +38,12 @@ const Welcome = () : JSX.Element => {
   const updateStatus = (): void => {
     getStationFilAddress().then(setFilAddress)
     getStationUserConsent().then((res) => {
-      setTimeout(() => {setUserConsent(res)}, 5000)
+      setTimeout(() => { setUserConsent(res) }, 5000)
     })
     getStationUserSawOnboarding().then((res) => {
-      setTimeout(() => {setUserOnboarded(res)}, 5000)
+      setTimeout(() => { setUserOnboarded(res) }, 5000)
     })
-    
+
   }
 
   useEffect(() => {
@@ -64,11 +58,11 @@ const Welcome = () : JSX.Element => {
   }
 
   const manageConsent = (decision: boolean) => {
-    setStationUserConsent(decision).then(() => {setUserConsent(decision)})
+    setStationUserConsent(decision).then(() => { setUserConsent(decision) })
   }
 
   const finishOnboarding = () => {
-    setStationUserSawOnboarding().then(() => {setUserOnboarded(true)})
+    setStationUserSawOnboarding().then(() => { setUserOnboarded(true)})
   }
 
   const openOnboarding = () => {
@@ -83,23 +77,30 @@ const Welcome = () : JSX.Element => {
   const [modalContent, setModalContent] = useState(<Onboarding onFinish={finishOnboarding} />)
 
   const afterSetFilAddress = (address: string | undefined) => {
-    openConsent(() => { 
-      manageConsent(true); 
-      setSysFilAddress(address) })
+    openConsent(() => {
+      manageConsent(true);
+      setSysFilAddress(address)
+    })
   }
 
   if (filAddress && filAddress !== '' && userConsent) {
     return <Navigate to="/" replace />
   }
-  
+
   return (
     <>
-      {(typeof(userOnboarded) === 'undefined' || typeof(userConsent) === 'undefined') ? <Loading />  : ''}
-      <div className="grid grid-cols-3 h-full">
-        <div className="col-span-2 h-full bg-neutral-100">
+      {(typeof (userOnboarded) === 'undefined' || typeof (userConsent) === 'undefined') ? <Loading /> : ''}
+      <div className="grid grid-cols-5 h-full bg-black">
+        <video className='absolute z-0 w-auto min-w-full min-h-full r-[-35%] object-cover' autoPlay loop muted>
+          <source src={video} type='video/mp4' />
+        </video>
+        <div className='fixed top-0 right-0 z-1 w-full h-full bg-gradient-to-tr from-black'/>
+        <div className='fixed top-0 right-0 z-1 w-full h-full bg-gradient-to-r from-black'/>
+
+        <div className="col-span-3 h-full z-10">
           <div className='flex flex-col h-full mx-20'>
             <div className="basis-1/4">
-              <img className="left-0 pt-10" src={StationLogoLight} width="200px" alt="Station Logo" />
+              <img className="left-0 pt-10" src={StationLogoDark} width="200px" alt="Station Logo" />
             </div>
 
             <div className="basis-2/4 flex place-items-center">
@@ -109,8 +110,8 @@ const Welcome = () : JSX.Element => {
           </div>
         </div>
 
-        <div className="col-span-1 h-full bg-stone-300">
-          <CreateWalletInfo />
+        <div className="col-span-2 h-screen z-10 flex justify-center items-center mx-20">
+            <CreateWalletInfo />
         </div>
       </div>
 
