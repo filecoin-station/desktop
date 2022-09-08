@@ -19,17 +19,18 @@ contextBridge.exposeInMainWorld('electron', {
     getUserConsent: () => ipcRenderer.invoke('station:getUserConsent'),
     setUserConsent: (/** @type {boolean} */ consent) => ipcRenderer.invoke('station:setUserConsent', consent)
   },
-  onActivityLog: (/** @type {() => Function} */ callback) => { 
-                    ipcRenderer.on('activity-log', callback); 
-                    return () => ipcRenderer.removeListener('activity-log', callback)
-                  },
-  onJobsCounter: (/** @type {() => Function} */ callback) => { 
-                    ipcRenderer.on('jobs-counter', callback); 
-                    return () => ipcRenderer.removeListener('jobs-counter', callback)
-                  },
-  onEarningsCounter: (/** @type {() => Function} */ callback) => { 
-                    ipcRenderer.on('earnings-counter', callback); 
-                    return () => ipcRenderer.removeListener('earnings-counter', callback)
-                  }
-  
+  stationEvents: {
+    onActivityLog: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('activity-log', callback)
+      return () => ipcRenderer.removeListener('activity-log', callback)
+    },
+    onJobsCounter: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('jobs-counter', callback)
+      return () => ipcRenderer.removeListener('jobs-counter', callback)
+    },
+    onEarningsCounter: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('earnings-counter', callback)
+      return () => ipcRenderer.removeListener('earnings-counter', callback)
+    }
+  }
 })
