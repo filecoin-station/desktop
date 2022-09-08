@@ -25,8 +25,10 @@ function getCacheHome () {
       if (!process.env.LOCALAPPDATA) throw new Error('Unsupported Windows environment: LOCALAPPDATA must be set.')
       return path.join(process.env.LOCALAPPDATA, app.name)
     case 'linux':
-      if (!process.env.XDG_CACHE_HOME) throw new Error('Unsupported Linux environment: XDG_CACHE_HOME must be set.')
-      return path.join(process.env.XDG_CACHE_HOME, app.name)
+      return path.join(
+        process.env.XDG_CACHE_HOME || path.join(app.getPath('home'), '.cache'),
+        app.name
+      )
     default:
       throw new Error(`Unsupported platform: ${platform}`)
   }
