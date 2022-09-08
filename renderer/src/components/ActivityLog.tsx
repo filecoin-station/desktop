@@ -77,17 +77,19 @@ const ActivityLog: FC<IActivityLog> = ({ logStream }) => {
   return (
     <>
       <div className="mt-4 max-h-full overflow-y-auto ">
-        {groupArrays ? groupArrays.map((data: { date: string, activities: ActivityEventMessage[] | undefined }) => {
-          return (
-            <>
-              <div className='bg-red-300'><DateSeparator date={data.date}/></div>
-              {data.activities?.map((element, index) => {
-                return <LogElement key={element.time} time={element.time} msg={element.msg} type={element.type} />
-              })}
-            </>
-          )
-        })
-          : <p>No activity to show</p>}
+        {groupArrays
+          ? groupArrays.map((data: { date: string, activities: ActivityEventMessage[] | undefined }) => {
+            return (
+              <>
+                <div className='bg-red-300'><DateSeparator date={data.date}/></div>
+                {data.activities?.map((element, index) => {
+                  return <LogElement key={element.time} time={element.time} msg={element.msg} type={element.type} />
+                })}
+              </>
+            )
+          })
+          : <p>No activity to show</p>
+        }
       </div>
     </>
   )
