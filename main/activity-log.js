@@ -53,17 +53,6 @@ class ActivityLog {
 }
 
 /**
- * TODO: use `structuredClone` (available from Node.js v17/v18, not supported by Electron yet)
- *
- * @template {object} T
- * @param {T} data
- * @returns {T}
- */
-function clone (data) {
-  return { ...data }
-}
-
-/**
  * @returns {import('./typings').ActivityEntry[]}
  */
 function loadStoredEntries () {
