@@ -1,7 +1,7 @@
 'use strict'
 
 const Store = require('electron-store')
-const configStore = new Store({
+const activityLogStore = new Store({
   name: 'activity-log'
 })
 
@@ -11,12 +11,7 @@ class ActivityLog {
 
   constructor () {
     this.#entries = loadStoredEntries()
-    this.#lastId = this.#entries
-      // We are storing ids as strings to allow us to switch to GUIDs in the future if needed
-      // When looking for the max id used, we need to cast strings to numbers.
-      .map(e => +e.id)
-      // Find the maximum id or return 0 when no events were recorded yet
-      .reduce((max, it) => it > max ? it : max, 0)
+    this.#lastId = Number(this.#entries.at(-1)?.id ?? 0)
   }
 
   /**
@@ -33,15 +28,17 @@ class ActivityLog {
       type,
       message
     }
+    // Freeze the data to prevent ActivityLog users from accidentally changing our store
+    Object.freeze(entry)
+
     this.#entries.push(entry)
     this.#save()
-    // Clone the data to prevent the caller from accidentally changing our store
-    return clone(entry)
+    return entry
   }
 
   getAllEntries () {
-    // Clone the data to prevent the caller from accidentally changing our store
-    return this.#entries.map(clone)
+    // Clone the array to prevent the caller from accidentally changing our store
+    return [...this.#entries]
   }
 
   static reset () {
@@ -51,7 +48,7 @@ class ActivityLog {
   }
 
   #save () {
-    configStore.set('events', this.#entries)
+    activityLogStore.set('events', this.#entries)
   }
 }
 
@@ -71,7 +68,7 @@ function clone (data) {
  */
 function loadStoredEntries () {
   // A workaround to fix false TypeScript errors
-  return /** @type {any} */(configStore.get('events', []))
+  return /** @type {any} */(activityLogStore.get('events', []))
 }
 
 module.exports = {
