@@ -17,6 +17,20 @@ contextBridge.exposeInMainWorld('electron', {
     getSawOnboarding: () => ipcRenderer.invoke('station:getSawOnboarding'),
     setSawOnboarding: () => ipcRenderer.invoke('station:setSawOnboarding'),
     getUserConsent: () => ipcRenderer.invoke('station:getUserConsent'),
-    setUserConsent: (/** @type {boolean} */ consent) => ipcRenderer.invoke('station:setUserConsent', consent),
+    setUserConsent: (/** @type {boolean} */ consent) => ipcRenderer.invoke('station:setUserConsent', consent)
+  },
+  stationEvents: {
+    onActivityLog: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('activity-log', callback)
+      return () => ipcRenderer.removeListener('activity-log', callback)
+    },
+    onJobsCounter: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('jobs-counter', callback)
+      return () => ipcRenderer.removeListener('jobs-counter', callback)
+    },
+    onEarningsCounter: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('earnings-counter', callback)
+      return () => ipcRenderer.removeListener('earnings-counter', callback)
+    }
   }
 })
