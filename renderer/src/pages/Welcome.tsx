@@ -46,16 +46,17 @@ const Welcome = (): JSX.Element => {
       setTimeout(() => { setUserConsent(res) }, 5000)
     })
     getStationUserSawOnboarding().then((res) => {
-      setTimeout(() => { setUserOnboarded(res) }, 5000)
+      setTimeout(() => { setUserOnboarded(res); setIsOpen(!res) }, 5000)
     })
 
+=======
+      setTimeout(() => { setUserOnboarded(res); setIsOpen(!res) }, 5000)
+    })
+>>>>>>> feat/station-login
   }
 
   useEffect(() => {
     updateStatus()
-    // fixme: Is this needed? what for?
-    // const id = setInterval(updateStatus, 1000)
-    // return () => clearInterval(id)
   }, [filAddress])
 
   const setSysFilAddress = (address: string | undefined) => {
@@ -67,7 +68,7 @@ const Welcome = (): JSX.Element => {
   }
 
   const finishOnboarding = () => {
-    setStationUserSawOnboarding().then(() => { setUserOnboarded(true)})
+    setStationUserSawOnboarding().then(() => { setUserOnboarded(true); setIsOpen(false) })
   }
 
   const openOnboarding = () => {
@@ -82,10 +83,14 @@ const Welcome = (): JSX.Element => {
   const [modalContent, setModalContent] = useState(<Onboarding onFinish={finishOnboarding} />)
 
   const afterSetFilAddress = (address: string | undefined) => {
-    openConsent(() => {
-      manageConsent(true);
+    if (userConsent !== true) {
+      openConsent(() => {
+        manageConsent(true)
+        setSysFilAddress(address)
+      })
+    } else {
       setSysFilAddress(address)
-    })
+    }
   }
 
   if (filAddress && filAddress !== '' && userConsent) {

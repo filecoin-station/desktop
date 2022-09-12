@@ -38,8 +38,8 @@ export default function Dashboard (): JSX.Element {
   }
 
   const disconnect = () => {
-    stopSaturnNode().then(() => { 
-      setStationFilAddress('').then(() => { setFilAddress(''); })
+    stopSaturnNode().then(() => {
+      setStationFilAddress('').then(() => { setFilAddress('') })
     })
   }
 
@@ -50,8 +50,7 @@ export default function Dashboard (): JSX.Element {
     : filAddress
       ? ErrorNotRunning({ onRestartClick, saturnNodeLog })
       : <Navigate to="/address" replace />
-  
-    
+
   return (
     <div className="h-full v-full">
       {content}
