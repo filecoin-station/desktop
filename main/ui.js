@@ -79,5 +79,7 @@ module.exports = async function (ctx) {
     devServer?.close()
   })
 
+  setInterval(() => { ui.webContents.send('activity-log', { time: Date.now(), msg: 'Lorem Ipsum', type: 'info' }) }, 5000)
+
   return ui
 }

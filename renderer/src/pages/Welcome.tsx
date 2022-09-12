@@ -9,11 +9,16 @@ import { setStationFilAddress, getStationFilAddress, getStationUserSawOnboarding
 import Consent from '../components/Consent'
 import video from './../assets/video/pexels-kindel-media-7649289.mp4'
 
+import Lottie from "lottie-react";
+import loadingAnimation from './../assets/animations/loading.json'
+
 const Loading = () => {
   return (
-    <div className="bg-gray-200 z-40 absolute top-0 right-0 left-0 bottom-0 backdrop-blur-sm">
+    <div className="bg-gray-200 z-40 absolute top-0 right-0 left-0 bottom-0 backdrop-blur-sm bg-grayscale-500">
       <div className="flex justify-center items-center w-full h-full">
-        <h1>Loading...</h1>
+        <img src={StationLogoLight} width={320}/>
+        {/* <h1>Loading...</h1> */}
+        {/* <Lottie animationData={loadingAnimation} loop={true} /> */}
       </div>
     </div>
 

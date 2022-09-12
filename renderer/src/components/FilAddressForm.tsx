@@ -53,15 +53,16 @@ const FilAddressForm: FC<IFilAddressForm> = ({ showOnboarding, setFilAddress, sy
 
       <div className="relative z-0 w-full my-5">
         <input autoComplete="off"
-          className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-white border-gray-200"
+          className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none
+           focus:ring-0 focus:border-white border-gray-200 font-body"
           type="text" 
           name="address"
           placeholder=" "
           data-testid="input-address-element"
           onChange={handleChangeAddress} />
         <label htmlFor="address" 
-        className="absolute duration-300 top-3 origin-top-left text-white pointer-events-none">
-          Enter name</label>
+        className="absolute duration-300 top-3 origin-top-left text-white pointer-events-none font-body uppercase">
+          FIL Address</label>
       
       {validationError ? <ValidationError message={validationError} /> : <br />}
       </div>
