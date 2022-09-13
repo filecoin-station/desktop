@@ -18,8 +18,9 @@ const { ipcMain } = require('electron/main')
 /** @typedef  {import('./typings').ActivityEvent} ActivityEvent */
 
 const inTest = (process.env.NODE_ENV === 'test')
+const isDev = !app.isPackaged && !inTest
 
-if (!app.isPackaged && !inTest) {
+if (isDev) {
   // Do not preserve old Activity entries in development mode
   ActivityLog.reset()
 }
