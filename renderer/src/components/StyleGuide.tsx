@@ -59,7 +59,7 @@ const StyleGuide = () => {
         <button className="btn-secondary" disabled>
         Secondary Button disabled
         </button>
-         
+
         <button className="btn-secondary-small">
         Secondary Button small
         </button>
@@ -70,32 +70,32 @@ const StyleGuide = () => {
       </div>
 
       <div className="pt-5 pb-5">
-        <a href="#" className="link-primary"> Link Primary  </a>
+        <button className="link-primary"> Link Primary  </button>
         <div className="bg-primary p-5">
-          <a href="#" className="link-primary-dark">Link Primary dark</a>
+          <button className="link-primary-dark">Link Primary dark</button>
         </div>
       </div>
 
       <div className="pt-5 pb-5">
         <p className="p-5 gradient-space-marine text-white">
           Gradient Space - Marine
-        </p>  
+        </p>
 
         <p className="p-5 gradient-deep-marine text-white">
           Gradient Deep - Marine
-        </p>  
+        </p>
 
         <p className="p-5 gradient-space-turqoise text-white">
           Gradient Space - Turqoise
-        </p>  
+        </p>
 
         <p className="p-5 gradient-space-fire text-white">
           Gradient Space - Fire
-        </p>  
+        </p>
 
         <p className="p-5 gradient-sun-fire">
           Gradient Sun - Fire
-        </p>  
+        </p>
       </div>
 
     </>
