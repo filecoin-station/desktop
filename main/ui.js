@@ -69,14 +69,12 @@ module.exports = async function (ctx) {
   ui.once('ready-to-show', ctx.showUI)
 
   const onNewActivity = (/** @type {unknown[]} */ ...args) => {
-    if (ui.isDestroyed()) return // This happens when quitting the entire app
     ui.webContents.send(ipcMainEvents.ACTIVITY_LOGGED, ...args)
   }
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
 
   // Don't exit when window is closed (Quit only via Tray icon menu)
   ui.on('close', (event) => {
-    ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     event.preventDefault()
     ui.hide()
     if (app.dock) app.dock.hide()
@@ -86,6 +84,7 @@ module.exports = async function (ctx) {
   // that were added to keep app running when the UI is closed.
   // (Without this, the app would run forever and/or fail to update)
   app.on('before-quit', () => {
+    ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     ui.removeAllListeners('close')
     devServer?.close()
   })
