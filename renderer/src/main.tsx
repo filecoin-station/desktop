@@ -15,11 +15,10 @@ ReactDOM.createRoot(
   </React.StrictMode>
 )
 
-window.electron.getActivityLog().then(log => {
-  console.log('GOT INITIAL ACTIVITY LOG')
-  log.forEach(entry => console.log('[ACTIVITY] %j', entry))
-})
-
 window.electron.onActivityLogged(entry => {
   console.log('[ACTIVITY] %j', entry)
+})
+
+window.electron.resumeActivityStream().then(() => {
+  console.log('ACTIVITY STREAM RESUMED')
 })

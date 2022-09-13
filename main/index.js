@@ -15,7 +15,8 @@ const { setupAppMenu } = require('./app-menu')
 const { ActivityLog } = require('./activity-log')
 const { ipcMain } = require('electron/main')
 
-/** @typedef  {import('./typings').ActivityEvent} ActivityEvent */
+/** @typedef {import('./typings').ActivityEvent} ActivityEvent */
+/** @typedef {import('./typings').ActivityEntry} ActivityEntry */
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -54,7 +55,7 @@ if (!app.requestSingleInstanceLock() && !inTest) {
 
 /** @type {import('./typings').Context} */
 const ctx = {
-  getAllActivityLogEntries,
+  resumeActivityStream,
   recordActivity,
   manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
@@ -90,17 +91,27 @@ async function run () {
 }
 
 const activityLog = new ActivityLog()
+let isActivityStreamFlowing = false
 
 /**
  * @param {ActivityEvent} event
  */
 function recordActivity (event) {
   const entry = activityLog.recordEvent(event)
+  if (isActivityStreamFlowing) emitActivity(entry)
+}
+
+/**
+ * @param {ActivityEntry} entry
+ */
+function emitActivity (entry) {
   ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, entry)
 }
 
-function getAllActivityLogEntries () {
-  return activityLog.getAllEntries()
+function resumeActivityStream () {
+  isActivityStreamFlowing = true
+  const existingEntries = activityLog.getAllEntries()
+  for (const it of existingEntries) emitActivity(it)
 }
 
 run()

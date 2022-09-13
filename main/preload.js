@@ -3,7 +3,7 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electron', {
-  getActivityLog: () => ipcRenderer.invoke('station:getActivityLog'),
+  resumeActivityStream: () => ipcRenderer.invoke('station:resumeActivityStream'),
 
   /**
    * @param {(activityEntry: import('./typings').ActivityEntry) => void} callback

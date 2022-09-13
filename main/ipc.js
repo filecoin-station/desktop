@@ -31,8 +31,8 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('station:getUserConsent', stationConfig.getUserConsent)
   ipcMain.handle('station:setUserConsent', (_event, consent) => stationConfig.setUserConsent(consent))
 
-  ipcMain.handle('station:getActivityLog', (_event, _args) => {
-    return ctx.getAllActivityLogEntries()
+  ipcMain.handle('station:resumeActivityStream', (_event, _args) => {
+    return ctx.resumeActivityStream()
   })
 }
 
