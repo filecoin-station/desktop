@@ -13,7 +13,7 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
 
   // File menu
   menu.items[1].submenu?.insert(1, new MenuItem({
-    label: 'Save Saturn Module Logs As…',
+    label: 'Save Saturn Module Log As…',
     click: async () => {
       const opts = { defaultPath: 'station.txt' }
       const win = BrowserWindow.getFocusedWindow()
