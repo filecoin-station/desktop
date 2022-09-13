@@ -4,6 +4,8 @@ const assert = require('assert').strict
 const { ActivityLog } = require('../activity-log')
 const { assertTimestampIsCloseToNow, pickProps } = require('./test-helpers')
 
+/** @typedef {import('../typings').ActivityEvent} ActivityEvent */
+
 describe('ActivityLog', function () {
   beforeEach(function () { return ActivityLog.reset() })
 
@@ -65,8 +67,8 @@ describe('ActivityLog', function () {
 })
 
 /**
- * @param {Partial<import('../typings').ActivityEvent>} [props]
- * @returns {import('../typings').ActivityEvent}
+ * @param {Partial<ActivityEvent>} [props]
+ * @returns {ActivityEvent}
  */
 function givenActivity (props) {
   return {

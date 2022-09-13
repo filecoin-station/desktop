@@ -15,6 +15,8 @@ const { setupAppMenu } = require('./app-menu')
 const { ActivityLog } = require('./activity-log')
 const { ipcMain } = require('electron/main')
 
+/** @typedef  {import('./typings').ActivityEvent} ActivityEvent */
+
 const inTest = (process.env.NODE_ENV === 'test')
 
 if (!app.isPackaged && !inTest) {
@@ -89,7 +91,7 @@ async function run () {
 const activityLog = new ActivityLog()
 
 /**
- * @param {import('./typings').ActivityEvent} event
+ * @param {ActivityEvent} event
  */
 function recordActivity (event) {
   const entry = activityLog.recordEvent(event)

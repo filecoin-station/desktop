@@ -5,6 +5,8 @@ const { ipcMain } = require('electron')
 const saturnNode = require('./saturn-node')
 const stationConfig = require('./station-config')
 
+/** @typedef {import('./typings').Context} Context */
+
 const ipcMainEvents = Object.freeze({
   ACTIVITY_LOGGED: 'station:activity-logged',
 
@@ -12,7 +14,7 @@ const ipcMainEvents = Object.freeze({
   UPDATE_CHECK_FINISHED: 'station:update-check:finished'
 })
 
-function setupIpcMain (/** @type {import('./typings').Context} */ ctx) {
+function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('saturn:isRunning', saturnNode.isRunning)
   ipcMain.handle('saturn:isReady', saturnNode.isReady)
   ipcMain.handle('saturn:start', _event => saturnNode.start(ctx))

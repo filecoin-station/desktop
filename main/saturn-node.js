@@ -12,6 +12,8 @@ const Store = require('electron-store')
 const consts = require('./consts')
 const configStore = new Store()
 
+/** @typedef {import('./typings').Context} Context */
+
 const saturnBinaryPath = getSaturnBinaryPath()
 
 /** @type {import('execa').ExecaChildProcess | null} */
@@ -31,7 +33,7 @@ const ConfigKeys = {
 
 let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 
-async function setup (/** @type {import('./typings').Context} */ ctx) {
+async function setup (/** @type {Context} */ ctx) {
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
 
   const stat = await fs.stat(saturnBinaryPath)
@@ -55,7 +57,7 @@ function getSaturnBinaryPath () {
     : path.resolve(__dirname, '..', 'build', 'saturn', `l2node-${process.platform}-${arch}`, name)
 }
 
-async function start (/** @type {import('./typings').Context} */ ctx) {
+async function start (/** @type {Context} */ ctx) {
   if (!filAddress) {
     console.info('Saturn node requires FIL address. Please configure it in the Station UI.')
     return
@@ -218,7 +220,7 @@ function appendToChildLog (text) {
 }
 
 /**
- * @param {import('./typings').Context} ctx
+ * @param {Context} ctx
  * @param {string} text
  */
 function handleActivityLogs (ctx, text) {
