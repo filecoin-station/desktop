@@ -5,18 +5,26 @@ type IStationStats = {
   totalEarns: number | undefined
 }
 
+const intlFormat = (counter:number, options={}) => {
+  return new Intl.NumberFormat(window.navigator.language, options).format(counter)
+}
+
 const StationStats: FC<IStationStats> = ({ totalJobs, totalEarns }) => {
+  const formatEarnings = totalEarns ? intlFormat(totalEarns, {maximumFractionDigits: 4, minimumFractionDigits: 2}) : '---'
+  const formatJobs = totalJobs ? intlFormat(totalJobs) : '---'
+
   return (
       <>
-        <div className='basis-1/2 flex flex-col min-w-[50%]'>
-          <p className='text-blue-600'>Total Jobs Completed</p>
-          <p className='text-3xl text-blue-600'>{totalJobs || '---'}</p>
+        <div className='flex flex-col'>
+          <p className='text-body-s uppercase opacity-80'>Total Jobs Completed</p>
+          <p className='title font-number font-bold text-header-l text-black'>
+            {formatJobs }</p>
         </div>
-        <div className='basis-1/2 flex flex-col min-w-[50%]'>
-          <p className='text-blue-600'>Total Earnings</p>
-          <p className='text-3xl text-blue-600'>
-            {totalEarns || '---'}
-            {totalEarns && <span className='ml-1 text-base'>FIL</span>}
+        <div className='flex flex-col'>
+          <p className='text-body-s uppercase opacity-80'>Total Earnings</p>
+          <p className='title font-number font-bold text-header-l text-black'>
+            {formatEarnings}
+            <span className='ml-1 text-base'>FIL</span>
           </p>
         </div>
       </>

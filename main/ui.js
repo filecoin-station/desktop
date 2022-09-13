@@ -79,7 +79,10 @@ module.exports = async function (ctx) {
     devServer?.close()
   })
 
-  setInterval(() => { ui.webContents.send('activity-log', { time: Date.now(), msg: 'Lorem Ipsum', type: 'info' }) }, 5000)
+  
+  ui.webContents.send('activity-log', { time: Date.now(), msg: 'Starting Saturn node...', type: 'info' })
+  ui.webContents.send('activity-log', { time: Date.now(), msg: 'Saturn node is running...', type: 'info' })
+  setInterval(() => { ui.webContents.send('activity-log', { time: Date.now(), msg: 'Job processed', type: 'info' }) }, 3000)
 
   return ui
 }

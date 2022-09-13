@@ -17,17 +17,20 @@ const Consent: FC<IConsent> = ({ onAccept, onReject }) => {
   }
 
   return (
-    <div data-testid="consent-element">
-      <img src='' className="w-full h-auto my-3" alt="Onboarding slide 1" />
-      <h1 className="font-bold text-xl my-3">Station asks for your consent to use your personal data to store and/or access information on a device.</h1>
-      <p className="text-sm my-3">Your personal data will be processed and information from your device (cookies, unique identifiers, and other device data) may be stored by, accessed by and shared with third party vendors, or use specifically by this app.
-      </p>
+    <div data-testid="consent-element" className='rounded-lg bg-white p-14'>
+      <h1 className="font-bold title text-black ">
+      Station asks for your consent to use your personal data to store and/or access information on a device.
+      </h1>
+      <div className='bg-white h-auto'>
+          <p className="py-4 text-body-l opacity-60">Modules are independent services that can run on Station. The first module that Station will house is a Saturn node and the users will be able to earn FIL for contributing their resources and services to each module.</p>
+        </div>
+      
       <div className="flex gap-3 justify-end">
-        <button className="bg-transparent hover:bg-gray-100 text-neutral-500 py-2 px-4 inline-flex items-center"
+        <button className="link-primary no-underline"
           title="reject"
-          onClick={reject} >Reject
+          onClick={reject} >Cancel
         </button>
-        <button className="bg-gray-700 hover:bg-gray-900 text-neutral-50 py-2 px-4 inline-flex items-center"
+        <button className="btn-primary"
           title="accept"
           onClick={accept}>Accept
         </button>

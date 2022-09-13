@@ -47,6 +47,7 @@ module.exports = {
         600: '#cccccc',
         700: '#b3b3b3',
       },
+      'transparent-gray': '#f7f7f7e3',
       'transparent': '#ffffff00',
       'success': '#33cc9d',
       'error': '#ff4d81',

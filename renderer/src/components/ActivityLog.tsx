@@ -1,6 +1,8 @@
 import { FC } from 'react'
 import { ActivityEventMessage } from '../typings'
 import * as dayjs from 'dayjs'
+import databaseIcon from './../assets/img/data--base.svg'
+
 
 interface ILogElement {
   time: EpochTimeStamp,
@@ -9,19 +11,15 @@ interface ILogElement {
 }
 const LogElement: FC<ILogElement> = (el) => {
   const time = new Intl.DateTimeFormat(window.navigator.language, {
-    hour: 'numeric', minute: 'numeric', second: 'numeric'
+    hour: 'numeric', minute: 'numeric'
   }).format(new Date(el.time))
 
   return (
-    <div className="grid grid-cols-[25%_5%_70%]">
-      <div className=''>
-        <span className='text-black'>{time}</span>
-      </div>
-      <div className=''>
-      </div>
-      <div className=''>
-        <p>{el.msg}</p>
-      </div>
+    <div className="grid grid-cols-[5%_70%_25%] py-2 border-b border-grayscale-400
+    text-body-xl leading-[20px] tracking-0 items-center">
+      <img src={databaseIcon} className="text-primary fill-primary stroke-primary" width='16px' height='auto' className='mx-1' />
+      <p className=''>{el.msg}</p>
+      <span className='text-black opacity-60 justify-self-end'>{time}</span>
     </div>
   )
 }
@@ -36,9 +34,9 @@ const DateSeparator: FC<IDateSeparator> = ({ date }) => {
   const displayStr = date === today ? 'today' : date === yesterday ? 'yesterday' : dayjs(date).format("D MMM")
   
   return (
-    <>
-      <h1>{displayStr}</h1>
-    </>
+    <div className="pt-8">
+      <h1 className='text-body text-body-m opacity-80'>{displayStr}</h1>
+    </div>
   )
 }
 
@@ -65,7 +63,7 @@ const ActivityLog: FC<IActivityLog> = ({ logStream=[] }) => {
   
   return (
     <>
-      <div className="mt-4 max-h-full overflow-y-auto ">
+      <div className="overflow-y-auto w-full px-[10%] md:px-[20%] xl:px-[30%] ">
         {groupArrays.length > 0
           ? groupArrays.map((data: { date: string, activities: ActivityEventMessage[] | undefined }) => {
             return (

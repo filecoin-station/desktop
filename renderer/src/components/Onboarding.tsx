@@ -18,9 +18,14 @@ const Slider: FC<ISlider> = ({ children, onFinish }) => {
   }
 
   return (
-    <div className="w-[32rem]" data-testid="onboarding-element">
+    <div className="w-[32rem] rounded-lg" data-testid="onboarding-element">
       {children[page]}
-      <div className="flex justify-between mt-3">
+      <div className="flex justify-between rounded-b-lg bg-white px-16">
+        <button
+          className="inline-flex items-center mb-11 left-0 "
+          onClick={(page !== children.length - 1 ? next : done)}>
+          {/* <span className="text-xs" '{page !== children.length - 1 ? 'Prev' : 'Got It'}</span> */}
+        </button>
         <div className="flex flex-row w-10 gap-1">
           {/* {children?.map((element: HTMLElement, index: number) =>
             <svg key={("svg-"+index)} viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
@@ -29,9 +34,9 @@ const Slider: FC<ISlider> = ({ children, onFinish }) => {
           )} */}
         </div>
         <button
-          className="bg-gray-800 hover:bg-gray-900 text-neutral-50 py-2 px-4 inline-flex items-center"
+          className="inline-flex items-center mb-11 right-0 link-primary "
           onClick={(page !== children.length - 1 ? next : done)}>
-          <span className="text-xs px-4">{page !== children.length - 1 ? 'Next' : 'Got It'}</span>
+          <span className="text-xs">{page !== children.length - 1 ? 'Next' : 'Got It'}</span>
         </button>
       </div>
     </div>
@@ -45,25 +50,24 @@ interface IOnboarding {
 const Onboarding: FC<IOnboarding> = ({ onFinish }) => {
   return (
     <Slider onFinish={onFinish}>
-      <div>
-        <div className=''>
-          <h1 className="font-bold text-xl my-3">Connect to Filecoin Station with your filecoin address.</h1>
+      <div className=''>
+        <div className='h-1/2 bg-black rounded-t-lg'>
+          <h1 className="p-3 title text-white font-bold px-14 py-14 ">Connect to Filecoin Station with your filecoin address.</h1>
         </div>
-        <div>
-          <p className="text-sm my-3">Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. In facilisis, lorem quis posuere porttitor, sem purus ultrices risus, vitae eleifend purus arcu a nibh. Quisque quis ultrices tellus. Vivamus blandit, massa eu malesuada facilisis, quam elit faucibus metus,
-            nec mollis arcu elit sit amet odio. </p>
+        <div className='bg-white h-auto'>
+          <p className="text-body-l px-16 py-8 opacity-60">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer venenatis tristique maximus. Phasellus at rutrum magna. Vestibulum quis maximus urna, ac pellentesque libero.</p>
         </div>
       </div>
 
-      <div>
-        <div>
-          <h1 className="font-bold text-xl my-3">New modules are automatically installed in Station.</h1>
+      <div className=''>
+        <div className='h-1/2 bg-black rounded-t-lg'>
+          <h1 className="p-3 title text-white font-bold px-14 py-14 ">Connect to Filecoin Station with your filecoin address.</h1>
         </div>
-        <div>
-          <p className="text-sm my-3">Modules are independent services that can run on Station. The first module that Station will house is a Saturn node and the users will be able to earn FIL for contributing their resources and services to each module.</p>
+        <div className='bg-white h-auto'>
+          <p className="text-body-l px-16 py-8 opacity-60">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer venenatis tristique maximus. Phasellus at rutrum magna. Vestibulum quis maximus urna, ac pellentesque libero.</p>
         </div>
       </div>
+
     </Slider>
   )
 }

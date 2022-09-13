@@ -19,7 +19,7 @@ const Modal: FC<IModal> = ({ isOpen, onClose, children }) => {
       aria-modal="true" role="dialog">
       <div className="bg-gray-200/75 z-30 absolute top-0 right-0 left-0 bottom-0 backdrop-blur-sm"
         onClick={close}></div>
-      <div className="bg-white p-6 z-40 min-w-[33%] max-w-2xl rounded-2xl flex justify-center">
+      <div className="z-40 min-w-[33%] max-w-[46rem] flex justify-center">
         {children}
       </div>
     </div>

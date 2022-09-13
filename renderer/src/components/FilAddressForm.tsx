@@ -47,31 +47,31 @@ const FilAddressForm: FC<IFilAddressForm> = ({ showOnboarding, setFilAddress, sy
 
   return (
     <div className='w-full max-w-2xl px-6 py-4'>
-      <h2 className="title text-white mb-3 font-bold">
-        Connect to the Station with your Filecoin Address to start <span className='text-accent'> earn FIL</span>
+      <h2 className="title text-black mb-3 font-bold">
+        Connect to the Station with your Filecoin Address to start <span className='text-primary'> earn FIL</span>
       </h2>
 
       <div className="relative z-0 w-full my-5">
         <input autoComplete="off"
           className="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none
-           focus:ring-0 focus:border-white border-gray-200 font-body"
+           focus:ring-0 focus:border-black border-gray-200 font-body"
           type="text" 
           name="address"
           placeholder=" "
           data-testid="input-address-element"
           onChange={handleChangeAddress} />
         <label htmlFor="address" 
-        className="absolute duration-300 top-3 origin-top-left text-white pointer-events-none font-body uppercase">
+        className="absolute duration-300 top-3 origin-top-left text-black pointer-events-none font-body uppercase">
           FIL Address</label>
       
       {validationError ? <ValidationError message={validationError} /> : <br />}
       </div>
 
       <div className='flex justify-between mt-3'>
-        <button className="underline text-body-s text-left"
+        <button className="underline text-body-s text-left text-primary"
         onClick={showOnboarding}>How to get started?</button>
         <button
-          className="btn-primary btn-primary-accent "
+          className="btn-primary "
           disabled={inputAddr.length === 0}
           onClick={handleAuthenticate}
           title="connect">

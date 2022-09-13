@@ -49,16 +49,17 @@
 
 @layer base {
   .title {
-    @apply text-header-m font-title text-primary;
+    @apply text-header-m font-title text-primary leading-[1.25] tracking-[-0.4px];;
   }
 
   .subtitle {
-    @apply text-header-xxs font-title text-secondary;
+    @apply text-header-xxs font-title text-secondary tracking-[-0.4px];
   }
 
   body {
-    @apply font-body text-white
+    @apply font-body text-black tracking-[-0.4px];
   }
+  
   
 }
 
@@ -126,6 +127,18 @@
 
   .gradient-sun-fire {
     @apply bg-gradient-to-r from-secondary-accent to-warning
+  }
+
+  .gradient-bg {
+    background: radial-gradient(94.55% 459.39% at 92% 11%, #F7F7F7 40.53%, rgba(247, 247, 247, 0.94) 80.12%, rgba(247, 247, 247, 0.89) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    transform: rotate(-180deg);
+  }
+
+  .gradient-bg-2 {
+    background: radial-gradient(137.12% 101.03% at 50% 0%, #F8F7F7 40.53%, #F7F7F7 78.03%, rgba(247, 247, 247, 0.95) 100%);
+    backdrop-filter: blur(5px);
+    /* Note: backdrop-filter has minimal browser support */
+    transform: rotate(-180deg);
   }
 
   input:focus ~ label,
