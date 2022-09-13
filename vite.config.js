@@ -15,5 +15,13 @@ export default defineConfig({
     emptyOutDir: true,
     sourcemap: true,
     target: 'chrome100'
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    coverage: {
+      reporter: ['text', 'json', 'html']
+    }
   }
 })
