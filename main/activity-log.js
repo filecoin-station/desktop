@@ -23,7 +23,7 @@ class ActivityLog {
    */
   recordActivity ({ source, type, message }) {
     /** @type {Activity} */
-    const entry = {
+    const activity = {
       id: crypto.randomUUID(),
       timestamp: Date.now(),
       source,
@@ -31,16 +31,16 @@ class ActivityLog {
       message
     }
     // Freeze the data to prevent ActivityLog users from accidentally changing our store
-    Object.freeze(entry)
+    Object.freeze(activity)
 
-    this.#entries.push(entry)
+    this.#entries.push(activity)
 
     if (this.#entries.length > 100) {
-      // Delete the oldest entry to keep ActivityLog at constant size
+      // Delete the oldest activity to keep ActivityLog at constant size
       this.#entries.shift()
     }
     this.#save()
-    return entry
+    return activity
   }
 
   getAllEntries () {
@@ -55,7 +55,7 @@ class ActivityLog {
   }
 
   #save () {
-    activityLogStore.set('events', this.#entries)
+    activityLogStore.set('activities', this.#entries)
   }
 }
 

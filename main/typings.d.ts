@@ -16,7 +16,7 @@ export interface RecordActivityOptions {
 }
 
 export interface Context {
-  recordActivity(event: RecordActivityOptions): void;
+  recordActivity(activity: RecordActivityOptions): void;
   resumeActivityStream(): void;
 
   showUI: () => void

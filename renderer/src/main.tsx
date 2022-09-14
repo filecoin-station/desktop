@@ -22,7 +22,7 @@ window.electron.onActivityLogged(activity => {
   activities.push(activity)
   if (activities.length > 100) activities.shift()
 
-  console.log('[EVENTS]', activities.sort((a, b) => {
+  console.log('[ACTIVITIES]', activities.sort((a, b) => {
     return a.timestamp !== b.timestamp
       ? b.timestamp - a.timestamp
       : a.id.localeCompare(b.id)

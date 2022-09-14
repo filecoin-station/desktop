@@ -9,26 +9,26 @@ const { assertTimestampIsCloseToNow, pickProps } = require('./test-helpers')
 describe('ActivityLog', function () {
   beforeEach(function () { return ActivityLog.reset() })
 
-  it('record events and assign them timestamp and id ', function () {
+  it('record activities and assign them timestamp and id ', function () {
     const activityLog = new ActivityLog()
-    const entryCreated = activityLog.recordActivity(givenActivity({
+    const activityCreated = activityLog.recordActivity(givenActivity({
       source: 'Station',
       type: 'info',
       message: 'Hello world!'
     }))
 
     assert.strictEqual(activityLog.getAllEntries().length, 1)
-    assert.deepStrictEqual(entryCreated, activityLog.getAllEntries()[0])
+    assert.deepStrictEqual(activityCreated, activityLog.getAllEntries()[0])
 
-    const { timestamp, ...entry } = activityLog.getAllEntries()[0]
-    assert.deepStrictEqual(entry, {
+    const { timestamp, ...activity } = activityLog.getAllEntries()[0]
+    assert.deepStrictEqual(activity, {
       id: '1',
       source: 'Station',
       type: 'info',
       message: 'Hello world!'
     })
 
-    assertTimestampIsCloseToNow(timestamp, 'event.timestamp')
+    assertTimestampIsCloseToNow(timestamp, 'activity.timestamp')
   })
 
   it('assigns unique ids', function () {
@@ -41,7 +41,7 @@ describe('ActivityLog', function () {
     ])
   })
 
-  it('preserves events across restarts', function () {
+  it('preserves activities across restarts', function () {
     new ActivityLog().recordActivity(givenActivity({ message: 'first run' }))
     const activityLog = new ActivityLog()
     activityLog.recordActivity(givenActivity({ message: 'second run' }))
@@ -56,12 +56,12 @@ describe('ActivityLog', function () {
 
     const log = new ActivityLog()
     for (let i = 0; i < 110; i++) {
-      log.recordActivity(givenActivity({ message: `event ${i}` }))
+      log.recordActivity(givenActivity({ message: `activity ${i}` }))
     }
     const entries = log.getAllEntries()
     assert.deepStrictEqual(
       [entries.at(0)?.message, entries.at(-1)?.message],
-      ['event 10', 'event 109']
+      ['activity 10', 'activity 109']
     )
   })
 })

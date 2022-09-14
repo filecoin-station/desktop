@@ -97,8 +97,8 @@ let isActivityStreamFlowing = false
  * @param {RecordActivityOptions} opts
  */
 function recordActivity (opts) {
-  const entry = activityLog.recordActivity(opts)
-  if (isActivityStreamFlowing) emitActivity(entry)
+  const activity = activityLog.recordActivity(opts)
+  if (isActivityStreamFlowing) emitActivity(activity)
 }
 
 /**
