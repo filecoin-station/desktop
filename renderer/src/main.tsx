@@ -16,13 +16,13 @@ ReactDOM.createRoot(
   </React.StrictMode>
 )
 
-const events: Activity[] = []
+const activities: Activity[] = []
 
 window.electron.onActivityLogged(activity => {
-  events.push(activity)
-  if (events.length > 100) events.shift()
+  activities.push(activity)
+  if (activities.length > 100) activities.shift()
 
-  console.log('[EVENTS]', events.sort((a, b) => {
+  console.log('[EVENTS]', activities.sort((a, b) => {
     return a.timestamp !== b.timestamp
       ? b.timestamp - a.timestamp
       : a.id.localeCompare(b.id)
