@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld('electron', {
   resumeActivityStream: () => ipcRenderer.invoke('station:resumeActivityStream'),
 
   /**
-   * @param {(activityEntry: import('./typings').ActivityEntry) => void} callback
+   * @param {(ActivityEvent: import('./typings').ActivityEvent) => void} callback
    */
   onActivityLogged (callback) {
     ipcRenderer.on('station:activity-logged', (_event, entry) => callback(entry))

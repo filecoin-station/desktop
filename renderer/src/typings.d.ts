@@ -4,7 +4,7 @@ export declare global {
   interface Window {
     electron: {
       resumeActivityStream(): Promise<ActivityEvent[]>,
-      onActivityLogged(callback: (activityEntry: ActivityEntry) => void),
+      onActivityLogged(callback: (activityEvent: ActivityEvent) => void),
 
       saturnNode: {
         start:() => Promise<void>,

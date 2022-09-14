@@ -1,6 +1,7 @@
 'use strict'
 
 /** @typedef {import('./typings').ActivityEvent}  ActivityEvent */
+/** @typedef {import('./typings').RecordActivityOptions}  RecordActivityOptions */
 
 const Store = require('electron-store')
 const crypto = require('node:crypto')
@@ -17,7 +18,7 @@ class ActivityLog {
   }
 
   /**
-   * @param {ActivityEvent} args
+   * @param {RecordActivityOptions} args
    * @returns {ActivityEvent}
    */
   recordEvent ({ source, type, message }) {

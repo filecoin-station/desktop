@@ -18,8 +18,8 @@ ReactDOM.createRoot(
 
 const events: ActivityEvent[] = []
 
-window.electron.onActivityLogged(entry => {
-  events.push(entry)
+window.electron.onActivityLogged(event => {
+  events.push(event)
   if (events.length > 100) events.shift()
 
   console.log('[EVENTS]', events.sort((a, b) => {
@@ -27,7 +27,7 @@ window.electron.onActivityLogged(entry => {
       ? b.timestamp - a.timestamp
       : a.id.localeCompare(b.id)
   }))
-  console.log('[ACTIVITY] %j', entry)
+  console.log('[ACTIVITY] %j', event)
 })
 
 window.electron.resumeActivityStream().then(() => {

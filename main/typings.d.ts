@@ -9,8 +9,14 @@ export interface ActivityEvent {
   message: string;
 }
 
+export interface RecordActivityOptions {
+  type: ActivityEventType;
+  source: ActivitySource;
+  message: string;
+}
+
 export interface Context {
-  recordActivity(event: ActivityEvent): void;
+  recordActivity(event: RecordActivityOptions): void;
   resumeActivityStream(): void;
 
   showUI: () => void

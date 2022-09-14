@@ -16,7 +16,7 @@ const { ActivityLog } = require('./activity-log')
 const { ipcMain } = require('electron/main')
 
 /** @typedef {import('./typings').ActivityEvent} ActivityEvent */
-/** @typedef {import('./typings').ActivityEntry} ActivityEntry */
+/** @typedef {import('./typings').RecordActivityOptions} RecordActivityOptions */
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -94,7 +94,7 @@ const activityLog = new ActivityLog()
 let isActivityStreamFlowing = false
 
 /**
- * @param {ActivityEvent} event
+ * @param {RecordActivityOptions} event
  */
 function recordActivity (event) {
   const entry = activityLog.recordEvent(event)
@@ -102,7 +102,7 @@ function recordActivity (event) {
 }
 
 /**
- * @param {ActivityEntry} entry
+ * @param {ActivityEvent} entry
  */
 function emitActivity (entry) {
   ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, entry)
