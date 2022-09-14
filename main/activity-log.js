@@ -1,31 +1,29 @@
 'use strict'
 
 /** @typedef {import('./typings').ActivityEvent}  ActivityEvent */
-/** @typedef {import('./typings').ActivityEntry}  ActivityEntry */
 
 const Store = require('electron-store')
+const crypto = require('node:crypto')
+
 const activityLogStore = new Store({
   name: 'activity-log'
 })
 
 class ActivityLog {
   #entries
-  #lastId
 
   constructor () {
     this.#entries = loadStoredEntries()
-    this.#lastId = Number(this.#entries.at(-1)?.id ?? 0)
   }
 
   /**
    * @param {ActivityEvent} args
-   * @returns {ActivityEntry}
+   * @returns {ActivityEvent}
    */
   recordEvent ({ source, type, message }) {
-    const nextId = ++this.#lastId
-    /** @type {ActivityEntry} */
+    /** @type {ActivityEvent} */
     const entry = {
-      id: String(nextId),
+      id: crypto.randomUUID(),
       timestamp: Date.now(),
       source,
       type,
@@ -61,7 +59,7 @@ class ActivityLog {
 }
 
 /**
- * @returns {ActivityEntry[]}
+ * @returns {ActivityEvent[]}
  */
 function loadStoredEntries () {
   // A workaround to fix false TypeScript errors
