@@ -11,7 +11,7 @@ describe('ActivityLog', function () {
 
   it('record events and assign them timestamp and id ', function () {
     const activityLog = new ActivityLog()
-    const entryCreated = activityLog.recordEvent(givenActivity({
+    const entryCreated = activityLog.recordActivity(givenActivity({
       source: 'Station',
       type: 'info',
       message: 'Hello world!'
@@ -33,8 +33,8 @@ describe('ActivityLog', function () {
 
   it('assigns unique ids', function () {
     const activityLog = new ActivityLog()
-    activityLog.recordEvent(givenActivity({ message: 'one' }))
-    activityLog.recordEvent(givenActivity({ message: 'two' }))
+    activityLog.recordActivity(givenActivity({ message: 'one' }))
+    activityLog.recordActivity(givenActivity({ message: 'two' }))
     assert.deepStrictEqual(activityLog.getAllEntries().map(it => pickProps(it, 'id', 'message')), [
       { id: '1', message: 'one' },
       { id: '2', message: 'two' }
@@ -42,9 +42,9 @@ describe('ActivityLog', function () {
   })
 
   it('preserves events across restarts', function () {
-    new ActivityLog().recordEvent(givenActivity({ message: 'first run' }))
+    new ActivityLog().recordActivity(givenActivity({ message: 'first run' }))
     const activityLog = new ActivityLog()
-    activityLog.recordEvent(givenActivity({ message: 'second run' }))
+    activityLog.recordActivity(givenActivity({ message: 'second run' }))
     assert.deepStrictEqual(activityLog.getAllEntries().map(it => pickProps(it, 'id', 'message')), [
       { id: '1', message: 'first run' },
       { id: '2', message: 'second run' }
@@ -56,7 +56,7 @@ describe('ActivityLog', function () {
 
     const log = new ActivityLog()
     for (let i = 0; i < 110; i++) {
-      log.recordEvent(givenActivity({ message: `event ${i}` }))
+      log.recordActivity(givenActivity({ message: `event ${i}` }))
     }
     const entries = log.getAllEntries()
     assert.deepStrictEqual(

@@ -1,6 +1,6 @@
 'use strict'
 
-/** @typedef {import('./typings').ActivityEvent}  ActivityEvent */
+/** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityOptions}  RecordActivityOptions */
 
 const Store = require('electron-store')
@@ -19,10 +19,10 @@ class ActivityLog {
 
   /**
    * @param {RecordActivityOptions} args
-   * @returns {ActivityEvent}
+   * @returns {Activity}
    */
-  recordEvent ({ source, type, message }) {
-    /** @type {ActivityEvent} */
+  recordActivity ({ source, type, message }) {
+    /** @type {Activity} */
     const entry = {
       id: crypto.randomUUID(),
       timestamp: Date.now(),
@@ -60,7 +60,7 @@ class ActivityLog {
 }
 
 /**
- * @returns {ActivityEvent[]}
+ * @returns {Activity[]}
  */
 function loadStoredEntries () {
   // A workaround to fix false TypeScript errors

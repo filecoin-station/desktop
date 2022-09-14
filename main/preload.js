@@ -6,10 +6,10 @@ contextBridge.exposeInMainWorld('electron', {
   resumeActivityStream: () => ipcRenderer.invoke('station:resumeActivityStream'),
 
   /**
-   * @param {(ActivityEvent: import('./typings').ActivityEvent) => void} callback
+   * @param {(Activity: import('./typings').Activity) => void} callback
    */
   onActivityLogged (callback) {
-    ipcRenderer.on('station:activity-logged', (_event, entry) => callback(entry))
+    ipcRenderer.on('station:activity-logged', (_event, activity) => callback(activity))
   },
 
   saturnNode: {

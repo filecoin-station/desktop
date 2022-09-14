@@ -1,16 +1,16 @@
 export type ActivitySource = 'Station' | 'Saturn';
-export type ActivityEventType = 'info' | 'error';
+export type ActivityType = 'info' | 'error';
 
-export interface ActivityEvent {
+export interface Activity {
   id: string;
   timestamp: number;
-  type: ActivityEventType;
+  type: ActivityType;
   source: ActivitySource;
   message: string;
 }
 
 export interface RecordActivityOptions {
-  type: ActivityEventType;
+  type: ActivityType;
   source: ActivitySource;
   message: string;
 }

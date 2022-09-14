@@ -15,7 +15,7 @@ const { setupAppMenu } = require('./app-menu')
 const { ActivityLog } = require('./activity-log')
 const { ipcMain } = require('electron/main')
 
-/** @typedef {import('./typings').ActivityEvent} ActivityEvent */
+/** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityOptions} RecordActivityOptions */
 
 const inTest = (process.env.NODE_ENV === 'test')
@@ -94,18 +94,18 @@ const activityLog = new ActivityLog()
 let isActivityStreamFlowing = false
 
 /**
- * @param {RecordActivityOptions} event
+ * @param {RecordActivityOptions} opts
  */
-function recordActivity (event) {
-  const entry = activityLog.recordEvent(event)
+function recordActivity (opts) {
+  const entry = activityLog.recordActivity(opts)
   if (isActivityStreamFlowing) emitActivity(entry)
 }
 
 /**
- * @param {ActivityEvent} entry
+ * @param {Activity} activity
  */
-function emitActivity (entry) {
-  ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, entry)
+function emitActivity (activity) {
+  ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
 }
 
 function resumeActivityStream () {

@@ -1,10 +1,10 @@
-import { ActivityEvent } from '../main/typings'
+import { Activity } from '../main/typings'
 
 export declare global {
   interface Window {
     electron: {
-      resumeActivityStream(): Promise<ActivityEvent[]>,
-      onActivityLogged(callback: (activityEvent: ActivityEvent) => void),
+      resumeActivityStream(): Promise<Activity[]>,
+      onActivityLogged(callback: (activity: Activity) => void),
 
       saturnNode: {
         start:() => Promise<void>,
