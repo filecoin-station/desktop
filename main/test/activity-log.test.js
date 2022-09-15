@@ -51,7 +51,7 @@ describe('ActivityLog', function () {
     ])
   })
 
-  it('limits the log to the most recent 50 entries', function () {
+  it('limits the log to the most recent 50 entries', /** @this {Mocha.Test} */ function () {
     this.timeout(10000)
 
     const log = new ActivityLog()
