@@ -3,8 +3,8 @@ import { Activity } from '../main/typings'
 export declare global {
   interface Window {
     electron: {
-      startActivityStream(): Promise<Activity[]>,
-      onActivityLogged(callback: (activity: Activity) => void),
+      getAllActivities(): Promise<Activity[]>,
+      onActivityLogged(callback: (allActivities: Activity[]) => void),
 
       saturnNode: {
         start:() => Promise<void>,

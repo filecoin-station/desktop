@@ -3,6 +3,7 @@ import {
   Link, Route, Routes
 } from 'react-router-dom'
 import './App.css'
+import { ActivityLog } from './components/ActivityLog'
 import Saturn from './Saturn'
 
 function App (): JSX.Element {
@@ -28,9 +29,9 @@ function Home (): JSX.Element {
 
   return (
     <div style={{ marginTop: '2em' }}>
-      <div className='logo'>🛰</div>
       <h2>Welcome to Filecoin Station</h2>
       <p><Link to='/saturn' id='link-to-saturn'> Saturn &gt;&gt;</Link></p>
+      <ActivityLog />
     </div>
   )
 }

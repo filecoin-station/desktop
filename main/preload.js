@@ -3,13 +3,20 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electron', {
-  startActivityStream: () => ipcRenderer.invoke('station:startActivityStream'),
+  getAllActivities: () => ipcRenderer.invoke('station:getAllActivities'),
 
   /**
    * @param {(Activity: import('./typings').Activity) => void} callback
    */
   onActivityLogged (callback) {
-    ipcRenderer.on('station:activity-logged', (_event, activity) => callback(activity))
+    /** @type {(event: import('electron').IpcRendererEvent, ...args: any[]) => void} */
+    const listener = (_event, activities) => callback(activities)
+
+    ipcRenderer.on('station:activity-logged', listener)
+
+    return function unsubscribe () {
+      ipcRenderer.removeListener('station:activity-logged', listener)
+    }
   },
 
   saturnNode: {

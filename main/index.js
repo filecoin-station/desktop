@@ -53,10 +53,17 @@ if (!app.requestSingleInstanceLock() && !inTest) {
   app.quit()
 }
 
+const activityLog = new ActivityLog()
+
 /** @type {import('./typings').Context} */
 const ctx = {
-  startActivityStream,
-  recordActivity,
+  getAllActivities: () => activityLog.getAllEntries(),
+
+  recordActivity: (args) => {
+    activityLog.record(args)
+    ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activityLog.getAllEntries())
+  },
+
   manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
@@ -88,30 +95,6 @@ async function run () {
   } catch (e) {
     handleError(e)
   }
-}
-
-const activityLog = new ActivityLog()
-let isActivityStreamFlowing = false
-
-/**
- * @param {RecordActivityOptions} opts
- */
-function recordActivity (opts) {
-  const activity = activityLog.record(opts)
-  if (isActivityStreamFlowing) emitActivity(activity)
-}
-
-/**
- * @param {Activity} activity
- */
-function emitActivity (activity) {
-  ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
-}
-
-function startActivityStream () {
-  isActivityStreamFlowing = true
-  const existingEntries = activityLog.getAllEntries()
-  for (const it of existingEntries) emitActivity(it)
 }
 
 run()

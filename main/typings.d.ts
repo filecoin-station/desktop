@@ -13,7 +13,7 @@ export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
 
 export interface Context {
   recordActivity(activity: RecordActivityArgs): void;
-  startActivityStream(): void;
+  getAllActivities(): void;
 
   showUI: () => void
   loadWebUIFromDist: import('electron-serve').loadURL
