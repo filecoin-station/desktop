@@ -20,6 +20,9 @@ const activities: Activity[] = []
 
 window.electron.onActivityLogged(activity => {
   activities.push(activity)
+  // In case two activities were recorded in the same millisecond, fall back to
+  // sorting by their IDs, which are guaranteed to be unique and therefore
+  // provide a stable sorting.
   activities.sort((a, b) => {
     return a.timestamp !== b.timestamp
       ? b.timestamp - a.timestamp
