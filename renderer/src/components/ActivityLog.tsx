@@ -15,10 +15,10 @@ export const ActivityLog : React.FC = () => {
     const unsubscribe = window.electron.onActivityLogged(allActivities => {
       setActivities(allActivities)
     })
-    return unsubscribe()
+    return unsubscribe
   }, [])
 
-  // TODO: add CSS styling :)
+  // TODO: add proper CSS styling :)
   const style: React.CSSProperties = {
     listStyle: 'none',
     textAlign: 'left',
@@ -27,7 +27,11 @@ export const ActivityLog : React.FC = () => {
     border: '1px solid white',
     padding: '1em'
   }
-  return <ul style={style}>
-    {activities.map(activity => <li key={activity.id}>{activity.message}</li>)}
-  </ul>
+
+  return <>
+    <h3>Activity Log</h3>
+    <ul style={style}>
+      {activities.map(activity => <li key={activity.id}>{activity.message}</li>).reverse()}
+    </ul>
+  </>
 }

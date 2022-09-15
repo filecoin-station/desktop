@@ -21,11 +21,6 @@ const { ipcMain } = require('electron/main')
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
-if (isDev) {
-  // Do not preserve old Activity entries in development mode
-  ActivityLog.reset()
-}
-
 function handleError (/** @type {any} */ err) {
   ctx.recordActivity({
     source: 'Station',
@@ -54,6 +49,10 @@ if (!app.requestSingleInstanceLock() && !inTest) {
 }
 
 const activityLog = new ActivityLog()
+if (isDev) {
+  // Do not preserve old Activity entries in development mode
+  activityLog.reset()
+}
 
 /** @type {import('./typings').Context} */
 const ctx = {

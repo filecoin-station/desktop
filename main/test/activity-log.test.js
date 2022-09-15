@@ -7,7 +7,7 @@ const { assertTimestampIsCloseToNow, pickProps } = require('./test-helpers')
 /** @typedef {import('../typings').RecordActivityArgs} RecordActivityOptions */
 
 describe('ActivityLog', function () {
-  beforeEach(function () { return ActivityLog.reset() })
+  beforeEach(function () { return new ActivityLog().reset() })
 
   it('record activities and assign them timestamp and id ', function () {
     const activityLog = new ActivityLog()

@@ -48,10 +48,9 @@ class ActivityLog {
     return [...this.#entries]
   }
 
-  static reset () {
-    const self = new ActivityLog()
-    self.#entries = []
-    self.#save()
+  reset () {
+    this.#entries = []
+    this.#save()
   }
 
   #save () {
