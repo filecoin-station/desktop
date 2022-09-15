@@ -7,7 +7,9 @@ const { assertTimestampIsCloseToNow, pickProps } = require('./test-helpers')
 /** @typedef {import('../typings').RecordActivityArgs} RecordActivityOptions */
 
 describe('ActivityLog', function () {
-  beforeEach(function () { return new ActivityLog().reset() })
+  beforeEach(function () {
+    return new ActivityLog().reset()
+  })
 
   it('record activities and assign them timestamp and id ', function () {
     const activityLog = new ActivityLog()
@@ -20,14 +22,14 @@ describe('ActivityLog', function () {
     assert.strictEqual(activityLog.getAllEntries().length, 1)
     assert.deepStrictEqual(activityCreated, activityLog.getAllEntries()[0])
 
-    const { timestamp, ...activity } = activityLog.getAllEntries()[0]
+    const { id, timestamp, ...activity } = activityLog.getAllEntries()[0]
     assert.deepStrictEqual(activity, {
-      id: '1',
       source: 'Station',
       type: 'info',
       message: 'Hello world!'
     })
 
+    assert.equal(typeof id, 'string')
     assertTimestampIsCloseToNow(timestamp, 'activity.timestamp')
   })
 
@@ -35,19 +37,17 @@ describe('ActivityLog', function () {
     const activityLog = new ActivityLog()
     activityLog.record(givenActivity({ message: 'one' }))
     activityLog.record(givenActivity({ message: 'two' }))
-    assert.deepStrictEqual(activityLog.getAllEntries().map(it => pickProps(it, 'id', 'message')), [
-      { id: '1', message: 'one' },
-      { id: '2', message: 'two' }
-    ])
+    const [first, second] = activityLog.getAllEntries()
+    assert(first.id !== second.id, `Expected unique ids. Got the same value: ${first.id}`)
   })
 
   it('preserves activities across restarts', function () {
     new ActivityLog().record(givenActivity({ message: 'first run' }))
     const activityLog = new ActivityLog()
     activityLog.record(givenActivity({ message: 'second run' }))
-    assert.deepStrictEqual(activityLog.getAllEntries().map(it => pickProps(it, 'id', 'message')), [
-      { id: '1', message: 'first run' },
-      { id: '2', message: 'second run' }
+    assert.deepStrictEqual(activityLog.getAllEntries().map(it => pickProps(it, 'message')), [
+      { message: 'first run' },
+      { message: 'second run' }
     ])
   })
 

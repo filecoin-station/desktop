@@ -63,7 +63,7 @@ class ActivityLog {
  */
 function loadStoredEntries () {
   // A workaround to fix false TypeScript errors
-  return /** @type {any} */(activityLogStore.get('events', []))
+  return /** @type {any} */(activityLogStore.get('activities', []))
 }
 
 module.exports = {
