@@ -1,19 +1,22 @@
 export type ActivitySource = 'Station' | 'Saturn';
-export type ActivityEventType = 'info' | 'error';
+export type ActivityType = 'info' | 'error';
 
-export interface ActivityEvent {
-  type: ActivityEventType;
+export interface Activity {
+  id: string;
+  timestamp: number;
+  type: ActivityType;
   source: ActivitySource;
   message: string;
 }
 
-export interface ActivityEntry extends ActivityEvent {
-  id: string;
-  timestamp: number;
+export interface RecordActivityOptions {
+  type: ActivityType;
+  source: ActivitySource;
+  message: string;
 }
 
 export interface Context {
-  recordActivity(event: ActivityEvent): void;
+  recordActivity(activity: RecordActivityOptions): void;
   resumeActivityStream(): void;
 
   showUI: () => void

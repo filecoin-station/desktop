@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './index.css'
+import { Activity } from '../../main/typings'
 
 ReactDOM.createRoot(
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -15,8 +16,22 @@ ReactDOM.createRoot(
   </React.StrictMode>
 )
 
-window.electron.onActivityLogged(entry => {
-  console.log('[ACTIVITY] %j', entry)
+const activities: Activity[] = []
+
+window.electron.onActivityLogged(activity => {
+  activities.push(activity)
+  // In case two activities were recorded in the same millisecond, fall back to
+  // sorting by their IDs, which are guaranteed to be unique and therefore
+  // provide a stable sorting.
+  activities.sort((a, b) => {
+    return a.timestamp !== b.timestamp
+      ? b.timestamp - a.timestamp
+      : a.id.localeCompare(b.id)
+  })
+  if (activities.length > 100) activities.shift()
+
+  console.log('[ACTIVITY] %j', activity)
+  console.log('[ACTIVITIES]', activities)
 })
 
 window.electron.resumeActivityStream().then(() => {

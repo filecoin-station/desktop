@@ -1,47 +1,46 @@
 'use strict'
 
-/** @typedef {import('./typings').ActivityEvent}  ActivityEvent */
-/** @typedef {import('./typings').ActivityEntry}  ActivityEntry */
+/** @typedef {import('./typings').Activity} Activity */
+/** @typedef {import('./typings').RecordActivityOptions}  RecordActivityOptions */
 
 const Store = require('electron-store')
+const crypto = require('node:crypto')
+
 const activityLogStore = new Store({
   name: 'activity-log'
 })
 
 class ActivityLog {
   #entries
-  #lastId
 
   constructor () {
     this.#entries = loadStoredEntries()
-    this.#lastId = Number(this.#entries.at(-1)?.id ?? 0)
   }
 
   /**
-   * @param {ActivityEvent} args
-   * @returns {ActivityEntry}
+   * @param {RecordActivityOptions} args
+   * @returns {Activity}
    */
-  recordEvent ({ source, type, message }) {
-    const nextId = ++this.#lastId
-    /** @type {ActivityEntry} */
-    const entry = {
-      id: String(nextId),
+  recordActivity ({ source, type, message }) {
+    /** @type {Activity} */
+    const activity = {
+      id: crypto.randomUUID(),
       timestamp: Date.now(),
       source,
       type,
       message
     }
     // Freeze the data to prevent ActivityLog users from accidentally changing our store
-    Object.freeze(entry)
+    Object.freeze(activity)
 
-    this.#entries.push(entry)
+    this.#entries.push(activity)
 
     if (this.#entries.length > 100) {
-      // Delete the oldest entry to keep ActivityLog at constant size
+      // Delete the oldest activity to keep ActivityLog at constant size
       this.#entries.shift()
     }
     this.#save()
-    return entry
+    return activity
   }
 
   getAllEntries () {
@@ -56,12 +55,12 @@ class ActivityLog {
   }
 
   #save () {
-    activityLogStore.set('events', this.#entries)
+    activityLogStore.set('activities', this.#entries)
   }
 }
 
 /**
- * @returns {ActivityEntry[]}
+ * @returns {Activity[]}
  */
 function loadStoredEntries () {
   // A workaround to fix false TypeScript errors
