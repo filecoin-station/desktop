@@ -1,43 +1,98 @@
-.App {
-  text-align: center;
-  color: white;
-  height: 100vm;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-.App header {
-  margin-top: 2em;
-  border-bottom: 1px dotted white;
-}
 
-.logo {
-  height: 35vmin;
-  font-size: 2em;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .logo {
-    animation: App-logo-spin infinite 10s linear;
+@layer base {
+  @font-face {
+    font-family: "SuisseIntl";
+    src: url('assets/fonts/SuisseIntl/SuisseIntl-Regular.ttf');
+  }
+  @font-face {
+    font-family: "SpaceGrotesk";
+    src: url('assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf');
+  }
+  @font-face {
+    font-family: "SpaceMono";
+    src: url('assets/fonts/SpaceMono/SpaceMono-Regular.ttf');
   }
 }
 
-.App main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+@layer base {
+  .title {
+    @apply text-header-xxl font-title text-primary;
+  }
+
+  .subtitle {
+    @apply text-header-xl font-title text-secondary;
+  }
+
+  body {
+    @apply font-body
+  }
+  
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@layer components {
+  .btn-primary {
+    @apply py-2 px-4 rounded-full font-body text-body-m  text-white
+     bg-primary hover:bg-primary-hover visited:bg-primary-click
+     disabled:bg-grayscale-500 disabled:text-grayscale-700;
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-a {
-  color: cyan;
+  .btn-primary-small {
+    @apply py-2 px-4 rounded-full font-body text-body-xs text-white
+    bg-primary hover:bg-primary-hover visited:bg-primary-click
+    disabled:bg-grayscale-500 disabled:text-grayscale-700;
+  }
+
+  .btn-secondary {
+    @apply py-2 px-4 rounded-full font-body text-body-m bg-opacity-0 border border-solid 
+     border-primary border-opacity-25  text-primary
+     hover:border-primary-hover hover:border-opacity-25 hover:text-primary-hover
+     visited:border-primary-click visited:border-opacity-25 visited:text-primary-click 
+     disabled:border-grayscale-500 disabled:text-grayscale-700;
+  }
+
+  .btn-secondary-small {
+    @apply py-2 px-4 rounded-full font-body text-body-xs bg-opacity-0 border border-solid
+     border-primary border-opacity-25  text-primary
+     hover:border-primary-hover hover:border-opacity-25 hover:text-primary-hover
+     visited:border-primary-click visited:border-opacity-25 visited:text-primary-click 
+     disabled:border-grayscale-500 disabled:text-grayscale-700
+     ;
+     
+  }
+
+  .link-primary {
+    @apply text-primary underline decoration-primary/70
+     hover:text-primary-hover hover:decoration-primary-hover/70
+     visited:text-primary-click visited:decoration-primary-click/70
+  }
+
+  .link-primary-dark {
+    @apply text-white underline decoration-white/70
+     hover:text-white hover:decoration-white/70
+     visited:text-white visited:decoration-white/70
+  }
+
+  .gradient-space-marine {
+    @apply bg-gradient-to-r from-tertiary-accent to-secondary
+  }
+
+  .gradient-deep-marine {
+    @apply bg-gradient-to-r from-primary to-secondary
+  }
+
+  .gradient-space-turqoise {
+    @apply bg-gradient-to-r from-tertiary-accent to-accent
+  }
+
+  .gradient-space-fire {
+    @apply bg-gradient-to-r from-tertiary-accent to-warning
+  }
+
+  .gradient-sun-fire {
+    @apply bg-gradient-to-r from-secondary-accent to-warning
+  }
 }
