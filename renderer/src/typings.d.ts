@@ -1,6 +1,11 @@
+import { Activity } from '../main/typings'
+
 export declare global {
   interface Window {
     electron: {
+      getAllActivities(): Promise<Activity[]>,
+      onActivityLogged(callback: (allActivities: Activity[]) => void),
+
       saturnNode: {
         start:() => Promise<void>,
         stop: () => Promise<void>,
