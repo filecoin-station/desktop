@@ -16,7 +16,7 @@ const { ActivityLog } = require('./activity-log')
 const { ipcMain } = require('electron/main')
 
 /** @typedef {import('./typings').Activity} Activity */
-/** @typedef {import('./typings').RecordActivityOptions} RecordActivityOptions */
+/** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -55,7 +55,7 @@ if (!app.requestSingleInstanceLock() && !inTest) {
 
 /** @type {import('./typings').Context} */
 const ctx = {
-  resumeActivityStream,
+  startActivityStream,
   recordActivity,
   manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
@@ -97,7 +97,7 @@ let isActivityStreamFlowing = false
  * @param {RecordActivityOptions} opts
  */
 function recordActivity (opts) {
-  const activity = activityLog.recordActivity(opts)
+  const activity = activityLog.record(opts)
   if (isActivityStreamFlowing) emitActivity(activity)
 }
 
@@ -108,7 +108,7 @@ function emitActivity (activity) {
   ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
 }
 
-function resumeActivityStream () {
+function startActivityStream () {
   isActivityStreamFlowing = true
   const existingEntries = activityLog.getAllEntries()
   for (const it of existingEntries) emitActivity(it)

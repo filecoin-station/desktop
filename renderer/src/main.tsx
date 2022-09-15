@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
+import { Activity } from '../../main/typings'
 import App from './App'
 import './index.css'
-import { Activity } from '../../main/typings'
 
 ReactDOM.createRoot(
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -34,6 +34,6 @@ window.electron.onActivityLogged(activity => {
   console.log('[ACTIVITIES]', activities)
 })
 
-window.electron.resumeActivityStream().then(() => {
+window.electron.startActivityStream().then(() => {
   console.log('ACTIVITY STREAM RESUMED')
 })
