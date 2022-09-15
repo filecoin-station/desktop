@@ -20,14 +20,15 @@ const activities: Activity[] = []
 
 window.electron.onActivityLogged(activity => {
   activities.push(activity)
-  if (activities.length > 100) activities.shift()
-
-  console.log('[ACTIVITIES]', activities.sort((a, b) => {
+  activities.sort((a, b) => {
     return a.timestamp !== b.timestamp
       ? b.timestamp - a.timestamp
       : a.id.localeCompare(b.id)
-  }))
+  })
+  if (activities.length > 100) activities.shift()
+
   console.log('[ACTIVITY] %j', activity)
+  console.log('[ACTIVITIES]', activities)
 })
 
 window.electron.resumeActivityStream().then(() => {
