@@ -12,6 +12,8 @@ const Store = require('electron-store')
 const consts = require('./consts')
 const configStore = new Store()
 
+/** @typedef {import('./typings').Context} Context */
+
 const saturnBinaryPath = getSaturnBinaryPath()
 
 /** @type {import('execa').ExecaChildProcess | null} */
@@ -31,7 +33,7 @@ const ConfigKeys = {
 
 let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 
-async function setup (/** @type {import('./typings').Context} */ _ctx) {
+async function setup (/** @type {Context} */ ctx) {
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
 
   const stat = await fs.stat(saturnBinaryPath)
@@ -41,7 +43,7 @@ async function setup (/** @type {import('./typings').Context} */ _ctx) {
     if (!childProcess) return
     stop()
   })
-  await start()
+  await start(ctx)
 }
 
 function getSaturnBinaryPath () {
@@ -55,7 +57,7 @@ function getSaturnBinaryPath () {
     : path.resolve(__dirname, '..', 'build', 'saturn', `l2node-${process.platform}-${arch}`, name)
 }
 
-async function start () {
+async function start (/** @type {Context} */ ctx) {
   if (!filAddress) {
     console.info('Saturn node requires FIL address. Please configure it in the Station UI.')
     return
@@ -88,6 +90,7 @@ async function start () {
     stdout.on('data', (/** @type {string} */ data) => {
       forwardChunkFromSaturn(data, console.log)
       appendToChildLog(data)
+      handleActivityLogs(ctx, data)
     })
 
     stderr.setEncoding('utf-8')
@@ -111,6 +114,8 @@ async function start () {
         console.log('Saturn node is up and ready (Web URL: %s)', webUrl)
         ready = true
         stdout.off('data', readyHandler)
+
+        ctx.recordActivity({ source: 'Saturn', type: 'info', message: 'Saturn module started.' })
         resolve()
       }
     }
@@ -131,6 +136,7 @@ async function start () {
     const msg = `Saturn node exited ${reason}`
     console.log(msg)
     appendToChildLog(msg)
+    ctx.recordActivity({ source: 'Saturn', type: 'info', message: msg })
 
     ready = false
   })
@@ -141,9 +147,11 @@ async function start () {
       setTimeout(500)
     ])
   } catch (err) {
-    const msg = err instanceof Error ? err.message : '' + err
-    appendToChildLog(`Cannot start Saturn node: ${msg}`)
+    const errorMsg = err instanceof Error ? err.message : '' + err
+    const message = `Cannot start Saturn node: ${errorMsg}`
+    appendToChildLog(message)
     console.error('Cannot start Saturn node:', err)
+    ctx.recordActivity({ source: 'Saturn', type: 'error', message })
   }
 }
 
@@ -209,6 +217,26 @@ function appendToChildLog (text) {
     .split(/\n/g)
     .map(line => `[${new Date().toLocaleTimeString()}] ${line}\n`)
     .join('')
+}
+
+/**
+ * @param {Context} ctx
+ * @param {string} text
+ */
+function handleActivityLogs (ctx, text) {
+  text
+    .trimEnd()
+    .split(/\n/g)
+    .forEach(line => {
+      const m = line.match(/^(INFO|ERROR): (.*)$/)
+      if (!m) return
+
+      ctx.recordActivity({
+        source: 'Saturn',
+        type: /** @type {any} */(m[1].toLowerCase()),
+        message: m[2]
+      })
+    })
 }
 
 module.exports = {

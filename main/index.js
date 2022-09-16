@@ -9,12 +9,25 @@ const setupUI = require('./ui')
 const setupTray = require('./tray')
 const setupUpdater = require('./updater')
 const saturnNode = require('./saturn-node')
-const { setupIpcMain } = require('./ipc')
+const { setupIpcMain, ipcMainEvents } = require('./ipc')
 const { setupAppMenu } = require('./app-menu')
 
+const { ActivityLog } = require('./activity-log')
+const { ipcMain } = require('electron/main')
+
+/** @typedef {import('./typings').Activity} Activity */
+/** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
+
 const inTest = (process.env.NODE_ENV === 'test')
+const isDev = !app.isPackaged && !inTest
 
 function handleError (/** @type {any} */ err) {
+  ctx.recordActivity({
+    source: 'Station',
+    type: 'error',
+    message: `Station failed to start: ${err.message || err}`
+  })
+
   log.error(err)
   dialog.showErrorBox('Error occured', err.stack ?? err.message ?? err)
 }
@@ -35,12 +48,29 @@ if (!app.requestSingleInstanceLock() && !inTest) {
   app.quit()
 }
 
+const activityLog = new ActivityLog()
+if (isDev) {
+  // Do not preserve old Activity entries in development mode
+  activityLog.reset()
+}
+
 /** @type {import('./typings').Context} */
 const ctx = {
+  getAllActivities: () => activityLog.getAllEntries(),
+
+  recordActivity: (args) => {
+    activityLog.record(args)
+    ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activityLog.getAllEntries())
+  },
+
   manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
 }
+
+process.on('exit', () => {
+  ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station stopped.' })
+})
 
 async function run () {
   try {
@@ -56,7 +86,9 @@ async function run () {
     await setupAppMenu(ctx)
     await setupUI(ctx)
     await setupUpdater(ctx)
-    await setupIpcMain()
+    await setupIpcMain(ctx)
+
+    ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
 
     await saturnNode.setup(ctx)
   } catch (e) {
