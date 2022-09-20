@@ -1,5 +1,6 @@
 import './Saturn.css'
 import { useEffect, useState } from 'react'
+import { Link, Navigate } from 'react-router-dom'
 import FilAddressForm from './components/FilAddressForm'
 import { Link } from 'react-router-dom'
 
@@ -51,14 +52,10 @@ export default function Saturn (): JSX.Element {
       : ErrorNotRunning({ onRestartClick, saturnNodeLog })
     : filAddress
       ? ErrorNotRunning({ onRestartClick, saturnNodeLog })
-      : <p>Please provide the FIL wallet address to use for Saturn Node</p>
+      : <Navigate to="/wallet" replace  />
 
   return (
     <div>
-      <div className='wallet'>
-        <label>FIL wallet address:</label>
-        <FilAddressForm address={filAddress} setAddress={setFilAddress} onValidAddress={onFilAddressChanged } />
-      </div>
       {content}
       <p><Link to='/dashboard'>Station &gt;&gt;</Link></p>
     </div>

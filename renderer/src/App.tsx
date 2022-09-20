@@ -20,15 +20,15 @@ const App = ():JSX.Element => {
 
 export default App
 
-function Dashboard (): JSX.Element {
-  useEffect(() => { document.title = 'Filecoin Station' })
+// function Home (): JSX.Element {
+//   useEffect(() => { document.title = 'Filecoin Station' })
 
-  return (
-    <div style={{ marginTop: '2em' }}>
-      <h2>Welcome to Filecoin Station</h2>
-      <TotalJobsCompleted />
-      <p><Link to='/saturn' id='link-to-saturn'> Saturn &gt;&gt;</Link></p>
-      <ActivityLog />
-    </div>
-  )
-}
+//   return (
+//     <div style={{ marginTop: '2em' }}>
+//       <h2>Welcome to Filecoin Station</h2>
+//       <TotalJobsCompleted />
+//       <p><Link to='/saturn' id='link-to-saturn'> Saturn &gt;&gt;</Link></p>
+//       <ActivityLog />
+//     </div>
+//   )
+// }
