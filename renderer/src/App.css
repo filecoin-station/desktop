@@ -20,7 +20,7 @@
   }
 
   .title {
-    @apply text-header-m font-title text-primary leading-[1.25] tracking-[-0.4px];
+    @apply text-header-l font-title text-primary leading-[1.25] tracking-[-0.4px];
   }
 
   .subtitle {
