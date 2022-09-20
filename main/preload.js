@@ -19,19 +19,19 @@ contextBridge.exposeInMainWorld('electron', {
     }
   },
 
-  getJobCount: () => ipcRenderer.invoke('station:getJobCount'),
+  getTotalJobsCompleted: () => ipcRenderer.invoke('station:getTotalJobsCompleted'),
 
   /**
-   * @param {(totalJobCount: number) => void} callback
+   * @param {(totalJobsCompleted: number) => void} callback
    */
-  onJobCountUpdated (callback) {
+  onJobStatsUpdated (callback) {
     /** @type {(event: import('electron').IpcRendererEvent, ...args: any[]) => void} */
     const listener = (_event, totalJobCount) => callback(totalJobCount)
 
-    ipcRenderer.on('station:job-count-updated', listener)
+    ipcRenderer.on('station:job-stats-updated', listener)
 
     return function unsubscribe () {
-      ipcRenderer.removeListener('station:job-counter-updated', listener)
+      ipcRenderer.removeListener('station:job-stats-updated', listener)
     }
   },
 

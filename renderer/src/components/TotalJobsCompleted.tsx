@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 
-export const JobCounter : React.FC = () => {
+export const TotalJobsCompleted : React.FC = () => {
   const [totalJobCount, setTotalJobCount] = useState<number>(0)
 
   useEffect(() => {
     (async () => {
-      const count = await window.electron.getJobCount()
+      const count = await window.electron.getTotalJobsCompleted()
       setTotalJobCount(count)
     })()
   }, [])
 
   useEffect(() => {
-    const unsubscribe = window.electron.onJobCountUpdated(count => {
+    const unsubscribe = window.electron.onJobStatsUpdated(count => {
       setTotalJobCount(count)
     })
     return unsubscribe

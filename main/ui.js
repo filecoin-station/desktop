@@ -100,13 +100,13 @@ function setupIpcEventForwarding (ui) {
   }
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
 
-  const onJobCounterUpdated = (/** @type {unknown[]} */ ...args) => {
-    ui.webContents.send(ipcMainEvents.JOB_COUNTER_UPDATED, ...args)
+  const onJobStatsUpdated = (/** @type {unknown[]} */ ...args) => {
+    ui.webContents.send(ipcMainEvents.JOB_STATS_UPDATED, ...args)
   }
-  ipcMain.on(ipcMainEvents.JOB_COUNTER_UPDATED, onJobCounterUpdated)
+  ipcMain.on(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
 
   return function stopIpcEventForwarding () {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
-    ipcMain.removeListener(ipcMainEvents.JOB_COUNTER_UPDATED, onJobCounterUpdated)
+    ipcMain.removeListener(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
   }
 }

@@ -6,8 +6,8 @@ export declare global {
       getAllActivities(): Promise<Activity[]>,
       onActivityLogged(callback: (allActivities: Activity[]) => void),
 
-      getJobCount(): Promise<number>,
-      onJobCountUpdated (callback: (totalJobCount: number) => void),
+      getTotalJobsCompleted(): Promise<number>,
+      onJobStatsUpdated (callback: (totalJobCount: number) => void),
 
       saturnNode: {
         start:() => Promise<void>,

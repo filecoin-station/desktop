@@ -11,14 +11,14 @@ export interface Activity {
 
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
 
-export type ModuleJobCount = Record<string, number>;
+export type ModuleJobStatsMap = Record<string, number>;
 
 export interface Context {
   recordActivity(activity: RecordActivityArgs): void;
   getAllActivities(): Activity[];
 
-  setModuleJobCount(moduleName: string, count: number): void;
-  getTotalJobCount(): number;
+  setModuleJobsCompleted(moduleName: string, count: number): void;
+  getTotalJobsCompleted(): number;
 
   showUI: () => void
   loadWebUIFromDist: import('electron-serve').loadURL

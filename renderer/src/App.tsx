@@ -4,7 +4,7 @@ import {
 } from 'react-router-dom'
 import './App.css'
 import { ActivityLog } from './components/ActivityLog'
-import { JobCounter } from './components/JobCounter'
+import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 import Saturn from './Saturn'
 
 function App (): JSX.Element {
@@ -31,7 +31,7 @@ function Home (): JSX.Element {
   return (
     <div style={{ marginTop: '2em' }}>
       <h2>Welcome to Filecoin Station</h2>
-      <JobCounter />
+      <TotalJobsCompleted />
       <p><Link to='/saturn' id='link-to-saturn'> Saturn &gt;&gt;</Link></p>
       <ActivityLog />
     </div>

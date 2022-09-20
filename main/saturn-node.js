@@ -38,7 +38,7 @@ const ConfigKeys = {
 let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 
 /** @type {ReturnType<setInterval>} */
-let jobCounterInterval
+let pollStatsInterval
 
 async function setup (/** @type {Context} */ ctx) {
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
@@ -119,14 +119,14 @@ async function start (/** @type {Context} */ ctx) {
 
         appendToChildLog('Saturn node is up and ready')
         console.log('Saturn node is up and ready (API URL: %s)', apiUrl)
-        webUrl = apiUrl + 'webui'
+        webUrl = `${apiUrl}webui`
         ready = true
         stdout.off('data', readyHandler)
 
         ctx.recordActivity({ source: 'Saturn', type: 'info', message: 'Saturn module started.' })
-        jobCounterInterval = setInterval(() => {
-          fetchJobCount(ctx)
-            .catch(err => console.warn('Cannot fetch job count from Saturn.', err))
+        pollStatsInterval = setInterval(() => {
+          pollStats(ctx)
+            .catch(err => console.warn('Cannot fetch Saturn module stats.', err))
         }, 100)
         resolve()
       }
@@ -174,7 +174,7 @@ function stop () {
     return
   }
 
-  clearInterval(jobCounterInterval)
+  clearInterval(pollStatsInterval)
 
   childProcess.kill()
   childProcess = null
@@ -253,7 +253,7 @@ function handleActivityLogs (ctx, text) {
     })
 }
 
-async function fetchJobCount (/** @type {Context} */ ctx) {
+async function pollStats (/** @type {Context} */ ctx) {
   const res = await request(apiUrl + 'stats', { throwOnError: true })
   const stats = await res.body.json()
   const jobCount = stats.NSuccessfulRetrievals
@@ -261,7 +261,7 @@ async function fetchJobCount (/** @type {Context} */ ctx) {
     const msg = 'Unexpected stats response - NSuccessfulRetrievals is not a number. Stats: ' + JSON.stringify(stats)
     throw new Error(msg)
   }
-  ctx.setModuleJobCount('saturn', jobCount)
+  ctx.setModuleJobsCompleted('saturn', jobCount)
 }
 
 module.exports = {

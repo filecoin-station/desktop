@@ -14,7 +14,7 @@ const { setupAppMenu } = require('./app-menu')
 
 const { ActivityLog } = require('./activity-log')
 const { ipcMain } = require('electron/main')
-const { JobCounter } = require('./job-counter')
+const { JobStats } = require('./job-stats')
 
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
@@ -49,7 +49,7 @@ if (!app.requestSingleInstanceLock() && !inTest) {
   app.quit()
 }
 
-const jobCounter = new JobCounter()
+const jobStats = new JobStats()
 
 const activityLog = new ActivityLog()
 if (isDev) {
@@ -66,10 +66,10 @@ const ctx = {
     ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activityLog.getAllEntries())
   },
 
-  getTotalJobCount: () => jobCounter.getTotalJobCount(),
-  setModuleJobCount: (moduleName, count) => {
-    jobCounter.setModuleJobCount(moduleName, count)
-    ipcMain.emit(ipcMainEvents.JOB_COUNTER_UPDATED, jobCounter.getTotalJobCount())
+  getTotalJobsCompleted: () => jobStats.getTotalJobsCompleted(),
+  setModuleJobsCompleted: (moduleName, count) => {
+    jobStats.setModuleJobsCompleted(moduleName, count)
+    ipcMain.emit(ipcMainEvents.JOB_STATS_UPDATED, jobStats.getTotalJobsCompleted())
   },
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
