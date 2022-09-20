@@ -256,7 +256,7 @@ function handleActivityLogs (ctx, text) {
 async function pollStats (/** @type {Context} */ ctx) {
   const res = await request(apiUrl + 'stats', { throwOnError: true })
   const stats = await res.body.json()
-  const jobCount = stats.NSuccessfulRetrievals
+  const jobCount = stats?.NSuccessfulRetrievals
   if (typeof jobCount !== 'number') {
     const msg = 'Unexpected stats response - NSuccessfulRetrievals is not a number. Stats: ' + JSON.stringify(stats)
     throw new Error(msg)
