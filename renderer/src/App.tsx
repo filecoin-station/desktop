@@ -1,10 +1,10 @@
-import { useEffect } from 'react'
+import './App.css'
 import {
   Link, Route, Routes
 } from 'react-router-dom'
-import './App.css'
 import { ActivityLog } from './components/ActivityLog'
 import Saturn from './Saturn'
+import { useEffect } from 'react'
 
 function App (): JSX.Element {
   return (
