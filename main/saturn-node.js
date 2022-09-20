@@ -263,12 +263,12 @@ async function pollStats (/** @type {Context} */ ctx) {
   /** @type {any} */
   const stats = await res.json()
 
-  const jobCount = stats?.NSuccessfulRetrievals
-  if (typeof jobCount !== 'number') {
+  const jobsCompleted = stats?.NSuccessfulRetrievals
+  if (typeof jobsCompleted !== 'number') {
     const msg = 'Unexpected stats response - NSuccessfulRetrievals is not a number. Stats: ' + JSON.stringify(stats)
     throw new Error(msg)
   }
-  ctx.setModuleJobsCompleted('saturn', jobCount)
+  ctx.setModuleJobsCompleted('saturn', jobsCompleted)
 }
 
 function noop () {
