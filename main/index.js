@@ -67,7 +67,10 @@ const ctx = {
   },
 
   getNumberOfAllJobsProcessed: () => jobCounter.getNumberOfAllJobsProcessed(),
-  recordModuleJobCount: (moduleName, count) => jobCounter.setJobsProcessedByModule(moduleName, count),
+  recordModuleJobCount: (moduleName, count) => {
+    jobCounter.setJobsProcessedByModule(moduleName, count)
+    ipcMain.emit(ipcMainEvents.JOB_COUNTER_UPDATED, jobCounter.getNumberOfAllJobsProcessed())
+  },
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },

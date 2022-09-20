@@ -7,9 +7,6 @@ const store = require('./store')
 const { ipcMain } = require('electron/main')
 const { ipcMainEvents } = require('./ipc')
 
-/** @type {ReturnType<setInterval>} */
-let jobCounterInterval
-
 /**
  * @param {import('./typings').Context} ctx
  * @returns {Promise<BrowserWindow>}
@@ -68,11 +65,6 @@ module.exports = async function (ctx) {
   ctx.showUI = () => {
     if (app.dock) app.dock.show()
     ui.show()
-
-    jobCounterInterval = setInterval(
-      () => ui.webContents.send(ipcMainEvents.JOB_COUNTER_UPDATED, ctx.getNumberOfAllJobsProcessed()),
-      30
-    )
   }
   ui.once('ready-to-show', ctx.showUI)
 
@@ -81,6 +73,11 @@ module.exports = async function (ctx) {
   }
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
 
+  const onJobCounterUpdated = (/** @type {unknown[]} */ ...args) => {
+    ui.webContents.send(ipcMainEvents.JOB_COUNTER_UPDATED, ...args)
+  }
+  ipcMain.on(ipcMainEvents.JOB_COUNTER_UPDATED, onJobCounterUpdated)
+
   // Don't exit when window is closed (Quit only via Tray icon menu)
   ui.on('close', (event) => {
     event.preventDefault()
@@ -88,7 +85,6 @@ module.exports = async function (ctx) {
     // Plausible doesn't think the app was exited.
     ui.hide()
     if (app.dock) app.dock.hide()
-    clearInterval(jobCounterInterval)
   })
 
   // When true quit is triggered we need to remove listeners
@@ -96,9 +92,9 @@ module.exports = async function (ctx) {
   // (Without this, the app would run forever and/or fail to update)
   app.on('before-quit', () => {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
+    ipcMain.removeListener(ipcMainEvents.JOB_COUNTER_UPDATED, onJobCounterUpdated)
     ui.removeAllListeners('close')
     devServer?.close()
-    clearInterval(jobCounterInterval)
   })
 
   return ui
