@@ -28,8 +28,6 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('station:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
   ipcMain.handle('station:getOnboardingCompleted', stationConfig.getOnboardingCompleted)
   ipcMain.handle('station:setOnboardingCompleted', (_event) => stationConfig.setOnboardingCompleted())
-  ipcMain.handle('station:getUserConsent', stationConfig.getUserConsent)
-  ipcMain.handle('station:setUserConsent', (_event, consent) => stationConfig.setUserConsent(consent))
 
   ipcMain.handle('station:getAllActivities', (_event, _args) => ctx.getAllActivities())
 }
