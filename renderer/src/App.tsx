@@ -7,6 +7,7 @@ import WalletConfig from './pages/WalletConfig'
 // import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 
 const App = ():JSX.Element => {
+  useEffect(() => { document.title = 'Filecoin Station' })
   return (
     <Router>
       <Routes>
