@@ -14,6 +14,7 @@ const { setupAppMenu } = require('./app-menu')
 
 const { ActivityLog } = require('./activity-log')
 const { ipcMain } = require('electron/main')
+const { JobCounter } = require('./job-counter')
 
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
@@ -48,6 +49,8 @@ if (!app.requestSingleInstanceLock() && !inTest) {
   app.quit()
 }
 
+const jobCounter = new JobCounter()
+
 const activityLog = new ActivityLog()
 if (isDev) {
   // Do not preserve old Activity entries in development mode
@@ -62,6 +65,9 @@ const ctx = {
     activityLog.record(args)
     ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activityLog.getAllEntries())
   },
+
+  getNumberOfAllJobsProcessed: () => jobCounter.getNumberOfAllJobsProcessed(),
+  recordModuleJobCount: (moduleName, count) => jobCounter.setJobsProcessedByModule(moduleName, count),
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },

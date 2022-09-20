@@ -7,6 +7,9 @@ const store = require('./store')
 const { ipcMain } = require('electron/main')
 const { ipcMainEvents } = require('./ipc')
 
+/** @type {ReturnType<setInterval>} */
+let jobCounterInterval
+
 /**
  * @param {import('./typings').Context} ctx
  * @returns {Promise<BrowserWindow>}
@@ -65,6 +68,11 @@ module.exports = async function (ctx) {
   ctx.showUI = () => {
     if (app.dock) app.dock.show()
     ui.show()
+
+    jobCounterInterval = setInterval(
+      () => ui.webContents.send(ipcMainEvents.JOB_COUNTER_UPDATED, ctx.getNumberOfAllJobsProcessed()),
+      30
+    )
   }
   ui.once('ready-to-show', ctx.showUI)
 
@@ -80,6 +88,7 @@ module.exports = async function (ctx) {
     // Plausible doesn't think the app was exited.
     ui.hide()
     if (app.dock) app.dock.hide()
+    clearInterval(jobCounterInterval)
   })
 
   // When true quit is triggered we need to remove listeners
@@ -89,6 +98,7 @@ module.exports = async function (ctx) {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     ui.removeAllListeners('close')
     devServer?.close()
+    clearInterval(jobCounterInterval)
   })
 
   return ui
