@@ -20,7 +20,7 @@
   }
 
   .title {
-    @apply text-header-m font-title text-primary leading-[1.25] tracking-[-0.4px];
+    @apply text-header-l font-title text-primary leading-[1.25] tracking-[-0.4px];
   }
 
   .subtitle {
@@ -34,7 +34,8 @@
 
 @layer components {
   .input {
-    @apply text-body-2xl font-body pt-3 pb-2 px-0 mt-0 border-dashed border-0 border-b bg-transparent appearance-none focus:outline-none focus:ring-0 focus:border-black border-grayscale-700;
+    @apply text-body-l font-body pt-3 pb-2 px-0 mt-0 border-dashed border-0 border-b 
+    bg-transparent appearance-none focus:outline-none focus:ring-0 focus:border-black border-grayscale-700;
   }
 
   .err-msg {

@@ -1,46 +1,43 @@
 import { useState, useEffect } from 'react'
 import FilAddressForm from '../components/FilAddressForm'
 import BackgroundGraph from './../assets/img/graph.svg'
-import { Navigate } from 'react-router-dom'
-import { setStationFilAddress, getStationFilAddress } from './../components/InterfaceCalls'
+import { useNavigate } from 'react-router-dom'
+import { getFilAddress, setFilAddress } from '../lib/station-config'
 
 const WalletConfig = (): JSX.Element => {
-  const [filAddress, setFilAddress] = useState<string | undefined>(undefined)
-  
-  const updateStatus = (): void => {
-    getStationFilAddress().then(setFilAddress)
-  }
+  const navigate = useNavigate()
+
+  const [docFilAddress, setDocFilAddress] = useState<string | undefined>(undefined)
+
+  useEffect(() => { document.title = 'Filecoin Station' })
 
   useEffect(() => {
-    updateStatus()
-  }, [filAddress])
+    getFilAddress().then(setDocFilAddress)
+  }, [])
 
-  const setSysFilAddress = (address: string | undefined) => {
-    setStationFilAddress(address).then(() => { setFilAddress(address) })
+  const setStationFilAddress = (address: string | undefined) => {
+    setFilAddress(address).then(() => { setDocFilAddress(address) })
   }
 
-
-  const afterSetFilAddress = (address: string | undefined) => {
-    setSysFilAddress(address)
-  }
-  
-  if (filAddress && filAddress !== '') {
-    console.log(filAddress)
-    return <Navigate to="/" replace />
+  if (docFilAddress && docFilAddress !== '') {
+    navigate('/dashboard', { replace: true })
   }
 
   return (
-    <>
-      <div className="w-full h-full relative">
-        <img src={BackgroundGraph} className="absolute -z-2 w-full h-full object-cover" />
-        <div className='absolute -z-1 w-full h-full gradient-bg' />
-        <div className="relative max-w-[1440px] h-full mx-auto my-0">          
-          <div className='w-[100%] max-w-[980px] h-full flex flex-col justify-center'>
-            <FilAddressForm showOnboarding={() => {}} sysFilAddress={filAddress} setFilAddress={afterSetFilAddress} />
-          </div>
+    <div className="w-full h-full relative">
+      <img src={BackgroundGraph} className="absolute -z-2 w-full h-full object-cover" alt="station background" />
+      <div className='absolute -z-1 w-full h-full gradient-bg' />
+
+      <div className="relative max-w-[1440px] h-full mx-auto my-0">
+        <div className='w-[100%] max-w-[980px] h-full flex flex-col justify-center'>
+          <h2 className="title text-black mb-24 font-bold text-header-xl">
+            Connect to the Station with your FIL address to start <span className='text-primary'> earning FIL</span>
+          </h2>
+          <FilAddressForm setFilAddress={setStationFilAddress} />
         </div>
       </div>
-    </>
+
+    </div>
   )
 }
 

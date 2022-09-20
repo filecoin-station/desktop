@@ -1,25 +1,23 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { checkAddressString } from '@glif/filecoin-address'
 
-interface IValidationError {
+interface ValidationErrorProps {
   message: string | undefined
 }
 
-const ValidationError: FC<IValidationError> = ({ message }) => {
+const ValidationError: FC<ValidationErrorProps> = ({ message }) => {
   return (
     message
-      ? <span className="err-msg" data-test-id="validation error" title="validation error">{message}</span>
+      ? <span className="err-msg" title="validation error">{message}</span>
       : <span className='mb-[0.625rem]'>&nbsp;</span>
   )
 }
 
-interface IFilAddressForm {
-  showOnboarding: () => void,
-  sysFilAddress: string | undefined,
+interface FilAddressFormProps {
   setFilAddress: (address: string | undefined) => void
 }
 
-const FilAddressForm: FC<IFilAddressForm> = ({ showOnboarding, setFilAddress, sysFilAddress }) => {
+const FilAddressForm: FC<FilAddressFormProps> = ({ setFilAddress }) => {
   const [validationError, setValidationError] = useState<string | undefined>()
   const [inputAddr, setInputAddr] = useState<string>('')
 
@@ -38,7 +36,8 @@ const FilAddressForm: FC<IFilAddressForm> = ({ showOnboarding, setFilAddress, sy
     setInputAddr(event.target.value)
   }
 
-  const handleAuthenticate = () => {
+  const handleAuthenticate = (event: React.SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault()
     if (!inputAddr) {
       return true
     }
@@ -48,18 +47,17 @@ const FilAddressForm: FC<IFilAddressForm> = ({ showOnboarding, setFilAddress, sy
   }
 
   return (
-    <div className='w-full px-6 py-4'>
-      <h2 className="title text-black mb-24 font-bold text-header-xl">
-        Connect to the Station with your FIL address to start <span className='text-primary'> earning FIL</span>
-      </h2>
+
+    <form onSubmit={handleAuthenticate}>
       <div className='pt-2 mb-20'>
         <div className="relative z-0 w-full">
-          <input autoComplete="off"
-            className="input w-full block "
+          <input
+            autoComplete="off"
+            className="input w-full block fil-address"
             type="text"
             name="address"
             placeholder=" "
-            data-testid="input-address-element"
+            tabIndex={0}
             onChange={handleChangeAddress} />
           <label htmlFor="address"
             className="absolute duration-300 top-3 origin-top-left text-black pointer-events-none font-body uppercase">
@@ -72,14 +70,15 @@ const FilAddressForm: FC<IFilAddressForm> = ({ showOnboarding, setFilAddress, sy
       <div className='flex justify-between items-center gap-3'>
         <p className="text-body-m">Your FIL rewards will be sent once a day to the address entered.</p>
         <button
-          className="btn-primary "
+          className="btn-primary submit-address"
           disabled={inputAddr.length === 0}
-          onClick={handleAuthenticate}
-          title="connect">
+          title="connect"
+          type="submit"
+          value="connect">
           <span className="text-xs px-4">Connect</span>
         </button>
       </div>
-    </div>
+    </form>
   )
 }
 

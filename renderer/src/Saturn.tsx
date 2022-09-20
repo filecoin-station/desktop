@@ -1,8 +1,8 @@
 import './Saturn.css'
 import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
-import FilAddressForm from './components/FilAddressForm'
-import { Link } from 'react-router-dom'
+
+import './Saturn.css'
 
 export default function Saturn (): JSX.Element {
   const [isRunning, setIsRunning] = useState(true)
@@ -35,29 +35,18 @@ export default function Saturn (): JSX.Element {
     updateStatus()
   }
 
-  async function onFilAddressChanged (address: string) : Promise<void> {
-    setFilAddress(address)
-    await setSaturnNodeFilAddress(address)
-    if (await isSaturnNodeRunning()) {
-      await window.electron.saturnNode.stop()
-    }
-    if (!address) return
-    await window.electron.saturnNode.start()
-    updateStatus()
-  }
-
   const content = isRunning
     ? saturnNodeWebUrl
       ? ModuleFrame({ saturnNodeWebUrl })
       : ErrorNotRunning({ onRestartClick, saturnNodeLog })
     : filAddress
       ? ErrorNotRunning({ onRestartClick, saturnNodeLog })
-      : <Navigate to="/wallet" replace  />
+      : <Navigate to="/wallet" replace />
 
   return (
     <div>
       {content}
-      <p><Link to='/dashboard'>Station &gt;&gt;</Link></p>
+      <p><Link to='/'>Station &gt;&gt;</Link></p>
     </div>
   )
 }
@@ -76,10 +65,6 @@ async function getSaturnNodeLog () : Promise<string> {
 
 async function getSaturnNodeFilAddress (): Promise<string | undefined> {
   return await window.electron.saturnNode.getFilAddress()
-}
-
-async function setSaturnNodeFilAddress (address: string | undefined): Promise<void> {
-  return await window.electron.saturnNode.setFilAddress(address)
 }
 
 function ErrorNotRunning ({ onRestartClick, saturnNodeLog } : {onRestartClick: React.MouseEventHandler<HTMLButtonElement>, saturnNodeLog: string}) {
