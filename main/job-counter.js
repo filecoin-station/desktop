@@ -36,16 +36,6 @@ class JobCounter {
   }
 }
 
-/*
-JobCounter - number of jobs processed by each module
-
-Next steps - similar to ActivityLog:
-- Integrate JobCounter methods into Context
-- Periodically update JobCounter in saturn-node.js
-- Propagate JobCounter to renderer via IPC (getValue RPC + onChange event)
-- Build a simple front-end consuming this API
-*/
-
 /**
  * @returns {import('./typings').ModuleJobCount}
  */
