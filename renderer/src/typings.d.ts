@@ -3,6 +3,11 @@ import { Activity } from '../main/typings'
 export declare global {
   interface Window {
     electron: {
+      stationMetadata: {
+        version: string,
+        environment: 'production' | 'development',
+      },
+
       getAllActivities(): Promise<Activity[]>,
       onActivityLogged(callback: (allActivities: Activity[]) => void),
 

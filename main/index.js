@@ -4,6 +4,7 @@ const { app, dialog } = require('electron')
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
 const { ActivityLog } = require('./activity-log')
 const { JobStats } = require('./job-stats')
+const { STATION_VERSION } = require('./consts')
 const { ipcMain } = require('electron/main')
 const log = require('electron-log')
 const path = require('node:path')
@@ -19,6 +20,13 @@ const setupUpdater = require('./updater')
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
+
+// Expose additional metadata for Electron preload script
+process.env.IS_PACKAGED = app.isPackaged ? '1' : undefined
+process.env.STATION_VERSION = app.isPackaged
+  ? STATION_VERSION
+  // TODO: can we use Git commit SHA instead?
+  : `dev-on-${STATION_VERSION}`
 
 function handleError (/** @type {any} */ err) {
   ctx.recordActivity({
