@@ -4,7 +4,7 @@ const path = require('path')
 const fs = require('node:fs/promises')
 const { setTimeout } = require('timers/promises')
 const assert = require('node:assert')
-const { request } = require('undici')
+const { fetch } = require('undici')
 
 const { app } = require('electron')
 const execa = require('execa')
@@ -254,14 +254,25 @@ function handleActivityLogs (ctx, text) {
 }
 
 async function pollStats (/** @type {Context} */ ctx) {
-  const res = await request(apiUrl + 'stats', { throwOnError: true })
-  const stats = await res.body.json()
+  const res = await fetch(apiUrl + 'stats')
+  if (!res.ok) {
+    const msg = `Cannot fetch Saturn node stats: ${res.status}\n${await res.text().catch(noop)}`
+    throw new Error(msg)
+  }
+
+  /** @type {any} */
+  const stats = await res.json()
+
   const jobCount = stats?.NSuccessfulRetrievals
   if (typeof jobCount !== 'number') {
     const msg = 'Unexpected stats response - NSuccessfulRetrievals is not a number. Stats: ' + JSON.stringify(stats)
     throw new Error(msg)
   }
   ctx.setModuleJobsCompleted('saturn', jobCount)
+}
+
+function noop () {
+  // no-op
 }
 
 module.exports = {
