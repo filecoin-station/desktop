@@ -23,7 +23,7 @@ const WalletConfig = (): JSX.Element => {
     navigate('/dashboard', { replace: true })
   }
 
-  return (
+  return ( 
     <div className="w-full h-full relative">
       <img src={BackgroundGraph} className="absolute -z-2 w-full h-full object-cover" alt="station background" />
       <div className='absolute -z-1 w-full h-full gradient-bg' />
