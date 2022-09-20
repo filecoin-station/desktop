@@ -261,7 +261,7 @@ async function fetchJobCount (/** @type {Context} */ ctx) {
     const msg = 'Unexpected stats response - NSuccessfulRetrievals is not a number. Stats: ' + JSON.stringify(stats)
     throw new Error(msg)
   }
-  ctx.recordModuleJobCount('saturn', jobCount)
+  ctx.setModuleJobCount('saturn', jobCount)
 }
 
 module.exports = {

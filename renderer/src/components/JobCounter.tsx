@@ -5,13 +5,13 @@ export const JobCounter : React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const count = await window.electron.getJobCounter()
+      const count = await window.electron.getJobCount()
       setTotalJobCount(count)
     })()
   }, [])
 
   useEffect(() => {
-    const unsubscribe = window.electron.onJobCounterUpdated(count => {
+    const unsubscribe = window.electron.onJobCountUpdated(count => {
       setTotalJobCount(count)
     })
     return unsubscribe

@@ -66,10 +66,10 @@ const ctx = {
     ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activityLog.getAllEntries())
   },
 
-  getNumberOfAllJobsProcessed: () => jobCounter.getNumberOfAllJobsProcessed(),
-  recordModuleJobCount: (moduleName, count) => {
-    jobCounter.setJobsProcessedByModule(moduleName, count)
-    ipcMain.emit(ipcMainEvents.JOB_COUNTER_UPDATED, jobCounter.getNumberOfAllJobsProcessed())
+  getTotalJobCount: () => jobCounter.getTotalJobCount(),
+  setModuleJobCount: (moduleName, count) => {
+    jobCounter.setModuleJobCount(moduleName, count)
+    ipcMain.emit(ipcMainEvents.JOB_COUNTER_UPDATED, jobCounter.getTotalJobCount())
   },
 
   manualCheckForUpdates: () => { throw new Error('never get here') },

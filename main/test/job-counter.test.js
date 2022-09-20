@@ -10,32 +10,32 @@ describe('JobCounter', function () {
 
   it('returns zero jobs initially', function () {
     const jobCounter = new JobCounter()
-    const totalCount = jobCounter.getNumberOfAllJobsProcessed()
+    const totalCount = jobCounter.getTotalJobCount()
     assert.strictEqual(totalCount, 0)
   })
 
   it('records Saturn job count and includes it in total jobs', function () {
     const jobCounter = new JobCounter()
-    jobCounter.setJobsProcessedByModule('saturn', 1)
+    jobCounter.setModuleJobCount('saturn', 1)
 
-    const totalCount = jobCounter.getNumberOfAllJobsProcessed()
+    const totalCount = jobCounter.getTotalJobCount()
     assert.strictEqual(totalCount, 1)
   })
 
   it('separates job counts for different modules', function () {
     const jobCounter = new JobCounter()
-    jobCounter.setJobsProcessedByModule('saturn', 1)
+    jobCounter.setModuleJobCount('saturn', 1)
 
-    jobCounter.setJobsProcessedByModule('another', 10)
-    assert.strictEqual(jobCounter.getNumberOfAllJobsProcessed(), 11)
+    jobCounter.setModuleJobCount('another', 10)
+    assert.strictEqual(jobCounter.getTotalJobCount(), 11)
 
-    jobCounter.setJobsProcessedByModule('saturn', 100)
-    assert.strictEqual(jobCounter.getNumberOfAllJobsProcessed(), 110)
+    jobCounter.setModuleJobCount('saturn', 100)
+    assert.strictEqual(jobCounter.getTotalJobCount(), 110)
   })
 
-  it('preserves countesr across restarts', function () {
-    new JobCounter().setJobsProcessedByModule('saturn', 1)
-    const totalCount = new JobCounter().getNumberOfAllJobsProcessed()
+  it('preserves counters across restarts', function () {
+    new JobCounter().setModuleJobCount('saturn', 1)
+    const totalCount = new JobCounter().getTotalJobCount()
     assert.strictEqual(totalCount, 1)
   })
 })

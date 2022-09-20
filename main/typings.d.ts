@@ -17,8 +17,8 @@ export interface Context {
   recordActivity(activity: RecordActivityArgs): void;
   getAllActivities(): Activity[];
 
-  recordModuleJobCount(moduleName: string, count: number): void;
-  getNumberOfAllJobsProcessed(): number;
+  setModuleJobCount(moduleName: string, count: number): void;
+  getTotalJobCount(): number;
 
   showUI: () => void
   loadWebUIFromDist: import('electron-serve').loadURL

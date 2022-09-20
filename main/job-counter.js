@@ -13,7 +13,7 @@ class JobCounter {
     this.#moduleCounters = loadStoredCounters()
   }
 
-  getNumberOfAllJobsProcessed () {
+  getTotalJobCount () {
     return Object.values(this.#moduleCounters).reduce((sum, value) => sum + value, 0)
   }
 
@@ -21,7 +21,7 @@ class JobCounter {
    * @param {string} moduleName
    * @param {number} count
    */
-  setJobsProcessedByModule (moduleName, count) {
+  setModuleJobCount (moduleName, count) {
     this.#moduleCounters[moduleName] = count
     this.#save()
   }
