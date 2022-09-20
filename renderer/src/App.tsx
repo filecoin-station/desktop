@@ -1,8 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
-import { useEffect } from 'react'
-import WalletConfig from './pages/WalletConfig'
-import Saturn from './Saturn'
 // import { ActivityLog } from './components/ActivityLog'
 // import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 
