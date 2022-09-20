@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 export const TotalJobsCompleted : React.FC = () => {
-  const [totalJobsCompleted setTotalJobsCompleted] = useState<number>(0)
+  const [totalJobsCompleted, setTotalJobsCompleted] = useState<number>(0)
 
   useEffect(() => {
     (async () => {
