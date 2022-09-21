@@ -35,17 +35,14 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
   )
 }
 
-interface IOnboarding {
+interface OnboardingProps {
   onFinish: () => void
 }
 
-const Onboarding: FC<IOnboarding> = ({ onFinish }) => {
+const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
   const [page, setPage] = useState(0)
   const pages = 3
-  const next = () => {
-    setPage((page + 1) % (pages))
-  }
-
+  const next = () => setPage(page +1)
   const prev = () => setPage(page - 1)
 
   return (
