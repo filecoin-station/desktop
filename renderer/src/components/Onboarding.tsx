@@ -3,14 +3,14 @@ import { ReactComponent as Back } from './../assets/img/arrow-left.svg'
 import { ReactComponent as Page } from './../assets/img/paginator-page.svg'
 import { ReactComponent as CurrentPage } from './../assets/img/paginator-current.svg'
 
-interface IFooter {
+interface FooterProps {
   page: number,
   pages: number,
   next: () => void,
   prev: () => void
 }
 
-const Footer: FC<IFooter> = ({ page, pages, next, prev }) => {
+const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
   return (
     <div className="flex justify-between">
       <button
