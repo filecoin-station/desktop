@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 
-import '../components/InterfaceCalls'
+import '../lib/station-config'
 import App from '../App'
 
-vi.mock('./../components/InterfaceCalls', () => {
+vi.mock('../lib/station-config', () => {
   return {
-    setStationUserOnboardingCompleted: () => Promise.resolve(undefined),
-    getStationUserOnboardingCompleted: (status: boolean) => Promise.resolve(false)
+    setOnboardingCompleted: () => Promise.resolve(undefined),
+    getOnboardingCompleted: (status: boolean) => Promise.resolve(false)
   }
 })
 
@@ -63,7 +63,7 @@ describe('Welcome page test', () => {
   test('redirects to dashboard directly if user is onboarded', async () => {
     vi.mock('./../components/InterfaceCalls', () => {
       return {
-        getStationUserOnboardingCompleted: (status: boolean) => Promise.resolve(true)
+        getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
       }
     })
     await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })

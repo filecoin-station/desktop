@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getStationUserOnboardingCompleted, setStationUserOnboardingCompleted } from '../components/InterfaceCalls'
+import { getOnboardingCompleted, setOnboardingCompleted } from '../lib/station-config'
 import Onboarding from '../components/Onboarding'
 import { ReactComponent as StationLogoLight } from '../assets/img/station-logo-light.svg'
 
@@ -24,7 +24,7 @@ const OnboardingPage = (): JSX.Element => {
   useEffect(() => {
     (async () => {
       await sleep(2000)
-      setIsOnboardingCompleted(await getStationUserOnboardingCompleted())
+      setIsOnboardingCompleted(await getOnboardingCompleted())
       setIsLoading(false)
     })()
   }, [])
@@ -37,7 +37,7 @@ const OnboardingPage = (): JSX.Element => {
 
   const onFinishOnboarding = useCallback(async () => {
     setIsOnboardingCompleted(true)
-    await setStationUserOnboardingCompleted()
+    await setOnboardingCompleted()
   }, [])
 
   if (isLoading) {
