@@ -16,7 +16,8 @@ const Footer: FC<IFooter> = ({ page, pages, next, prev }) => {
       <button
         className="btn-secondary-small flex items-center group back-button"
         disabled={page === 0}
-        onClick={prev}>
+        onClick={prev}
+        type="button">
         <i><Back className="btn-icon-primary-small"/></i>
         <span>Back</span>
       </button>
