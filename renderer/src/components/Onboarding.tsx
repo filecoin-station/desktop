@@ -18,7 +18,7 @@ const Footer: FC<IFooter> = ({ page, pages, next, prev }) => {
         disabled={page === 0}
         onClick={prev}>
         <i><Back className="btn-icon-primary-small"/></i>
-        <span className="">Back</span>
+        <span>Back</span>
       </button>
       <div className='flex flex-row items-center space-between gap-3'>
         {[...Array(pages - 1).keys()].map((_, index) => {
