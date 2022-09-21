@@ -2,12 +2,7 @@ import { FC } from 'react'
 import { ActivityEventMessage } from '../typings'
 import * as dayjs from 'dayjs'
 
-interface ILogElement {
-  time: EpochTimeStamp,
-  msg: string,
-  type: 'info' | 'warning' | 'error' | undefined
-}
-const LogElement: FC<ILogElement> = (el) => {
+const ActivityLogItem: FC<ActivityEventMessage> = (el) => {
   const time = new Intl.DateTimeFormat(window.navigator.language, {
     hour: 'numeric', minute: 'numeric', second: 'numeric'
   }).format(new Date(el.time))
@@ -26,61 +21,55 @@ const LogElement: FC<ILogElement> = (el) => {
   )
 }
 
-interface IDateSeparator {
+interface DateSeparatorProps {
   date: string,
 }
 
-const DateSeparator: FC<IDateSeparator> = ({ date }) => {
+const DateSeparator: FC<DateSeparatorProps> = ({ date }) => {
   const today = dayjs().format('YYYY-MM-DD')
   const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD')
-  const displayStr = date === today ? 'today' : date === yesterday ? 'yesterday' : dayjs(date).format("D MMM")
-  
-  return (
-    <>
-      <h1>{displayStr}</h1>
-    </>
-  )
+  const displayStr = date === today ? 'today' : date === yesterday ? 'yesterday' : dayjs(date).format('D MMM')
+
+  return <h1>{displayStr}</h1>
 }
 
-interface IActivityLog {
-  logStream: ActivityEventMessage[] | undefined;
+interface ActivitiesByDate {
+  [date: string]: ActivityEventMessage[];
 }
 
-const ActivityLog: FC<IActivityLog> = ({ logStream=[] }) => {
-  const sortedLogStream = logStream.sort(function (x, y) {
-    return x.time - y.time
-  })
+// TODO: remove examples
+const initialActivities: ActivityEventMessage[] = [
+  { time: dayjs().unix(), msg: 'this just happened', type: 'info' },
+  { time: dayjs().subtract(1, 'day').unix(), msg: 'dis from yesterday', type: 'info' },
+  { time: dayjs().subtract(2, 'day').unix(), msg: '2 days ago', type: 'info' },
+  { time: dayjs().subtract(2, 'day').unix(), msg: '2 days ago too', type: 'info' }
+]
+interface ActivityLogProps {
+  activities: ActivityEventMessage[];
+}
 
-  const groups = sortedLogStream.reverse().reduce((groups: any, log: ActivityEventMessage) => {
-    const date = dayjs.unix(log.time/1000).format("YYYY-MM-DD")
-    return {...groups, [date]: groups[date] ? groups[date].concat(log) : [log] }
-  }, {})
+const ActivityLog: FC<ActivityLogProps> = ({ activities = initialActivities }) => {
+  const activitiesByDate: ActivitiesByDate =
+    activities
+      .sort((x, y) => y.time - x.time)
+      .reduce((groups: ActivitiesByDate, activity: ActivityEventMessage) => {
+        const date = dayjs.unix(activity.time).format('YYYY-MM-DD')
+        return { ...groups, [date]: groups[date] ? groups[date].concat(activity) : [activity] }
+      }, {})
 
-  const groupArrays = Object.keys(groups).map((date) => {
-    return {
-      date,
-      activities: groups[date]
-    }
-  })
-  
   return (
-    <>
-      <div className="mt-4 max-h-full overflow-y-auto ">
-        {groupArrays.length > 0
-          ? groupArrays.map((data: { date: string, activities: ActivityEventMessage[] | undefined }) => {
-            return (
-              <div key={data.date}>
-                <div className='bg-red-300'><DateSeparator date={data.date}/></div>
-                {data.activities?.map((element, index) => {
-                  return <LogElement key={element.time} time={element.time} msg={element.msg} type={element.type} />
-                })}
-              </div>
-            )
-          })
-          : <p>No activity to show</p>
-        }
-      </div>
-    </>
+    <div className="overflow-y-auto">
+      {Object.keys(activitiesByDate).map((date) => (
+        <div key={date}>
+          <div className='bg-red-300'>
+            <DateSeparator date={date}/>
+          </div>
+          <div>
+            {activitiesByDate[date].map((activity) => <ActivityLogItem {...activity} />)}
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }
 
