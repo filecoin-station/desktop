@@ -42,7 +42,7 @@ interface OnboardingProps {
 const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
   const [page, setPage] = useState(0)
   const pages = 3
-  const next = () => setPage(page +1)
+  const next = () => setPage(page + 1)
   const prev = () => setPage(page - 1)
 
   return (
