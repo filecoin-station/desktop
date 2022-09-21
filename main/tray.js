@@ -1,9 +1,9 @@
 'use strict'
 
-const { Menu, Tray, shell, app, ipcMain } = require('electron')
-const path = require('path')
 const { IS_MAC, STATION_VERSION } = require('./consts')
+const { Menu, Tray, app, ipcMain, shell } = require('electron')
 const { ipcMainEvents } = require('./ipc')
+const path = require('path')
 
 // Be warned, this one is pretty ridiculous:
 // Tray must be global or it will break due to.. GC.

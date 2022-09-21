@@ -1,15 +1,14 @@
 'use strict'
 
-const path = require('path')
-const fs = require('node:fs/promises')
-const { setTimeout } = require('timers/promises')
-const assert = require('node:assert')
-
-const { app } = require('electron')
-const execa = require('execa')
-
 const Store = require('electron-store')
+const { app } = require('electron')
+const assert = require('node:assert')
 const consts = require('./consts')
+const execa = require('execa')
+const fs = require('node:fs/promises')
+const path = require('path')
+const { setTimeout } = require('timers/promises')
+
 const configStore = new Store()
 
 /** @typedef {import('./typings').Context} Context */
