@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Welcome from '../pages/Welcome'
+import Onboarding from '../pages/Onboarding'
 import Saturn from '../Saturn'
 
 const AppRoutes = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Welcome />} />
+        <Route path="/" element={<Onboarding />} />
         <Route path="/dashboard" element={<Saturn />} />
       </Routes>
     </Router>
