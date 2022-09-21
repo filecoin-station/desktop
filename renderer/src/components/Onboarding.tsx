@@ -14,9 +14,10 @@ const Footer: FC<IFooter> = ({ page, pages, next, prev }) => {
   return (
     <div className="flex justify-between">
       <button
-        className="btn-secondary-small "
+        className="btn-secondary-small flex items-center group back-button"
         disabled={page === 0}
         onClick={prev}>
+        <i><Back className="btn-icon-primary-small"/></i>
         <span className="">Back</span>
       </button>
       <div className='flex flex-row items-center space-between gap-3'>
@@ -47,9 +48,9 @@ const Onboarding: FC<IOnboarding> = ({ onFinish }) => {
   const prev = () => setPage(page - 1)
 
   return (
-    <div>
+    <div className="onboarding">
       {page === 0 &&
-        <div className='w-[100%] max-w-[640px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)]'>
+        <div className={'w-[100%] max-w-[640px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)] onboarding-' + page }>
           <div className='bg-black px-20 py-16  rounded-t-[10px]'>
             <h1 className="font-title text-white leading-[3.25rem] text-header-s">Connect to Filecoin Station with your filecoin address.</h1>
           </div>
@@ -64,7 +65,7 @@ const Onboarding: FC<IOnboarding> = ({ onFinish }) => {
         </div>}
 
       {page === 1 &&
-        <div className='w-[100%] max-w-[640px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)]'>
+        <div className={'w-[100%] max-w-[640px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)] onboarding-' + page }>
           <div className='bg-black px-20 py-16  rounded-t-[10px]'>
             <h1 className="font-title text-white leading-[3.25rem] text-header-s">New modules are automatically installed in Station.</h1>
           </div>
@@ -78,7 +79,7 @@ const Onboarding: FC<IOnboarding> = ({ onFinish }) => {
       }
 
       {page === 2 &&
-        <div className='w-[100%] max-w-[940px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)]'>
+        <div className={'w-[100%] max-w-[940px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)] onboarding-' + page }>
           <div className='bg-black px-20 py-16  rounded-t-[10px]'>
             <h1 className="font-title text-white leading-[3.25rem] text-header-s">Station asks for your consent to use your personal data to store and/or access information on a device.</h1>
           </div>
