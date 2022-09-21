@@ -67,7 +67,9 @@ test.describe.serial('Application launch', async () => {
   })
 
   test('navigate to Saturn', async () => {
-    await mainWindow.click('#link-to-saturn')
+    await mainWindow.click('button:has-text("Continue")')
+    await mainWindow.click('button:has-text("Continue")')
+    await mainWindow.click('button:has-text("Accept")')
     expect(await mainWindow.title()).toBe('Saturn')
   })
 
