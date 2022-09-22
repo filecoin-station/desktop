@@ -1,9 +1,9 @@
 'use strict'
 
+const { expect, test } = require('@playwright/test')
 const { _electron: electron } = require('playwright')
-const { test, expect } = require('@playwright/test')
-const path = require('path')
 const { fetch } = require('undici')
+const path = require('path')
 
 const TIMEOUT_MULTIPLIER = process.env.CI ? 10 : 1
 

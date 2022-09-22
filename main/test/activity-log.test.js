@@ -1,8 +1,8 @@
 'use strict'
 
+const { assertTimestampIsCloseToNow, pickProps } = require('./test-helpers')
 const assert = require('assert').strict
 const { ActivityLog } = require('../activity-log')
-const { assertTimestampIsCloseToNow, pickProps } = require('./test-helpers')
 
 /** @typedef {import('../typings').RecordActivityArgs} RecordActivityOptions */
 

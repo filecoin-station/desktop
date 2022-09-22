@@ -1,20 +1,18 @@
 'use strict'
 
 const { app, dialog } = require('electron')
-const log = require('electron-log')
-const serve = require('electron-serve')
-const path = require('node:path')
-
-const setupUI = require('./ui')
-const setupTray = require('./tray')
-const setupUpdater = require('./updater')
-const saturnNode = require('./saturn-node')
-const { setupIpcMain, ipcMainEvents } = require('./ipc')
-const { setupAppMenu } = require('./app-menu')
-
+const { ipcMainEvents, setupIpcMain } = require('./ipc')
 const { ActivityLog } = require('./activity-log')
-const { ipcMain } = require('electron/main')
 const { JobStats } = require('./job-stats')
+const { ipcMain } = require('electron/main')
+const log = require('electron-log')
+const path = require('node:path')
+const saturnNode = require('./saturn-node')
+const serve = require('electron-serve')
+const { setupAppMenu } = require('./app-menu')
+const setupTray = require('./tray')
+const setupUI = require('./ui')
+const setupUpdater = require('./updater')
 
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */

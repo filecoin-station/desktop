@@ -1,13 +1,12 @@
 'use strict'
 
-const { BrowserWindow, app, Notification, shell } = require('electron')
+const { BrowserWindow, Notification, app, shell } = require('electron')
 const { autoUpdater } = require('electron-updater')
 const { ipcMain } = require('electron/main')
+const { ipcMainEvents } = require('./ipc')
 const ms = require('ms')
 const log = require('electron-log').scope('updater')
-
 const { showDialogSync } = require('./dialog')
-const { ipcMainEvents } = require('./ipc')
 
 // must be global to avoid gc
 let updateNotification = null

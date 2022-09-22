@@ -1,20 +1,20 @@
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 import './App.css'
-import OnboardingPage from './pages/Onboarding'
+import {
+  Link, Route, Routes
+} from 'react-router-dom'
 import { ActivityLog } from './components/ActivityLog'
-import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 import Saturn from './Saturn'
+import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 import { useEffect } from 'react'
+import OnboardingPage from './pages/Onboarding'
 
 const App = ():JSX.Element => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<OnboardingPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/saturn" element={<Saturn />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<OnboardingPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/saturn" element={<Saturn />} />
+    </Routes>
   )
 }
 
@@ -32,4 +32,3 @@ function Dashboard (): JSX.Element {
     </div>
   )
 }
-

@@ -1,7 +1,7 @@
 'use strict'
 
-const electron = require('electron')
 const Store = require('electron-store')
+const electron = require('electron')
 
 const defaults = {
   // https://github.com/sindresorhus/electron-store#defaults
