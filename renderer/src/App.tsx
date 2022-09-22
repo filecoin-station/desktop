@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
 import { useEffect } from 'react'
 import Onboarding from './pages/Onboarding'
@@ -23,15 +24,3 @@ const App = ():JSX.Element => {
 
 export default App
 
-function Dashboard (): JSX.Element {
-  useEffect(() => { document.title = 'Filecoin Station' })
-
-  return (
-    <div style={{ marginTop: '2em' }}>
-      <h2>Welcome to Filecoin Station</h2>
-      <TotalJobsCompleted />
-      <p><Link to='/saturn' id='link-to-saturn'> Saturn &gt;&gt;</Link></p>
-      <ActivityLog />
-    </div>
-  )
-}
