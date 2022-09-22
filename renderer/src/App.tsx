@@ -1,14 +1,10 @@
-import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
 import { useEffect } from 'react'
 import Onboarding from './pages/Onboarding'
 import WalletConfig from './pages/WalletConfig'
-// import { ActivityLog } from './components/ActivityLog'
-// import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 
 const App = ():JSX.Element => {
-  useEffect(() => { document.title = 'Filecoin Station' })
   return (
     <Router>
       <Routes>
