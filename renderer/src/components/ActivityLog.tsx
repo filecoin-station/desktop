@@ -1,6 +1,8 @@
 import { FC } from 'react'
 import { ActivityEventMessage } from '../typings'
 import * as dayjs from 'dayjs'
+import { ReactComponent as WarningIcon } from '../assets/img/warning.svg'
+import { ReactComponent as JobIcon } from '../assets/img/job.svg'
 
 const ActivityLogItem: FC<ActivityEventMessage> = (activity) => {
   const time = new Intl.DateTimeFormat(window.navigator.language, {
@@ -8,13 +10,18 @@ const ActivityLogItem: FC<ActivityEventMessage> = (activity) => {
   }).format(new Date(activity.timestamp))
 
   return (
-    <div className="flex py-4 border-b-[1px] border-[#00000006]">
-      <div className="w-[40px]"></div>
-      <div className="flex-1 mr-4">
+    <div className="flex py-4 border-b border-grayscale-350 activity-item">
+      <div className="w-10">
+        {activity.type === 'info' &&
+          <i><JobIcon className="btn-icon-primary-small icon-primary"/></i>}
+        {activity.type === 'error' &&
+          <i><WarningIcon className="btn-icon-primary-small icon-error"/></i>}
+      </div>
+      <div className="flex-1 mr-4 text-body-s">
         <p>{activity.message}</p>
       </div>
       <div className="">
-        <span className='text-black'>{time}</span>
+        <span className='number text-body-2xs text-grayscale-600'>{time}</span>
       </div>
     </div>
   )
@@ -29,7 +36,7 @@ const DateSeparator: FC<DateSeparatorProps> = ({ date }) => {
   const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD')
   const displayStr = date === today ? 'today' : date === yesterday ? 'yesterday' : dayjs(date).format('D MMM')
 
-  return <div className="uppercase text-[10px] mb-4">{displayStr}</div>
+  return <div className="uppercase text-body-3xs mb-4">{displayStr}</div>
 }
 
 interface ActivitiesByDate {
@@ -49,7 +56,7 @@ const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
       }, {})
 
   return (
-    <div>
+    <div className='activity-log'>
       {Object.keys(activitiesByDate).map((date) => (
         <div key={date} className="mb-12">
           <DateSeparator date={date}/>
