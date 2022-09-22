@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, FC } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import {
   getStationActivityLog, stopSaturnNode, setStationFilAddress,
   startSaturnNode, getStationFilAddress, getStationTotalEarnings,
@@ -6,99 +6,111 @@ import {
 } from '../components/InterfaceCalls'
 import { ActivityEventMessage } from '../typings'
 import ActivityLog from '../components/ActivityLog'
-import StationStats from '../components/DashboardStats'
-import { useNavigate } from 'react-router-dom'
-
-type IFilWalletHeader = {
-  address: string | undefined;
-  disconnect: () => void;
-}
-
-const FilWalletHeader: FC<IFilWalletHeader> = ({ address, disconnect }) => {
-  const shortAddr = address?.substring(0, 4) + '...' + address?.substring(address.length - 4, address.length)
-
-  return (
-    <>
-      <span className='text-white text-right'>
-        {shortAddr}
-      </span>
-      <button className='text-white ml-4' onClick={disconnect}>
-        change
-      </button>
-    </>
-  )
-}
+import HeaderBackgroundImage from '../assets/img/header.png'
+import WalletIcon from '../assets/img/wallet.svg'
 
 export default function Dashboard (): JSX.Element {
-  const navigate = useNavigate()
-  const [filAddress, setFilAddress] = useState<string | undefined>()
-  const [totalJobs, setTotalJobs] = useState<number | undefined>()
-  const [totalEarnings, setTotalEarnigs] = useState<number | undefined>()
-  const [activityLog, setActivityLog] = useState<ActivityEventMessage[]>()
-
-  const updateStatus = (): void => {
-    getStationFilAddress().then((addr) => {
-      addr && addr !== '' ? setFilAddress(addr) : navigate('/address', { replace: true })
-    })
-    getStationActivityLog().then(setActivityLog)
-    getStationTotalEarnings().then(setTotalEarnigs)
-    getStationTotalJobs().then(setTotalJobs)
+  const [address, setAddress] = useState<string | undefined>()
+  const [totalJobs, setTotalJobs] = useState<number>(0)
+  const [totalEarnings, setTotalEarnigs] = useState<number>(0)
+  const [activities, setActivities] = useState<ActivityEventMessage[]>([])
+  const shortAddress = (str: string | undefined) => str
+    ? str.substring(0, 4) + '...' + str.substring(str.length - 4, str.length)
+    : ''
+  const disconnect = async () => {
+    // TODO: move disconnect logic to backend
+    await stopSaturnNode()
+    await setStationFilAddress('')
+    setAddress('')
   }
 
-  const handleActivityLogEvent = useCallback((_event: any, value: ActivityEventMessage) => {
-    setActivityLog(previousLog => { return previousLog ? [...previousLog, value] : [value] })
+  const reload = async (): Promise<void> => {
+    setAddress(await getStationFilAddress())
+    setActivities(await getStationActivityLog())
+    setTotalEarnigs(await getStationTotalEarnings())
+    setTotalJobs(await getStationTotalJobs())
+  }
+
+  const handleActivity = useCallback((value: ActivityEventMessage) => {
+    setActivities(activities => activities ? [...activities, value] : [value])
   }, [])
 
-  const handleEarningsCounterEvent = useCallback((_event: any, value: number) => {
-    setTotalEarnigs((previousCounter) => previousCounter ? previousCounter + value : value)
+  const handleEarnings = useCallback((value: number) => {
+    setTotalEarnigs((counter) => counter ? counter + value : value)
   }, [])
 
-  const handleJobsCounterEvent = useCallback((_event: any, value: number) => {
-    setTotalJobs((previousCounter) => previousCounter ? previousCounter + value : value)
+  const handleJobs = useCallback((value: number) => {
+    setTotalJobs((counter) => counter ? counter + value : value)
   }, [])
 
   useEffect(() => {
-    updateStatus()
+    reload()
     startSaturnNode()
-    const unsubscribeActivityLog = window.electron.stationEvents.onActivityLog(handleActivityLogEvent)
-    const unsubscribeEarningsCounter = window.electron.stationEvents.onEarningsCounter(handleEarningsCounterEvent)
-    const unsubscribeJobsCounter = window.electron.stationEvents.onJobsCounter(handleJobsCounterEvent)
+    const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(handleActivity)
+    const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(handleEarnings)
+    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(handleJobs)
 
     return () => {
       stopSaturnNode()
-      unsubscribeActivityLog()
-      unsubscribeEarningsCounter()
-      unsubscribeJobsCounter()
+      unsubscribeOnActivityLogged()
+      unsubscribeOnEarningsChanged()
+      unsubscribeOnJobProcessed()
     }
-  }, [])
-
-  const disconnect = () => {
-    stopSaturnNode().then(() => {
-      setStationFilAddress('').then(() => { setFilAddress(''); })
-    })
-  }
+  }, [handleActivity, handleEarnings, handleJobs])
 
   return (
-    <div className="h-screen w-screen overflow-hidden">
+    <div className="h-screen w-screen overflow-hidden bg-[#f0f0f0]">
+      <div className="relative">
 
-      <div className='h-[33%] flex justify-center bg-slate-900'>
-        <div className="relative mt-10 mb-10 w-[80%] md:w-[60%] xl:w-[40%]">
-
-          <div className="flex justify-end">
-            <FilWalletHeader address={filAddress} disconnect={disconnect} />
+        <div className="max-w-[744px] mx-auto">
+          <div className="absolute left-0 z-0 top-0 w-full h-[300px]"
+            style={{
+              backgroundImage: `url(${HeaderBackgroundImage})`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: '50% 0',
+              WebkitMaskImage: 'linear-gradient(black, transparent)',
+              maskImage: 'linear-gradient(black, transparent)'
+            }}>
           </div>
-
-          <div className='h-full flex flex-row items-end pb-10'>
-            <StationStats totalJobs={totalJobs} totalEarns={totalEarnings} />
+          <div className="h-[300px] flex flex-col relative z-10">
+            <div className="flex-grow flex pt-4 justify-end justify-items-end">
+              <div>
+                <a className="flex content-center cursor-pointer" href="/#" onClick={disconnect}>
+                  <img src={WalletIcon} alt=""/>
+                  <span className="text-right mx-3">{shortAddress(address)}</span>
+                  <span className="underline text-primary">Change Wallet</span>
+                </a>
+              </div>
+            </div>
+            <div className="mb-6">
+              <p className="text-[10px] uppercase">Total Jobs Completed</p>
+              <p className="text-[44px] font-bold">{totalJobs}</p>
+            </div>
+            <div className="mb-6">
+              <p className="text-[10px] uppercase">Total Earnings (updated daily)</p>
+              <p className="text-[44px] font-bold">
+                {totalEarnings}
+                {totalEarnings && <span className="text-[20px]">FIL</span>}
+              </p>
+            </div>
           </div>
-
         </div>
-      </div>
-
-      <div className='h-[67%] flex justify-center bg-[#f1f4f5]'>
-        <div className="w-[80%] md:w-[60%] xl:w-[40%] mt-10 pb-20 relative">
-          <h1 className='text-xl font-bold'>Activity log</h1>
-          <ActivityLog logStream={activityLog} />
+        <div className="pointer-events-none fixed h-[60px] bg-[#f0f0f0] w-full z-20"
+          style={{
+            WebkitMaskImage: 'linear-gradient(black, transparent)',
+            maskImage: 'linear-gradient(black, transparent)'
+          }}>
+        </div>
+        <div className="h-screen overflow-y-auto pt-12 relative z-10">
+          <div className="max-w-[744px] mx-auto overflow-hidden">
+            <ActivityLog activities={activities} />
+          </div>
+        </div>
+        <div className="pointer-events-none fixed h-[60px] bg-[#f0f0f0] w-full z-10 bottom-0"
+          style={{
+            WebkitMaskImage: 'linear-gradient(transparent, black)',
+            maskImage: 'linear-gradient(transparent, black)'
+          }}>
         </div>
       </div>
     </div>
