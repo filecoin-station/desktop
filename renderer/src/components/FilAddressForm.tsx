@@ -8,7 +8,7 @@ interface ValidationErrorProps {
 const ValidationError: FC<ValidationErrorProps> = ({ message }) => {
   return (
     message
-      ? <span className="err-msg" title="validation error">{message}</span>
+      ? <span className="text-error text-body-s" title="validation error">{message}</span>
       : <span className='mb-[0.625rem]'>&nbsp;</span>
   )
 }
