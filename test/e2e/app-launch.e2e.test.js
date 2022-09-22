@@ -70,7 +70,8 @@ test.describe.serial('Application launch', async () => {
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Accept")')
-    expect(await mainWindow.title()).toBe('Filecoin Station')
+    await mainWindow.click('a#link-to-saturn')
+    expect(await mainWindow.title()).toBe('Saturn')
   })
 
   test('enter FIL address', async () => {
