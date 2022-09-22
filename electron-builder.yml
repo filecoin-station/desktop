@@ -1,9 +1,8 @@
 appId: io.filecoin.station
 generateUpdatesFilesForAllChannels: true
 
-# Will be overwritten by before-pack script when running on GitHub Actions
 extraMetadata:
-  buildNumber: "1-dev"
+  buildNumber: "will be set from before-pack script"
 
 files:
   - filter:

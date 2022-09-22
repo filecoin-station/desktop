@@ -21,11 +21,8 @@ const setupUpdater = require('./updater')
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
-console.log('BUILD VERSION', BUILD_VERSION)
-
-// Expose additional metadata for Electron preload script
-process.env.IS_PACKAGED = app.isPackaged ? '1' : undefined
-process.env.STATION_VERSION = BUILD_VERSION
+console.log('Filecoin Station build version:', BUILD_VERSION)
+process.env.STATION_BUILD_VERSION = BUILD_VERSION
 
 function handleError (/** @type {any} */ err) {
   ctx.recordActivity({

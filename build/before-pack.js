@@ -9,11 +9,6 @@
  */
 exports.default = async function ({ packager }) {
   const extraMetadata = packager.config.extraMetadata
-  extraMetadata.buildTag = process.env.CI_BUILD_TAG
-  if (process.env.GITHUB_RUN_NUMBER) {
-    extraMetadata.buildNumber = process.env.GITHUB_RUN_NUMBER
-  }
-
-  console.log('APP INFO', packager.appInfo)
-  console.log('CONFIG', packager.config)
+  extraMetadata.buildTag = process.env.GITHUB_REF_TYPE === 'tag' ? process.env.GITHUB_REF_NAME : null
+  extraMetadata.buildNumber = process.env.GITHUB_RUN_NUMBER ?? '1-dev'
 }
