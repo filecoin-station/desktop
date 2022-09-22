@@ -3,6 +3,8 @@
 const { contextBridge, ipcRenderer } = require('electron')
 
 contextBridge.exposeInMainWorld('electron', {
+  stationBuildVersion: process.env.STATION_BUILD_VERSION,
+
   getAllActivities: () => ipcRenderer.invoke('station:getAllActivities'),
 
   /**
