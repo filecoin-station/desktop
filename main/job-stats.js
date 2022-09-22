@@ -40,14 +40,13 @@ class JobStats {
    * @param {number} count
    */
   setModuleJobsCompleted (moduleName, count) {
-    const incr = moduleName in this.#perModuleJobStats
-      ? count - this.#perModuleJobStats[moduleName]
-      : 1
-    writeClient.writePoint(
-      new Point('jobs-completed')
-        .tag('module', moduleName)
-        .intField('value', incr)
-    )
+    if (moduleName in this.#perModuleJobStats) {
+      writeClient.writePoint(
+        new Point('jobs-completed')
+          .tag('module', moduleName)
+          .intField('value', count - this.#perModuleJobStats[moduleName])
+      )
+    }
     this.#perModuleJobStats[moduleName] = count
     this.#save()
   }
