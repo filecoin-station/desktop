@@ -16,7 +16,7 @@ const writeClient = client.getWriteApi(
 
 setInterval(() => {
   writeClient.flush()
-}, 1000)
+}, 5000)
 
 /** @typedef {import('./typings').ModuleJobStatsMap} ModuleJobStatsMap */
 
