@@ -19,5 +19,6 @@
       "vite/client",
     ],
   },
-  "include": ["src"]
+  "include": ["src"],
+  "files": ["custom.d.ts"]
 }

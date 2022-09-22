@@ -9,20 +9,18 @@ module.exports = {
   theme: {
     fontSize: {
       base: '1.25rem',
-      'header-xxs': '1.25rem',
-      'header-xs': '1.5rem',
-      'header-s': '1.75rem',
-      'header-m': '2.25rem',
-      'header-l': '2.75rem',
-      'header-xl': '3.25rem',
-      'header-xxl': '4.5rem',
-      'body-xs': '0.5rem',
-      'body-s': '0.625rem',
-      'body-m': '0.75rem',
-      'body-l': '0.875rem',
-      'body-xl': '1rem',
-      'body-xxl': '1.25rem',
-      'body-3xl': '1.75rem'
+      'header-3xs': '1.25rem',
+      'header-2xs': '1.5rem',
+      'header-xs': '1.75rem',
+      'header-s': '2.25rem',
+      'header-m': '2.75rem',
+      'header-l': '3.25rem',
+      'body-3xs': '0.625rem',
+      'body-2xs': '0.75rem',
+      'body-xs': '0.875rem',
+      'body-s': '1rem',
+      'body-m': '1.25rem',
+      'body-l': '1.75rem'
     },
     fontFamily: {
       title: ['SuisseIntl', 'sans-serif'],

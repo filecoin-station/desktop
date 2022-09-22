@@ -6,26 +6,21 @@ import { ActivityLog } from './components/ActivityLog'
 import Saturn from './Saturn'
 import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 import { useEffect } from 'react'
+import OnboardingPage from './pages/Onboarding'
 
-function App (): JSX.Element {
+const App = ():JSX.Element => {
   return (
-    <div className='App'>
-      <header>
-        <h1>Filecoin Station</h1>
-      </header>
-      <main>
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/saturn' element={<Saturn />} />
-        </Routes>
-      </main>
-    </div>
+    <Routes>
+      <Route path="/" element={<OnboardingPage />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/saturn" element={<Saturn />} />
+    </Routes>
   )
 }
 
 export default App
 
-function Home (): JSX.Element {
+function Dashboard (): JSX.Element {
   useEffect(() => { document.title = 'Filecoin Station' })
 
   return (

@@ -25,9 +25,7 @@ export declare global {
         getFilAddress: () => Promise<string | undefined>,
         setFilAddress: (address: string | undefined) => Promise<void>,
         getOnboardingCompleted: () => Promise<boolean>,
-        setOnboardingCompleted: () => Promise<void>,
-        getUserConsent: () => Promisse<boolean>,
-        setUserConsent: (consent: boolean) => Promisse<void>
+        setOnboardingCompleted: () => Promise<void>
       }
     }
   }

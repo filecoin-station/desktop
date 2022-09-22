@@ -16,11 +16,9 @@
     font-family: "SpaceMono";
     src: url('assets/fonts/SpaceMono/SpaceMono-Regular.ttf');
   }
-}
 
-@layer base {
   .title {
-    @apply text-header-xxl font-title text-primary;
+    @apply text-header-l font-title text-primary;
   }
 
   .subtitle {
@@ -30,10 +28,11 @@
   body {
     @apply font-body
   }
-  
 }
 
 @layer components {
+
+
   .btn-primary {
     @apply py-2 px-4 rounded-full font-body text-body-m  text-white
      bg-primary hover:bg-primary-hover visited:bg-primary-click
@@ -41,40 +40,44 @@
   }
 
   .btn-primary-small {
-    @apply py-2 px-4 rounded-full font-body text-body-xs text-white
+    @apply py-2 px-4 rounded-full font-body text-body-s text-white
     bg-primary hover:bg-primary-hover visited:bg-primary-click
     disabled:bg-grayscale-500 disabled:text-grayscale-700;
   }
 
+  .btn-icon-primary-small {
+    @apply h-4 w-4 m-1
+  }
+
+  .btn-icon-primary-small path {
+    @apply fill-primary group-hover:fill-primary-hover group-visited:fill-primary-click
+    group-disabled:fill-grayscale-500
+  }
+
+  
+
   .btn-secondary {
-    @apply py-2 px-4 rounded-full font-body text-body-m bg-opacity-0 border border-solid 
-     border-primary border-opacity-25  text-primary
-     hover:border-primary-hover hover:border-opacity-25 hover:text-primary-hover
-     visited:border-primary-click visited:border-opacity-25 visited:text-primary-click 
-     disabled:border-grayscale-500 disabled:text-grayscale-700;
+    @apply font-body text-body-m
+      text-primary
+      hover:text-primary-hover
+      visited:text-primary-click 
+      disabled:text-grayscale-700;
   }
 
   .btn-secondary-small {
-    @apply py-2 px-4 rounded-full font-body text-body-xs bg-opacity-0 border border-solid
-     border-primary border-opacity-25  text-primary
-     hover:border-primary-hover hover:border-opacity-25 hover:text-primary-hover
-     visited:border-primary-click visited:border-opacity-25 visited:text-primary-click 
-     disabled:border-grayscale-500 disabled:text-grayscale-700
-     ;
-     
+    @apply font-body text-body-s
+      text-primary
+      hover:text-primary-hover
+      visited:text-primary-click 
+      disabled:text-grayscale-700;
   }
 
   .link-primary {
-    @apply text-primary underline decoration-primary/70
+    @apply text-body-xs text-primary underline decoration-primary/70
      hover:text-primary-hover hover:decoration-primary-hover/70
      visited:text-primary-click visited:decoration-primary-click/70
   }
 
-  .link-primary-dark {
-    @apply text-white underline decoration-white/70
-     hover:text-white hover:decoration-white/70
-     visited:text-white visited:decoration-white/70
-  }
 
   .gradient-space-marine {
     @apply bg-gradient-to-r from-tertiary-accent to-secondary
