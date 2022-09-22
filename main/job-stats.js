@@ -29,7 +29,6 @@ class JobStats {
 
   constructor () {
     this.#perModuleJobStats = loadStoredStats()
-    this.#updateStats()
   }
 
   getTotalJobsCompleted () {
@@ -41,9 +40,16 @@ class JobStats {
    * @param {number} count
    */
   setModuleJobsCompleted (moduleName, count) {
+    const incr = moduleName in this.#perModuleJobStats
+      ? count - this.#perModuleJobStats[moduleName]
+      : 1
+    writeClient.writePoint(
+      new Point('jobs-completed')
+        .tag('module', moduleName)
+        .intField('value', incr)
+    )
     this.#perModuleJobStats[moduleName] = count
     this.#save()
-    this.#updateStats()
   }
 
   reset () {
@@ -53,16 +59,6 @@ class JobStats {
 
   #save () {
     storeStats(this.#perModuleJobStats)
-  }
-
-  #updateStats () {
-    const point = new Point('jobs-completed')
-    for (const [moduleName, count] of Object.entries(this.#perModuleJobStats)) {
-      point
-        .tag('module', moduleName)
-        .intField('value', count)
-    }
-    writeClient.writePoint(point)
   }
 }
 
