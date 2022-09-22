@@ -1,15 +1,18 @@
 import { useEffect, useState, useCallback } from 'react'
 import {
-  getStationActivityLog, stopSaturnNode, setStationFilAddress,
-  startSaturnNode, getStationFilAddress, getStationTotalEarnings,
-  getStationTotalJobs
-} from '../components/InterfaceCalls'
+  getAllActivities, stopSaturnNode, startSaturnNode,
+  setFilAddress, getFilAddress,
+  getStationTotalEarnings, getTotalJobsCompleted
+} from '../lib/station-config'
 import { ActivityEventMessage } from '../typings'
 import ActivityLog from '../components/ActivityLog'
 import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
+import { useNavigate } from 'react-router-dom'
 
 export default function Dashboard (): JSX.Element {
+  const navigate = useNavigate()
+
   const [address, setAddress] = useState<string | undefined>()
   const [totalJobs, setTotalJobs] = useState<number>(0)
   const [totalEarnings, setTotalEarnigs] = useState<number>(0)
@@ -20,15 +23,16 @@ export default function Dashboard (): JSX.Element {
   const disconnect = async () => {
     // TODO: move disconnect logic to backend
     await stopSaturnNode()
-    await setStationFilAddress('')
-    setAddress('')
+    await setFilAddress('').then(
+      () => { setAddress(undefined); navigate('/', { replace: true }) }
+    )
   }
 
   const reload = async (): Promise<void> => {
-    setAddress(await getStationFilAddress())
-    setActivities(await getStationActivityLog())
+    setAddress(await getFilAddress())
+    setActivities(await getAllActivities())
     setTotalEarnigs(await getStationTotalEarnings())
-    setTotalJobs(await getStationTotalJobs())
+    setTotalJobs(await getTotalJobsCompleted())
   }
 
   const handleActivity = useCallback((value: ActivityEventMessage) => {
@@ -59,7 +63,7 @@ export default function Dashboard (): JSX.Element {
   }, [handleActivity, handleEarnings, handleJobs])
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#f0f0f0]">
+    <div className="h-screen w-screen overflow-hidden bg-grayscale-100">
       <div className="relative">
 
         <div className="max-w-[744px] mx-auto">
@@ -75,38 +79,38 @@ export default function Dashboard (): JSX.Element {
           <div className="h-[300px] flex flex-col relative z-10">
             <div className="flex-grow flex pt-4 justify-end justify-items-end">
               <div>
-                <a className="flex content-center cursor-pointer" href="/#" onClick={disconnect}>
+                <button type="button" className="flex items-center cursor-pointer" title="logout" onClick={disconnect}>
                   <img src={WalletIcon} alt=""/>
-                  <span className="text-right mx-3">{shortAddress(address)}</span>
+                  <span className="text-right mx-3 fil-address" title="fil address">{shortAddress(address)}</span>
                   <span className="underline text-primary">Change Wallet</span>
-                </a>
+                </button>
               </div>
             </div>
             <div className="mb-6">
-              <p className="text-[10px] uppercase">Total Jobs Completed</p>
-              <p className="text-[44px] font-bold">{totalJobs}</p>
+              <p className="text-body-3xs text-grayscale-700 uppercase">Total Jobs Completed</p>
+              <p className="text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs}</p>
             </div>
             <div className="mb-6">
-              <p className="text-[10px] uppercase">Total Earnings (updated daily)</p>
-              <p className="text-[44px] font-bold">
-                {totalEarnings}
-                {totalEarnings && <span className="text-[20px]">FIL</span>}
+              <p className="text-body-3xs text-grayscale-700 uppercase">Total Earnings (updated daily)</p>
+              <p className="text-header-m font-bold font-number total-earnings" title="total earnings">
+                {totalEarnings > 0 ? totalEarnings : '--'}
+                {totalEarnings > 0 ? <span className="text-header-3xs">FIL</span> : ''}
               </p>
             </div>
           </div>
         </div>
-        <div className="pointer-events-none fixed h-[60px] bg-[#f0f0f0] w-full z-20"
+        <div className="pointer-events-none fixed h-14 bg-grayscale-100 w-full z-20"
           style={{
             WebkitMaskImage: 'linear-gradient(black, transparent)',
             maskImage: 'linear-gradient(black, transparent)'
           }}>
         </div>
-        <div className="h-screen overflow-y-auto pt-12 relative z-10">
+        <div tabIndex={1} className="h-screen overflow-y-auto pt-12 relative z-10">
           <div className="max-w-[744px] mx-auto overflow-hidden">
             <ActivityLog activities={activities} />
           </div>
         </div>
-        <div className="pointer-events-none fixed h-[60px] bg-[#f0f0f0] w-full z-10 bottom-0"
+        <div className="pointer-events-none fixed h-14 bg-grayscale-100 w-full z-10 bottom-0"
           style={{
             WebkitMaskImage: 'linear-gradient(transparent, black)',
             maskImage: 'linear-gradient(transparent, black)'

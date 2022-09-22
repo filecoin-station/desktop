@@ -1,15 +1,12 @@
-import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
 import { useEffect } from 'react'
 import Onboarding from './pages/Onboarding'
 import WalletConfig from './pages/WalletConfig'
-import Saturn from './Saturn'
-import { TotalJobsCompleted } from './components/TotalJobsCompleted'
-import { ActivityLog } from './components/ActivityLog'
+// import { ActivityLog } from './components/ActivityLog'
+// import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 
 const App = ():JSX.Element => {
-  useEffect(() => { document.title = 'Filecoin Station' })
   return (
     <Router>
       <Routes>
@@ -23,4 +20,3 @@ const App = ():JSX.Element => {
 }
 
 export default App
-
