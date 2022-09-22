@@ -22,6 +22,8 @@ const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
 console.log('Filecoin Station build version:', BUILD_VERSION)
+
+// Expose additional metadata for Electron preload script
 process.env.STATION_BUILD_VERSION = BUILD_VERSION
 
 function handleError (/** @type {any} */ err) {
