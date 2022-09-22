@@ -4,6 +4,7 @@ const path = require('path')
 const fs = require('node:fs/promises')
 const { setTimeout } = require('timers/promises')
 const assert = require('node:assert')
+const { fetch } = require('undici')
 
 const { app } = require('electron')
 const execa = require('execa')
@@ -27,11 +28,17 @@ let childLog = ''
 /** @type {string | undefined} */
 let webUrl
 
+/** @type {string | undefined} */
+let apiUrl
+
 const ConfigKeys = {
   FilAddress: 'saturn.filAddress'
 }
 
 let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
+
+/** @type {ReturnType<setInterval>} */
+let pollStatsInterval
 
 async function setup (/** @type {Context} */ ctx) {
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
@@ -106,16 +113,21 @@ async function start (/** @type {Context} */ ctx) {
     const readyHandler = data => {
       output += data.toString()
 
-      const webuiMatch = output.match(/^WebUI: (http.*)$/m)
-      if (webuiMatch) {
-        webUrl = webuiMatch[1]
+      const apiMatch = output.match(/^API: (http.*)$/m)
+      if (apiMatch) {
+        apiUrl = apiMatch[1]
 
         appendToChildLog('Saturn node is up and ready')
-        console.log('Saturn node is up and ready (Web URL: %s)', webUrl)
+        console.log('Saturn node is up and ready (API URL: %s)', apiUrl)
+        webUrl = `${apiUrl}webui`
         ready = true
         stdout.off('data', readyHandler)
 
         ctx.recordActivity({ source: 'Saturn', type: 'info', message: 'Saturn module started.' })
+        pollStatsInterval = setInterval(() => {
+          pollStats(ctx)
+            .catch(err => console.warn('Cannot fetch Saturn module stats.', err))
+        }, 100)
         resolve()
       }
     }
@@ -161,6 +173,8 @@ function stop () {
     console.log('Saturn node was not running')
     return
   }
+
+  clearInterval(pollStatsInterval)
 
   childProcess.kill()
   childProcess = null
@@ -237,6 +251,28 @@ function handleActivityLogs (ctx, text) {
         message: m[2]
       })
     })
+}
+
+async function pollStats (/** @type {Context} */ ctx) {
+  const res = await fetch(apiUrl + 'stats')
+  if (!res.ok) {
+    const msg = `Cannot fetch Saturn node stats: ${res.status}\n${await res.text().catch(noop)}`
+    throw new Error(msg)
+  }
+
+  /** @type {any} */
+  const stats = await res.json()
+
+  const jobsCompleted = stats?.NSuccessfulRetrievals
+  if (typeof jobsCompleted !== 'number') {
+    const msg = 'Unexpected stats response - NSuccessfulRetrievals is not a number. Stats: ' + JSON.stringify(stats)
+    throw new Error(msg)
+  }
+  ctx.setModuleJobsCompleted('saturn', jobsCompleted)
+}
+
+function noop () {
+  // no-op
 }
 
 module.exports = {

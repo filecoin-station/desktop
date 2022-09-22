@@ -8,7 +8,7 @@ const { mkdir } = require('node:fs/promises')
 const path = require('node:path')
 const tar = require('tar-fs')
 const gunzip = require('gunzip-maybe')
-const { request } = require('undici')
+const { fetch } = require('undici')
 const { pipeline } = require('node:stream/promises')
 
 const githubToken = process.env.GITHUB_TOKEN
@@ -40,15 +40,21 @@ async function main () {
 
         const outName = `l2node-${platform}-${getArch(match[2])}`
         console.log(' ⇣ downloading %s', outName)
-        const res = await request(url, {
-          headers: { authorization },
-          maxRedirections: 5
+        const res = await fetch(url, {
+          headers: {
+            ...(authorization ? { authorization } : {})
+          },
+          redirect: 'follow'
         })
 
-        if (res.statusCode >= 300) {
+        if (res.status >= 300) {
           throw new Error(
-            `Cannot fetch saturn-l2 binary ${name}: ${res.statusCode}\n${await res.body.text()}`
+            `Cannot fetch saturn-l2 binary ${name}: ${res.status}\n${await res.text()}`
           )
+        }
+
+        if (!res.body) {
+          throw new Error(`Cannot fetch saturn-l2 binary ${name}: no response body`)
         }
 
         const outFile = path.join(outDir, outName)
@@ -66,20 +72,22 @@ async function main () {
  * }>}
  */
 async function fetchReleaseMetadata () {
-  const res = await request(
+  const res = await fetch(
     `https://api.github.com/repos/filecoin-saturn/L2-node/releases/tags/${SATURN_DIST_TAG}`,
     {
       headers: {
         accept: 'application/vnd.github.v3+json',
         'user-agent': 'undici',
-        authorization
+        ...(authorization ? { authorization } : {})
       }
     }
   )
-  if (res.statusCode >= 300) {
-    throw new Error(`Cannot fetch saturn-l2 release ${SATURN_DIST_TAG}: ${res.statusCode}\n${await res.body.text()}`)
+  if (res.status >= 300) {
+    throw new Error(`Cannot fetch saturn-l2 release ${SATURN_DIST_TAG}: ${res.status}\n${await res.text()}`)
   }
-  const data = await res.body.json()
+
+  /** @type {any} */
+  const data = await res.json()
   return data
 }
 

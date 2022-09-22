@@ -9,6 +9,7 @@ const stationConfig = require('./station-config')
 
 const ipcMainEvents = Object.freeze({
   ACTIVITY_LOGGED: 'station:activity-logged',
+  JOB_STATS_UPDATED: 'station:job-stats-updated',
 
   UPDATE_CHECK_STARTED: 'station:update-check:started',
   UPDATE_CHECK_FINISHED: 'station:update-check:finished'
@@ -30,6 +31,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('station:setOnboardingCompleted', (_event) => stationConfig.setOnboardingCompleted())
 
   ipcMain.handle('station:getAllActivities', (_event, _args) => ctx.getAllActivities())
+  ipcMain.handle('station:getTotalJobsCompleted', (_event, _args) => ctx.getTotalJobsCompleted())
 }
 
 module.exports = {
