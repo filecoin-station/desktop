@@ -1,5 +1,8 @@
+import { useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
+import Dashboard from './pages/Dashboard'
+import WalletConfig from './pages/WalletConfig'
 // import { ActivityLog } from './components/ActivityLog'
 // import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 
