@@ -106,5 +106,7 @@
       "tsconfig.json",
       "renderer/tsconfig.json"
     ]
-  }
+  },
+  "buildTag": null,
+  "buildNumber": null
 }

@@ -1,6 +1,10 @@
 appId: io.filecoin.station
 generateUpdatesFilesForAllChannels: true
 
+# Will be overwritten by before-pack script when running on GitHub Actions
+extraMetadata:
+  buildNumber: "1-dev"
+
 files:
   - filter:
     - main/**/*
@@ -16,6 +20,7 @@ extraResources:
 
 asarUnpack: 'main/**/scripts/**/*'
 
+beforePack: 'build/before-pack.js'
 afterSign: 'build/notarize-macos.js'
 
 mac:
