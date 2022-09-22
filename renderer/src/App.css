@@ -36,10 +36,6 @@
     bg-transparent appearance-none focus:outline-none focus:ring-0 focus:border-black border-grayscale-700;
   }
 
-  .err-msg {
-    @apply text-error text-body-s;
-  }
-
   .btn-primary {
     @apply py-2 px-4 rounded-full font-body text-body-m  text-white
      bg-primary hover:bg-primary-hover visited:bg-primary-click
