@@ -1,5 +1,5 @@
-import { checkAddressString } from '@glif/filecoin-address'
 import { FormEvent, useEffect, useState } from 'react'
+import { checkAddressString } from '@glif/filecoin-address'
 
 interface FilAddressFormProps {
     address?: string

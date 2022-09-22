@@ -5,12 +5,15 @@
       "standard"
   ],
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "eslint-plugin-require-sort"
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": ["error", {
       "argsIgnorePattern": "^_"
-    }]
+    }],
+    "sort-imports": ["error"],
+    "require-sort/require-sort": ["error"]
   },
   "ignorePatterns": [
     "assets/",

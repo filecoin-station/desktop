@@ -4,12 +4,12 @@
 
 const SATURN_DIST_TAG = 'v0.4.1'
 
+const { fetch } = require('undici')
+const gunzip = require('gunzip-maybe')
 const { mkdir } = require('node:fs/promises')
 const path = require('node:path')
-const tar = require('tar-fs')
-const gunzip = require('gunzip-maybe')
-const { fetch } = require('undici')
 const { pipeline } = require('node:stream/promises')
+const tar = require('tar-fs')
 
 const githubToken = process.env.GITHUB_TOKEN
 const authorization = githubToken ? `Bearer ${githubToken}` : undefined

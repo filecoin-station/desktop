@@ -1,11 +1,10 @@
 'use strict'
 
-const path = require('path')
-
 const { BrowserWindow, app, screen } = require('electron')
-const store = require('./store')
 const { ipcMain } = require('electron/main')
 const { ipcMainEvents } = require('./ipc')
+const path = require('path')
+const store = require('./store')
 
 /**
  * @param {import('./typings').Context} ctx

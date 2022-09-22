@@ -1,5 +1,5 @@
-import StationLogoLight from './../assets/img/station-logo-light.svg'
 import StationLogoDark from './../assets/img/station-logo-dark.svg'
+import StationLogoLight from './../assets/img/station-logo-light.svg'
 
 const StyleGuide = () => {
   return (

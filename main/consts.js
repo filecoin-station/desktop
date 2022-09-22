@@ -1,9 +1,9 @@
 'use strict'
 
+const { app } = require('electron')
 const os = require('os')
 const packageJson = require('../package.json')
 const path = require('path')
-const { app } = require('electron')
 
 module.exports = Object.freeze({
   CACHE_HOME: getCacheHome(),

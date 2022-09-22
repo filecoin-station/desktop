@@ -1,7 +1,7 @@
 'use strict'
 
-const { dialog } = require('electron')
 const { IS_MAC } = require('./consts')
+const { dialog } = require('electron')
 
 module.exports = {
   showDialogSync

@@ -1,9 +1,9 @@
 'use strict'
 
+const { BrowserWindow, Menu, MenuItem, dialog, ipcMain } = require('electron')
 const fs = require('node:fs/promises')
-const { Menu, MenuItem, ipcMain, dialog, BrowserWindow } = require('electron')
-const { ipcMainEvents } = require('./ipc')
 const { getLog } = require('./saturn-node')
+const { ipcMainEvents } = require('./ipc')
 
 function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
   const menu = Menu.getApplicationMenu()
