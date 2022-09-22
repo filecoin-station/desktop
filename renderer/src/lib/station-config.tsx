@@ -36,7 +36,7 @@ export async function getAllActivities (): Promise<ActivityEventMessage[]> {
   return await window.electron.getAllActivities()
 }
 
-export async function getStationTotalEarnings (): Promise<number> {
+export async function getTotalEarnings (): Promise<number> {
   return 0
 }
 
