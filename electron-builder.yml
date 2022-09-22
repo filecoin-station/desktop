@@ -1,6 +1,9 @@
 appId: io.filecoin.station
 generateUpdatesFilesForAllChannels: true
 
+extraMetadata:
+  buildNumber: "will be set from before-pack script"
+
 files:
   - filter:
     - main/**/*
@@ -16,6 +19,7 @@ extraResources:
 
 asarUnpack: 'main/**/scripts/**/*'
 
+beforePack: 'build/before-pack.js'
 afterSign: 'build/notarize-macos.js'
 
 mac:
