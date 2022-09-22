@@ -30,16 +30,18 @@ export declare global {
         setUserConsent: (consent: boolean) => Promisse<void>
       },
       stationEvents: {
-        onActivityLog: (callback) => () => void
-        onJobsCounter: (callback) => () => void
-        onEarningsCounter: (callback) => () => void
+        onActivityLogged: (callback) => () => void
+        onJobProcessed: (callback) => () => void
+        onEarningsChanged: (callback) => () => void
       }
     }
   }
 }
 
 export type ActivityEventMessage = {
-  time: EpochTimeStamp,
-  type: 'info' | 'error' | 'warning' | undefined,
-  msg: string
+  id: string;
+  timestamp: number;
+  type: string;
+  source: string;
+  message: string;
 }
