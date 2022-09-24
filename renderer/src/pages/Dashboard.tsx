@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import {
   getAllActivities, stopSaturnNode, startSaturnNode,
   setFilAddress, getFilAddress,
-  getStationTotalEarnings, getTotalJobsCompleted
+  getTotalEarnings, getTotalJobsCompleted
 } from '../lib/station-config'
 import { ActivityEventMessage } from '../typings'
 import ActivityLog from '../components/ActivityLog'
@@ -31,7 +31,7 @@ export default function Dashboard (): JSX.Element {
   const reload = async (): Promise<void> => {
     setAddress(await getFilAddress())
     setActivities(await getAllActivities())
-    setTotalEarnigs(await getStationTotalEarnings())
+    setTotalEarnigs(await getTotalEarnings())
     setTotalJobs(await getTotalJobsCompleted())
   }
 
