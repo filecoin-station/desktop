@@ -31,7 +31,7 @@ const OnboardingPage = (): JSX.Element => {
 
   useEffect(() => {
     if (isOnboardingCompleted) {
-      navigate('/dashboard', { replace: true })
+      navigate('/wallet', { replace: true })
     }
   }, [isOnboardingCompleted, navigate])
 

@@ -3,7 +3,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import '@testing-library/jest-dom'
 import '../lib/station-config'
-import App from '../App'
+import { BrowserRouter } from 'react-router-dom'
+import WalletConfig from '../pages/WalletConfig'
 
 vi.mock('../lib/station-config', () => {
   return {
@@ -24,9 +25,9 @@ vi.mock('react-router-dom', async () => {
 
 describe('WalletConfig page test', () => {
   beforeEach(() => {
-    render(<App />)
+    render(<BrowserRouter><WalletConfig /></BrowserRouter>)
   })
-
+  
   test('display input field', () => {
     expect(document.getElementsByClassName('fil-address').length).toBe(1)
   })
