@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { ActivityEventMessage } from '../typings'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
 import { ReactComponent as WarningIcon } from '../assets/img/warning.svg'
 import { ReactComponent as JobIcon } from '../assets/img/job.svg'
 
