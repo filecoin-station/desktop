@@ -9,7 +9,7 @@ const WalletConfig = (): JSX.Element => {
 
   const [docFilAddress, setDocFilAddress] = useState<string | undefined>(undefined)
 
-  useEffect(() => { document.title = 'Filecoin Station' })
+  useEffect(() => { document.title = 'Login' })
 
   useEffect(() => {
     getFilAddress().then(setDocFilAddress)

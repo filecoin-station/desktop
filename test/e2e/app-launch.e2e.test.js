@@ -66,9 +66,17 @@ test.describe.serial('Application launch', async () => {
     expect(await mainWindow.title()).toBe('Filecoin Station')
   })
 
+  test('navigate to wallet input', async () => {
+    await mainWindow.click('button:has-text("Continue")')
+    await mainWindow.click('button:has-text("Continue")')
+    await mainWindow.click('button:has-text("Accept")')
+    expect(await mainWindow.title()).toBe('Login')
+  })
+
   test('enter FIL address', async () => {
     await mainWindow.fill('input.fil-address', 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
     await mainWindow.click('button.submit-address')
+    expect(await mainWindow.title()).toBe('Saturn')
   })
 
   test('wait for Saturn node to get ready', async () => {
