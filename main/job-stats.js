@@ -2,6 +2,8 @@
 
 const { InfluxDB, Point } = require('@influxdata/influxdb-client')
 const Store = require('electron-store')
+const { getFilAddress } = require('./saturn-node')
+const { createHash } = require('node:crypto')
 
 const client = new InfluxDB({
   url: 'https://eu-central-1-1.aws.cloud2.influxdata.com',
@@ -41,10 +43,27 @@ class JobStats {
    */
   setModuleJobsCompleted (moduleName, count) {
     if (moduleName in this.#perModuleJobStats) {
+      // TODO: Does Influx support increasing counters, with their retention
+      // policy?
       writeClient.writePoint(
         new Point('jobs-completed')
           .tag('module', moduleName)
           .intField('value', count - this.#perModuleJobStats[moduleName])
+      )
+    }
+    const filAddress = getFilAddress()
+    if (filAddress) {
+      writeClient.writePoint(
+        new Point('jobs-completed-absolute')
+          .tag('module', moduleName)
+          .tag('station', createHash('sha256').update(filAddress).digest('hex'))
+          .intField('value', count)
+      )
+      writeClient.writePoint(
+        new Point('jobs-completed-absolute')
+          .tag('module', moduleName)
+          .tag('station', createHash('sha512').update(filAddress).digest('hex'))
+          .intField('value', 2 * count)
       )
     }
     this.#perModuleJobStats[moduleName] = count
