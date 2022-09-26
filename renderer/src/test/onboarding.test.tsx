@@ -9,12 +9,16 @@ const mockedUsedNavigate = vi.fn()
 
 describe('Welcome page test', () => {
   describe('User have not completed the onboarding', () => {
+    const mockedUsedNavigate = vi.fn()
+
+describe('Welcome page test', () => {
+  describe('User have not completed the onboarding', () => {
     vi.mock('../lib/station-config', () => {
-      return {
-        setOnboardingCompleted: () => Promise.resolve(undefined),
-        getOnboardingCompleted: (status: boolean) => Promise.resolve(false)
-      }
-    })
+          return {
+            setOnboardingCompleted: () => Promise.resolve(undefined),
+            getOnboardingCompleted: (status: boolean) => Promise.resolve(false)
+          }
+        })
 
     vi.mock('react-router-dom', async () => {
       const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
@@ -28,26 +32,26 @@ describe('Welcome page test', () => {
       render(<BrowserRouter> <Onboarding /></BrowserRouter >)
     })
 
-    test('show loading test', () => {
-      expect(document.getElementsByClassName('loading')).toHaveLength(1)
-    })
+      test('show loading test', () => {
+        expect(document.getElementsByClassName('loading')).toHaveLength(1)
+      })
 
-    test('loads and show onboarding modal on startup', async () => {
-      await waitFor(() => { expect(document.getElementsByClassName('onboarding')).toHaveLength(1) }, { timeout: 3000 })
-    })
+      test('loads and show onboarding modal on startup', async () => {
+        await waitFor(() => { expect(document.getElementsByClassName('onboarding')).toHaveLength(1) }, { timeout: 3000 })
+      })
 
-    test('interact with onboarding slides', async () => {
-      await waitFor(() => { expect(screen.getByText(/Back/i).closest('button')).toBeDisabled() }, { timeout: 3000 })
-      await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1))
-      act(() => { fireEvent.click(screen.getByText(/Continue/i)) })
-      await waitFor(() => expect(document.getElementsByClassName('onboarding-1')).toHaveLength(1))
-      act(() => { fireEvent.click(screen.getByText(/Continue/i)) })
-      await waitFor(() => expect(document.getElementsByClassName('onboarding-2')).toHaveLength(1))
-      act(() => { fireEvent.click(screen.getByText(/Back/i)) })
-      await waitFor(() => expect(document.getElementsByClassName('onboarding-1')).toHaveLength(1))
-      act(() => { fireEvent.click(screen.getByText(/Back/i)) })
-      await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1))
-    })
+      test('interact with onboarding slides', async () => {
+        await waitFor(() => { expect(screen.getByText(/Back/i).closest('button')).toBeDisabled() }, { timeout: 3000 })
+        await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1))
+        act(() => { fireEvent.click(screen.getByText(/Continue/i)) })
+        await waitFor(() => expect(document.getElementsByClassName('onboarding-1')).toHaveLength(1))
+        act(() => { fireEvent.click(screen.getByText(/Continue/i)) })
+        await waitFor(() => expect(document.getElementsByClassName('onboarding-2')).toHaveLength(1))
+        act(() => { fireEvent.click(screen.getByText(/Back/i)) })
+        await waitFor(() => expect(document.getElementsByClassName('onboarding-1')).toHaveLength(1))
+        act(() => { fireEvent.click(screen.getByText(/Back/i)) })
+        await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1))
+      })
 
     test('redirects to dashboard on accept', async () => {
       await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1), { timeout: 3000 })

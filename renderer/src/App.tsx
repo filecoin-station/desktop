@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
-import { useEffect } from 'react'
-import Onboarding from './pages/Onboarding'
+import Dashboard from './pages/Dashboard'
 import WalletConfig from './pages/WalletConfig'
 import Onboarding from './pages/Onboarding'
 
