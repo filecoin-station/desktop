@@ -1,6 +1,9 @@
 import './Saturn.css'
 import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
+import { ActivityLog } from './components/ActivityLog'
+import { TotalJobsCompleted } from './components/TotalJobsCompleted'
+
 
 export default function Saturn (): JSX.Element {
   const [isRunning, setIsRunning] = useState(true)
@@ -43,6 +46,8 @@ export default function Saturn (): JSX.Element {
 
   return (
     <div>
+      <TotalJobsCompleted />
+      <ActivityLog />
       {content}
       <p><Link to='/'>Station &gt;&gt;</Link></p>
     </div>
