@@ -99,18 +99,18 @@ export default function Dashboard (): JSX.Element {
             </div>
           </div>
         </div>
-        <div className="pointer-events-none fixed h-14 bg-grayscale-100 w-full z-20"
+        <div className="pointer-events-none absolute h-14 bg-grayscale-100 w-full z-20"
           style={{
             WebkitMaskImage: 'linear-gradient(black, transparent)',
             maskImage: 'linear-gradient(black, transparent)'
           }}>
         </div>
-        <div tabIndex={1} className="h-screen overflow-y-auto pt-12 relative z-10">
+        <div tabIndex={0} className="h-screen overflow-y-auto pt-12 relative z-10">
           <div className="max-w-[744px] mx-auto overflow-hidden">
             <ActivityLog activities={activities} />
           </div>
         </div>
-        <div className="pointer-events-none fixed h-14 bg-grayscale-100 w-full z-10 bottom-0"
+        <div className="pointer-events-none absolute h-14 bg-grayscale-100 w-full z-10 bottom-0"
           style={{
             WebkitMaskImage: 'linear-gradient(transparent, black)',
             maskImage: 'linear-gradient(transparent, black)'

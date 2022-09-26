@@ -27,7 +27,7 @@ describe('WalletConfig page test', () => {
   beforeEach(() => {
     render(<BrowserRouter><WalletConfig /></BrowserRouter>)
   })
-  
+
   test('display input field', () => {
     expect(document.getElementsByClassName('fil-address').length).toBe(1)
   })
