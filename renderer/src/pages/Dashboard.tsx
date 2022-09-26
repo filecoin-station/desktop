@@ -112,7 +112,7 @@ const Dashboard = (): JSX.Element => {
             <ActivityLog activities={activities} />
           </div>
         </div>
-        <div className="pointer-events-none fixed h-14 bg-grayscale-100 w-full z-10 bottom-0"
+        <div className="pointer-events-none absolute h-14 bg-grayscale-100 w-full z-10 bottom-0"
           style={{
             WebkitMaskImage: 'linear-gradient(transparent, black)',
             maskImage: 'linear-gradient(transparent, black)'
