@@ -101,6 +101,7 @@ test.describe.serial('Application launch', async () => {
   })
 
   test('renders Saturn WebUI in <iframe>', async () => {
+    await mainWindow.click('a#link-to-saturn')
     const saturnWebUrl = await mainWindow.evaluate(() => window.electron.saturnNode.getWebUrl())
     const iframeElem = await mainWindow.waitForSelector('#module-webui')
     expect(await iframeElem.getAttribute('src'), 'iframe URL').toBe(saturnWebUrl)
