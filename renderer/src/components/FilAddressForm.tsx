@@ -38,10 +38,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ setFilAddress }) => {
 
   const handleAuthenticate = (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!inputAddr) {
-      return true
-    }
-    if (validateAddress()) {
+    if (inputAddr && validateAddress()) {
       setFilAddress(inputAddr)
     }
   }
