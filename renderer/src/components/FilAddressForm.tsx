@@ -1,22 +1,30 @@
-import { FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 import { checkAddressString } from '@glif/filecoin-address'
 
-interface FilAddressFormProps {
-    address?: string
-    setAddress: React.Dispatch<React.SetStateAction<string | undefined>>
-    onValidAddress: (address: string) => void
+interface ValidationErrorProps {
+  message: string | undefined
 }
 
-export default function FilAddressForm (props: FilAddressFormProps) {
-  const backendAddress = props.address ?? ''
-  const [address, setAddress] = useState(backendAddress)
+const ValidationError: FC<ValidationErrorProps> = ({ message }) => {
+  return (
+    message
+      ? <span className="err-msg" title="validation error">{message}</span>
+      : <span className='mb-[0.625rem]'>&nbsp;</span>
+  )
+}
+
+interface FilAddressFormProps {
+  setFilAddress: (address: string | undefined) => void
+}
+
+const FilAddressForm: FC<FilAddressFormProps> = ({ setFilAddress }) => {
   const [validationError, setValidationError] = useState<string | undefined>()
+  const [inputAddr, setInputAddr] = useState<string>('')
 
   const validateAddress = () => {
     setValidationError(undefined)
-    if (!address) return true
     try {
-      checkAddressString(address)
+      checkAddressString(inputAddr)
       return true
     } catch (err) {
       setValidationError(err instanceof Error ? err.message : '' + err)
@@ -24,34 +32,51 @@ export default function FilAddressForm (props: FilAddressFormProps) {
     }
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleChangeAddress = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputAddr(event.target.value)
+  }
 
-    if (validateAddress() && address !== props.address) {
-      props.onValidAddress(address)
+  const handleAuthenticate = (event: React.SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (inputAddr && validateAddress()) {
+      setFilAddress(inputAddr)
     }
   }
 
-  // Update the input element with the address after it was loaded from the backend
-  useEffect(() => { setAddress(backendAddress) }, [backendAddress])
-
-  // Validate the address entered by the user
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { validateAddress() }, [address])
-
   return (
-    <form onSubmit={handleSubmit}>
-        <input
-            className='fil-address'
-            value={address}
-            placeholder="Enter FIL address"
-            onChange={e => setAddress(e.target.value)}
-            autoFocus={true}
-            required/>
-        <button type='submit' className='submit-address'>Go!</button>
-        <p className='error' style={{ visibility: validationError ? 'visible' : 'hidden' }}>
-          Invalid FIL address: {validationError}
-        </p>
+
+    <form onSubmit={handleAuthenticate}>
+      <div className='pt-2 mb-20'>
+        <div className="relative z-0 w-full">
+          <input
+            autoComplete="off"
+            className="input w-full block fil-address"
+            type="text"
+            name="address"
+            placeholder=" "
+            tabIndex={0}
+            onChange={handleChangeAddress} />
+          <label htmlFor="address"
+            className="absolute duration-300 top-3 origin-top-left text-black pointer-events-none font-body uppercase">
+            FIL Address</label>
+
+          <ValidationError message={validationError} />
+        </div>
+      </div>
+
+      <div className='flex justify-between items-center gap-3'>
+        <p className="text-body-m">Your FIL rewards will be sent once a day to the address entered.</p>
+        <button
+          className="btn-primary submit-address"
+          disabled={inputAddr.length === 0}
+          title="connect"
+          type="submit"
+          value="connect">
+          <span className="text-xs px-4">Connect</span>
+        </button>
+      </div>
     </form>
   )
 }
+
+export default FilAddressForm

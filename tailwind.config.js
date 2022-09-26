@@ -47,9 +47,10 @@ module.exports = {
       },
       success: '#33cc9d',
       error: '#ff4d81',
-      warning: '#f76003'
+      warning: '#f76003',
+      'transparent-gray': '#f7f7f7e3',
+      transparent: '#ffffff00'
     }
-
   },
   plugins: []
 }

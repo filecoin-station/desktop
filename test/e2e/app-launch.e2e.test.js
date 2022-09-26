@@ -66,17 +66,17 @@ test.describe.serial('Application launch', async () => {
     expect(await mainWindow.title()).toBe('Filecoin Station')
   })
 
-  test('navigate to Saturn', async () => {
+  test('navigate to wallet input', async () => {
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Accept")')
-    await mainWindow.click('a#link-to-saturn')
-    expect(await mainWindow.title()).toBe('Saturn')
+    expect(await mainWindow.title()).toBe('Login')
   })
 
   test('enter FIL address', async () => {
     await mainWindow.fill('input.fil-address', 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
     await mainWindow.click('button.submit-address')
+    expect(await mainWindow.title()).toBe('Filecoin Station')
   })
 
   test('wait for Saturn node to get ready', async () => {
@@ -101,6 +101,7 @@ test.describe.serial('Application launch', async () => {
   })
 
   test('renders Saturn WebUI in <iframe>', async () => {
+    await mainWindow.click('a#link-to-saturn')
     const saturnWebUrl = await mainWindow.evaluate(() => window.electron.saturnNode.getWebUrl())
     const iframeElem = await mainWindow.waitForSelector('#module-webui')
     expect(await iframeElem.getAttribute('src'), 'iframe URL').toBe(saturnWebUrl)

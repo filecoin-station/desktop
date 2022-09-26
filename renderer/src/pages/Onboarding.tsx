@@ -21,6 +21,8 @@ const OnboardingPage = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState<boolean|null>()
 
+  useEffect(() => { document.title = 'Filecoin Station' })
+
   useEffect(() => {
     (async () => {
       await sleep(2000)
@@ -31,7 +33,7 @@ const OnboardingPage = (): JSX.Element => {
 
   useEffect(() => {
     if (isOnboardingCompleted) {
-      navigate('/dashboard', { replace: true })
+      navigate('/wallet', { replace: true })
     }
   }, [isOnboardingCompleted, navigate])
 

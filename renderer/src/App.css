@@ -3,7 +3,9 @@
 @tailwind utilities;
 
 
+
 @layer base {
+
   @font-face {
     font-family: "SuisseIntl";
     src: url('assets/fonts/SuisseIntl/SuisseIntl-Regular.ttf');
@@ -18,20 +20,27 @@
   }
 
   .title {
-    @apply text-header-l font-title text-primary;
+    @apply text-header-l font-title text-primary leading-[1.25] tracking-[-0.4px];
   }
 
   .subtitle {
-    @apply text-header-xl font-title text-secondary;
+    @apply text-header-xxs font-title text-secondary tracking-[-0.4px];
   }
 
   body {
-    @apply font-body
+    @apply font-body text-black tracking-[-0.4px];
   }
 }
 
 @layer components {
+  .input {
+    @apply text-body-l font-body pt-3 pb-2 px-0 mt-0 border-dashed border-0 border-b 
+    bg-transparent appearance-none focus:outline-none focus:ring-0 focus:border-black border-grayscale-700;
+  }
 
+  .err-msg {
+    @apply text-error text-body-s;
+  }
 
   .btn-primary {
     @apply py-2 px-4 rounded-full font-body text-body-m  text-white
@@ -65,11 +74,16 @@
   }
 
   .btn-secondary-small {
-    @apply font-body text-body-s
-      text-primary
-      hover:text-primary-hover
-      visited:text-primary-click 
-      disabled:text-grayscale-700;
+    @apply py-2 px-4 rounded-full font-body text-body-xs bg-opacity-0 border border-solid
+     border-primary border-opacity-25  text-primary
+     hover:border-primary-hover hover:border-opacity-25 hover:text-primary-hover
+     visited:border-primary-click visited:border-opacity-25 visited:text-primary-click 
+     disabled:border-grayscale-500 disabled:text-grayscale-700;  
+  }
+
+  .btn-primary-accent {
+    @apply bg-accent hover:bg-accent-hover visited:bg-accent-click
+    disabled:bg-accent/40 
   }
 
   .link-primary {
@@ -98,4 +112,31 @@
   .gradient-sun-fire {
     @apply bg-gradient-to-r from-secondary-accent to-warning
   }
+
+  .gradient-bg {
+    background: radial-gradient(94.55% 459.39% at 92% 11%, #F7F7F7 40.53%, rgba(247, 247, 247, 0.34) 80.12%, rgba(247, 247, 247, 0.58) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    transform: rotate(-180deg);
+  }
+
+  .gradient-bg-2 {
+    background: radial-gradient(137.12% 101.03% at 50% 0%, #F8F7F7 40.53%, #F7F7F7 78.03%, rgba(247, 247, 247, 0.95) 100%);
+    backdrop-filter: blur(5px);
+    /* Note: backdrop-filter has minimal browser support */
+    transform: rotate(-180deg);
+  }
+
+  input:focus ~ label,
+  input:not(:placeholder-shown) ~ label{
+    --tw-translate-x: 0;
+    --tw-translate-y: 0;
+    --tw-rotate: 0;
+    --tw-skew-x: 0;
+    --tw-skew-y: 0;
+    transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
+      skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    --tw-scale-x: 0.75;
+    --tw-scale-y: 0.75;
+    --tw-translate-y: -1.5rem;
+  }
+
 }

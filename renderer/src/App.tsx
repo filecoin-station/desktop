@@ -1,20 +1,23 @@
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
-import {
-  Link, Route, Routes
-} from 'react-router-dom'
-import { ActivityLog } from './components/ActivityLog'
+import { useEffect } from 'react'
+import Onboarding from './pages/Onboarding'
+import WalletConfig from './pages/WalletConfig'
 import Saturn from './Saturn'
 import { TotalJobsCompleted } from './components/TotalJobsCompleted'
-import { useEffect } from 'react'
-import OnboardingPage from './pages/Onboarding'
+import { ActivityLog } from './components/ActivityLog'
 
 const App = ():JSX.Element => {
+  useEffect(() => { document.title = 'Filecoin Station' })
   return (
-    <Routes>
-      <Route path="/" element={<OnboardingPage />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/saturn" element={<Saturn />} />
-    </Routes>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Onboarding />} />
+        <Route path="/wallet" element={<WalletConfig />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/saturn" element={<Saturn />} />
+      </Routes>
+    </Router>
   )
 }
 
