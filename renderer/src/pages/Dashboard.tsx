@@ -10,7 +10,7 @@ import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
 
-export default function Dashboard (): JSX.Element {
+const Dashboard = (): JSX.Element {
   const navigate = useNavigate()
 
   const [address, setAddress] = useState<string | undefined>()
@@ -27,7 +27,7 @@ export default function Dashboard (): JSX.Element {
       () => { setAddress(undefined); navigate('/', { replace: true }) }
     )
   }
-
+  
   const reload = async (): Promise<void> => {
     setAddress(await getFilAddress())
     setActivities(await getAllActivities())
@@ -46,6 +46,8 @@ export default function Dashboard (): JSX.Element {
   const handleJobs = useCallback((value: number) => {
     setTotalJobs((counter) => counter ? counter + value : value)
   }, [])
+
+  useEffect(() => { document.title = 'Dashboard' })
 
   useEffect(() => {
     reload()
@@ -120,3 +122,5 @@ export default function Dashboard (): JSX.Element {
     </div>
   )
 }
+
+export default Dashboard
