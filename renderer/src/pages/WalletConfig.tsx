@@ -22,6 +22,7 @@ const WalletConfig = (): JSX.Element => {
 
   if (docFilAddress && docFilAddress !== '') {
     navigate('/dashboard', { replace: true })
+    return null
   }
 
   return (
