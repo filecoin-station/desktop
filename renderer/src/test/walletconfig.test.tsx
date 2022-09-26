@@ -22,6 +22,15 @@ vi.mock('react-router-dom', async () => {
     useNavigate: () => mockedUsedNavigate
   }
 })
+const start = vi.fn()
+Object.defineProperty(window, 'electron', {
+  writable: true,
+  value: {
+    saturnNode: {
+      start,
+    }
+  }
+})
 
 describe('WalletConfig page test', () => {
   beforeEach(() => {
