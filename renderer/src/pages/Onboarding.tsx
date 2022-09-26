@@ -36,10 +36,9 @@ const OnboardingPage = (): JSX.Element => {
   useEffect(() => {
     if (isOnboardingCompleted && !filAddress) {
       navigate('/wallet', { replace: true })
-    } else if(filAddress) {
-      navigate('/dashboard', {replace: true})
-    } 
-    
+    } else if (filAddress) {
+      navigate('/dashboard', { replace: true })
+    }
   }, [isOnboardingCompleted, filAddress, navigate])
 
   const onFinishOnboarding = useCallback(async () => {
