@@ -12,13 +12,16 @@ const WalletConfig = (): JSX.Element => {
   useEffect(() => { document.title = 'Login' })
 
   useEffect(() => {
-    getFilAddress().then(setFilAddress)
+    (async () => {
+      setFilAddress(await getFilAddress())
+    })()
   }, [])
 
   const setStationFilAddress = useCallback(async (address: string | undefined) => {
     await saveFilAddress(address)
     setFilAddress(address)
   }, [])
+ 
 
   if (filAddress && filAddress !== '') {
     navigate('/dashboard', { replace: true })

@@ -15,7 +15,6 @@ const App = ():JSX.Element => {
         <Route path="/" element={<Onboarding />} />
         <Route path="/wallet" element={<WalletConfig />} />
         <Route path="/dashboard" element={<Saturn />} />
-
       </Routes>
     </Router>
   )
