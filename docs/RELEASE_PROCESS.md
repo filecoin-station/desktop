@@ -22,13 +22,11 @@ modified flow from
 
 <!-- TODO: manual tag creation could be automated -->
 
-1. Update `electron*` dependencies, if necessary.
-2. Commit the changes.
-3. Create a new feature branch, e.g. `release/A.B.C`
-4. Update the package version using `npm --no-git-tag-version version A.B.C`
-5. Commit the changes, use `release: vA.B.C` as the commit message
-6. Open a pull request, wait for CI to finish, and then land the PR.
-7. Pull the latest `main` branch to your machine, create a new tag and push it
+1. Create a new feature branch, e.g. `release/A.B.C`
+1. Update the package version using `npm --no-git-tag-version version A.B.C`
+1. Commit the changes, use `release: vA.B.C` as the commit message
+1. Open a pull request, wait for CI to finish, and then land the PR.
+1. Pull the latest `main` branch to your machine, create a new tag and push it
    to GitHub:
 
    ```
@@ -39,15 +37,15 @@ modified flow from
    git push origin vA.B.C
    ```
 
-8. Wait for GitHub Actions CI to upload the binaries to a draft release
+1. Wait for GitHub Actions CI to upload the binaries to a draft release
    [here](https://github.com/filecoin-project/filecoin-station/releases) (a new
    one will be created if you haven't drafted one).
-9. Review and publish the release draft.
+1. Review and publish the release draft.
    - Once a release is published, users will receive the app update
    - The `latest.yml, latest-mac.yml, latest-linux.yml` files attached to
      [/releases](https://github.com/filecoin-project/filecoin-station/releases)
      are used by the desktop app to determine when an app update is available.
-10. Done!
+1. Done!
 
 ### Old instructions that require admin access to the repo
 
