@@ -15,9 +15,10 @@ const WalletConfig = (): JSX.Element => {
     getFilAddress().then(setDocFilAddress)
   }, [])
 
-  const setStationFilAddress = (address: string | undefined) => {
-    setFilAddress(address).then(() => { setDocFilAddress(address) })
-  }
+  const setStationFilAddress = useCallback(async (address: string | undefined) => {
+    await setFilAddress(address)
+    setDocFilAddress(address)
+  }, [])
 
   if (docFilAddress && docFilAddress !== '') {
     navigate('/dashboard', { replace: true })
