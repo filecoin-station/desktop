@@ -10,11 +10,7 @@ import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
 
-<<<<<<< HEAD
 const Dashboard = (): JSX.Element => {
-=======
-const Dashboard = (): JSX.Element {
->>>>>>> 6080ec3 (wip: fix e2e test)
   const navigate = useNavigate()
 
   const [address, setAddress] = useState<string | undefined>()
@@ -31,7 +27,7 @@ const Dashboard = (): JSX.Element {
       () => { setAddress(undefined); navigate('/', { replace: true }) }
     )
   }
-  
+
   const reload = async (): Promise<void> => {
     setAddress(await getFilAddress())
     setActivities(await getAllActivities())
