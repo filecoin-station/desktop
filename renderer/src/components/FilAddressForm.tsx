@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 import { checkAddressString } from '@glif/filecoin-address'
 
 interface ValidationErrorProps {
