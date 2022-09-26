@@ -67,7 +67,7 @@
     "@types/tar-fs": "^2.0.1",
     "@types/tmp": "^0.2.3",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
-    "@typescript-eslint/experimental-utils": "^5.36.2",
+    "@typescript-eslint/experimental-utils": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
     "@vitejs/plugin-react": "^2.1.0",
     "@vitest/ui": "^0.23.4",
