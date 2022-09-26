@@ -22,11 +22,13 @@ const WalletConfig = (): JSX.Element => {
     setFilAddress(address)
   }, [])
  
+  useEffect(() => {
+   if(filAddress) {
+      navigate('/dashboard', {replace: true})
+    } 
+    
+  }, [filAddress, navigate])
 
-  if (filAddress && filAddress !== '') {
-    navigate('/dashboard', { replace: true })
-    return null
-  }
 
   return (
     <div className="w-full h-full relative">
