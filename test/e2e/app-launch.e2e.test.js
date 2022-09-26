@@ -76,7 +76,7 @@ test.describe.serial('Application launch', async () => {
   test('enter FIL address', async () => {
     await mainWindow.fill('input.fil-address', 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
     await mainWindow.click('button.submit-address')
-    expect(await mainWindow.title()).toBe('Saturn')
+    expect(await mainWindow.title()).toBe('Filecoin Station')
   })
 
   test('wait for Saturn node to get ready', async () => {
