@@ -2,8 +2,6 @@ import './Saturn.css'
 import { useEffect, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 
-import './Saturn.css'
-
 export default function Saturn (): JSX.Element {
   const [isRunning, setIsRunning] = useState(true)
   const [saturnNodeWebUrl, setSaturnNodeWebUrl] = useState('')

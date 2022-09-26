@@ -16,7 +16,7 @@ vi.mock('../lib/station-config', () => {
 const mockedUsedNavigate = vi.fn()
 
 vi.mock('react-router-dom', async () => {
-  const router: any = await vi.importActual('react-router-dom')
+  const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
   return {
     ...router,
     useNavigate: () => mockedUsedNavigate
@@ -27,7 +27,7 @@ Object.defineProperty(window, 'electron', {
   writable: true,
   value: {
     saturnNode: {
-      start,
+      start
     }
   }
 })
@@ -36,7 +36,7 @@ describe('WalletConfig page test', () => {
   beforeEach(() => {
     render(<BrowserRouter><WalletConfig /></BrowserRouter>)
   })
-  
+
   test('display input field', () => {
     expect(document.getElementsByClassName('fil-address').length).toBe(1)
   })
