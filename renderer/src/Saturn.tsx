@@ -44,7 +44,7 @@ export default function Saturn (): JSX.Element {
   return (
     <div>
       {content}
-      <p><Link to='/'>Station &gt;&gt;</Link></p>
+      <p><Link to='/dashboard'>Station &gt;&gt;</Link></p>
     </div>
   )
 }
