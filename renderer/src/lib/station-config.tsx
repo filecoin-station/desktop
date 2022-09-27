@@ -49,6 +49,5 @@ export async function getTotalEarnings (): Promise<number> {
 }
 
 export async function getTotalJobsCompleted (): Promise<number> {
-  // return 33
   return await window.electron.getTotalJobsCompleted()
 }
