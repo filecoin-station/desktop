@@ -27,7 +27,7 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
   if (process.platform === 'darwin') {
     // File menu
     menu.items[1].submenu?.insert(0, saveSaturnModuleLogAs)
-  } else if (process.platform === 'win32') {
+  } else if (process.platform === 'win32' || process.platform === 'linux') {
     // File menu
     menu.items[0].submenu?.insert(0, saveSaturnModuleLogAs)
   }
@@ -57,7 +57,7 @@ function setupCheckForUpdatesMenuItem (ctx, menu) {
     // Filecoin Station menu
     menu.items[0].submenu?.insert(1, checkForUpdates)
     menu.items[0].submenu?.insert(2, checkingForUpdates)
-  } else if (process.platform === 'win32') {
+  } else if (process.platform === 'win32' || process.platform === 'linux') {
     // Help menu
     menu.items[4].submenu?.insert(0, checkForUpdates)
     menu.items[4].submenu?.insert(1, checkingForUpdates)
