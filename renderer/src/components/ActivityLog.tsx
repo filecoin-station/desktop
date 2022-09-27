@@ -51,7 +51,7 @@ const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
     activities
       .sort((x, y) => y.timestamp - x.timestamp)
       .reduce((groups: ActivitiesByDate, activity: ActivityEventMessage) => {
-        const date = dayjs.unix(activity.timestamp).format('YYYY-MM-DD')
+        const date = dayjs(activity.timestamp).format('YYYY-MM-DD')
         return { ...groups, [date]: groups[date] ? groups[date].concat(activity) : [activity] }
       }, {})
 
