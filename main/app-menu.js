@@ -11,8 +11,7 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
 
   setupCheckForUpdatesMenuItem(ctx, menu)
 
-  // File menu
-  menu.items[1].submenu?.insert(1, new MenuItem({
+  const saveSaturnModuleLogAs = new MenuItem({
     label: 'Save Saturn Module Log As…',
     click: async () => {
       const opts = { defaultPath: 'station.txt' }
@@ -24,7 +23,14 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
         await fs.writeFile(filePath, getLog())
       }
     }
-  }))
+  })
+  if (process.platform === 'darwin') {
+    // File menu
+    menu.items[1].submenu?.insert(0, saveSaturnModuleLogAs)
+  } else if (process.platform === 'win32') {
+    // File menu
+    menu.items[0].submenu?.insert(0, saveSaturnModuleLogAs)
+  }
 
   Menu.setApplicationMenu(menu)
   setupIpcEventListeners(menu)
@@ -36,23 +42,26 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
  * @param {Electron.Menu} menu
  */
 function setupCheckForUpdatesMenuItem (ctx, menu) {
-  // GitHub issues tracking the work to add this menu item on other platforms:
-  //  - Windows: https://github.com/filecoin-project/filecoin-station/issues/63
-  //  - Linux: https://github.com/filecoin-project/filecoin-station/issues/64
-  if (process.platform !== 'darwin') return
-
-  // App menu
-  menu.items[0].submenu?.insert(1, new MenuItem({
+  const checkForUpdates = new MenuItem({
     id: 'checkForUpdates',
     label: 'Check For Updates...',
     click: () => { ctx.manualCheckForUpdates() }
-  }))
-  menu.items[0].submenu?.insert(2, new MenuItem({
+  })
+  const checkingForUpdates = new MenuItem({
     id: 'checkingForUpdates',
     label: 'Checking For Updates',
     enabled: false,
     visible: false
-  }))
+  })
+  if (process.platform === 'darwin') {
+    // Filecoin Station menu
+    menu.items[0].submenu?.insert(1, checkForUpdates)
+    menu.items[0].submenu?.insert(2, checkingForUpdates)
+  } else if (process.platform === 'win32') {
+    // Help menu
+    menu.items[4].submenu?.insert(0, checkForUpdates)
+    menu.items[4].submenu?.insert(1, checkingForUpdates)
+  }
 }
 
 /**
