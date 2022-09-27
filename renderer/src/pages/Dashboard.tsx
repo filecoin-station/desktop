@@ -24,7 +24,7 @@ const Dashboard = (): JSX.Element => {
     // TODO: move disconnect logic to backend
     await stopSaturnNode()
     await setFilAddress('').then(
-      () => { setAddress(undefined); navigate('/', { replace: true }) }
+      () => { setAddress(undefined); navigate('/wallet', { replace: true }) }
     )
   }
 
