@@ -49,6 +49,7 @@ describe('Dashboard page', () => {
     })
 
     beforeEach(() => {
+      vi.clearAllMocks()
       render(<BrowserRouter><Dashboard /></BrowserRouter>)
     })
 
@@ -72,7 +73,7 @@ describe('Dashboard page', () => {
     test('logs out wallet', async () => {
       act(() => { fireEvent.click(screen.getByTitle('logout')) })
       await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledTimes(1) })
-      await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledWith('/', { replace: true }) })
+      await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true }) })
     })
   })
 
@@ -151,6 +152,7 @@ describe('Dashboard page', () => {
     })
 
     beforeEach(() => {
+      vi.clearAllMocks()
       render(<BrowserRouter><Dashboard /></BrowserRouter>)
     })
 
@@ -160,13 +162,13 @@ describe('Dashboard page', () => {
     })
 
     test('subscribes and listens the jobs counter', async () => {
-      await waitFor(() => { expect(onJobProcessed).toBeCalledTimes(2) }, { timeout: 10 })
+      await waitFor(() => { expect(onJobProcessed).toBeCalledTimes(1) }, { timeout: 10 })
       await waitFor(() => { expect((screen.getByTitle('total jobs')).textContent).toBe('200') }, { timeout: 1000 })
     })
 
     test('subscribes and listens the earnings counter', async () => {
       // callback is called before as manytimes as tests happening
-      await waitFor(() => { expect(onEarningsChanged).toBeCalledTimes(3) }, { timeout: 10 })
+      await waitFor(() => { expect(onEarningsChanged).toBeCalledTimes(1) }, { timeout: 10 })
       await waitFor(() => { expect((screen.getByTitle('total earnings')).textContent).toBe('200FIL') }, { timeout: 1000 })
     })
   })
