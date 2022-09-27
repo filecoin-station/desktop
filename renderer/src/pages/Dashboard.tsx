@@ -35,29 +35,30 @@ const Dashboard = (): JSX.Element => {
     setTotalJobs(await getTotalJobsCompleted())
   }
 
-  const handleActivity = useCallback((value: ActivityEventMessage) => {
-    setActivities(activities => activities ? [...activities, value] : [value])
+  const handleActivity = useCallback((value: ActivityEventMessage[]) => {
+    setActivities(value)
   }, [])
 
   const handleEarnings = useCallback((value: number) => {
-    setTotalEarnigs((counter) => counter ? counter + value : value)
+    setTotalEarnigs(value)
   }, [])
 
   const handleJobs = useCallback((value: number) => {
-    setTotalJobs((counter) => counter ? counter + value : value)
+    setTotalJobs(value)
   }, [])
-
-  useEffect(() => { document.title = 'Dashboard' })
 
   useEffect(() => {
     reload()
-    startSaturnNode()
+    // startSaturnNode()
+    // return stopSaturnNode()
+  }, [])
+
+  useEffect(() => {
     const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(handleActivity)
     const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(handleEarnings)
-    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(handleJobs)
+    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed((count: number) => { handleJobs(count) })
 
     return () => {
-      stopSaturnNode()
       unsubscribeOnActivityLogged()
       unsubscribeOnEarningsChanged()
       unsubscribeOnJobProcessed()
