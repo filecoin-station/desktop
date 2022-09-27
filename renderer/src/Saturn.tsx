@@ -18,8 +18,6 @@ export default function Saturn (): JSX.Element {
     // We are running the update in background and not waiting for the promises to resolve.
   }
 
-  useEffect(() => { document.title = 'Saturn' })
-
   useEffect(() => {
     updateStatus()
     const id = setInterval(updateStatus, 1000)
