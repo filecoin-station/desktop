@@ -4,10 +4,12 @@ import dayjs from 'dayjs'
 import { ReactComponent as WarningIcon } from '../assets/img/warning.svg'
 import { ReactComponent as JobIcon } from '../assets/img/job.svg'
 
+const dateTimeFormat = new Intl.DateTimeFormat(window.navigator.language, {
+  hour: 'numeric', minute: 'numeric', second: 'numeric'
+})
+
 const ActivityLogItem: FC<ActivityEventMessage> = (activity) => {
-  const time = new Intl.DateTimeFormat(window.navigator.language, {
-    hour: 'numeric', minute: 'numeric', second: 'numeric'
-  }).format(new Date(activity.timestamp))
+  const time = dateTimeFormat.format(new Date(activity.timestamp))
 
   return (
     <div className="flex py-4 border-b border-grayscale-350 activity-item">
