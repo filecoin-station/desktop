@@ -37,6 +37,12 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
       enabled: false,
       visible: false
     },
+    {
+      label: 'Save Saturn Module Log As…',
+      click: function () {
+        ctx.saveSaturnModuleLogAs()
+      }
+    },
     { type: 'separator' },
     {
       id: 'showUi',

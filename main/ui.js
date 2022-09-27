@@ -22,6 +22,7 @@ module.exports = async function (ctx) {
     height: store.get('ui.height', dimensions.height < 900 ? dimensions.height : 900),
     minWidth: 720,
     minHeight: 540,
+    autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
       nodeIntegration: false,
