@@ -7,6 +7,7 @@ import Saturn from './Saturn'
 import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 import { ActivityLog } from './components/ActivityLog'
 import Sentry from './components/Sentry'
+import Plausible from './components/Plausible'
 
 const App = ():JSX.Element => {
   useEffect(() => { document.title = 'Filecoin Station' })
@@ -18,6 +19,7 @@ const App = ():JSX.Element => {
           <Route path="*" element={
             <>
               <Sentry />
+              <Plausible />
               <Routes>
                 <Route path="/wallet" element={<WalletConfig />} />
                 <Route path="/dashboard" element={<Dashboard />} />

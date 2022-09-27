@@ -51,6 +51,7 @@
     "prettier": "^2.7.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-helmet-async": "^1.3.0",
     "react-router-dom": "^6.4.1",
     "tar-fs": "^2.1.1",
     "undici": "^5.10.0",
