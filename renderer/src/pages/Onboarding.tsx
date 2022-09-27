@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getOnboardingCompleted, setOnboardingCompleted } from '../lib/station-config'
+import { getFilAddress, getOnboardingCompleted, setOnboardingCompleted } from '../lib/station-config'
 import Onboarding from '../components/Onboarding'
 import { ReactComponent as StationLogoLight } from '../assets/img/station-logo-light.svg'
 
@@ -20,22 +20,26 @@ const OnboardingPage = (): JSX.Element => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState<boolean|null>()
+  const [filAddress, setFilAddress] = useState<string|null>()
 
   useEffect(() => { document.title = 'Filecoin Station' })
 
   useEffect(() => {
     (async () => {
       await sleep(2000)
+      setFilAddress(await getFilAddress())
       setIsOnboardingCompleted(await getOnboardingCompleted())
       setIsLoading(false)
     })()
   }, [])
 
   useEffect(() => {
-    if (isOnboardingCompleted) {
+    if (isOnboardingCompleted && !filAddress) {
       navigate('/wallet', { replace: true })
+    } else if (filAddress) {
+      navigate('/dashboard', { replace: true })
     }
-  }, [isOnboardingCompleted, navigate])
+  }, [isOnboardingCompleted, filAddress, navigate])
 
   const onFinishOnboarding = useCallback(async () => {
     setIsOnboardingCompleted(true)
