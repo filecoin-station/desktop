@@ -52,5 +52,19 @@ contextBridge.exposeInMainWorld('electron', {
     setFilAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('station:setFilAddress', address),
     getOnboardingCompleted: () => ipcRenderer.invoke('station:getOnboardingCompleted'),
     setOnboardingCompleted: () => ipcRenderer.invoke('station:setOnboardingCompleted')
+  },
+  stationEvents: {
+    onActivityLogged: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('activity-log', callback)
+      return () => ipcRenderer.removeListener('activity-log', callback)
+    },
+    onJobProcessed: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('jobs-counter', callback)
+      return () => ipcRenderer.removeListener('jobs-counter', callback)
+    },
+    onEarningsChanged: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('earnings-counter', callback)
+      return () => ipcRenderer.removeListener('earnings-counter', callback)
+    }
   }
 })
