@@ -6,8 +6,8 @@ const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const store = require('./store')
 const {
-  getTrayOperationDialogShown,
-  setTrayOperationDialogShown
+  getTrayOperationExplained,
+  setTrayOperationExplained
 } = require('./station-config')
 const { showDialogSync } = require('./dialog')
 
@@ -77,12 +77,12 @@ module.exports = async function (ctx) {
   // Don't exit when window is closed (Quit only via Tray icon menu)
   ui.on('close', (event) => {
     event.preventDefault()
-    if (!getTrayOperationDialogShown()) {
+    if (!getTrayOperationExplained()) {
       showDialogSync({
         title: 'Closing Filecoin Station',
         message: 'Station will continue running in the background.'
       })
-      setTrayOperationDialogShown()
+      setTrayOperationExplained()
     }
     // Hide the window instead of closing it, so that the UI lives on and
     // Plausible doesn't think the app was exited.

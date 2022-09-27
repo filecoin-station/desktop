@@ -5,11 +5,11 @@ const configStore = new Store()
 
 const ConfigKeys = {
   OnboardingCompleted: 'station.onboardingCompleted',
-  TrayOperationDialogShown: 'station.trayOperationDialogShown'
+  TrayOperationExplained: 'station.TrayOperationExplained'
 }
 
 let OnboardingCompleted = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.OnboardingCompleted))
-let TrayOperationDialogShown = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.TrayOperationDialogShown))
+let TrayOperationExplained = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.TrayOperationExplained))
 
 /**
  * @returns {boolean}
@@ -29,21 +29,21 @@ function setOnboardingCompleted () {
 /**
  * @returns {boolean}
  */
-function getTrayOperationDialogShown () {
-  return !!TrayOperationDialogShown
+function getTrayOperationExplained () {
+  return !!TrayOperationExplained
 }
 
 /**
  *
  */
-function setTrayOperationDialogShown () {
-  TrayOperationDialogShown = true
-  configStore.set(ConfigKeys.TrayOperationDialogShown, TrayOperationDialogShown)
+function setTrayOperationExplained () {
+  TrayOperationExplained = true
+  configStore.set(ConfigKeys.TrayOperationExplained, TrayOperationExplained)
 }
 
 module.exports = {
   getOnboardingCompleted,
   setOnboardingCompleted,
-  getTrayOperationDialogShown,
-  setTrayOperationDialogShown
+  getTrayOperationExplained,
+  setTrayOperationExplained
 }
