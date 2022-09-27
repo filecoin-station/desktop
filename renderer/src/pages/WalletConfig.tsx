@@ -23,8 +23,7 @@ const WalletConfig = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    if (filAddress && filAddress !== '') {
-      window.electron.saturnNode.start()
+    if (filAddress) {
       navigate('/dashboard', { replace: true })
     }
   }, [filAddress, navigate])

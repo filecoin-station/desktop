@@ -51,6 +51,22 @@ contextBridge.exposeInMainWorld('electron', {
     getFilAddress: () => ipcRenderer.invoke('station:getFilAddress'),
     setFilAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('station:setFilAddress', address),
     getOnboardingCompleted: () => ipcRenderer.invoke('station:getOnboardingCompleted'),
-    setOnboardingCompleted: () => ipcRenderer.invoke('station:setOnboardingCompleted')
+    setOnboardingCompleted: () => ipcRenderer.invoke('station:setOnboardingCompleted'),
+    getUserConsent: () => ipcRenderer.invoke('station:getUserConsent'),
+    setUserConsent: (/** @type {boolean} */ consent) => ipcRenderer.invoke('station:setUserConsent', consent)
+  },
+  stationEvents: {
+    onActivityLogged: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('activity-log', callback)
+      return () => ipcRenderer.removeListener('activity-log', callback)
+    },
+    onJobProcessed: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('jobs-counter', callback)
+      return () => ipcRenderer.removeListener('jobs-counter', callback)
+    },
+    onEarningsChanged: (/** @type {() => Function} */ callback) => {
+      ipcRenderer.on('earnings-counter', callback)
+      return () => ipcRenderer.removeListener('earnings-counter', callback)
+    }
   }
 })
