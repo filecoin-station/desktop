@@ -8,11 +8,12 @@ import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 import { ActivityLog } from './components/ActivityLog'
 import Sentry from './components/Sentry'
 import Plausible from './components/Plausible'
+import { HelmetProvider } from 'react-helmet-async'
 
 const App = ():JSX.Element => {
   useEffect(() => { document.title = 'Filecoin Station' })
   return (
-    <>
+    <HelmetProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Onboarding />} />
@@ -30,7 +31,7 @@ const App = ():JSX.Element => {
           </Route>
         </Routes>
       </Router>
-    </>
+    </HelmetProvider>
   )
 }
 
