@@ -7,17 +7,10 @@ import { BrowserRouter } from 'react-router-dom'
 
 const mockedUsedNavigate = vi.fn()
 
-vi.mock('react-router-dom', async () => {
-  const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-  return {
-    ...router,
-    useNavigate: () => mockedUsedNavigate
-  }
-})
-
 describe('Welcome page test', () => {
   describe('User has not completed the onboarding', () => {
     beforeAll(() => {
+      vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
@@ -25,7 +18,16 @@ describe('Welcome page test', () => {
           getFilAddress: () => Promise.resolve(undefined)
         }
       })
+
+      vi.mock('react-router-dom', async () => {
+        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
+        return {
+          ...router,
+          useNavigate: () => mockedUsedNavigate
+        }
+      })
     })
+
     beforeEach(() => {
       render(<BrowserRouter> <Onboarding /></BrowserRouter >)
     })
@@ -63,9 +65,20 @@ describe('Welcome page test', () => {
 
   describe('User has completed the onboarding previously', () => {
     beforeAll(() => {
+      vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
+          setOnboardingCompleted: () => Promise.resolve(undefined),
+          getOnboardingCompleted: (status: boolean) => Promise.resolve(true),
+          getFilAddress: () => Promise.resolve(undefined)
+        }
+      })
+
+      vi.mock('react-router-dom', async () => {
+        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
+        return {
+          ...router,
+          useNavigate: () => mockedUsedNavigate
         }
       })
     })
@@ -82,10 +95,12 @@ describe('Welcome page test', () => {
 
   describe('User has completed the onboarding and set up wallet previously', () => {
     beforeAll(() => {
+      vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
-          getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
+          setOnboardingCompleted: () => Promise.resolve(undefined),
+          getOnboardingCompleted: (status: boolean) => Promise.resolve(false),
+          getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
         }
       })
     })

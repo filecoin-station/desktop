@@ -35,6 +35,7 @@ describe('Dashboard page', () => {
     })
 
     beforeAll(() => {
+      vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
           getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
@@ -102,6 +103,7 @@ describe('Dashboard page', () => {
     const onJobProcessed = vi.fn((callback) => () => ({}))
 
     beforeAll(() => {
+      vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
           getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
