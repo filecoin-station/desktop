@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
-import { useEffect } from 'react'
 import Onboarding from './pages/Onboarding'
 import WalletConfig from './pages/WalletConfig'
 import Saturn from './Saturn'
