@@ -54,17 +54,25 @@ contextBridge.exposeInMainWorld('electron', {
     setOnboardingCompleted: () => ipcRenderer.invoke('station:setOnboardingCompleted')
   },
   stationEvents: {
-    onActivityLogged: (/** @type {() => Function} */ callback) => {
-      ipcRenderer.on('activity-log', callback)
-      return () => ipcRenderer.removeListener('activity-log', callback)
+    onActivityLogged: (/** @type {(value: import('./typings').Activity) => void} */ callback) => {
+      /** @type {(event: import('electron').IpcRendererEvent, ...args: any[]) => void} */
+      const listener = (_event, activities) => callback(activities)
+      ipcRenderer.on('station:activity-logged', listener)
+      return () => ipcRenderer.removeListener('station:activity-logged', callback)
     },
-    onJobProcessed: (/** @type {() => Function} */ callback) => {
-      ipcRenderer.on('jobs-counter', callback)
-      return () => ipcRenderer.removeListener('jobs-counter', callback)
+    onJobProcessed: (/** @type {(value: number) => void} */ callback) => {
+      /** @type {(event: import('electron').IpcRendererEvent, ...args: any[]) => void} */
+      const listener = (_event, totalJobCount) => { console.log(_event); return callback(totalJobCount) }
+
+      ipcRenderer.on('station:job-stats-updated', listener)
+      return () => ipcRenderer.removeListener('station:job-stats-updated', callback)
     },
-    onEarningsChanged: (/** @type {() => Function} */ callback) => {
-      ipcRenderer.on('earnings-counter', callback)
-      return () => ipcRenderer.removeListener('earnings-counter', callback)
+    onEarningsChanged: (/** @type {(value: number) => void} */ callback) => {
+      /** @type {(event: import('electron').IpcRendererEvent, ...args: any[]) => void} */
+      const listener = (_event, totalEarnings) => callback(totalEarnings)
+
+      ipcRenderer.on('station:earnings-counter', listener)
+      return () => ipcRenderer.removeListener('station:earnings-counter', callback)
     }
   }
 })
