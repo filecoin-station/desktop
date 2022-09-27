@@ -59,24 +59,17 @@ test.describe.serial('Application launch', async () => {
     electronApp.close()
   })
 
-  test('the window shows the expected title', async () => {
-    // See what you can do with 'window':
-    // https://playwright.dev/docs/api/class-electronapplication#electron-application-first-window
-    // https://playwright.dev/docs/api/class-page
-    expect(await mainWindow.title()).toBe('Filecoin Station')
-  })
-
   test('navigate to wallet input', async () => {
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Accept")')
-    expect(await mainWindow.title()).toBe('Login')
+    expect(new URL(await mainWindow.url()).pathname).toBe('/wallet')
   })
 
   test('enter FIL address', async () => {
     await mainWindow.fill('input.fil-address', 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
     await mainWindow.click('button.submit-address')
-    expect(await mainWindow.title()).toBe('Filecoin Station')
+    expect(new URL(await mainWindow.url()).pathname).toBe('/dashboard')
   })
 
   test('wait for Saturn node to get ready', async () => {

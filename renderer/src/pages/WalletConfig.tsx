@@ -9,8 +9,6 @@ const WalletConfig = (): JSX.Element => {
 
   const [filAddress, setFilAddress] = useState<string | undefined>(undefined)
 
-  useEffect(() => { document.title = 'Login' })
-
   useEffect(() => {
     (async () => {
       setFilAddress(await getFilAddress())

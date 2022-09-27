@@ -8,12 +8,14 @@ import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 import { ActivityLog } from './components/ActivityLog'
 import Sentry from './components/Sentry'
 import Plausible from './components/Plausible'
-import { HelmetProvider } from 'react-helmet-async'
+import { HelmetProvider, Helmet } from 'react-helmet-async'
 
 const App = ():JSX.Element => {
-  useEffect(() => { document.title = 'Filecoin Station' })
   return (
     <HelmetProvider>
+      <Helmet>
+        <title>Filecoin Station</title>
+      </Helmet>
       <Router>
         <Routes>
           <Route path="/" element={<Onboarding />} />
@@ -38,8 +40,6 @@ const App = ():JSX.Element => {
 export default App
 
 function Dashboard (): JSX.Element {
-  useEffect(() => { document.title = 'Filecoin Station' })
-
   return (
     <div style={{ marginTop: '2em' }}>
       <h2>Welcome to Filecoin Station</h2>
