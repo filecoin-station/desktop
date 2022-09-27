@@ -1,18 +1,31 @@
-import { useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import FilAddressForm from '../components/FilAddressForm'
 import BackgroundGraph from './../assets/img/graph.svg'
 import { useNavigate } from 'react-router-dom'
-import { setFilAddress as saveFilAddress } from '../lib/station-config'
+import { getFilAddress, setFilAddress as saveFilAddress } from '../lib/station-config'
 
 const WalletConfig = (): JSX.Element => {
   const navigate = useNavigate()
-  useEffect(() => { document.title = 'Login' })
+
+  const [filAddress, setFilAddress] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    (async () => {
+      setFilAddress(await getFilAddress())
+    })()
+  }, [])
 
   const setStationFilAddress = useCallback(async (address: string | undefined) => {
     await saveFilAddress(address)
-    window.electron.saturnNode.start()
-    navigate('/dashboard', { replace: true })
-  }, [navigate])
+    setFilAddress(address)
+  }, [])
+
+  useEffect(() => {
+    if (filAddress && filAddress !== '') {
+      window.electron.saturnNode.start()
+      navigate('/dashboard', { replace: true })
+    }
+  }, [filAddress, navigate])
 
   return (
     <div className="w-full h-full relative">
