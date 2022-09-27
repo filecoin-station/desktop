@@ -6,18 +6,29 @@ import WalletConfig from './pages/WalletConfig'
 import Saturn from './Saturn'
 import { TotalJobsCompleted } from './components/TotalJobsCompleted'
 import { ActivityLog } from './components/ActivityLog'
+import Sentry from './components/Sentry'
 
 const App = ():JSX.Element => {
   useEffect(() => { document.title = 'Filecoin Station' })
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Onboarding />} />
-        <Route path="/wallet" element={<WalletConfig />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/saturn" element={<Saturn />} />
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Onboarding />} />
+          <Route path="*" element={
+            <>
+              <Sentry />
+              <Routes>
+                <Route path="/wallet" element={<WalletConfig />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/saturn" element={<Saturn />} />
+              </Routes>
+            </>
+          }>
+          </Route>
+        </Routes>
+      </Router>
+    </>
   )
 }
 
