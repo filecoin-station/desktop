@@ -15,9 +15,9 @@ const ActivityLogItem: FC<ActivityEventMessage> = (activity) => {
     <div className="flex py-4 border-b border-grayscale-350 activity-item">
       <div className="w-10">
         {activity.type === 'info' &&
-          <i><JobIcon className="btn-icon-primary-small icon-primary"/></i>}
+          <i><JobIcon className="btn-icon-primary-small icon-primary" /></i>}
         {activity.type === 'error' &&
-          <i><WarningIcon className="btn-icon-primary-small icon-error"/></i>}
+          <i><WarningIcon className="btn-icon-primary-small icon-error" /></i>}
       </div>
       <div className="flex-1 mr-4 text-body-s">
         <p>{activity.message}</p>
@@ -59,11 +59,12 @@ const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
 
   return (
     <div className='activity-log'>
-      {Object.keys(activitiesByDate).map((date) => (
+      {Object.entries(activitiesByDate).map(([date, activities]) => (
         <div key={date} className="mb-12">
-          <DateSeparator date={date}/>
+          <DateSeparator date={date} />
           <div>
-            {activitiesByDate[date].map((activity) => <ActivityLogItem key={activity.id} {...activity} />)}
+            {activities.map((activity) => <ActivityLogItem key={activity.id} id={activity.id}
+            timestamp={activity.timestamp} type={activity.type} source={activity.source} message={activity.message} />)}
           </div>
         </div>
       ))}

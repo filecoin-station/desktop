@@ -23,9 +23,9 @@ const Dashboard = (): JSX.Element => {
   const disconnect = async () => {
     // TODO: move disconnect logic to backend
     await stopSaturnNode()
-    await setFilAddress('').then(
-      () => { setAddress(undefined); navigate('/wallet', { replace: true }) }
-    )
+    await setFilAddress('')
+    setAddress(undefined)
+    navigate('/wallet', { replace: true })
   }
 
   const reload = async (): Promise<void> => {
