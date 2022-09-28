@@ -21,7 +21,6 @@ const Dashboard = (): JSX.Element => {
     ? str.substring(0, 4) + '...' + str.substring(str.length - 4, str.length)
     : ''
   const disconnect = async () => {
-    // TODO: move disconnect logic to backend
     await stopSaturnNode()
     await setFilAddress('')
     setAddress(undefined)
@@ -68,7 +67,7 @@ const Dashboard = (): JSX.Element => {
               <div>
                 <button type="button" className="flex items-center cursor-pointer" title="logout" onClick={disconnect}>
                   <img src={WalletIcon} alt=""/>
-                  <span className="text-right mx-3 fil-address" title="fil address">{shortAddress(address)}</span>
+                  <span className="text-right mx-3 fil-address" title="fil address">{address && shortAddress(address)}</span>
                   <span className="underline text-primary">Change Wallet</span>
                 </button>
               </div>
