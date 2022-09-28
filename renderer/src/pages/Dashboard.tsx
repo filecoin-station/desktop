@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import {
-  getAllActivities, stopSaturnNode, startSaturnNode,
+  getAllActivities, stopSaturnNode,
   setFilAddress, getFilAddress,
   getTotalEarnings, getTotalJobsCompleted
 } from '../lib/station-config'
@@ -49,8 +49,6 @@ const Dashboard = (): JSX.Element => {
 
   useEffect(() => {
     reload()
-    // startSaturnNode()
-    // return stopSaturnNode()
   }, [])
 
   useEffect(() => {
