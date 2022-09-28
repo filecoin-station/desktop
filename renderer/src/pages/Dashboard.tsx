@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import {
   getAllActivities, stopSaturnNode,
   setFilAddress, getFilAddress,
@@ -17,7 +17,7 @@ const Dashboard = (): JSX.Element => {
   const [totalJobs, setTotalJobs] = useState<number>(0)
   const [totalEarnings, setTotalEarnigs] = useState<number>(0)
   const [activities, setActivities] = useState<ActivityEventMessage[]>([])
-  const shortAddress = (str: string | undefined) => str
+  const shortAddress = (str: string) => str
     ? str.substring(0, 4) + '...' + str.substring(str.length - 4, str.length)
     : ''
   const disconnect = async () => {
@@ -35,9 +35,7 @@ const Dashboard = (): JSX.Element => {
     setTotalJobs(await getTotalJobsCompleted())
   }
 
-  useEffect(() => {
-    reload()
-  }, [])
+  useEffect(() => { reload() })
 
   useEffect(() => {
     const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
