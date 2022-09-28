@@ -9,74 +9,6 @@ import Dashboard from '../pages/Dashboard'
 const mockedUsedNavigate = vi.fn()
 
 describe('Dashboard page', () => {
-  describe('Unpopulated', () => {
-    const onActivityLogged = vi.fn((callback) => () => ({}))
-    const onEarningsChanged = vi.fn((callback) => () => ({}))
-    const onJobProcessed = vi.fn((callback) => () => ({}))
-
-    beforeAll(() => {
-      vi.clearAllMocks()
-      vi.mock('../lib/station-config', () => {
-        return {
-          getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
-          getTotalJobsCompleted: () => Promise.resolve(0),
-          getTotalEarnings: () => Promise.resolve(0),
-          startSaturnNode: () => Promise.resolve(undefined),
-          stopSaturnNode: () => Promise.resolve(undefined),
-          getAllActivities: () => Promise.resolve([])
-        }
-      })
-
-      vi.mock('react-router-dom', async () => {
-        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-        return {
-          ...router,
-          useNavigate: () => mockedUsedNavigate
-        }
-      })
-
-      Object.defineProperty(window, 'electron', {
-        writable: true,
-        value: {
-          stationEvents: {
-            onActivityLogged,
-            onEarningsChanged,
-            onJobProcessed
-          }
-        }
-      })
-    })
-
-    beforeEach(() => {
-      vi.clearAllMocks()
-      render(<BrowserRouter><Dashboard /></BrowserRouter>)
-    })
-
-    test('display wallet short address', async () => {
-      expect(document.getElementsByClassName('fil-address').length).toBe(1)
-      await waitFor(() => { expect((screen.getByTitle('fil address')).textContent).toBe('f16m...n4qa') })
-    })
-
-    test('display jobs counter', async () => {
-      await waitFor(() => { expect((screen.getByTitle('total jobs')).textContent).toBe('0') })
-    })
-
-    test('displays earnings counter null', async () => {
-      await waitFor(() => { expect((screen.getByTitle('total earnings')).textContent).toBe('--') })
-    })
-
-    test('displays empty activty log', () => {
-      expect(document.getElementsByClassName('activity-item').length).toBe(0)
-    })
-
-    test('logs out wallet', async () => {
-      act(() => { fireEvent.click(screen.getByTitle('logout')) })
-      await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledTimes(1) })
-      await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true }) })
-    })
-  })
-
   describe('Populated', () => {
     const onActivityLogged = vi.fn((callback) => {
       const value = [{
@@ -170,6 +102,74 @@ describe('Dashboard page', () => {
       // callback is called before as manytimes as tests happening
       await waitFor(() => { expect(onEarningsChanged).toBeCalledTimes(1) }, { timeout: 10 })
       await waitFor(() => { expect((screen.getByTitle('total earnings')).textContent).toBe('200FIL') }, { timeout: 1000 })
+    })
+  })
+
+  describe('Unpopulated', () => {
+    const onActivityLogged = vi.fn((callback) => () => ({}))
+    const onEarningsChanged = vi.fn((callback) => () => ({}))
+    const onJobProcessed = vi.fn((callback) => () => ({}))
+
+    beforeAll(() => {
+      vi.clearAllMocks()
+      vi.mock('../lib/station-config', () => {
+        return {
+          getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+          setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
+          getTotalJobsCompleted: () => Promise.resolve(0),
+          getTotalEarnings: () => Promise.resolve(0),
+          startSaturnNode: () => Promise.resolve(undefined),
+          stopSaturnNode: () => Promise.resolve(undefined),
+          getAllActivities: () => Promise.resolve([])
+        }
+      })
+
+      vi.mock('react-router-dom', async () => {
+        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
+        return {
+          ...router,
+          useNavigate: () => mockedUsedNavigate
+        }
+      })
+
+      Object.defineProperty(window, 'electron', {
+        writable: true,
+        value: {
+          stationEvents: {
+            onActivityLogged,
+            onEarningsChanged,
+            onJobProcessed
+          }
+        }
+      })
+    })
+
+    beforeEach(() => {
+      vi.clearAllMocks()
+      render(<BrowserRouter><Dashboard /></BrowserRouter>)
+    })
+
+    test('display wallet short address', async () => {
+      expect(document.getElementsByClassName('fil-address').length).toBe(1)
+      await waitFor(() => { expect((screen.getByTitle('fil address')).textContent).toBe('f16m...n4qa') })
+    })
+
+    test('display jobs counter', async () => {
+      await waitFor(() => { expect((screen.getByTitle('total jobs')).textContent).toBe('0') })
+    })
+
+    test('displays earnings counter null', async () => {
+      await waitFor(() => { expect((screen.getByTitle('total earnings')).textContent).toBe('--') })
+    })
+
+    test('displays empty activty log', () => {
+      expect(document.getElementsByClassName('activity-item').length).toBe(0)
+    })
+
+    test('logs out wallet', async () => {
+      act(() => { fireEvent.click(screen.getByTitle('logout')) })
+      await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledTimes(1) })
+      await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true }) })
     })
   })
 })
