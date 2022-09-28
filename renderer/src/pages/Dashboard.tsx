@@ -35,33 +35,21 @@ const Dashboard = (): JSX.Element => {
     setTotalJobs(await getTotalJobsCompleted())
   }
 
-  const handleActivity = useCallback((value: ActivityEventMessage[]) => {
-    setActivities(value)
-  }, [])
-
-  const handleEarnings = useCallback((value: number) => {
-    setTotalEarnigs(value)
-  }, [])
-
-  const handleJobs = useCallback((value: number) => {
-    setTotalJobs(value)
-  }, [])
-
   useEffect(() => {
     reload()
   }, [])
 
   useEffect(() => {
-    const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(handleActivity)
-    const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(handleEarnings)
-    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed((count: number) => { handleJobs(count) })
+    const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
+    const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(setTotalEarnigs)
+    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(setTotalJobs)
 
     return () => {
       unsubscribeOnActivityLogged()
       unsubscribeOnEarningsChanged()
       unsubscribeOnJobProcessed()
     }
-  }, [handleActivity, handleEarnings, handleJobs])
+  }, [])
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-grayscale-100">
