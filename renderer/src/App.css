@@ -36,6 +36,8 @@
   .onboarding,
   .activity-item {
     -webkit-app-region: no-drag;
+  }
+  input {
     -webkit-user-select: text;
   }
 
