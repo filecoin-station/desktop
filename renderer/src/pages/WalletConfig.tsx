@@ -17,12 +17,12 @@ const WalletConfig = (): JSX.Element => {
 
   const setStationFilAddress = useCallback(async (address: string | undefined) => {
     await saveFilAddress(address)
+    window.electron.saturnNode.start()
     setFilAddress(address)
   }, [])
 
   useEffect(() => {
     if (filAddress && filAddress !== '') {
-      window.electron.saturnNode.start()
       navigate('/dashboard', { replace: true })
     }
   }, [filAddress, navigate])

@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
 
   @font-face {
@@ -38,10 +36,6 @@
     bg-transparent appearance-none focus:outline-none focus:ring-0 focus:border-black border-grayscale-700;
   }
 
-  .err-msg {
-    @apply text-error text-body-s;
-  }
-
   .btn-primary {
     @apply py-2 px-4 rounded-full font-body text-body-m  text-white
      bg-primary hover:bg-primary-hover visited:bg-primary-click
@@ -58,12 +52,20 @@
     @apply h-4 w-4 m-1
   }
 
-  .btn-icon-primary-small path {
+  .icon-primary path {
     @apply fill-primary group-hover:fill-primary-hover group-visited:fill-primary-click
     group-disabled:fill-grayscale-500
   }
 
-  
+  .icon-warning path {
+    @apply fill-warning group-hover:fill-warning group-visited:fill-warning
+    group-disabled:fill-grayscale-500
+  }
+
+  .icon-error path {
+    @apply fill-error group-hover:fill-error group-visited:fill-error
+    group-disabled:fill-grayscale-500
+  }
 
   .btn-secondary {
     @apply font-body text-body-m
