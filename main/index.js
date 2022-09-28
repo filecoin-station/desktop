@@ -77,6 +77,7 @@ const ctx = {
   },
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
+  saveSaturnModuleLogAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
 }
