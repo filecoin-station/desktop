@@ -13,3 +13,7 @@ export async function getFilAddress (): Promise<string | undefined> {
 export async function setFilAddress (address: string | undefined): Promise<void> {
   return await window.electron.stationConfig.setFilAddress(address)
 }
+
+export async function startSaturnNode (): Promise<void> {
+  return await window.electron.saturnNode.start()
+}

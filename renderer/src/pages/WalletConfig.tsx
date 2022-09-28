@@ -2,14 +2,14 @@ import { useCallback } from 'react'
 import FilAddressForm from '../components/FilAddressForm'
 import BackgroundGraph from './../assets/img/graph.svg'
 import { useNavigate } from 'react-router-dom'
-import { setFilAddress as saveFilAddress } from '../lib/station-config'
+import { startSaturnNode, setFilAddress as saveFilAddress } from '../lib/station-config'
 
 const WalletConfig = (): JSX.Element => {
   const navigate = useNavigate()
 
   const setStationFilAddress = useCallback(async (address: string | undefined) => {
     await saveFilAddress(address)
-    window.electron.saturnNode.start()
+    startSaturnNode()
     navigate('/dashboard', { replace: true })
   }, [navigate])
 
