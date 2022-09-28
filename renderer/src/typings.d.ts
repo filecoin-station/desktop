@@ -33,7 +33,7 @@ export declare global {
         onEarningsChanged: (callback) => () => void
       },
       dialogs: {
-        confirmChangeWalletAddress: () => boolean
+        confirmChangeWalletAddress: () => Promise<boolean>
       }
     }
   }
