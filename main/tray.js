@@ -52,10 +52,10 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
     {
       label: 'Start at login',
       type: 'checkbox',
-      click: function () {
+      click: function (item) {
         const openAtLogin = !app.getLoginItemSettings().openAtLogin
         app.setLoginItemSettings({ openAtLogin })
-        this.checked = openAtLogin
+        item.checked = openAtLogin
       },
       checked: app.getLoginItemSettings().openAtLogin
     },
