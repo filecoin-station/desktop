@@ -20,24 +20,23 @@ const OnboardingPage = (): JSX.Element => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState<boolean|null>()
-  const [filAddress, setFilAddress] = useState<string|null>()
 
   useEffect(() => {
     (async () => {
       await sleep(2000)
-      setFilAddress(await getFilAddress())
+      if (await getFilAddress()) {
+        return navigate('/dashboard', { replace: true })
+      }
       setIsOnboardingCompleted(await getOnboardingCompleted())
       setIsLoading(false)
     })()
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
-    if (isOnboardingCompleted && !filAddress) {
+    if (isOnboardingCompleted) {
       navigate('/wallet', { replace: true })
-    } else if (filAddress) {
-      navigate('/dashboard', { replace: true })
     }
-  }, [filAddress, isOnboardingCompleted, navigate])
+  }, [isOnboardingCompleted, navigate])
 
   const onFinishOnboarding = useCallback(async () => {
     setIsOnboardingCompleted(true)
