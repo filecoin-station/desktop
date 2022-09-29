@@ -93,10 +93,7 @@ test.describe.serial('Application launch', async () => {
     expect(response.headers.get('location')).toMatch(/address\/f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa$/)
   })
 
-  test('renders Saturn WebUI in <iframe>', async () => {
-    await mainWindow.click('a#link-to-saturn')
-    const saturnWebUrl = await mainWindow.evaluate(() => window.electron.saturnNode.getWebUrl())
-    const iframeElem = await mainWindow.waitForSelector('#module-webui')
-    expect(await iframeElem.getAttribute('src'), 'iframe URL').toBe(saturnWebUrl)
+  test('renders Dashboard page', async () => {
+    expect(new URL(await mainWindow.url()).pathname).toBe('/dashboard')
   })
 })

@@ -12,7 +12,14 @@ exports.default = async function ({ packager }) {
   // the packaged version of `package.json`.
   // Learn more in the docs:
   // https://www.electron.build/configuration/configuration.html#Configuration-extraMetadata
-  const extraMetadata = packager.config.extraMetadata
-  extraMetadata.buildTag = process.env.GITHUB_REF_TYPE === 'tag' ? process.env.GITHUB_REF_NAME : null
-  extraMetadata.buildNumber = process.env.GITHUB_RUN_NUMBER ?? '1-dev'
+  Object.assign(packager.config.extraMetadata, getGitHubBuildMetadata())
 }
+
+function getGitHubBuildMetadata () {
+  return {
+    buildTag: process.env.GITHUB_REF_TYPE === 'tag' ? process.env.GITHUB_REF_NAME : null,
+    buildNumber: process.env.GITHUB_RUN_NUMBER ?? '1-dev'
+  }
+}
+
+exports.getGitHubBuildMetadata = getGitHubBuildMetadata
