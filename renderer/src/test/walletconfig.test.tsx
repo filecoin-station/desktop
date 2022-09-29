@@ -9,7 +9,8 @@ import WalletConfig from '../pages/WalletConfig'
 vi.mock('../lib/station-config', () => {
   return {
     getFilAddress: () => Promise.resolve(undefined),
-    setFilAddress: (address: string | undefined) => Promise.resolve(undefined)
+    setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
+    startSaturnNode: () => Promise.resolve(undefined)
   }
 })
 
@@ -20,15 +21,6 @@ vi.mock('react-router-dom', async () => {
   return {
     ...router,
     useNavigate: () => mockedUsedNavigate
-  }
-})
-const start = vi.fn()
-Object.defineProperty(window, 'electron', {
-  writable: true,
-  value: {
-    saturnNode: {
-      start
-    }
   }
 })
 

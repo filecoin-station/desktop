@@ -38,17 +38,18 @@ module.exports = {
       'secondary-accent': '#d5f710',
       'tertiary-accent': '#330867',
       grayscale: {
+        100: '#f0f0f0',
         200: '#f7f7f7',
-        300: '#f1f4f5',
-        400: '#f0f0f0',
-        500: '#ededed',
-        600: '#cccccc',
-        700: '#b3b3b3'
+        300: '#ededed',
+        350: '#ebeaea',
+        400: '#cccccc',
+        500: '#b3b3b3',
+        600: '#666666',
+        700: '#313131'
       },
       success: '#33cc9d',
       error: '#ff4d81',
       warning: '#f76003',
-      'transparent-gray': '#f7f7f7e3',
       transparent: '#ffffff00'
     }
   },
