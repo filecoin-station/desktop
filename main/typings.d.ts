@@ -23,5 +23,6 @@ export interface Context {
   showUI: () => void
   loadWebUIFromDist: import('electron-serve').loadURL
   manualCheckForUpdates: () => void,
-  saveSaturnModuleLogAs: () => Promise<void>
+  saveSaturnModuleLogAs: () => Promise<void>,
+  confirmChangeWalletAddress: () => boolean,
 }

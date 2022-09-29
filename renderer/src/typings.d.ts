@@ -31,6 +31,9 @@ export declare global {
         onActivityLogged: (callback) => () => void
         onJobProcessed: (callback) => () => void
         onEarningsChanged: (callback) => () => void
+      },
+      dialogs: {
+        confirmChangeWalletAddress: () => Promise<boolean>
       }
     }
   }
