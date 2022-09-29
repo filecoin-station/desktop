@@ -1,6 +1,6 @@
 'use strict'
 
-require('./setup-sentry-on-backend')
+require('./setup-sentry')
 
 const { app, dialog } = require('electron')
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
