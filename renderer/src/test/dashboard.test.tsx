@@ -139,6 +139,9 @@ describe('Dashboard page', () => {
             onActivityLogged,
             onEarningsChanged,
             onJobProcessed
+          },
+          dialogs: {
+            confirmChangeWalletAddress: () => Promise.resolve(true)
           }
         }
       })
