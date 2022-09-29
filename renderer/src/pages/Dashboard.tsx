@@ -9,6 +9,7 @@ import ActivityLog from '../components/ActivityLog'
 import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
+import { confirmChangeWalletAddress } from '../lib/dialogs'
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ const Dashboard = (): JSX.Element => {
     ? str.substring(0, 4) + '...' + str.substring(str.length - 4, str.length)
     : ''
   const disconnect = async () => {
+    if (!(await confirmChangeWalletAddress())) return
     await stopSaturnNode()
     await setFilAddress('')
     setAddress(undefined)
@@ -73,12 +75,12 @@ const Dashboard = (): JSX.Element => {
               </div>
             </div>
             <div className="mb-6">
-              <p className="text-body-3xs text-grayscale-700 uppercase">Total Jobs Completed</p>
-              <p className="text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs}</p>
+              <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Jobs Completed</p>
+              <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs}</p>
             </div>
             <div className="mb-6">
-              <p className="text-body-3xs text-grayscale-700 uppercase">Total Earnings (updated daily)</p>
-              <p className="text-header-m font-bold font-number total-earnings" title="total earnings">
+              <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (updated daily)</p>
+              <p className="w-fit text-header-m font-bold font-number total-earnings" title="total earnings">
                 {totalEarnings > 0 ? totalEarnings : '--'}
                 {totalEarnings > 0 ? <span className="text-header-3xs">FIL</span> : ''}
               </p>

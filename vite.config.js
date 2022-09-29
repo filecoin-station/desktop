@@ -20,7 +20,6 @@ export default defineConfig({
   },
   test: {
     globals: true,
-    threads: false,
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
     coverage: {

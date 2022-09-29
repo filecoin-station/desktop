@@ -14,6 +14,7 @@ const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
 const setupUI = require('./ui')
 const setupUpdater = require('./updater')
+const { setup: setupDialogs } = require('./dialog')
 
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
@@ -79,7 +80,8 @@ const ctx = {
   manualCheckForUpdates: () => { throw new Error('never get here') },
   saveSaturnModuleLogAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
-  loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
+  loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') }),
+  confirmChangeWalletAddress: () => { throw new Error('never get here') }
 }
 
 process.on('exit', () => {
@@ -105,6 +107,7 @@ async function run () {
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
 
     await saturnNode.setup(ctx)
+    setupDialogs(ctx)
   } catch (e) {
     handleError(e)
   }
