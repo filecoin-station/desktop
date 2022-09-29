@@ -63,17 +63,18 @@ jobs:
         run:
           node ./build/configure-sentry.js >> $GITHUB_ENV
 
-      - name: Create Sentry release
-        if: matrix.os == 'ubuntu-latest'
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: protocol-labs-ip
-          SENTRY_PROJECT: filecoin-station
-        run: |
-          sentry-cli releases new "${{ env.SENTRY_VERSION }}"
-          sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
-          sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
-          sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
+      # TODO: Figure out permission issues for external contributors
+      # - name: Create Sentry release
+      #   if: matrix.os == 'ubuntu-latest'
+      #   env:
+      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      #     SENTRY_ORG: protocol-labs-ip
+      #     SENTRY_PROJECT: filecoin-station
+      #   run: |
+      #     sentry-cli releases new "${{ env.SENTRY_VERSION }}"
+      #     sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
+      #     sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
+      #     sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
 
       - name: Test backend
         run: npm run test:backend
