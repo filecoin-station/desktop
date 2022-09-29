@@ -3,9 +3,8 @@
 const Sentry = require('@sentry/node')
 const { BUILD_VERSION } = require('./consts')
 
-if (BUILD_VERSION.endsWith('-dev')) {
-  // Disable Sentry integration for dev builds
-} else {
+// Disable Sentry integration for dev builds
+if (!BUILD_VERSION.endsWith('-dev')) {
   // Importing @sentry/tracing patches the global hub for tracing to work.
   require('@sentry/tracing')
 
