@@ -27,6 +27,8 @@ jobs:
 
       - name: Check out Git repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Install Node.js
         uses: actions/setup-node@v2
@@ -50,6 +52,28 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Install Sentry CLI
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          curl -sL https://sentry.io/get-cli/ | bash
+          sentry-cli --version
+
+      - name: Configure SENTRY env vars
+        run:
+          node ./build/configure-sentry.js >> $GITHUB_ENV
+
+      - name: Create Sentry release
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: protocol-labs-ip
+          SENTRY_PROJECT: filecoin-station
+        run: |
+          sentry-cli releases new "${{ env.SENTRY_VERSION }}"
+          sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
+          sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
+          sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
 
       - name: Test backend
         run: npm run test:backend
@@ -148,4 +172,3 @@ jobs:
 
       - name: Show Cache
         run: du -sh ${{ github.workspace }}/.cache/ && ls -l ${{ github.workspace }}/.cache/
-
