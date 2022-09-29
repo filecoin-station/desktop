@@ -5,6 +5,12 @@ const { ipcMain } = require('electron/main')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const store = require('./store')
+const { getFilAddress } = require('./saturn-node')
+const {
+  getTrayOperationExplained,
+  setTrayOperationExplained
+} = require('./station-config')
+const { showDialogSync } = require('./dialog')
 
 /**
  * @param {import('./typings').Context} ctx
@@ -65,13 +71,25 @@ module.exports = async function (ctx) {
     if (app.dock) app.dock.show()
     ui.show()
   }
-  ui.once('ready-to-show', ctx.showUI)
+  // We want the Station to start hidden in the tray.
+  // However, when the user did not complete the onboarding flow,
+  // we need to show the app to ask them to finish the setup process
+  if (!getFilAddress()) {
+    ui.once('ready-to-show', ctx.showUI)
+  }
 
   const stopIpcEventForwarding = setupIpcEventForwarding(ui)
 
   // Don't exit when window is closed (Quit only via Tray icon menu)
   ui.on('close', (event) => {
     event.preventDefault()
+    if (!getTrayOperationExplained()) {
+      showDialogSync({
+        title: 'Closing Filecoin Station',
+        message: 'Station will continue running in the background.'
+      })
+      setTrayOperationExplained()
+    }
     // Hide the window instead of closing it, so that the UI lives on and
     // Plausible doesn't think the app was exited.
     ui.hide()
