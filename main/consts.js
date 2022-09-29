@@ -5,13 +5,15 @@ const os = require('os')
 const packageJson = require('../package.json')
 const path = require('path')
 
+const { getBuildVersion } = require('./build-version')
+
 module.exports = Object.freeze({
   CACHE_HOME: getCacheHome(),
   IS_MAC: os.platform() === 'darwin',
   IS_WIN: os.platform() === 'win32',
   IS_APPIMAGE: typeof process.env.APPIMAGE !== 'undefined',
   STATION_VERSION: packageJson.version,
-  BUILD_VERSION: getBuildVersion(),
+  BUILD_VERSION: getBuildVersion(packageJson),
 
   ELECTRON_VERSION: process.versions.electron
 })
@@ -34,17 +36,4 @@ function getCacheHome () {
     default:
       throw new Error(`Unsupported platform: ${platform}`)
   }
-}
-
-function getBuildVersion () {
-  const { version, buildTag, buildNumber } = packageJson
-  // A release build produced by GitHub Actions CI
-  if (buildTag === `v${version}`) return version
-
-  // A non-release build produced by GitHub Actions CI
-  if (buildNumber) return `${packageJson.version}.${packageJson.buildNumber}`
-
-  // A local build.
-  // TODO: can we use Git commit SHA?
-  return `${packageJson.version}.1-dev`
 }
