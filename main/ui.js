@@ -5,6 +5,7 @@ const { ipcMain } = require('electron/main')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const store = require('./store')
+const { getFilAddress } = require('./saturn-node')
 
 /**
  * @param {import('./typings').Context} ctx
@@ -65,7 +66,9 @@ module.exports = async function (ctx) {
     if (app.dock) app.dock.show()
     ui.show()
   }
-  ui.once('ready-to-show', ctx.showUI)
+  if (!getFilAddress()) {
+    ui.once('ready-to-show', ctx.showUI)
+  }
 
   const stopIpcEventForwarding = setupIpcEventForwarding(ui)
 
