@@ -26,8 +26,8 @@ module.exports = async function (ctx) {
     show: false, // we show it via ready-to-show
     width: store.get('ui.width', dimensions.width < 1440 ? dimensions.width : 1440),
     height: store.get('ui.height', dimensions.height < 900 ? dimensions.height : 900),
-    minWidth: 720,
-    minHeight: 540,
+    minWidth: 1080,
+    minHeight: 740,
     autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
