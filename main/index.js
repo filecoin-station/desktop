@@ -1,5 +1,7 @@
 'use strict'
 
+require('./setup-sentry-on-backend')
+
 const { app, dialog } = require('electron')
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
 const { ActivityLog } = require('./activity-log')
@@ -14,6 +16,7 @@ const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
 const setupUI = require('./ui')
 const setupUpdater = require('./updater')
+const Sentry = require('@sentry/node')
 
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
@@ -27,6 +30,8 @@ console.log('Filecoin Station build version:', BUILD_VERSION)
 process.env.STATION_BUILD_VERSION = BUILD_VERSION
 
 function handleError (/** @type {any} */ err) {
+  Sentry.captureException(err)
+
   ctx.recordActivity({
     source: 'Station',
     type: 'error',
@@ -81,6 +86,18 @@ const ctx = {
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
 }
+
+app.on('before-quit', () => {
+  // Flush pending events immediately
+  // See https://docs.sentry.io/platforms/node/configuration/draining/
+  Sentry.close()
+})
+
+process.on('uncaughtException', err => {
+  Sentry.captureException(err)
+  log.error(err)
+  process.exitCode = 1
+})
 
 process.on('exit', () => {
   ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station stopped.' })
