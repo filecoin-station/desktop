@@ -9,6 +9,7 @@ import ActivityLog from '../components/ActivityLog'
 import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
+import { confirmChangeWalletAddress } from '../lib/dialogs'
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate()
@@ -21,6 +22,7 @@ const Dashboard = (): JSX.Element => {
     ? str.substring(0, 4) + '...' + str.substring(str.length - 4, str.length)
     : ''
   const disconnect = async () => {
+    if (!(await confirmChangeWalletAddress())) return
     await stopSaturnNode()
     await setFilAddress('')
     setAddress(undefined)
