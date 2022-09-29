@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom'
 
 /**
  * This test was intentionally isolated from others on onboarding.test.tsx
- * Mocking the same object multiples times (../lib/station-config and 'react-router-dom') with 
+ * Mocking the same object multiples times (../lib/station-config and 'react-router-dom') with
  * different responses is leading to overwrites which makes tests failing.
  * This is something that deserves a deeper exploration in order to clarify wich is the best structure
  * to use on vitest. In the meantime, this will ensure the feature integrity running on this separate file
