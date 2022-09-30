@@ -1,21 +1,27 @@
 'use strict'
 
 const Store = require('electron-store')
-const electron = require('electron')
-
-const defaults = {
-  // https://github.com/sindresorhus/electron-store#defaults
-  language: (electron.app).getLocale() // useful for i18n
-}
-
-/** @type {import('electron-store').Options<{language: string}>["migrations"]} */
-const migrations = {
-  // https://github.com/sindresorhus/electron-store#migrations
-}
+const { randomUUID } = require('crypto')
 
 const store = new Store({
-  defaults,
-  migrations
+  defaults: {
+    stationID: randomUUID()
+  }
 })
 
-module.exports = store
+const keys = {
+  stationID: 'stationID'
+}
+
+const stationID = /** @type {string} */ (store.get(keys.stationID))
+
+/**
+ * @returns {string}
+ */
+function getStationID () {
+  return stationID
+}
+
+module.exports = {
+  getStationID
+}

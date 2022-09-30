@@ -4,7 +4,6 @@ const { BrowserWindow, app, screen } = require('electron')
 const { ipcMain } = require('electron/main')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
-const store = require('./store')
 const { getFilAddress } = require('./saturn-node')
 const {
   getTrayOperationExplained,
@@ -24,8 +23,8 @@ module.exports = async function (ctx) {
   const ui = new BrowserWindow({
     title: 'Filecoin Station',
     show: false, // we show it via ready-to-show
-    width: store.get('ui.width', dimensions.width < 1440 ? dimensions.width : 1440),
-    height: store.get('ui.height', dimensions.height < 900 ? dimensions.height : 900),
+    width: Math.min(dimensions.width, 1440),
+    height: Math.min(dimensions.height, 900),
     minWidth: 1080,
     minHeight: 740,
     autoHideMenuBar: true,
