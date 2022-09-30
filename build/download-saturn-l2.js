@@ -2,14 +2,16 @@
 
 'use strict'
 
-const SATURN_DIST_TAG = 'v0.4.1'
+const SATURN_DIST_TAG = 'v0.4.2'
 
 const { fetch } = require('undici')
 const gunzip = require('gunzip-maybe')
 const { mkdir } = require('node:fs/promises')
+const { createWriteStream } = require('node:fs')
 const path = require('node:path')
 const { pipeline } = require('node:stream/promises')
 const tar = require('tar-fs')
+const unzip = require('unzip-stream')
 
 const githubToken = process.env.GITHUB_TOKEN
 const authorization = githubToken ? `Bearer ${githubToken}` : undefined
@@ -31,7 +33,7 @@ async function main () {
   await Promise.all(
     assets
       .map(async ({ name, browser_download_url: url }) => {
-        const match = name.match(/^L2-node_\d+\.\d+\.\d+_([A-Za-z0-9]+)_([A-Za-z0-9_]+)\.tar\.gz$/)
+        const match = name.match(/^L2-node_([A-Za-z0-9]+)_([A-Za-z0-9_]+)\.(tar\.gz|zip)$/)
         const platform = match && getPlatform(match[1])
         if (!match || platform !== process.platform) {
           console.log(' ⨯ skipping %s', name)
@@ -58,7 +60,17 @@ async function main () {
         }
 
         const outFile = path.join(outDir, outName)
-        await pipeline(res.body, gunzip(), tar.extract(outFile))
+        if (match[3] === 'tar.gz') {
+          await pipeline(res.body, gunzip(), tar.extract(outDir))
+        } else {
+          const parser = unzip.Parse()
+          parser.on('entry', entry => {
+            if (entry.path === 'L2-node') {
+              entry.pipe(createWriteStream(`${outDir}/l2node-darwin-x64/saturn-L2-node`))
+            }
+          })
+          await pipeline(res.body, parser)
+        }
         console.log(' ✓ %s', outFile)
       })
   )
