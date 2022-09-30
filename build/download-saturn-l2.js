@@ -6,7 +6,7 @@ const SATURN_DIST_TAG = 'v0.4.2'
 
 const { fetch } = require('undici')
 const gunzip = require('gunzip-maybe')
-const { mkdir } = require('node:fs/promises')
+const { mkdir, chmod } = require('node:fs/promises')
 const { createWriteStream } = require('node:fs')
 const path = require('node:path')
 const { pipeline } = require('node:stream/promises')
@@ -63,10 +63,14 @@ async function main () {
         if (match[3] === 'tar.gz') {
           await pipeline(res.body, gunzip(), tar.extract(outDir))
         } else {
+          // Darwin needs to be a zip for notarization
+          await mkdir(path.join(outDir, 'l2node-darwin-x64'))
           const parser = unzip.Parse()
-          parser.on('entry', entry => {
+          parser.on('entry', async entry => {
             if (entry.path === 'L2-node') {
-              entry.pipe(createWriteStream(`${outDir}/l2node-darwin-x64/saturn-L2-node`))
+              const outPath = `${outDir}/l2node-darwin-x64/saturn-L2-node`
+              await pipeline(entry, createWriteStream(outPath))
+              await chmod(outPath, 0o111)
             }
           })
           await pipeline(res.body, parser)
