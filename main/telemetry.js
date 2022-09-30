@@ -9,9 +9,9 @@ const client = new InfluxDB({
 })
 
 const writeClient = client.getWriteApi(
-  'julian.gruber@protocol.ai',
-  'station',
-  'ns'
+  'Filecoin Station', // org
+  'station', // bucket
+  'ns' // precision
 )
 
 setInterval(() => {
