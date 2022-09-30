@@ -89,7 +89,7 @@
   }
 
   .btn-secondary-small {
-    @apply py-2 px-4 rounded-full font-body text-body-xs bg-opacity-0 border border-solid
+    @apply py-2 px-4 rounded-full font-body text-body-s bg-opacity-0 border border-solid
      border-primary border-opacity-25  text-primary
      hover:border-primary-hover hover:border-opacity-25 hover:text-primary-hover
      visited:border-primary-click visited:border-opacity-25 visited:text-primary-click 
@@ -154,4 +154,16 @@
     --tw-translate-y: -1.5rem;
   }
 
+  .tooltip .tooltiptext{
+    @apply w-auto
+     px-3 py-0.5 top-8
+     rounded-full bg-grayscale-600 
+     text-body-2xs text-white text-center 
+     absolute z-10 whitespace-nowrap hidden
+  }
+
+  .tooltip:hover .tooltiptext {
+    @apply block
+    
+  }
 }

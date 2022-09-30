@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, useState } from 'react'
 import { checkAddressString } from '@glif/filecoin-address'
+import { ReactComponent as Warning } from '../assets/img/error.svg'
 
 interface ValidationErrorProps {
   message: string | undefined
@@ -8,7 +9,13 @@ interface ValidationErrorProps {
 const ValidationError: FC<ValidationErrorProps> = ({ message }) => {
   return (
     message
-      ? <span className="text-error text-body-s" title="validation error">{message}</span>
+      ? <div className='flex flex-row items-center'>
+      <Warning width={'12px'} height={'12px'}/>
+      <div className="ml-1 tooltip text-error text-body-s relative cursor-pointer" title="validation error">
+        Invalid wallet address
+        <span className='tooltiptext'>{message}</span>
+      </div>
+    </div>
       : <span className='mb-[0.625rem]'>&nbsp;</span>
   )
 }
