@@ -5,11 +5,11 @@ const configStore = new Store()
 
 const ConfigKeys = {
   OnboardingCompleted: 'station.onboardingCompleted',
-  UserConsent: 'station.userConsent'
+  TrayOperationExplained: 'station.TrayOperationExplained'
 }
 
 let OnboardingCompleted = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.OnboardingCompleted))
-let userConsent = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.UserConsent))
+let TrayOperationExplained = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.TrayOperationExplained))
 
 /**
  * @returns {boolean}
@@ -29,21 +29,21 @@ function setOnboardingCompleted () {
 /**
  * @returns {boolean}
  */
-function getUserConsent () {
-  return !!userConsent
+function getTrayOperationExplained () {
+  return !!TrayOperationExplained
 }
 
 /**
- * @param {boolean } consent
+ *
  */
-function setUserConsent (consent) {
-  userConsent = consent
-  configStore.set(ConfigKeys.UserConsent, userConsent)
+function setTrayOperationExplained () {
+  TrayOperationExplained = true
+  configStore.set(ConfigKeys.TrayOperationExplained, TrayOperationExplained)
 }
 
 module.exports = {
   getOnboardingCompleted,
   setOnboardingCompleted,
-  getUserConsent,
-  setUserConsent
+  getTrayOperationExplained,
+  setTrayOperationExplained
 }

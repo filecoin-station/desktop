@@ -3,6 +3,7 @@
 const { app, dialog } = require('electron')
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
 const { ActivityLog } = require('./activity-log')
+const { BUILD_VERSION } = require('./consts')
 const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
 const log = require('electron-log')
@@ -13,12 +14,18 @@ const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
 const setupUI = require('./ui')
 const setupUpdater = require('./updater')
+const { setup: setupDialogs } = require('./dialog')
 
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
+
+console.log('Filecoin Station build version:', BUILD_VERSION)
+
+// Expose additional metadata for Electron preload script
+process.env.STATION_BUILD_VERSION = BUILD_VERSION
 
 function handleError (/** @type {any} */ err) {
   ctx.recordActivity({
@@ -71,8 +78,10 @@ const ctx = {
   },
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
+  saveSaturnModuleLogAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
-  loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') })
+  loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') }),
+  confirmChangeWalletAddress: () => { throw new Error('never get here') }
 }
 
 process.on('exit', () => {
@@ -98,6 +107,7 @@ async function run () {
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
 
     await saturnNode.setup(ctx)
+    setupDialogs(ctx)
   } catch (e) {
     handleError(e)
   }

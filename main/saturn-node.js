@@ -1,7 +1,7 @@
 'use strict'
 
 const Store = require('electron-store')
-const { app } = require('electron')
+const { app, BrowserWindow, dialog } = require('electron')
 const assert = require('node:assert')
 const consts = require('./consts')
 const execa = require('execa')
@@ -40,6 +40,17 @@ let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.F
 let pollStatsInterval
 
 async function setup (/** @type {Context} */ ctx) {
+  ctx.saveSaturnModuleLogAs = async () => {
+    const opts = { defaultPath: 'saturn.txt' }
+    const win = BrowserWindow.getFocusedWindow()
+    const { filePath } = win
+      ? await dialog.showSaveDialog(win, opts)
+      : await dialog.showSaveDialog(opts)
+    if (filePath) {
+      await fs.writeFile(filePath, getLog())
+    }
+  }
+
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
 
   const stat = await fs.stat(saturnBinaryPath)

@@ -1,39 +1,38 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
-import {
-  Link, Route, Routes
-} from 'react-router-dom'
-import { ActivityLog } from './components/ActivityLog'
-import Saturn from './Saturn'
-import { TotalJobsCompleted } from './components/TotalJobsCompleted'
-import { useEffect } from 'react'
+import Onboarding from './pages/Onboarding'
+import WalletConfig from './pages/WalletConfig'
+import Dashboard from './pages/Dashboard'
+import Sentry from './components/Sentry'
+import Plausible from './components/Plausible'
+import { HelmetProvider, Helmet } from 'react-helmet-async'
+import Saturn from './components/Saturn'
 
-function App (): JSX.Element {
+const App = ():JSX.Element => {
   return (
-    <div className='App'>
-      <header>
-        <h1>Filecoin Station</h1>
-      </header>
-      <main>
+    <HelmetProvider>
+      <Helmet>
+        <title>Filecoin Station</title>
+      </Helmet>
+      <Saturn />
+      <Router>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/saturn' element={<Saturn />} />
+          <Route path="/" element={<Onboarding />} />
+          <Route path="*" element={
+            <>
+              <Sentry />
+              <Plausible />
+              <Routes>
+                <Route path="/wallet" element={<WalletConfig />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Routes>
+            </>
+          }>
+          </Route>
         </Routes>
-      </main>
-    </div>
+      </Router>
+    </HelmetProvider>
   )
 }
 
 export default App
-
-function Home (): JSX.Element {
-  useEffect(() => { document.title = 'Filecoin Station' })
-
-  return (
-    <div style={{ marginTop: '2em' }}>
-      <h2>Welcome to Filecoin Station</h2>
-      <TotalJobsCompleted />
-      <p><Link to='/saturn' id='link-to-saturn'> Saturn &gt;&gt;</Link></p>
-      <ActivityLog />
-    </div>
-  )
-}
