@@ -44,18 +44,13 @@ describe('WalletConfig page test', () => {
   test('display error validation messages', async () => {
     const addressInput = document.getElementsByClassName('fil-address')[0]
 
-    act(() => { fireEvent.change(document.getElementsByClassName('fil-address')[0], { target: { value: '123' } }) })
-    await waitFor(() => { expect(addressInput).toHaveValue('123') })
-    act(() => { fireEvent.click(screen.getByTitle('connect')) })
-    await waitFor(() => { expect(screen.queryByTitle('validation error')).toBeVisible() })
-    await waitFor(() => { expect(screen.getByTitle('validation error').textContent).toBe('Unknown address coinType.') })
     act(() => { fireEvent.change(addressInput, { target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4q' } }) })
     await waitFor(() => { expect(addressInput).toHaveValue('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4q') })
     act(() => { fireEvent.click(screen.getByTitle('connect')) })
-    await waitFor(() => { expect(screen.getByTitle('validation error').textContent).toBe('Invalid secp256k1 address length.') })
+    await waitFor(() => { expect(screen.getByText('Invalid wallet address.')).toBeVisible() })
   })
 
-  test('navigate to saturn when address is valid', async () => {
+  test('navigate to dashboard when address is valid', async () => {
     const addressInput = document.getElementsByClassName('fil-address')[0]
     act(() => { fireEvent.change(addressInput, { target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa' } }) })
     act(() => { fireEvent.click(screen.getByTitle('connect')) })
