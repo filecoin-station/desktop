@@ -1,25 +1,11 @@
 'use strict'
 
-const { InfluxDB, Point } = require('@influxdata/influxdb-client')
+const { Point } = require('@influxdata/influxdb-client')
 const Store = require('electron-store')
 const { getFilAddress } = require('./saturn-node')
 const { createHash } = require('node:crypto')
 const { getStationID } = require('./store')
-
-const client = new InfluxDB({
-  url: 'https://eu-central-1-1.aws.cloud2.influxdata.com',
-  // station-anonymous-write
-  token: '0fZyu9zjDvYlaNfOeuwgnQoUI0VcSzeYDpnOLjQyr30mz-Plqels5JHEwgKRbtCcDJbQmv62VnOV_FsZVxgoow=='
-})
-const writeClient = client.getWriteApi(
-  'julian.gruber@protocol.ai',
-  'station',
-  'ns'
-)
-
-setInterval(() => {
-  writeClient.flush()
-}, 5000)
+const { writeClient } = require('./telemetry')
 
 /** @typedef {import('./typings').ModuleJobStatsMap} ModuleJobStatsMap */
 
