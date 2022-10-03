@@ -10,7 +10,7 @@ const ValidationError: FC<ValidationErrorProps> = ({ message }) => {
   return (
     message
       ? <div className='flex flex-row items-center'>
-          <Warning width={'12px'} height={'12px'}/>
+          <Warning width={'12px'} height={'12px'} fill="#ff4d81"/>
           <span className="ml-1 text-error text-body-s">Invalid wallet address.</span>
         </div>
       : <span className='mb-[0.625rem]'>&nbsp;</span>

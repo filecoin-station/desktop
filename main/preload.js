@@ -46,7 +46,8 @@ contextBridge.exposeInMainWorld('electron', {
 
       ipcRenderer.on('station:earnings-counter', listener)
       return () => ipcRenderer.removeListener('station:earnings-counter', callback)
-    }
+    },
+    onNotification: () => { return () => ({}) }
   },
   dialogs: {
     confirmChangeWalletAddress: () => ipcRenderer.invoke('dialogs:confirmChangeWalletAddress')

@@ -41,6 +41,8 @@ describe('Dashboard page', () => {
       return () => ({})
     })
 
+    const onNotification = vi.fn((callback) => () => ({}))
+
     beforeAll(() => {
       vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
@@ -77,7 +79,8 @@ describe('Dashboard page', () => {
           stationEvents: {
             onActivityLogged,
             onEarningsChanged,
-            onJobProcessed
+            onJobProcessed,
+            onNotification
           }
         }
       })
@@ -109,6 +112,7 @@ describe('Dashboard page', () => {
     const onActivityLogged = vi.fn((callback) => () => ({}))
     const onEarningsChanged = vi.fn((callback) => () => ({}))
     const onJobProcessed = vi.fn((callback) => () => ({}))
+    const onNotification = vi.fn((callback) => () => ({}))
 
     beforeAll(() => {
       vi.clearAllMocks()
@@ -138,7 +142,8 @@ describe('Dashboard page', () => {
           stationEvents: {
             onActivityLogged,
             onEarningsChanged,
-            onJobProcessed
+            onJobProcessed,
+            onNotification
           },
           dialogs: {
             confirmChangeWalletAddress: () => Promise.resolve(true)
