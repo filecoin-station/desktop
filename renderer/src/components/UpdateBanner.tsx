@@ -10,9 +10,7 @@ const UpdateBanner = () => {
       setIsUpdateAvailable(true)
     })
 
-    return () => {
-      unsubscribeUpdateNotification()
-    }
+    return unsubscribeUpdateNotification
   }, [])
 
   if (!isUpdateAvailable) return null
