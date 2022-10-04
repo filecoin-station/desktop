@@ -41,7 +41,7 @@ describe('Dashboard page', () => {
       return () => ({})
     })
 
-    const onNotification = vi.fn((callback) => () => ({}))
+    const onUpdateAvailable = vi.fn((callback) => () => ({}))
 
     beforeAll(() => {
       vi.clearAllMocks()
@@ -80,7 +80,7 @@ describe('Dashboard page', () => {
             onActivityLogged,
             onEarningsChanged,
             onJobProcessed,
-            onNotification
+            onUpdateAvailable
           }
         }
       })
@@ -112,7 +112,7 @@ describe('Dashboard page', () => {
     const onActivityLogged = vi.fn((callback) => () => ({}))
     const onEarningsChanged = vi.fn((callback) => () => ({}))
     const onJobProcessed = vi.fn((callback) => () => ({}))
-    const onNotification = vi.fn((callback) => () => ({}))
+    const onUpdateAvailable = vi.fn((callback) => () => ({}))
 
     beforeAll(() => {
       vi.clearAllMocks()
@@ -143,7 +143,7 @@ describe('Dashboard page', () => {
             onActivityLogged,
             onEarningsChanged,
             onJobProcessed,
-            onNotification
+            onUpdateAvailable
           },
           dialogs: {
             confirmChangeWalletAddress: () => Promise.resolve(true)

@@ -30,7 +30,7 @@ describe('WalletConfig page test', () => {
       writable: true,
       value: {
         stationEvents: {
-          onNotification: vi.fn((callback) => () => ({}))
+          onUpdateAvailable: vi.fn((callback) => () => ({}))
         }
       }
     })

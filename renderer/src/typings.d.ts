@@ -32,7 +32,7 @@ export declare global {
         onActivityLogged: (callback) => () => void
         onJobProcessed: (callback) => () => void
         onEarningsChanged: (callback) => () => void
-        onNotification: (callback) => () => void
+        onUpdateAvailable: (callback) => () => void
       },
       dialogs: {
         confirmChangeWalletAddress: () => Promise<boolean>
@@ -47,8 +47,4 @@ export type ActivityEventMessage = {
   type: string;
   source: string;
   message: string;
-}
-
-export type UpdateNotification = {
-  text: string
 }
