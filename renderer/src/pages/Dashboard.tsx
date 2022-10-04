@@ -4,13 +4,13 @@ import {
   setFilAddress, getFilAddress,
   getTotalEarnings, getTotalJobsCompleted
 } from '../lib/station-config'
-import { ActivityEventMessage, InAppNotification } from '../typings'
+import { ActivityEventMessage } from '../typings'
 import ActivityLog from '../components/ActivityLog'
 import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
 import { confirmChangeWalletAddress } from '../lib/dialogs'
-import Notification from '../components/Notification'
+import UpdateBanner from '../components/UpdateBanner'
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate()
@@ -19,7 +19,6 @@ const Dashboard = (): JSX.Element => {
   const [totalJobs, setTotalJobs] = useState<number>(0)
   const [totalEarnings, setTotalEarnigs] = useState<number>(0)
   const [activities, setActivities] = useState<ActivityEventMessage[]>([])
-  const [notification, setNotification] = useState<InAppNotification|undefined>()
   const shortAddress = (str: string) => str
     ? str.substring(0, 4) + '...' + str.substring(str.length - 4, str.length)
     : ''
@@ -44,31 +43,17 @@ const Dashboard = (): JSX.Element => {
     const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
     const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(setTotalEarnigs)
     const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(setTotalJobs)
-    const unsubscribeInAppNotification = window.electron.stationEvents.onNotification(setNotification)
 
     return () => {
       unsubscribeOnActivityLogged()
       unsubscribeOnEarningsChanged()
       unsubscribeOnJobProcessed()
-      unsubscribeInAppNotification()
     }
   }, [])
 
-  const notificationCallback = async () => {
-    if (notification) {
-      await notification.action()
-      setNotification(undefined)
-    }
-  }
-
   return (
     <div className="h-screen w-screen overflow-hidden bg-grayscale-100">
-      {notification &&
-        <Notification message={notification.text}
-        buttonText={notification.buttonText}
-        callback={notificationCallback} />
-      }
-
+      <UpdateBanner />
       <div className="relative">
         <div className="max-w-[744px] mx-auto">
           <div className="absolute left-0 z-0 top-0 w-full h-[300px]"

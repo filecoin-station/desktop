@@ -3,6 +3,7 @@ import FilAddressForm from '../components/FilAddressForm'
 import BackgroundGraph from './../assets/img/graph.svg'
 import { useNavigate } from 'react-router-dom'
 import { startSaturnNode, setFilAddress as saveFilAddress } from '../lib/station-config'
+import UpdateBanner from '../components/UpdateBanner'
 
 const WalletConfig = (): JSX.Element => {
   const navigate = useNavigate()
@@ -14,7 +15,8 @@ const WalletConfig = (): JSX.Element => {
   }, [navigate])
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full overflow-y-hidden relative">
+      <UpdateBanner />
       <img src={BackgroundGraph} className="absolute -z-2 w-full h-full object-cover" alt="station background" />
       <div className='absolute -z-1 w-full h-full gradient-bg' />
 

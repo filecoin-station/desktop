@@ -25,7 +25,8 @@ export declare global {
         getFilAddress: () => Promise<string | undefined>,
         setFilAddress: (address: string | undefined) => Promise<void>,
         getOnboardingCompleted: () => Promise<boolean>,
-        setOnboardingCompleted: () => Promise<void>
+        setOnboardingCompleted: () => Promise<void>,
+        restartStation(): Promisse<void>,
       },
       stationEvents: {
         onActivityLogged: (callback) => () => void
@@ -48,8 +49,6 @@ export type ActivityEventMessage = {
   message: string;
 }
 
-export type InAppNotification = {
-  text: string,
-  buttonText: string,
-  action: () => void
+export type UpdateNotification = {
+  text: string
 }
