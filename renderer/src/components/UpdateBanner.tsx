@@ -28,9 +28,9 @@ const UpdateBanner = () => {
         <Warning width={'12px'} height={'12px'} fill="none" stroke="#fff" />
         <span className='text-white text-body-xs'> { notification.text } </span>
         </div>
-         <button
+        <button
           className='py-2 px-8 rounded-full font-body text-body-2xs border border-solid
-          text-white hover:bg-grayscale-100 hover:bg-opacity-30 bg-transparent'
+         text-white hover:bg-grayscale-100 hover:bg-opacity-30 bg-transparent'
           onClick={onDismiss}>Restart now</button>
       </div>
     </div>
