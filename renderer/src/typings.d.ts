@@ -11,6 +11,8 @@ export declare global {
       getTotalJobsCompleted(): Promise<number>,
       onJobStatsUpdated (callback: (totalJobCount: number) => void),
 
+      restart(): void,
+
       saturnNode: {
         start: () => Promise<void>,
         stop: () => Promise<void>,

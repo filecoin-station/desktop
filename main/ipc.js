@@ -12,7 +12,8 @@ const ipcMainEvents = Object.freeze({
   JOB_STATS_UPDATED: 'station:job-stats-updated',
 
   UPDATE_CHECK_STARTED: 'station:update-check:started',
-  UPDATE_CHECK_FINISHED: 'station:update-check:finished'
+  UPDATE_CHECK_FINISHED: 'station:update-check:finished',
+  UPDATE_AVAILABLE: 'station:update-available'
 })
 
 function setupIpcMain (/** @type {Context} */ ctx) {
@@ -34,6 +35,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('station:getTotalJobsCompleted', (_event, _args) => ctx.getTotalJobsCompleted())
 
   ipcMain.handle('dialogs:confirmChangeWalletAddress', (_event, _args) => ctx.confirmChangeWalletAddress())
+  ipcMain.handle('station:restart', (_event, _args) => ctx.restart())
 }
 
 module.exports = {

@@ -13,6 +13,11 @@ let updateNotification = null
 
 let checkingManually = false
 
+function quitAndInstall () {
+  beforeQuitCleanup()
+  autoUpdater.quitAndInstall()
+}
+
 function beforeQuitCleanup () {
   BrowserWindow.getAllWindows().forEach(w => w.removeAllListeners('close'))
   app.removeAllListeners('window-all-closed')
@@ -31,7 +36,7 @@ function setup (/** @type {import('./typings').Context} */ _ctx) {
   require('electron').autoUpdater.on('before-quit-for-update', beforeQuitCleanup)
 }
 
-module.exports = async function (/** @type {import('./typings').Context} */ ctx) {
+async function setupUpdater (/** @type {import('./typings').Context} */ ctx) {
   if (['test', 'development'].includes(process.env.NODE_ENV ?? '')) {
     ctx.manualCheckForUpdates = () => {
       showDialogSync({
@@ -86,6 +91,7 @@ function onUpdaterError (err) {
  * @param {import('electron-updater').UpdateInfo} info
  */
 function onUpdateAvailable ({ version /*, releaseNotes */ }) {
+  ipcMain.emit(ipcMainEvents.UPDATE_AVAILABLE)
   log.info(`Update to version ${version} is available, downloading..`)
   autoUpdater.downloadUpdate().then(
     _ => log.info('Update downloaded'),
@@ -139,10 +145,7 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
       buttons: ['Later', 'Install now']
     })
     if (buttonIx === 1) { // install now
-      setImmediate(async () => {
-        beforeQuitCleanup()
-        autoUpdater.quitAndInstall()
-      })
+      setImmediate(quitAndInstall)
     }
   }
 
@@ -158,4 +161,9 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
     updateNotification.on('click', showUpdateDialog)
     updateNotification.show()
   }
+}
+
+module.exports = {
+  setupUpdater,
+  quitAndInstall
 }

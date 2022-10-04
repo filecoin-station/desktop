@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ReactComponent as Warning } from '../assets/img/error.svg'
-import { restartStation } from '../lib/station-config'
+import { restart } from '../lib/station-config'
 
 const UpdateBanner = () => {
   const [isUpdateAvailable, setIsUpdateAvailable] = useState<boolean>(false)
@@ -28,7 +28,7 @@ const UpdateBanner = () => {
         <button
           className='py-2 px-8 rounded-full font-body text-body-2xs border border-solid
          text-white hover:bg-grayscale-100 hover:bg-opacity-30 bg-transparent'
-          onClick={restartStation}>Restart now</button>
+          onClick={restart}>Restart now</button>
       </div>
     </div>
   )

@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('electron', {
 
   getAllActivities: () => ipcRenderer.invoke('station:getAllActivities'),
   getTotalJobsCompleted: () => ipcRenderer.invoke('station:getTotalJobsCompleted'),
+  restart: () => ipcRenderer.invoke('station:restart'),
 
   saturnNode: {
     start: () => ipcRenderer.invoke('saturn:start'),
