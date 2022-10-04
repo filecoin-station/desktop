@@ -23,20 +23,7 @@ function beforeQuitCleanup () {
   app.removeAllListeners('window-all-closed')
 }
 
-function setup (/** @type {import('./typings').Context} */ _ctx) {
-  autoUpdater.autoDownload = false // we download manually in 'update-available'
-
-  autoUpdater.on('error', onUpdaterError)
-  autoUpdater.on('update-available', onUpdateAvailable)
-  autoUpdater.on('update-not-available', onUpdateNotAvailable)
-  autoUpdater.on('update-downloaded', onUpdateDownloaded)
-
-  // built-in updater != electron-updater
-  // https://github.com/electron-userland/electron-builder/pull/6395
-  require('electron').autoUpdater.on('before-quit-for-update', beforeQuitCleanup)
-}
-
-async function setupUpdater (/** @type {import('./typings').Context} */ ctx) {
+async function setup (/** @type {import('./typings').Context} */ ctx) {
   if (['test', 'development'].includes(process.env.NODE_ENV ?? '')) {
     ctx.manualCheckForUpdates = () => {
       showDialogSync({
@@ -49,7 +36,16 @@ async function setupUpdater (/** @type {import('./typings').Context} */ ctx) {
     return
   }
 
-  setup(ctx)
+  autoUpdater.autoDownload = false // we download manually in 'update-available'
+
+  autoUpdater.on('error', onUpdaterError)
+  autoUpdater.on('update-available', onUpdateAvailable)
+  autoUpdater.on('update-not-available', onUpdateNotAvailable)
+  autoUpdater.on('update-downloaded', onUpdateDownloaded)
+
+  // built-in updater != electron-updater
+  // https://github.com/electron-userland/electron-builder/pull/6395
+  require('electron').autoUpdater.on('before-quit-for-update', beforeQuitCleanup)
 
   checkForUpdatesInBackground() // async check on startup
   setInterval(checkForUpdatesInBackground, ms('12h'))
@@ -164,6 +160,6 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
 }
 
 module.exports = {
-  setupUpdater,
+  setup,
   quitAndInstall
 }

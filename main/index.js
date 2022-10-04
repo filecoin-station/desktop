@@ -102,7 +102,7 @@ async function run () {
     await setupTray(ctx)
     await setupAppMenu(ctx)
     await setupUI(ctx)
-    await updater.setupUpdater(ctx)
+    await updater.setup(ctx)
     await setupIpcMain(ctx)
 
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
