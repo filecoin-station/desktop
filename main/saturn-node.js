@@ -137,7 +137,7 @@ async function start (/** @type {Context} */ ctx) {
         pollStatsInterval = setInterval(() => {
           pollStats(ctx)
             .catch(err => console.warn('Cannot fetch Saturn module stats.', err))
-        }, 100)
+        }, 1000)
         resolve()
       }
     }
