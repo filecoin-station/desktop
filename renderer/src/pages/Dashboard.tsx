@@ -36,7 +36,7 @@ const Dashboard = (): JSX.Element => {
     setTotalJobs(await getTotalJobsCompleted())
   }
 
-  useEffect(() => { reload() })
+  useEffect(() => { reload() }, [])
 
   useEffect(() => {
     const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
