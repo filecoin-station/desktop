@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getOnboardingCompleted, setOnboardingCompleted } from '../lib/station-config'
+import { getFilAddress, getOnboardingCompleted, setOnboardingCompleted } from '../lib/station-config'
 import Onboarding from '../components/Onboarding'
 import { ReactComponent as StationLogoLight } from '../assets/img/station-logo-light.svg'
 
@@ -24,10 +24,13 @@ const OnboardingPage = (): JSX.Element => {
   useEffect(() => {
     (async () => {
       await sleep(2000)
+      if (await getFilAddress()) {
+        return navigate('/dashboard', { replace: true })
+      }
       setIsOnboardingCompleted(await getOnboardingCompleted())
       setIsLoading(false)
     })()
-  }, [])
+  }, [navigate])
 
   useEffect(() => {
     if (isOnboardingCompleted) {

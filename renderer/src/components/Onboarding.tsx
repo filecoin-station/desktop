@@ -27,7 +27,7 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
         })}
       </div>
       <button
-        className="btn-secondary-small "
+        className="btn-secondary-small icon-primary"
         onClick={next}>
         <span className="">Continue</span>
       </button>

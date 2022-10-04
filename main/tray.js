@@ -23,9 +23,14 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
   tray = new Tray(icon(on))
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: `Filecoin Station v${STATION_VERSION}`,
+      label: 'Open Station',
+      click: () => ctx.showUI()
+    },
+    {
+      label: 'Learn more…',
       click: () => { shell.openExternal(`https://github.com/filecoin-project/filecoin-station/releases/v${STATION_VERSION}`) }
     },
+    { type: 'separator' },
     {
       id: 'checkForUpdates',
       label: 'Check for Updates...',
@@ -45,17 +50,12 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
     },
     { type: 'separator' },
     {
-      id: 'showUi',
-      label: 'Show UI',
-      click: () => ctx.showUI()
-    },
-    {
       label: 'Start at login',
       type: 'checkbox',
-      click: function () {
+      click: function (item) {
         const openAtLogin = !app.getLoginItemSettings().openAtLogin
         app.setLoginItemSettings({ openAtLogin })
-        this.checked = openAtLogin
+        item.checked = openAtLogin
       },
       checked: app.getLoginItemSettings().openAtLogin
     },

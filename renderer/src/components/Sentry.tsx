@@ -4,6 +4,9 @@ import { BrowserTracing } from '@sentry/tracing'
 
 const SentryComponent = () => {
   useEffect(() => {
+    // Disable Sentry integration for dev builds
+    if (window.electron.stationBuildVersion.endsWith('-dev')) { return }
+
     Sentry.init({
       dsn: 'https://ff9615d8516545158e186d863a06a0f1@o1408530.ingest.sentry.io/6762462',
       integrations: [new BrowserTracing()],

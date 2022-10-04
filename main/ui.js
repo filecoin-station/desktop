@@ -5,6 +5,7 @@ const { ipcMain } = require('electron/main')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const store = require('./store')
+const { getFilAddress } = require('./saturn-node')
 const {
   getTrayOperationExplained,
   setTrayOperationExplained
@@ -25,8 +26,8 @@ module.exports = async function (ctx) {
     show: false, // we show it via ready-to-show
     width: store.get('ui.width', dimensions.width < 1440 ? dimensions.width : 1440),
     height: store.get('ui.height', dimensions.height < 900 ? dimensions.height : 900),
-    minWidth: 720,
-    minHeight: 540,
+    minWidth: 1080,
+    minHeight: 740,
     autoHideMenuBar: true,
     titleBarStyle: 'hiddenInset',
     webPreferences: {
@@ -70,7 +71,12 @@ module.exports = async function (ctx) {
     if (app.dock) app.dock.show()
     ui.show()
   }
-  ui.once('ready-to-show', ctx.showUI)
+  // We want the Station to start hidden in the tray.
+  // However, when the user did not complete the onboarding flow,
+  // we need to show the app to ask them to finish the setup process
+  if (!getFilAddress()) {
+    ui.once('ready-to-show', ctx.showUI)
+  }
 
   const stopIpcEventForwarding = setupIpcEventForwarding(ui)
 
