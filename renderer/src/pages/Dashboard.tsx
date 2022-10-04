@@ -53,7 +53,6 @@ const Dashboard = (): JSX.Element => {
   return (
     <div className="h-screen w-screen overflow-hidden bg-grayscale-100">
       <div className="relative">
-
         <div className="max-w-[744px] mx-auto">
           <div className="absolute left-0 z-0 top-0 w-full h-[300px]"
             style={{
@@ -93,7 +92,7 @@ const Dashboard = (): JSX.Element => {
             maskImage: 'linear-gradient(black, transparent)'
           }}>
         </div>
-        <div tabIndex={0} className="h-screen overflow-y-auto pt-12 relative z-10">
+        <div tabIndex={0} className="h-[calc(100vh_-_300px)] overflow-y-auto pt-12 relative z-10">
           <div className="max-w-[744px] mx-auto overflow-hidden">
             <ActivityLog activities={activities} />
           </div>
