@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { render, waitFor } from '@testing-library/react'
 
 import '../lib/station-config'
-import Welcome from '../pages/Welcome'
+import Redirector from '../pages/Redirector'
 import { BrowserRouter } from 'react-router-dom'
 
 /**
@@ -36,12 +36,12 @@ describe('Welcome page', () => {
 
     beforeEach(() => {
       vi.resetAllMocks()
-      render(<BrowserRouter> <Welcome /></BrowserRouter >)
+      render(<BrowserRouter> <Redirector /></BrowserRouter >)
     })
 
     test('redirects to dashboard directly if user is onboarded', async () => {
       await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }), { timeout: 3000 })
+      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard'), { timeout: 3000 })
     })
   })
 })

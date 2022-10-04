@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
-import Welcome from './pages/Welcome'
+import Welcome from './pages/Redirector'
 import Onboarding from './pages/Onboarding'
 import WalletConfig from './pages/WalletConfig'
 import Dashboard from './pages/Dashboard'

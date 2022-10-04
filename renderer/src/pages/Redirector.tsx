@@ -5,19 +5,19 @@ import { ReactComponent as StationLogoLight } from '../assets/img/station-logo-l
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-const Welcome = (): JSX.Element => {
+const Redirector = (): JSX.Element => {
   const navigate = useNavigate()
 
   useEffect(() => {
     (async () => {
       await sleep(2000)
       if (await getFilAddress()) {
-        return navigate('/dashboard', { replace: true })
+        return navigate('/dashboard')
       }
       if (await getOnboardingCompleted()) {
-        return navigate('/wallet', { replace: true })
+        return navigate('/wallet')
       }
-      return navigate('/onboarding', { replace: true })
+      return navigate('/onboarding')
     })()
   }, [navigate])
 
@@ -30,4 +30,4 @@ const Welcome = (): JSX.Element => {
   )
 }
 
-export default Welcome
+export default Redirector
