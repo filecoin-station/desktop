@@ -13,7 +13,7 @@ const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
 const setupUI = require('./ui')
-const updater = require('./updater')
+const setupUpdater = require('./updater')
 const { setup: setupDialogs } = require('./dialog')
 
 /** @typedef {import('./typings').Activity} Activity */
@@ -82,7 +82,7 @@ const ctx = {
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') }),
   confirmChangeWalletAddress: () => { throw new Error('never get here') },
-  restart: () => { updater.quitAndInstall() }
+  restart: () => { throw new Error('never get here') }
 }
 
 process.on('exit', () => {
@@ -102,7 +102,7 @@ async function run () {
     await setupTray(ctx)
     await setupAppMenu(ctx)
     await setupUI(ctx)
-    await updater.setup(ctx)
+    await setupUpdater(ctx)
     await setupIpcMain(ctx)
 
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })

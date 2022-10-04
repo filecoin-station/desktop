@@ -23,19 +23,7 @@ function beforeQuitCleanup () {
   app.removeAllListeners('window-all-closed')
 }
 
-async function setup (/** @type {import('./typings').Context} */ ctx) {
-  if (['test', 'development'].includes(process.env.NODE_ENV ?? '')) {
-    ctx.manualCheckForUpdates = () => {
-      showDialogSync({
-        title: 'Not available in development',
-        message: 'Yes, you called this function successfully.',
-        type: 'info',
-        buttons: ['Close']
-      })
-    }
-    return
-  }
-
+function setup (/** @type {import('./typings').Context} */ _ctx) {
   autoUpdater.autoDownload = false // we download manually in 'update-available'
 
   autoUpdater.on('error', onUpdaterError)
@@ -46,6 +34,25 @@ async function setup (/** @type {import('./typings').Context} */ ctx) {
   // built-in updater != electron-updater
   // https://github.com/electron-userland/electron-builder/pull/6395
   require('electron').autoUpdater.on('before-quit-for-update', beforeQuitCleanup)
+}
+
+module.exports = async function setupUpdater (/** @type {import('./typings').Context} */ ctx) {
+  if (['test', 'development'].includes(process.env.NODE_ENV ?? '')) {
+    ctx.manualCheckForUpdates = () => {
+      showDialogSync({
+        title: 'Not available in development',
+        message: 'Yes, you called this function successfully.',
+        type: 'info',
+        buttons: ['Close']
+      })
+    }
+    ctx.restart = () => {
+      quitAndInstall()
+    }
+    return
+  }
+
+  setup(ctx)
 
   checkForUpdatesInBackground() // async check on startup
   setInterval(checkForUpdatesInBackground, ms('12h'))
@@ -157,9 +164,4 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
     updateNotification.on('click', showUpdateDialog)
     updateNotification.show()
   }
-}
-
-module.exports = {
-  setup,
-  quitAndInstall
 }
