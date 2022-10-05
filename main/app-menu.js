@@ -9,14 +9,11 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
 
   setupCheckForUpdatesMenuItem(ctx, menu)
 
-  const saveSaturnModuleLogAs = new MenuItem({
+  // File menu
+  menu.items[1].submenu?.insert(0, new MenuItem({
     label: 'Save Saturn Module Log As…',
     click: () => { ctx.saveSaturnModuleLogAs() }
-  })
-  if (process.platform === 'darwin') {
-    // File menu
-    menu.items[1].submenu?.insert(0, saveSaturnModuleLogAs)
-  }
+  }))
 
   Menu.setApplicationMenu(menu)
   setupIpcEventListeners(menu)
@@ -39,11 +36,10 @@ function setupCheckForUpdatesMenuItem (ctx, menu) {
     enabled: false,
     visible: false
   })
-  if (process.platform === 'darwin') {
-    // Filecoin Station menu
-    menu.items[0].submenu?.insert(1, checkForUpdates)
-    menu.items[0].submenu?.insert(2, checkingForUpdates)
-  }
+
+  // Filecoin Station menu
+  menu.items[0].submenu?.insert(1, checkForUpdates)
+  menu.items[0].submenu?.insert(2, checkingForUpdates)
 }
 
 /**
