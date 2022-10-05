@@ -2,7 +2,7 @@
   "name": "filecoin-station",
   "productName": "Filecoin Station",
   "private": true,
-  "version": "0.6.0",
+  "version": "0.7.1",
   "description": "Desktop application for Filecoin Retrieval Markets",
   "main": "main/index.js",
   "scripts": {
@@ -41,8 +41,9 @@
   "dependencies": {
     "@glif/filecoin-address": "^2.0.1",
     "@influxdata/influxdb-client": "^1.29.0",
+    "@sentry/node": "^7.14.0",
     "@sentry/react": "^7.13.0",
-    "@sentry/tracing": "^7.13.0",
+    "@sentry/tracing": "^7.14.1",
     "dayjs": "^1.11.5",
     "electron-log": "^4.4.7",
     "electron-serve": "^1.1.0",
@@ -69,7 +70,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/tar-fs": "^2.0.1",
     "@types/tmp": "^0.2.3",
-    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/experimental-utils": "^5.38.0",
     "@typescript-eslint/parser": "^5.39.0",
     "@vitejs/plugin-react": "^2.1.0",
