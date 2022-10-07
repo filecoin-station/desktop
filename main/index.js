@@ -87,7 +87,7 @@ const ctx = {
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') }),
   confirmChangeWalletAddress: () => { throw new Error('never get here') },
-  restart: () => { throw new Error('never get here') }
+  restartToUpdate: () => { throw new Error('never get here') }
 }
 
 app.on('before-quit', () => {

@@ -46,7 +46,7 @@ module.exports = async function setupUpdater (/** @type {import('./typings').Con
         buttons: ['Close']
       })
     }
-    ctx.restart = () => {
+    ctx.restartToUpdate = () => {
       quitAndInstall()
     }
     return

@@ -11,7 +11,7 @@ export declare global {
       getTotalJobsCompleted(): Promise<number>,
       onJobStatsUpdated (callback: (totalJobCount: number) => void),
 
-      restart(): void,
+      restartToUpdate(): void,
 
       saturnNode: {
         start: () => Promise<void>,
@@ -28,7 +28,6 @@ export declare global {
         setFilAddress: (address: string | undefined) => Promise<void>,
         getOnboardingCompleted: () => Promise<boolean>,
         setOnboardingCompleted: () => Promise<void>,
-        restartStation(): Promisse<void>,
       },
       stationEvents: {
         onActivityLogged: (callback) => () => void

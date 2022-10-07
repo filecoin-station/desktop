@@ -52,6 +52,6 @@ export async function getTotalJobsCompleted (): Promise<number> {
   return await window.electron.getTotalJobsCompleted()
 }
 
-export async function restart (): Promise<void> {
-  return await window.electron.restart()
+export async function restartToUpdate (): Promise<void> {
+  return await window.electron.restartToUpdate()
 }
