@@ -241,9 +241,7 @@ function appendToChildLog (text) {
     .split(/\n/g)
     .map(line => `[${new Date().toLocaleTimeString()}] ${line}`)
   )
-  while (childLog.length > 100) {
-    childLog.shift()
-  }
+  childLog.splice(0, childLog.length - 100)
 }
 
 /**
