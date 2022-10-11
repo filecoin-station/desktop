@@ -3,7 +3,7 @@ import { ReactComponent as Warning } from '../assets/img/error.svg'
 import { openReleaseNotes, restartToUpdate } from '../lib/station-config'
 
 const UpdateBanner = () => {
-  const [isUpdateAvailable, setIsUpdateAvailable] = useState<boolean>(true)
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState<boolean>(false)
 
   useEffect(() => {
     const unsubscribeUpdateNotification = window.electron.stationEvents.onUpdateAvailable(() => {
