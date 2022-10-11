@@ -53,7 +53,8 @@ contextBridge.exposeInMainWorld('electron', {
 
       ipcRenderer.on('station:update-available', listener)
       return () => ipcRenderer.removeListener('station:update-available', callback)
-    }
+    },
+    openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes')
   },
   dialogs: {
     confirmChangeWalletAddress: () => ipcRenderer.invoke('dialogs:confirmChangeWalletAddress')

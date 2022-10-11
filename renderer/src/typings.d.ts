@@ -27,13 +27,14 @@ export declare global {
         getFilAddress: () => Promise<string | undefined>,
         setFilAddress: (address: string | undefined) => Promise<void>,
         getOnboardingCompleted: () => Promise<boolean>,
-        setOnboardingCompleted: () => Promise<void>,
+        setOnboardingCompleted: () => Promise<void>
       },
       stationEvents: {
         onActivityLogged: (callback) => () => void
         onJobProcessed: (callback) => () => void
         onEarningsChanged: (callback) => () => void
         onUpdateAvailable: (callback) => () => void
+        openReleaseNotes: () => void
       },
       dialogs: {
         confirmChangeWalletAddress: () => Promise<boolean>
