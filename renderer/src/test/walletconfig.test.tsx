@@ -31,7 +31,8 @@ describe('WalletConfig page test', () => {
       value: {
         stationEvents: {
           onUpdateAvailable: vi.fn((callback) => () => ({}))
-        }
+        },
+        getUpdaterStatus: vi.fn(() => Promise.resolve(false))
       }
     })
   })
