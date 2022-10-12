@@ -1,6 +1,5 @@
 'use strict'
 
-const { shell } = require('electron')
 const Store = require('electron-store')
 const configStore = new Store()
 
@@ -42,17 +41,9 @@ function setTrayOperationExplained () {
   configStore.set(ConfigKeys.TrayOperationExplained, TrayOperationExplained)
 }
 
-/**
- *
- */
-function openReleaseNotes () {
-  shell.openExternal('https://github.com/filecoin-station/filecoin-station/releases/latest')
-}
-
 module.exports = {
   getOnboardingCompleted,
   setOnboardingCompleted,
   getTrayOperationExplained,
-  setTrayOperationExplained,
-  openReleaseNotes
+  setTrayOperationExplained
 }

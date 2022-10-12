@@ -30,13 +30,15 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('station:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
   ipcMain.handle('station:getOnboardingCompleted', stationConfig.getOnboardingCompleted)
   ipcMain.handle('station:setOnboardingCompleted', (_event) => stationConfig.setOnboardingCompleted())
-  ipcMain.handle('station:openReleaseNotes', (_event) => stationConfig.openReleaseNotes())
 
   ipcMain.handle('station:getAllActivities', (_event, _args) => ctx.getAllActivities())
   ipcMain.handle('station:getTotalJobsCompleted', (_event, _args) => ctx.getTotalJobsCompleted())
 
   ipcMain.handle('dialogs:confirmChangeWalletAddress', (_event, _args) => ctx.confirmChangeWalletAddress())
+
   ipcMain.handle('station:restartToUpdate', (_event, _args) => ctx.restartToUpdate())
+  ipcMain.handle('station:openReleaseNotes', (_event) => ctx.openReleaseNotes())
+  ipcMain.handle('station:getUpdaterStatus', (_events, _args) => ctx.getUpdaterStatus())
 }
 
 module.exports = {

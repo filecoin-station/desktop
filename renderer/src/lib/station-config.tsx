@@ -57,5 +57,5 @@ export async function restartToUpdate (): Promise<void> {
 }
 
 export function openReleaseNotes (): void {
-  return window.electron.stationEvents.openReleaseNotes()
+  return window.electron.openReleaseNotes()
 }

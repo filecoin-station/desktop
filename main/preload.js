@@ -10,7 +10,10 @@ contextBridge.exposeInMainWorld('electron', {
 
   getAllActivities: () => ipcRenderer.invoke('station:getAllActivities'),
   getTotalJobsCompleted: () => ipcRenderer.invoke('station:getTotalJobsCompleted'),
+
+  getUpdaterStatus: () => ipcRenderer.invoke('station:getUpdaterStatus'),
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
+  openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
 
   saturnNode: {
     start: () => ipcRenderer.invoke('saturn:start'),
@@ -53,8 +56,7 @@ contextBridge.exposeInMainWorld('electron', {
 
       ipcRenderer.on('station:update-available', listener)
       return () => ipcRenderer.removeListener('station:update-available', callback)
-    },
-    openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes')
+    }
   },
   dialogs: {
     confirmChangeWalletAddress: () => ipcRenderer.invoke('dialogs:confirmChangeWalletAddress')

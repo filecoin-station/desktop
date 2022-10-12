@@ -11,6 +11,8 @@ export declare global {
       getTotalJobsCompleted(): Promise<number>,
       onJobStatsUpdated (callback: (totalJobCount: number) => void),
 
+      getUpdaterStatus(): Promise<{updateAvailable: boolean}>,
+      openReleaseNotes(): void,
       restartToUpdate(): void,
 
       saturnNode: {
@@ -33,8 +35,7 @@ export declare global {
         onActivityLogged: (callback) => () => void
         onJobProcessed: (callback) => () => void
         onEarningsChanged: (callback) => () => void
-        onUpdateAvailable: (callback) => () => void
-        openReleaseNotes: () => void
+        onUpdateAvailable: (callback: () => void) => () => void
       },
       dialogs: {
         confirmChangeWalletAddress: () => Promise<boolean>

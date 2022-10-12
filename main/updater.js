@@ -13,6 +13,11 @@ let updateNotification = null
 
 let checkingManually = false
 
+let updateAvailable = false
+
+/** @type {string | undefined} */
+let nextVersion
+
 function quitAndInstall () {
   beforeQuitCleanup()
   autoUpdater.quitAndInstall()
@@ -37,6 +42,12 @@ function setup (/** @type {import('./typings').Context} */ _ctx) {
 }
 
 module.exports = async function setupUpdater (/** @type {import('./typings').Context} */ ctx) {
+  ctx.getUpdaterStatus = async function getUpdaterStatus () {
+    return { updateAvailable }
+  }
+
+  ctx.openReleaseNotes = openReleaseNotes
+
   if (['test', 'development'].includes(process.env.NODE_ENV ?? '')) {
     ctx.manualCheckForUpdates = () => {
       showDialogSync({
@@ -46,9 +57,16 @@ module.exports = async function setupUpdater (/** @type {import('./typings').Con
         buttons: ['Close']
       })
     }
+
     ctx.restartToUpdate = () => {
-      quitAndInstall()
+      showDialogSync({
+        title: 'Not available in development',
+        message: 'Yes, you called this function successfully.',
+        type: 'info',
+        buttons: ['Close']
+      })
     }
+
     return
   }
 
@@ -61,6 +79,10 @@ module.exports = async function setupUpdater (/** @type {import('./typings').Con
   ctx.manualCheckForUpdates = () => {
     checkingManually = true
     checkForUpdatesInBackground()
+  }
+
+  ctx.restartToUpdate = () => {
+    quitAndInstall()
   }
 }
 
@@ -94,6 +116,9 @@ function onUpdaterError (err) {
  * @param {import('electron-updater').UpdateInfo} info
  */
 function onUpdateAvailable ({ version /*, releaseNotes */ }) {
+  updateAvailable = true
+  nextVersion = version
+
   ipcMain.emit(ipcMainEvents.UPDATE_AVAILABLE)
   log.info(`Update to version ${version} is available, downloading..`)
   autoUpdater.downloadUpdate().then(
@@ -113,8 +138,13 @@ function onUpdateAvailable ({ version /*, releaseNotes */ }) {
   })
 
   if (buttonIx === 1) {
-    shell.openExternal(`https://github.com/filecoin-project/filecoin-station/releases/v${version}`)
+    openReleaseNotes()
   }
+}
+
+function openReleaseNotes () {
+  const version = nextVersion ? `v${nextVersion}` : 'latest'
+  shell.openExternal(`https://github.com/filecoin-project/filecoin-station/releases/${version}`)
 }
 
 /**
