@@ -73,3 +73,12 @@ support.
 
 After updating to a newer Chromium version, update the compilation target for
 `renderer` files in [vite.config.js](./../vite.config.js).
+
+## Troubleshooting end-to-end tests
+
+Set `DEBUG=pw:browser` to obtain console logs from the electron app under test.
+
+```shell
+$ npm run build
+$ DEBUG=pw:browser npm run test:e2
+```
