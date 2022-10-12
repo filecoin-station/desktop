@@ -5,12 +5,13 @@ import { openReleaseNotes, restartToUpdate } from '../lib/station-config'
 const UpdateBanner = () => {
   const [isUpdateAvailable, setIsUpdateAvailable] = useState<boolean>(false)
 
-  useEffect(() => {
-    window.electron.getUpdaterStatus()
-      .then(({ updateAvailable }) => setIsUpdateAvailable(updateAvailable))
-  })
+  const reload = async () => {
+    const updateStatus = await window.electron.getUpdaterStatus()
+    setIsUpdateAvailable(updateStatus.updateAvailable)
+  }
 
   useEffect(() => {
+    reload()
     const unsubscribeUpdateNotification = window.electron.stationEvents.onUpdateAvailable(() => {
       setIsUpdateAvailable(true)
     })
