@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard'
 
 const mockedUsedNavigate = vi.fn()
+const getUpdaterStatus = vi.fn(() => Promise.resolve(false))
 
 describe('Dashboard page', () => {
   describe('Populated', () => {
@@ -81,7 +82,8 @@ describe('Dashboard page', () => {
             onEarningsChanged,
             onJobProcessed,
             onUpdateAvailable
-          }
+          },
+          getUpdaterStatus
         }
       })
     })
@@ -147,7 +149,8 @@ describe('Dashboard page', () => {
           },
           dialogs: {
             confirmChangeWalletAddress: () => Promise.resolve(true)
-          }
+          },
+          getUpdaterStatus
         }
       })
     })
