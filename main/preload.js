@@ -36,26 +36,24 @@ contextBridge.exposeInMainWorld('electron', {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, activities) => callback(activities)
       ipcRenderer.on('station:activity-logged', listener)
-      return () => ipcRenderer.removeListener('station:activity-logged', callback)
+      return () => ipcRenderer.removeListener('station:activity-logged', listener)
     },
     onJobProcessed: (/** @type {(value: number) => void} */ callback) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, totalJobCount) => callback(totalJobCount)
       ipcRenderer.on('station:job-stats-updated', listener)
-      return () => ipcRenderer.removeListener('station:job-stats-updated', callback)
+      return () => ipcRenderer.removeListener('station:job-stats-updated', listener)
     },
     onEarningsChanged: (/** @type {(value: number) => void} */ callback) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, totalEarnings) => callback(totalEarnings)
-
       ipcRenderer.on('station:earnings-counter', listener)
-      return () => ipcRenderer.removeListener('station:earnings-counter', callback)
+      return () => ipcRenderer.removeListener('station:earnings-counter', listener)
     },
     onUpdateAvailable: (/** @type {() => void} */ callback) => {
       const listener = () => callback()
-
       ipcRenderer.on('station:update-available', listener)
-      return () => ipcRenderer.removeListener('station:update-available', callback)
+      return () => ipcRenderer.removeListener('station:update-available', listener)
     }
   },
   dialogs: {
