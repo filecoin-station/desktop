@@ -28,5 +28,5 @@ export interface Context {
 
   openReleaseNotes: () => void,
   restartToUpdate: () => void,
-  getUpdaterStatus: () => Promise<{updateAvailable: boolean}>,
+  getUpdaterStatus: () => {updateAvailable: boolean}
 }

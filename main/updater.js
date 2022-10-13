@@ -42,7 +42,7 @@ function setup (/** @type {import('./typings').Context} */ _ctx) {
 }
 
 module.exports = async function setupUpdater (/** @type {import('./typings').Context} */ ctx) {
-  ctx.getUpdaterStatus = async function getUpdaterStatus () {
+  ctx.getUpdaterStatus = function getUpdaterStatus () {
     return { updateAvailable }
   }
 
