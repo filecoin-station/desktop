@@ -17,7 +17,7 @@ const UpdateBanner = () => {
     })
 
     return unsubscribeUpdateNotification
-  }, [isUpdateAvailable])
+  }, [])
 
   if (!isUpdateAvailable) return null
   return (
