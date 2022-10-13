@@ -50,7 +50,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
       {page === 0 &&
         <div className={'w-[100%] max-w-[640px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)] onboarding-' + page}>
           <div className='bg-black px-20 py-16  rounded-t-[10px] min-h-[276px] flex'>
-            <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto">Simple and Safe.</h1>
+            <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto">Join the Filecoin Economy.</h1>
           </div>
           <div className='min-h-[372px]'>
             <div className='pb-20 px-20 pt-16 min-h-[250px]'>

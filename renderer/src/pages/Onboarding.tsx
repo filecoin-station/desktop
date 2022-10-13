@@ -11,7 +11,6 @@ const Loading = () => {
     <div className="fixed bg-grayscale-200 w-full h-full top-0 left-0 loading">
       <div className="flex flex-col justify-center items-center h-full w-full">
         <StationLogoLight width="720px" />
-        <span className='text-header-3xs text-grayscale-500'>Join the Filecoin Economy</span>
       </div>
     </div>
   )
