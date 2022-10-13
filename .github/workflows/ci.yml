@@ -63,18 +63,22 @@ jobs:
         run:
           node ./build/configure-sentry.js >> $GITHUB_ENV
 
-      # TODO: Figure out permission issues for external contributors
-      # - name: Create Sentry release
-      #   if: matrix.os == 'ubuntu-latest'
-      #   env:
-      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      #     SENTRY_ORG: protocol-labs-ip
-      #     SENTRY_PROJECT: filecoin-station
-      #   run: |
-      #     sentry-cli releases new "${{ env.SENTRY_VERSION }}"
-      #     sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
-      #     sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
-      #     sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
+      - name: Create Sentry release
+        # Secrets are not passed to the runner when a workflow is triggered from a forked repository.
+        # See https://docs.github.com/en/actions/security-guides/encrypted-secrets#using-encrypted-secrets-in-a-workflow
+        # We skip this step in such case.
+        #
+        # We must use `env` instead of `secrets`, see https://stackoverflow.com/a/70249520/69868
+        if: matrix.os == 'ubuntu-latest' && env.SENTRY_AUTH_TOKEN
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: protocol-labs-ip
+          SENTRY_PROJECT: filecoin-station
+        run: |
+          sentry-cli releases new "${{ env.SENTRY_VERSION }}"
+          sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
+          sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
+          sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
 
       - name: Test backend
         run: npm run test:backend
