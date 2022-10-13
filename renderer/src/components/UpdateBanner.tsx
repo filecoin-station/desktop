@@ -22,22 +22,22 @@ const UpdateBanner = () => {
   if (!isUpdateAvailable) return null
   return (
     <div className="h-14 bg-black top-0 left-0 w-full">
-      <div className="h-full max-w-[744px] mx-auto flex flex-row items-center justify-between">
+      <div className="h-full max-w-[844px] mx-auto flex flex-row items-center justify-between">
         <div className='flex flex-row items-center gap-1'>
-        <Warning width={'12px'} height={'12px'} fill="none" stroke="#fff" />
-        <span className='text-white text-body-xs'>
-          The new version will launch the next time you start Station.
-        </span>
+          <Warning width={'12px'} height={'12px'} fill="none" stroke="#fff" />
+          <span className='text-white text-body-xs'>
+            New version available: the new version will launch when Station next restarts.
+          </span>
         </div>
         <div>
-        <span onClick={openReleaseNotes}
-          className="font-body text-body-xs underline mr-3 text-white hover:text-grayscale-100 cursor-pointer">
+          <span onClick={openReleaseNotes}
+            className="font-body text-body-xs underline mr-3 text-white hover:text-grayscale-100 cursor-pointer">
             Release notes
-        </span>
-        <button
-          className='py-2 px-8 rounded-full font-body text-body-2xs border border-solid
+          </span>
+          <button
+            className='py-2 px-8 rounded-full font-body text-body-2xs border border-solid
          text-white hover:bg-grayscale-100 hover:bg-opacity-30 bg-transparent'
-          onClick={restartToUpdate}>Restart now</button>
+            onClick={restartToUpdate}>Restart now</button>
         </div>
       </div>
     </div>
