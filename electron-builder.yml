@@ -54,7 +54,7 @@ nsis:
   allowToChangeInstallationDirectory: true
 
 linux:
-  artifactName: ${name}-${version}-${os}-${arch}.${ext}
+  artifactName: ${name}-${os}-${arch}.${ext}
   executableName: filecoin-station
   icon: filecoin-station
   category: Network;FileTransfer;P2P
