@@ -21,6 +21,7 @@ asarUnpack: 'main/**/scripts/**/*'
 
 beforePack: 'build/before-pack.js'
 afterSign: 'build/notarize-macos.js'
+artifactName: '${productName}.${ext}'
 
 mac:
   category: public.app-category.utilities
