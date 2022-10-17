@@ -10,6 +10,7 @@ import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
 import { confirmChangeWalletAddress } from '../lib/dialogs'
+import UpdateBanner from '../components/UpdateBanner'
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate()
@@ -52,6 +53,7 @@ const Dashboard = (): JSX.Element => {
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-grayscale-100">
+      <UpdateBanner />
       <div className="relative">
         <div className="max-w-[744px] mx-auto">
           <div className="absolute left-0 z-0 top-0 w-full h-[300px]"

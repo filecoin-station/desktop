@@ -26,7 +26,18 @@ describe('WalletConfig page test', () => {
         useNavigate: () => mockedUsedNavigate
       }
     })
+
+    Object.defineProperty(window, 'electron', {
+      writable: true,
+      value: {
+        stationEvents: {
+          onUpdateAvailable: vi.fn((callback) => () => ({}))
+        },
+        getUpdaterStatus: vi.fn(() => Promise.resolve(false))
+      }
+    })
   })
+
   beforeEach(() => {
     vi.clearAllMocks()
     render(<BrowserRouter><WalletConfig /></BrowserRouter>)

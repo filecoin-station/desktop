@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard'
 
 const mockedUsedNavigate = vi.fn()
+const getUpdaterStatus = vi.fn(() => Promise.resolve(false))
 
 describe('Dashboard page', () => {
   test('Unpopulated', () => {
@@ -112,6 +113,8 @@ describe('Dashboard page', () => {
       return () => ({})
     })
 
+    const onUpdateAvailable = vi.fn((callback) => () => ({}))
+
     beforeAll(() => {
       vi.restoreAllMocks()
       vi.mock('../lib/station-config', () => {
@@ -151,8 +154,10 @@ describe('Dashboard page', () => {
           stationEvents: {
             onActivityLogged,
             onEarningsChanged,
-            onJobProcessed
-          }
+            onJobProcessed,
+            onUpdateAvailable
+          },
+          getUpdaterStatus
         }
       })
       render(<BrowserRouter><Dashboard /></BrowserRouter>)
@@ -169,7 +174,6 @@ describe('Dashboard page', () => {
     })
 
     test('subscribes and listens the earnings counter', async () => {
-      // callback is called before as manytimes as tests happening
       await waitFor(() => { expect(onEarningsChanged).toBeCalledTimes(1) }, { timeout: 10 })
       await waitFor(() => { expect((screen.getByTitle('total earnings')).textContent).toBe('200FIL') }, { timeout: 1000 })
     })
