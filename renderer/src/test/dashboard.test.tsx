@@ -47,8 +47,10 @@ describe('Dashboard page', () => {
           stationEvents: {
             onActivityLogged,
             onEarningsChanged,
-            onJobProcessed
+            onJobProcessed,
+            onUpdateAvailable: vi.fn((callback) => () => ({}))
           },
+          getUpdaterStatus: vi.fn(() => Promise.resolve(false)),
           dialogs: {
             confirmChangeWalletAddress: () => Promise.resolve(true)
           }
