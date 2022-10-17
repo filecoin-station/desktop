@@ -89,7 +89,7 @@ describe('Welcome page test', () => {
       await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1), { timeout: 3000 })
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
-      await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Accept/i)) }))
+      await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/accept/i)) }))
       expect(mockedUsedNavigate).toHaveBeenCalledTimes(1)
       expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true })
     })

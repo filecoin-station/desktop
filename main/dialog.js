@@ -59,9 +59,9 @@ function showDialogSync ({
 function setup (/** @type {Context} */ ctx) {
   ctx.confirmChangeWalletAddress = () => {
     const choice = showDialogSync({
-      title: 'Change Wallet Address',
+      title: 'You\'re about to change the FIL address',
       message: 'Are you sure you want to change your wallet address? This will stop all Station activity.',
-      buttons: ['Change', 'Cancel']
+      buttons: ['Continue', 'Cancel']
     })
     return choice === 0
   }
