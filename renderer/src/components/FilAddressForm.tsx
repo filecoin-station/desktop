@@ -68,7 +68,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ setFilAddress }) => {
       </div>
 
       <div className='flex justify-between items-center gap-3'>
-        <p className="text-body-m">Your FIL rewards will be sent once a day to the address entered.</p>
+        <p className="text-body-m">Your FIL rewards will be sent regularly to the address entered.</p>
         <button
           className="btn-primary submit-address"
           disabled={inputAddr.length === 0}

@@ -80,7 +80,7 @@ const Dashboard = (): JSX.Element => {
               <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs}</p>
             </div>
             <div className="mb-6">
-              <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (updated daily)</p>
+              <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (coming soon)</p>
               <p className="w-fit text-header-m font-bold font-number total-earnings" title="total earnings">
                 {totalEarnings > 0 ? totalEarnings : '--'}
                 {totalEarnings > 0 ? <span className="text-header-3xs">FIL</span> : ''}
