@@ -21,7 +21,7 @@ const WalletConfig = (): JSX.Element => {
       <div className="relative min-w-[840px] max-w-[1440px] h-full mx-auto my-0">
         <div className='md:ml-12 xl:w-full max-w-[980px] h-full flex flex-col justify-center'>
           <h2 className="title text-black mb-24 font-bold text-header-xl">
-            Connect to the Station with your FIL address to start <span className='text-primary'> earning FIL</span>
+            Connect a FIL address to Station to start <span className='text-primary'> earning FIL</span>
           </h2>
           <FilAddressForm setFilAddress={setStationFilAddress} />
         </div>

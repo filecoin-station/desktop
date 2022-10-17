@@ -9,7 +9,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const Loading = () => {
   return (
     <div className="fixed bg-grayscale-200 w-full h-full top-0 left-0 loading">
-      <div className="flex justify-center items-center h-full w-full">
+      <div className="flex flex-col justify-center items-center h-full w-full">
         <StationLogoLight width="720px" />
       </div>
     </div>
