@@ -122,8 +122,14 @@ function setupIpcEventForwarding (ui) {
   }
   ipcMain.on(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
 
+  const onUpdateAvailable = (/** @type {unknown[]} */ ...args) => {
+    ui.webContents.send(ipcMainEvents.UPDATE_AVAILABLE, ...args)
+  }
+  ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, onUpdateAvailable)
+
   return function stopIpcEventForwarding () {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     ipcMain.removeListener(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
+    ipcMain.removeListener(ipcMainEvents.UPDATE_AVAILABLE, onUpdateAvailable)
   }
 }

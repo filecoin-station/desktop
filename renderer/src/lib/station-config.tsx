@@ -51,3 +51,11 @@ export async function getTotalEarnings (): Promise<number> {
 export async function getTotalJobsCompleted (): Promise<number> {
   return await window.electron.getTotalJobsCompleted()
 }
+
+export async function restartToUpdate (): Promise<void> {
+  return await window.electron.restartToUpdate()
+}
+
+export function openReleaseNotes (): void {
+  return window.electron.openReleaseNotes()
+}
