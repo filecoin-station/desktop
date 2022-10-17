@@ -4,9 +4,6 @@ const { app, dialog } = require('electron')
 const log = require('electron-log')
 const path = require('node:path')
 
-const inTest = (process.env.NODE_ENV === 'test')
-const isDev = !app.isPackaged && !inTest
-
 // Override the place where we look for config files when running the end-to-end test suite.
 // We must call this early on, before any of our modules accesses the config store.
 // https://www.npmjs.com/package/electron-store
@@ -37,6 +34,9 @@ const { setup: setupDialogs } = require('./dialog')
 
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
+
+const inTest = (process.env.NODE_ENV === 'test')
+const isDev = !app.isPackaged && !inTest
 
 console.log('Filecoin Station build version:', BUILD_VERSION)
 
