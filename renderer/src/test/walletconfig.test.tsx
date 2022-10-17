@@ -25,6 +25,18 @@ vi.mock('react-router-dom', async () => {
 })
 
 describe('WalletConfig page test', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, 'electron', {
+      writable: true,
+      value: {
+        stationEvents: {
+          onUpdateAvailable: vi.fn((callback) => () => ({}))
+        },
+        getUpdaterStatus: vi.fn(() => Promise.resolve(false))
+      }
+    })
+  })
+
   beforeEach(() => {
     render(<BrowserRouter><WalletConfig /></BrowserRouter>)
   })

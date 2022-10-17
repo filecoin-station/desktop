@@ -25,4 +25,8 @@ export interface Context {
   manualCheckForUpdates: () => void,
   saveSaturnModuleLogAs: () => Promise<void>,
   confirmChangeWalletAddress: () => boolean,
+
+  openReleaseNotes: () => void,
+  restartToUpdate: () => void,
+  getUpdaterStatus: () => {updateAvailable: boolean}
 }
