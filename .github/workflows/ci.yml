@@ -62,6 +62,8 @@ jobs:
       - name: Configure SENTRY env vars
         run:
           node ./build/configure-sentry.js >> $GITHUB_ENV
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Create Sentry release
         # Secrets are not passed to the runner when a workflow is triggered from a forked repository.
