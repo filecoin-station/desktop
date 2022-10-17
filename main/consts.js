@@ -21,8 +21,8 @@ module.exports = Object.freeze({
 // Replace with `app.get('localUserData')` after this PR is landed & released:
 // https://github.com/electron/electron/pull/34337
 function getCacheHome () {
-  if (process.env.NODE_ENV === 'test' && process.env.HOME) {
-    return path.join(process.env.HOME, 'local-user-data')
+  if (process.env.STATION_ROOT) {
+    return path.join(process.env.STATION_ROOT, 'cache')
   }
 
   const platform = os.platform()

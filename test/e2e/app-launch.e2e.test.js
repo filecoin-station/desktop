@@ -24,13 +24,13 @@ test.describe.serial('Application launch', async () => {
     test.slow()
 
     // Launch Electron app against sandbox fake HOME dir
-    const userData = tmp.dirSync({ prefix: 'tmp_home_', unsafeCleanup: true }).name
+    const stationRootDir = tmp.dirSync({ prefix: 'station-', unsafeCleanup: true }).name
     electronApp = await electron.launch({
       args: [path.join(__dirname, '..', '..', 'main', 'index.js')],
       env: {
         ...process.env,
         NODE_ENV: 'test',
-        HOME: userData
+        STATION_ROOT: stationRootDir
       },
       timeout: 30000 * TIMEOUT_MULTIPLIER
     })

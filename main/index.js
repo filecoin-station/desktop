@@ -11,8 +11,8 @@ const isDev = !app.isPackaged && !inTest
 // We must call this early on, before any of our modules accesses the config store.
 // https://www.npmjs.com/package/electron-store
 // https://www.electronjs.org/docs/latest/api/app#appgetpathname
-if (inTest && process.env.HOME) {
-  app.setPath('userData', path.join(process.env.HOME, 'user-data'))
+if (process.env.STATION_ROOT) {
+  app.setPath('userData', path.join(process.env.STATION_ROOT, 'user-data'))
 
   // Set also 'localUserData' after this PR is landed & released:
   // We are using localUserData for Saturn L2 cache
