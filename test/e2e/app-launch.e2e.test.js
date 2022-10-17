@@ -82,7 +82,7 @@ test.describe.serial('Application launch', async () => {
 
       // Return the last observed value. It may be undefined if the promise above has not finished yet
       return (/** @type {any} */(window)).__saturnNodeIsReady
-    }, [], { timeout: 1000 * TIMEOUT_MULTIPLIER })
+    }, [], { timeout: 2000 * TIMEOUT_MULTIPLIER })
   })
 
   test('saturn WebUI is available', async () => {
