@@ -86,7 +86,10 @@ const ctx = {
   saveSaturnModuleLogAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') }),
-  confirmChangeWalletAddress: () => { throw new Error('never get here') }
+  confirmChangeWalletAddress: () => { throw new Error('never get here') },
+  restartToUpdate: () => { throw new Error('never get here') },
+  openReleaseNotes: () => { throw new Error('never get here') },
+  getUpdaterStatus: () => { throw new Error('never get here') }
 }
 
 app.on('before-quit', () => {
