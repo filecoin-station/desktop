@@ -80,5 +80,5 @@ Set `DEBUG=pw:browser` to obtain console logs from the electron app under test.
 
 ```shell
 $ npm run build
-$ DEBUG=pw:browser npm run test:e2
+$ DEBUG=pw:browser npm run test:e2e
 ```
