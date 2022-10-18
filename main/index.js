@@ -11,7 +11,7 @@ const path = require('node:path')
 if (process.env.STATION_ROOT) {
   app.setPath('userData', path.join(process.env.STATION_ROOT, 'user-data'))
 
-  // Set also 'localUserData' after this PR is landed & released:
+  // Also set 'localUserData' after this PR is landed & released:
   // We are using localUserData for Saturn L2 cache
   // https://github.com/electron/electron/pull/34337
 }
