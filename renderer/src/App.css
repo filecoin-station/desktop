@@ -52,7 +52,7 @@
   .btn-primary {
     @apply py-2 px-4 rounded-full font-body text-body-m  text-white
      bg-primary hover:bg-primary-hover visited:bg-primary-click
-     disabled:bg-grayscale-500 disabled:text-grayscale-500
+     disabled:bg-grayscale-500 disabled:text-white
   }
 
   .btn-primary-small {
