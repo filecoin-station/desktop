@@ -3,6 +3,8 @@
 const Store = require('electron-store')
 const configStore = new Store()
 
+console.log('Loading Station configuration from', configStore.path)
+
 const ConfigKeys = {
   OnboardingCompleted: 'station.onboardingCompleted',
   TrayOperationExplained: 'station.TrayOperationExplained'
