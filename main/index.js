@@ -1,19 +1,35 @@
 'use strict'
 
 const { app, dialog } = require('electron')
+const log = require('electron-log')
+const path = require('node:path')
+
+// Override the place where we look for config files when running the end-to-end test suite.
+// We must call this early on, before any of our modules accesses the config store.
+// https://www.npmjs.com/package/electron-store
+// https://www.electronjs.org/docs/latest/api/app#appgetpathname
+if (process.env.STATION_ROOT) {
+  app.setPath('userData', path.join(process.env.STATION_ROOT, 'user-data'))
+
+  // Also set 'localUserData' after this PR is landed & released:
+  // We are using localUserData for Saturn L2 cache
+  // https://github.com/electron/electron/pull/34337
+}
+
+require('./setup-sentry')
+
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
 const { ActivityLog } = require('./activity-log')
 const { BUILD_VERSION } = require('./consts')
 const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
-const log = require('electron-log')
-const path = require('node:path')
 const saturnNode = require('./saturn-node')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
 const setupUI = require('./ui')
 const setupUpdater = require('./updater')
+const Sentry = require('@sentry/node')
 const { setup: setupDialogs } = require('./dialog')
 
 /** @typedef {import('./typings').Activity} Activity */
@@ -28,6 +44,8 @@ console.log('Filecoin Station build version:', BUILD_VERSION)
 process.env.STATION_BUILD_VERSION = BUILD_VERSION
 
 function handleError (/** @type {any} */ err) {
+  Sentry.captureException(err)
+
   ctx.recordActivity({
     source: 'Station',
     type: 'error',
@@ -81,8 +99,23 @@ const ctx = {
   saveSaturnModuleLogAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') }),
-  confirmChangeWalletAddress: () => { throw new Error('never get here') }
+  confirmChangeWalletAddress: () => { throw new Error('never get here') },
+  restartToUpdate: () => { throw new Error('never get here') },
+  openReleaseNotes: () => { throw new Error('never get here') },
+  getUpdaterStatus: () => { throw new Error('never get here') }
 }
+
+app.on('before-quit', () => {
+  // Flush pending events immediately
+  // See https://docs.sentry.io/platforms/node/configuration/draining/
+  Sentry.close()
+})
+
+process.on('uncaughtException', err => {
+  Sentry.captureException(err)
+  log.error(err)
+  process.exitCode = 1
+})
 
 process.on('exit', () => {
   ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station stopped.' })
@@ -99,7 +132,9 @@ async function run () {
   try {
     // Interface
     await setupTray(ctx)
-    await setupAppMenu(ctx)
+    if (process.platform === 'darwin') {
+      await setupAppMenu(ctx)
+    }
     await setupUI(ctx)
     await setupUpdater(ctx)
     await setupIpcMain(ctx)

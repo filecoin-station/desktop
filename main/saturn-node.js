@@ -21,8 +21,8 @@ let childProcess = null
 
 let ready = false
 
-/** @type {string} */
-let childLog = ''
+/** @type {string[]} */
+let childLog = []
 
 /** @type {string | undefined} */
 let webUrl
@@ -86,7 +86,7 @@ async function start (/** @type {Context} */ ctx) {
     return
   }
 
-  childLog = ''
+  childLog = []
   appendToChildLog('Starting Saturn node')
   childProcess = execa(saturnBinaryPath, {
     env: {
@@ -137,7 +137,7 @@ async function start (/** @type {Context} */ ctx) {
         pollStatsInterval = setInterval(() => {
           pollStats(ctx)
             .catch(err => console.warn('Cannot fetch Saturn module stats.', err))
-        }, 100)
+        }, 1000)
         resolve()
       }
     }
@@ -203,7 +203,7 @@ function getWebUrl () {
 }
 
 function getLog () {
-  return childLog
+  return childLog.join('\n')
 }
 
 /**
@@ -236,11 +236,12 @@ function forwardChunkFromSaturn (chunk, log) {
  * @param {string} text
  */
 function appendToChildLog (text) {
-  childLog += text
+  childLog.push(...text
     .trimEnd()
     .split(/\n/g)
-    .map(line => `[${new Date().toLocaleTimeString()}] ${line}\n`)
-    .join('')
+    .map(line => `[${new Date().toLocaleTimeString()}] ${line}`)
+  )
+  childLog.splice(0, childLog.length - 100)
 }
 
 /**

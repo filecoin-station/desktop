@@ -52,7 +52,7 @@
   .btn-primary {
     @apply py-2 px-4 rounded-full font-body text-body-m  text-white
      bg-primary hover:bg-primary-hover visited:bg-primary-click
-     disabled:bg-grayscale-500 disabled:text-grayscale-700;
+     disabled:bg-grayscale-500 disabled:text-white
   }
 
   .btn-primary-small {
@@ -93,7 +93,7 @@
      border-primary border-opacity-25  text-primary
      hover:border-primary-hover hover:border-opacity-25 hover:text-primary-hover
      visited:border-primary-click visited:border-opacity-25 visited:text-primary-click 
-     disabled:border-grayscale-500 disabled:text-grayscale-700;  
+     disabled:border-grayscale-500 disabled:text-grayscale-500;  
   }
 
   .btn-primary-accent {

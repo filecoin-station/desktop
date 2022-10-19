@@ -6,26 +6,40 @@ import '../lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
 import WalletConfig from '../pages/WalletConfig'
 
-vi.mock('../lib/station-config', () => {
-  return {
-    getFilAddress: () => Promise.resolve(undefined),
-    setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
-    startSaturnNode: () => Promise.resolve(undefined)
-  }
-})
-
 const mockedUsedNavigate = vi.fn()
 
-vi.mock('react-router-dom', async () => {
-  const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-  return {
-    ...router,
-    useNavigate: () => mockedUsedNavigate
-  }
-})
-
 describe('WalletConfig page test', () => {
+  beforeAll(() => {
+    vi.restoreAllMocks()
+    vi.mock('../lib/station-config', () => {
+      return {
+        getFilAddress: () => Promise.resolve(undefined),
+        setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
+        startSaturnNode: () => Promise.resolve(undefined)
+      }
+    })
+
+    vi.mock('react-router-dom', async () => {
+      const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
+      return {
+        ...router,
+        useNavigate: () => mockedUsedNavigate
+      }
+    })
+
+    Object.defineProperty(window, 'electron', {
+      writable: true,
+      value: {
+        stationEvents: {
+          onUpdateAvailable: vi.fn((callback) => () => ({}))
+        },
+        getUpdaterStatus: vi.fn(() => Promise.resolve(false))
+      }
+    })
+  })
+
   beforeEach(() => {
+    vi.clearAllMocks()
     render(<BrowserRouter><WalletConfig /></BrowserRouter>)
   })
 
@@ -44,18 +58,13 @@ describe('WalletConfig page test', () => {
   test('display error validation messages', async () => {
     const addressInput = document.getElementsByClassName('fil-address')[0]
 
-    act(() => { fireEvent.change(document.getElementsByClassName('fil-address')[0], { target: { value: '123' } }) })
-    await waitFor(() => { expect(addressInput).toHaveValue('123') })
-    act(() => { fireEvent.click(screen.getByTitle('connect')) })
-    await waitFor(() => { expect(screen.queryByTitle('validation error')).toBeVisible() })
-    await waitFor(() => { expect(screen.getByTitle('validation error').textContent).toBe('Unknown address coinType.') })
     act(() => { fireEvent.change(addressInput, { target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4q' } }) })
     await waitFor(() => { expect(addressInput).toHaveValue('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4q') })
     act(() => { fireEvent.click(screen.getByTitle('connect')) })
-    await waitFor(() => { expect(screen.getByTitle('validation error').textContent).toBe('Invalid secp256k1 address length.') })
+    await waitFor(() => { expect(screen.getByText('Invalid wallet address.')).toBeVisible() })
   })
 
-  test('navigate to saturn when address is valid', async () => {
+  test('navigate to dashboard when address is valid', async () => {
     const addressInput = document.getElementsByClassName('fil-address')[0]
     act(() => { fireEvent.change(addressInput, { target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa' } }) })
     act(() => { fireEvent.click(screen.getByTitle('connect')) })
