@@ -1,15 +1,25 @@
 'use strict'
 
 const Store = require('electron-store')
-const configStore = new Store()
+const { randomUUID } = require('crypto')
 
 const ConfigKeys = {
   OnboardingCompleted: 'station.onboardingCompleted',
-  TrayOperationExplained: 'station.TrayOperationExplained'
+  TrayOperationExplained: 'station.TrayOperationExplained',
+  StationID: 'station.StationID'
 }
 
-let OnboardingCompleted = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.OnboardingCompleted))
-let TrayOperationExplained = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.TrayOperationExplained))
+const configStore = new Store({
+  defaults: {
+    [ConfigKeys.OnboardingCompleted]: false,
+    [ConfigKeys.TrayOperationExplained]: false,
+    [ConfigKeys.StationID]: randomUUID()
+  }
+})
+
+let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted))
+let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained))
+const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID))
 
 /**
  * @returns {boolean}
@@ -41,9 +51,17 @@ function setTrayOperationExplained () {
   configStore.set(ConfigKeys.TrayOperationExplained, TrayOperationExplained)
 }
 
+/**
+ * @returns {string}
+ */
+function getStationID () {
+  return StationID
+}
+
 module.exports = {
   getOnboardingCompleted,
   setOnboardingCompleted,
   getTrayOperationExplained,
-  setTrayOperationExplained
+  setTrayOperationExplained,
+  getStationID
 }
