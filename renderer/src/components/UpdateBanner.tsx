@@ -26,7 +26,7 @@ const UpdateBanner = () => {
         <div className='flex flex-row items-center gap-1'>
           <Warning width={'12px'} height={'12px'} fill="none" stroke="#fff" />
           <span className='text-white text-body-xs'>
-            New version available: the new version will launch when Station next restarts.
+            New version available: Station will update itself on next launch.
           </span>
         </div>
         <div>
