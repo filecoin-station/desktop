@@ -64,7 +64,7 @@ async function main () {
 
         const outFile = path.join(outDir, outName)
         if (match[3] === 'tar.gz') {
-          await pipeline(res.body, gunzip(), tar.extract(outDir))
+          await pipeline(res.body, gunzip(), tar.extract(outFile))
         } else {
           // Darwin needs to be a zip for notarization
           await mkdir(path.join(outDir, 'l2node-darwin-x64'), { recursive: true })
