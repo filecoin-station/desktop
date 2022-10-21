@@ -17,6 +17,8 @@ const configStore = new Store({
   }
 })
 
+console.log('Loading Station configuration from', configStore.path)
+
 let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted))
 let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained))
 const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID))

@@ -13,6 +13,16 @@ let updateNotification = null
 
 let checkingManually = false
 
+let updateAvailable = false
+
+/** @type {string | undefined} */
+let nextVersion
+
+function quitAndInstall () {
+  beforeQuitCleanup()
+  autoUpdater.quitAndInstall()
+}
+
 function beforeQuitCleanup () {
   BrowserWindow.getAllWindows().forEach(w => w.removeAllListeners('close'))
   app.removeAllListeners('window-all-closed')
@@ -31,7 +41,13 @@ function setup (/** @type {import('./typings').Context} */ _ctx) {
   require('electron').autoUpdater.on('before-quit-for-update', beforeQuitCleanup)
 }
 
-module.exports = async function (/** @type {import('./typings').Context} */ ctx) {
+module.exports = async function setupUpdater (/** @type {import('./typings').Context} */ ctx) {
+  ctx.getUpdaterStatus = function getUpdaterStatus () {
+    return { updateAvailable }
+  }
+
+  ctx.openReleaseNotes = openReleaseNotes
+
   if (['test', 'development'].includes(process.env.NODE_ENV ?? '')) {
     ctx.manualCheckForUpdates = () => {
       showDialogSync({
@@ -41,6 +57,16 @@ module.exports = async function (/** @type {import('./typings').Context} */ ctx)
         buttons: ['Close']
       })
     }
+
+    ctx.restartToUpdate = () => {
+      showDialogSync({
+        title: 'Not available in development',
+        message: 'Yes, you called this function successfully.',
+        type: 'info',
+        buttons: ['Close']
+      })
+    }
+
     return
   }
 
@@ -53,6 +79,10 @@ module.exports = async function (/** @type {import('./typings').Context} */ ctx)
   ctx.manualCheckForUpdates = () => {
     checkingManually = true
     checkForUpdatesInBackground()
+  }
+
+  ctx.restartToUpdate = () => {
+    quitAndInstall()
   }
 }
 
@@ -86,6 +116,10 @@ function onUpdaterError (err) {
  * @param {import('electron-updater').UpdateInfo} info
  */
 function onUpdateAvailable ({ version /*, releaseNotes */ }) {
+  updateAvailable = true
+  nextVersion = version
+
+  ipcMain.emit(ipcMainEvents.UPDATE_AVAILABLE)
   log.info(`Update to version ${version} is available, downloading..`)
   autoUpdater.downloadUpdate().then(
     _ => log.info('Update downloaded'),
@@ -104,8 +138,13 @@ function onUpdateAvailable ({ version /*, releaseNotes */ }) {
   })
 
   if (buttonIx === 1) {
-    shell.openExternal(`https://github.com/filecoin-project/filecoin-station/releases/v${version}`)
+    openReleaseNotes()
   }
+}
+
+function openReleaseNotes () {
+  const version = nextVersion ? `v${nextVersion}` : 'latest'
+  shell.openExternal(`https://github.com/filecoin-station/filecoin-station/releases/${version}`)
 }
 
 /**
@@ -139,10 +178,7 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
       buttons: ['Later', 'Install now']
     })
     if (buttonIx === 1) { // install now
-      setImmediate(async () => {
-        beforeQuitCleanup()
-        autoUpdater.quitAndInstall()
-      })
+      setImmediate(quitAndInstall)
     }
   }
 

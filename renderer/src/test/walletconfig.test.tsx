@@ -6,26 +6,40 @@ import '../lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
 import WalletConfig from '../pages/WalletConfig'
 
-vi.mock('../lib/station-config', () => {
-  return {
-    getFilAddress: () => Promise.resolve(undefined),
-    setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
-    startSaturnNode: () => Promise.resolve(undefined)
-  }
-})
-
 const mockedUsedNavigate = vi.fn()
 
-vi.mock('react-router-dom', async () => {
-  const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-  return {
-    ...router,
-    useNavigate: () => mockedUsedNavigate
-  }
-})
-
 describe('WalletConfig page test', () => {
+  beforeAll(() => {
+    vi.restoreAllMocks()
+    vi.mock('../lib/station-config', () => {
+      return {
+        getFilAddress: () => Promise.resolve(undefined),
+        setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
+        startSaturnNode: () => Promise.resolve(undefined)
+      }
+    })
+
+    vi.mock('react-router-dom', async () => {
+      const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
+      return {
+        ...router,
+        useNavigate: () => mockedUsedNavigate
+      }
+    })
+
+    Object.defineProperty(window, 'electron', {
+      writable: true,
+      value: {
+        stationEvents: {
+          onUpdateAvailable: vi.fn((callback) => () => ({}))
+        },
+        getUpdaterStatus: vi.fn(() => Promise.resolve(false))
+      }
+    })
+  })
+
   beforeEach(() => {
+    vi.clearAllMocks()
     render(<BrowserRouter><WalletConfig /></BrowserRouter>)
   })
 

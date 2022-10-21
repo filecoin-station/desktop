@@ -1,15 +1,28 @@
 'use strict'
 
+const { app, dialog } = require('electron')
+const log = require('electron-log')
+const path = require('node:path')
+
+// Override the place where we look for config files when running the end-to-end test suite.
+// We must call this early on, before any of our modules accesses the config store.
+// https://www.npmjs.com/package/electron-store
+// https://www.electronjs.org/docs/latest/api/app#appgetpathname
+if (process.env.STATION_ROOT) {
+  app.setPath('userData', path.join(process.env.STATION_ROOT, 'user-data'))
+
+  // Also set 'localUserData' after this PR is landed & released:
+  // We are using localUserData for Saturn L2 cache
+  // https://github.com/electron/electron/pull/34337
+}
+
 require('./setup-sentry')
 
-const { app, dialog } = require('electron')
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
 const { ActivityLog } = require('./activity-log')
 const { BUILD_VERSION } = require('./consts')
 const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
-const log = require('electron-log')
-const path = require('node:path')
 const saturnNode = require('./saturn-node')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
@@ -86,7 +99,10 @@ const ctx = {
   saveSaturnModuleLogAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') }),
-  confirmChangeWalletAddress: () => { throw new Error('never get here') }
+  confirmChangeWalletAddress: () => { throw new Error('never get here') },
+  restartToUpdate: () => { throw new Error('never get here') },
+  openReleaseNotes: () => { throw new Error('never get here') },
+  getUpdaterStatus: () => { throw new Error('never get here') }
 }
 
 app.on('before-quit', () => {
