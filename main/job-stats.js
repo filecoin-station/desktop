@@ -4,7 +4,7 @@ const Store = require('electron-store')
 const { Point } = require('@influxdata/influxdb-client')
 const { getFilAddress } = require('./saturn-node')
 const { createHash } = require('node:crypto')
-const { getStationID } = require('./store')
+const { getStationID } = require('./station-config')
 const { writeClient } = require('./telemetry')
 
 /** @typedef {import('./typings').ModuleJobStatsMap} ModuleJobStatsMap */
