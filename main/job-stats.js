@@ -2,7 +2,7 @@
 
 const Store = require('electron-store')
 const { Point } = require('@influxdata/influxdb-client')
-const { getFilAddress } = require('./saturn-node')
+const { getFilAddress } = require('./station-config')
 const { createHash } = require('node:crypto')
 const { getStationID } = require('./station-config')
 const { writeClient } = require('./telemetry')

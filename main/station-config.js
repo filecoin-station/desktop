@@ -6,7 +6,8 @@ const { randomUUID } = require('crypto')
 const ConfigKeys = {
   OnboardingCompleted: 'station.onboardingCompleted',
   TrayOperationExplained: 'station.TrayOperationExplained',
-  StationID: 'station.StationID'
+  StationID: 'station.StationID',
+  FilAddress: 'station.filAddress'
 }
 
 const configStore = new Store({
@@ -21,6 +22,7 @@ console.log('Loading Station configuration from', configStore.path)
 
 let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted))
 let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained))
+let FilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID))
 
 /**
@@ -54,6 +56,21 @@ function setTrayOperationExplained () {
 }
 
 /**
+ * @returns {string | undefined}
+ */
+function getFilAddress () {
+  return FilAddress
+}
+
+/**
+ * @param {string | undefined} address
+ */
+function setFilAddress (address) {
+  FilAddress = address
+  configStore.set(ConfigKeys.FilAddress, address)
+}
+
+/**
  * @returns {string}
  */
 function getStationID () {
@@ -65,5 +82,7 @@ module.exports = {
   setOnboardingCompleted,
   getTrayOperationExplained,
   setTrayOperationExplained,
+  getFilAddress,
+  setFilAddress,
   getStationID
 }
