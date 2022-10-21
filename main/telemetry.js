@@ -16,7 +16,7 @@ const writeClient = client.getWriteApi(
 
 setInterval(() => {
   writeClient.flush()
-}, 5000)
+}, 5000).unref()
 
 module.exports = {
   writeClient
