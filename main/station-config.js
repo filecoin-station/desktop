@@ -1,17 +1,23 @@
 'use strict'
 
 const Store = require('electron-store')
-const configStore = new Store()
-
-console.log('Loading Station configuration from', configStore.path)
 
 const ConfigKeys = {
   OnboardingCompleted: 'station.onboardingCompleted',
   TrayOperationExplained: 'station.TrayOperationExplained'
 }
 
-let OnboardingCompleted = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.OnboardingCompleted))
-let TrayOperationExplained = /** @type {boolean | undefined} */ (configStore.get(ConfigKeys.TrayOperationExplained))
+const configStore = new Store({
+  defaults: {
+    [ConfigKeys.OnboardingCompleted]: false,
+    [ConfigKeys.TrayOperationExplained]: false
+  }
+})
+
+console.log('Loading Station configuration from', configStore.path)
+
+let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted))
+let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained))
 
 /**
  * @returns {boolean}
