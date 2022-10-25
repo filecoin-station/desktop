@@ -1,7 +1,7 @@
 'use strict'
 
 const { IS_MAC, STATION_VERSION } = require('./consts')
-const { Menu, Tray, app, ipcMain, shell } = require('electron')
+const { Menu, Tray, app, ipcMain, shell, nativeImage } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 
@@ -10,17 +10,10 @@ const path = require('path')
 // https://www.electronjs.org/docs/faq#my-apps-tray-disappeared-after-a-few-minutes
 let tray = null
 
-const on = 'on'
-// const off = 'off'
-
-function icon (/** @type {'on' | 'off'} */ state) {
-  const dir = path.resolve(path.join(__dirname, '../assets/tray'))
-  if (IS_MAC) return path.join(dir, `${state}-macos.png`)
-  return path.join(dir, `${state}.png`)
-}
-
 module.exports = function (/** @type {import('./typings').Context} */ ctx) {
-  tray = new Tray(icon(on))
+  const image = nativeImage.createFromPath(path.join(__dirname, '../assets/tray/on-macos.png'))
+  image.setTemplateImage(true)
+  tray = new Tray(image)
   const contextMenu = Menu.buildFromTemplate([
     {
       label: 'Open Station',
