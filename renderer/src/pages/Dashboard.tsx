@@ -30,16 +30,15 @@ const Dashboard = (): JSX.Element => {
     navigate('/wallet', { replace: true })
   }
 
-  const reload = async (): Promise<void> => {
-    setAddress(await getFilAddress())
-    setActivities(await getAllActivities())
-    setTotalEarnigs(await getTotalEarnings())
-    setTotalJobs(await getTotalJobsCompleted())
-  }
-
-  useEffect(() => { reload() }, [])
-
   useEffect(() => {
+    const loadStoredInfo = async () => {
+      setAddress(await getFilAddress())
+      setActivities(await getAllActivities())
+      setTotalEarnigs(await getTotalEarnings())
+      setTotalJobs(await getTotalJobsCompleted())
+    }
+    loadStoredInfo()
+
     const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
     const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(setTotalEarnigs)
     const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(setTotalJobs)
