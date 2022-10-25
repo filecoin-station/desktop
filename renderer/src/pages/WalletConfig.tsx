@@ -3,6 +3,7 @@ import FilAddressForm from '../components/FilAddressForm'
 import BackgroundGraph from './../assets/img/graph.svg'
 import { useNavigate } from 'react-router-dom'
 import { startSaturnNode, setFilAddress as saveFilAddress } from '../lib/station-config'
+import UpdateBanner from '../components/UpdateBanner'
 
 const WalletConfig = (): JSX.Element => {
   const navigate = useNavigate()
@@ -14,14 +15,15 @@ const WalletConfig = (): JSX.Element => {
   }, [navigate])
 
   return (
-    <div className="w-full h-full relative">
+    <div className="w-full h-full overflow-y-hidden relative">
+      <UpdateBanner />
       <img src={BackgroundGraph} className="absolute -z-2 w-full h-full object-cover" alt="station background" />
       <div className='absolute -z-1 w-full h-full gradient-bg' />
 
-      <div className="relative max-w-[1440px] h-full mx-auto my-0">
-        <div className='w-[100%] max-w-[980px] h-full flex flex-col justify-center'>
+      <div className="relative min-w-[840px] max-w-[1440px] h-full mx-auto my-0">
+        <div className='md:ml-12 xl:w-full max-w-[980px] h-full flex flex-col justify-center'>
           <h2 className="title text-black mb-24 font-bold text-header-xl">
-            Connect to the Station with your FIL address to start <span className='text-primary'> earning FIL</span>
+            Connect a FIL address to Station to start <span className='text-primary'> earning FIL</span>
           </h2>
           <FilAddressForm setFilAddress={setStationFilAddress} />
         </div>

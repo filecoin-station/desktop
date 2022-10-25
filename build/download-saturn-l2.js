@@ -2,14 +2,19 @@
 
 'use strict'
 
-const SATURN_DIST_TAG = 'v0.4.1'
+const SATURN_DIST_TAG = 'v0.4.2'
 
 const { fetch } = require('undici')
 const gunzip = require('gunzip-maybe')
-const { mkdir } = require('node:fs/promises')
+const { mkdir, chmod } = require('node:fs/promises')
+const { createWriteStream } = require('node:fs')
 const path = require('node:path')
 const { pipeline } = require('node:stream/promises')
 const tar = require('tar-fs')
+const unzip = require('unzip-stream')
+const { once } = require('events')
+
+/** @typedef {import('unzip-stream').Entry} UnzipStreamEntry */
 
 const githubToken = process.env.GITHUB_TOKEN
 const authorization = githubToken ? `Bearer ${githubToken}` : undefined
@@ -31,7 +36,7 @@ async function main () {
   await Promise.all(
     assets
       .map(async ({ name, browser_download_url: url }) => {
-        const match = name.match(/^L2-node_\d+\.\d+\.\d+_([A-Za-z0-9]+)_([A-Za-z0-9_]+)\.tar\.gz$/)
+        const match = name.match(/^L2-node_([A-Za-z0-9]+)_([A-Za-z0-9_]+)\.(tar\.gz|zip)$/)
         const platform = match && getPlatform(match[1])
         if (!match || platform !== process.platform) {
           console.log(' ⨯ skipping %s', name)
@@ -58,7 +63,27 @@ async function main () {
         }
 
         const outFile = path.join(outDir, outName)
-        await pipeline(res.body, gunzip(), tar.extract(outFile))
+        if (match[3] === 'tar.gz') {
+          await pipeline(res.body, gunzip(), tar.extract(outFile))
+        } else {
+          // Darwin needs to be a zip for notarization
+          await mkdir(path.join(outDir, 'l2node-darwin-x64'), { recursive: true })
+          const parser = unzip.Parse()
+          await Promise.all([
+            (async () => {
+              while (true) {
+                const [entry] = /** @type {[UnzipStreamEntry]} */ (await once(parser, 'entry'))
+                if (entry.path === 'L2-node') {
+                  const outPath = `${outDir}/l2node-darwin-x64/saturn-L2-node`
+                  await pipeline(entry, createWriteStream(outPath))
+                  await chmod(outPath, 0o111)
+                  return
+                }
+              }
+            })(),
+            pipeline(res.body, parser)
+          ])
+        }
         console.log(' ✓ %s', outFile)
       })
   )

@@ -1,7 +1,7 @@
 'use strict'
 
 const { IS_MAC, STATION_VERSION } = require('./consts')
-const { Menu, Tray, app, ipcMain, shell, nativeImage } = require('electron')
+const { Menu, Tray, app, ipcMain, nativeImage } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 
@@ -16,12 +16,12 @@ module.exports = function (/** @type {import('./typings').Context} */ ctx) {
   tray = new Tray(image)
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: 'Open Station',
-      click: () => ctx.showUI()
+      label: `Filecoin Station v${STATION_VERSION}`,
+      enabled: false
     },
     {
-      label: 'Learn more…',
-      click: () => { shell.openExternal(`https://github.com/filecoin-project/filecoin-station/releases/v${STATION_VERSION}`) }
+      label: 'Open Station',
+      click: () => ctx.showUI()
     },
     { type: 'separator' },
     {

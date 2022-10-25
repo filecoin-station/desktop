@@ -10,6 +10,7 @@ import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
 import { confirmChangeWalletAddress } from '../lib/dialogs'
+import UpdateBanner from '../components/UpdateBanner'
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate()
@@ -36,7 +37,7 @@ const Dashboard = (): JSX.Element => {
     setTotalJobs(await getTotalJobsCompleted())
   }
 
-  useEffect(() => { reload() })
+  useEffect(() => { reload() }, [])
 
   useEffect(() => {
     const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
@@ -52,8 +53,8 @@ const Dashboard = (): JSX.Element => {
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-grayscale-100">
+      <UpdateBanner />
       <div className="relative">
-
         <div className="max-w-[744px] mx-auto">
           <div className="absolute left-0 z-0 top-0 w-full h-[300px]"
             style={{
@@ -79,7 +80,7 @@ const Dashboard = (): JSX.Element => {
               <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs}</p>
             </div>
             <div className="mb-6">
-              <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (updated daily)</p>
+              <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (coming soon)</p>
               <p className="w-fit text-header-m font-bold font-number total-earnings" title="total earnings">
                 {totalEarnings > 0 ? totalEarnings : '--'}
                 {totalEarnings > 0 ? <span className="text-header-3xs">FIL</span> : ''}
@@ -93,7 +94,7 @@ const Dashboard = (): JSX.Element => {
             maskImage: 'linear-gradient(black, transparent)'
           }}>
         </div>
-        <div tabIndex={0} className="h-screen overflow-y-auto pt-12 relative z-10">
+        <div tabIndex={0} className="h-[calc(100vh_-_300px)] overflow-y-auto pt-12 relative z-10">
           <div className="max-w-[744px] mx-auto overflow-hidden">
             <ActivityLog activities={activities} />
           </div>
