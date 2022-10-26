@@ -20,7 +20,7 @@ const writeClient = client.getWriteApi(
 )
 
 setInterval(() => {
-  writeClient.flush()
+  writeClient.flush().catch(console.error)
 }, 5000).unref()
 
 /**
