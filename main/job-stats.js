@@ -3,9 +3,7 @@
 const Store = require('electron-store')
 const { Point } = require('@influxdata/influxdb-client')
 const { getFilAddress } = require('./station-config')
-const { createHash } = require('node:crypto')
-const { getStationID } = require('./station-config')
-const { writeClient } = require('./telemetry')
+const { writePoint } = require('./telemetry')
 
 /** @typedef {import('./typings').ModuleJobStatsMap} ModuleJobStatsMap */
 
@@ -33,11 +31,9 @@ class JobStats {
     if (filAddress && moduleName in this.#perModuleJobStats) {
       const diff = count - this.#perModuleJobStats[moduleName]
       if (diff > 0) {
-        writeClient.writePoint(
+        writePoint(
           new Point('jobs-completed')
             .stringField('module', moduleName)
-            .stringField('wallet', createHash('sha256').update(filAddress).digest('hex'))
-            .stringField('station', getStationID())
             .intField('value', diff)
         )
       }
