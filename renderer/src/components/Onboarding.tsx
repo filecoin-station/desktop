@@ -76,7 +76,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
                 Before you start, you will need to link a FIL address to Station.
               </p>
               <p className="text-body-s my-3">
-                Filecoin will be trasnferred to your wallet periodically according to your participation.
+                Filecoin will be transferred to your wallet periodically according to your participation.
               </p>
             </div>
             <div className='pb-20 bottom-0 px-20'>
