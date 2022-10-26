@@ -7,7 +7,7 @@ const ConfigKeys = {
   OnboardingCompleted: 'station.onboardingCompleted',
   TrayOperationExplained: 'station.TrayOperationExplained',
   StationID: 'station.StationID',
-  FilAddress: 'station.filAddress'
+  FilAddress: 'saturn.filAddress'
 }
 
 const configStore = new Store({
