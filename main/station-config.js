@@ -86,7 +86,6 @@ function setFilAddress (address) {
  * @returns {string}
  */
 function getStationID () {
-  console.log({ StationID })
   return StationID
 }
 
