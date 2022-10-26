@@ -15,11 +15,6 @@ const ConfigKeys = {
 // require('electron').app.setVersion('9999.9.9')
 
 const configStore = new Store({
-  defaults: {
-    [ConfigKeys.OnboardingCompleted]: false,
-    [ConfigKeys.TrayOperationExplained]: false,
-    [ConfigKeys.StationID]: randomUUID()
-  },
   migrations: {
     '>=0.9.0': store => {
       if (store.has('station.onboardingCompleted')) {
@@ -37,10 +32,10 @@ const configStore = new Store({
 
 console.log('Loading Station configuration from', configStore.path)
 
-let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted))
-let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained))
+let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted, false))
+let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained, false))
 let FilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
-const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID))
+const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID, randomUUID()))
 
 /**
  * @returns {boolean}
@@ -91,6 +86,7 @@ function setFilAddress (address) {
  * @returns {string}
  */
 function getStationID () {
+  console.log({ StationID })
   return StationID
 }
 
