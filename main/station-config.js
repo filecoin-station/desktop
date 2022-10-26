@@ -4,17 +4,34 @@ const Store = require('electron-store')
 const { randomUUID } = require('crypto')
 
 const ConfigKeys = {
-  OnboardingCompleted: 'station.onboardingCompleted',
+  OnboardingCompleted: 'station.OnboardingCompleted',
   TrayOperationExplained: 'station.TrayOperationExplained',
   StationID: 'station.StationID',
-  FilAddress: 'saturn.filAddress'
+  FilAddress: 'station.FilAddress'
 }
+
+// Use this to test migrations
+// https://github.com/sindresorhus/electron-store/issues/205
+// require('electron').app.setVersion('1.9.2')
 
 const configStore = new Store({
   defaults: {
     [ConfigKeys.OnboardingCompleted]: false,
     [ConfigKeys.TrayOperationExplained]: false,
     [ConfigKeys.StationID]: randomUUID()
+  },
+  migrations: {
+    '>=0.9.0': store => {
+      if (store.has('station.onboardingCompleted')) {
+        store.set('station.OnboardingCompleted', store.get('station.onboardingCompleted'))
+      }
+      if (store.has('saturn.filAddress')) {
+        store.set('station.filAddress', store.get('saturn.filAddress'))
+      }
+    }
+  },
+  beforeEachMigration: (_, context) => {
+    console.log(`Migrating station-config from ${context.fromVersion} → ${context.toVersion}`)
   }
 })
 
