@@ -12,7 +12,7 @@ const ConfigKeys = {
 
 // Use this to test migrations
 // https://github.com/sindresorhus/electron-store/issues/205
-// require('electron').app.setVersion('1.9.2')
+require('electron').app.setVersion('0.9.1')
 
 const configStore = new Store({
   defaults: {
@@ -23,9 +23,11 @@ const configStore = new Store({
   migrations: {
     '>=0.9.0': store => {
       if (store.has('station.onboardingCompleted')) {
+        console.log('has onboardingcompleted')
         store.set('station.OnboardingCompleted', store.get('station.onboardingCompleted'))
       }
       if (store.has('saturn.filAddress')) {
+        console.log('has filaddress')
         store.set('station.filAddress', store.get('saturn.filAddress'))
       }
     }
