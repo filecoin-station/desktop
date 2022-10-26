@@ -23,12 +23,10 @@ const configStore = new Store({
   migrations: {
     '>=0.9.0': store => {
       if (store.has('station.onboardingCompleted')) {
-        console.log('has onboardingcompleted')
-        store.set('station.OnboardingCompleted', store.get('station.onboardingCompleted'))
+        store.set(ConfigKeys.OnboardingCompleted, store.get('station.onboardingCompleted'))
       }
       if (store.has('saturn.filAddress')) {
-        console.log('has filaddress')
-        store.set('station.filAddress', store.get('saturn.filAddress'))
+        store.set(ConfigKeys.FilAddress, store.get('saturn.filAddress'))
       }
     }
   },
