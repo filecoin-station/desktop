@@ -12,7 +12,7 @@ const ConfigKeys = {
 
 // Use this to test migrations
 // https://github.com/sindresorhus/electron-store/issues/205
-require('electron').app.setVersion('0.9.1')
+// require('electron').app.setVersion('9999.9.9')
 
 const configStore = new Store({
   defaults: {
