@@ -51,6 +51,13 @@ module.exports = {
       error: '#ff4d81',
       warning: '#f76003',
       transparent: '#ffffff00'
+    },
+    extend: {
+      keyframes: {
+        shine: {
+          '100%': { backgroundPosition: '100%' }
+        }
+      }
     }
   },
   plugins: []
