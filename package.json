@@ -43,7 +43,7 @@
     "@influxdata/influxdb-client": "^1.31.0",
     "@sentry/node": "^7.17.3",
     "@sentry/react": "^7.15.0",
-    "@sentry/tracing": "^7.14.1",
+    "@sentry/tracing": "^7.17.3",
     "dayjs": "^1.11.5",
     "electron-log": "^4.4.7",
     "electron-serve": "^1.1.0",
