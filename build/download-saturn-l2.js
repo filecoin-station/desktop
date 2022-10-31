@@ -76,7 +76,7 @@ async function main () {
                 if (entry.path === 'L2-node') {
                   const outPath = `${outDir}/l2node-darwin-x64/saturn-L2-node`
                   await pipeline(entry, createWriteStream(outPath))
-                  await chmod(outPath, 0o111)
+                  await chmod(outPath, 0o555)
                   return
                 }
               }
