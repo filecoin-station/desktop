@@ -32,10 +32,12 @@ const Dashboard = (): JSX.Element => {
 
   useEffect(() => {
     const loadStoredInfo = async () => {
-      Promise.all([getFilAddress().then(setAddress),
-        getAllActivities().then(setActivities),
-        getTotalEarnings().then(setTotalEarnigs),
-        getTotalJobsCompleted().then(setTotalJobs)])
+      Promise.all([
+        (async () => { setAddress(await getFilAddress()) })(),
+        (async () => { setActivities(await getAllActivities()) })(),
+        (async () => { setTotalEarnigs(await getTotalEarnings()) })(),
+        (async () => { setTotalJobs(await getTotalJobsCompleted()) })()
+      ])
     }
     loadStoredInfo()
 
