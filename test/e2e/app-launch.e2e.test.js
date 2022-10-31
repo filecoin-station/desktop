@@ -2,7 +2,6 @@
 
 const { expect, test } = require('@playwright/test')
 const { _electron: electron } = require('playwright')
-const { fetch } = require('undici')
 const path = require('path')
 
 const TIMEOUT_MULTIPLIER = process.env.CI ? 10 : 1
@@ -83,14 +82,6 @@ test.describe.serial('Application launch', async () => {
       // Return the last observed value. It may be undefined if the promise above has not finished yet
       return (/** @type {any} */(window)).__saturnNodeIsReady
     }, [], { timeout: 2000 * TIMEOUT_MULTIPLIER })
-  })
-
-  test('saturn WebUI is available', async () => {
-    const saturnWebUrl = await mainWindow.evaluate(() => window.electron.saturnNode.getWebUrl())
-    console.log('Saturn WebUI URL: %s', saturnWebUrl)
-    const response = await fetch(saturnWebUrl, { redirect: 'manual' })
-    expect(response.status).toBe(303)
-    expect(response.headers.get('location')).toMatch(/address\/f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa$/)
   })
 
   test('renders Dashboard page', async () => {
