@@ -9,6 +9,7 @@ const fs = require('node:fs/promises')
 const path = require('path')
 const { setTimeout } = require('timers/promises')
 const { getFilAddress, setFilAddress } = require('./station-config')
+const Sentry = require('@sentry/node')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -151,6 +152,10 @@ async function start (/** @type {Context} */ ctx) {
     console.log(msg)
     appendToChildLog(msg)
     ctx.recordActivity({ source: 'Saturn', type: 'info', message: msg })
+    Sentry.captureException(new Error(msg), scope => {
+      scope.setExtra('logs', getLog())
+      return scope
+    })
 
     ready = false
   })
