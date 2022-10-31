@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   getAllActivities, stopSaturnNode,
   setFilAddress, getFilAddress,
@@ -11,6 +11,7 @@ import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
 import { confirmChangeWalletAddress } from '../lib/dialogs'
 import UpdateBanner from '../components/UpdateBanner'
+import { useCountUp } from 'react-countup'
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate()
@@ -30,20 +31,30 @@ const Dashboard = (): JSX.Element => {
     navigate('/wallet', { replace: true })
   }
 
+  const updateTotalJobs = (newJobCounter: number) => {
+    jobsCounterUpdate(newJobCounter)
+    setTotalJobs(newJobCounter)
+  }
+
+  const updateTotalEarnings = (newTotalEarnings:number) => {
+    earningsCounterUpdate(newTotalEarnings)
+    setTotalEarnigs(newTotalEarnings)
+  }
+
   useEffect(() => {
     const loadStoredInfo = async () => {
       Promise.all([
         (async () => { setAddress(await getFilAddress()) })(),
         (async () => { setActivities(await getAllActivities()) })(),
-        (async () => { setTotalEarnigs(await getTotalEarnings()) })(),
-        (async () => { setTotalJobs(await getTotalJobsCompleted()) })()
+        (async () => { updateTotalEarnings(await getTotalEarnings()) })(),
+        (async () => { updateTotalJobs(await getTotalJobsCompleted()) })()
       ])
     }
     loadStoredInfo()
 
     const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
-    const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(setTotalEarnigs)
-    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(setTotalJobs)
+    const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(updateTotalEarnings)
+    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(updateTotalJobs)
 
     return () => {
       unsubscribeOnActivityLogged()
@@ -51,6 +62,20 @@ const Dashboard = (): JSX.Element => {
       unsubscribeOnJobProcessed()
     }
   }, [])
+
+  const jobsCounterCountUpRef = React.useRef(null)
+  const { update: jobsCounterUpdate } = useCountUp({
+    ref: jobsCounterCountUpRef,
+    start: 0,
+    end: totalJobs
+  })
+
+  const earningsCounterCountUpRef = React.useRef(null)
+  const { update: earningsCounterUpdate } = useCountUp({
+    ref: jobsCounterCountUpRef,
+    start: 0,
+    end: totalEarnings
+  })
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-grayscale-100">
@@ -70,7 +95,7 @@ const Dashboard = (): JSX.Element => {
             <div className="flex-grow flex pt-4 justify-end justify-items-end">
               <div>
                 <button type="button" className="flex items-center cursor-pointer" title="logout" onClick={disconnect}>
-                  <img src={WalletIcon} alt=""/>
+                  <img src={WalletIcon} alt="" />
                   <span className="text-right mx-3 fil-address" title="fil address">{address && shortAddress(address)}</span>
                   <span className="underline text-primary">Change Wallet</span>
                 </button>
@@ -78,14 +103,19 @@ const Dashboard = (): JSX.Element => {
             </div>
             <div className="mb-6">
               <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Jobs Completed</p>
-              <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs}</p>
+              <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs" ref={jobsCounterCountUpRef}/>
             </div>
             <div className="mb-6">
               <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (coming soon)</p>
-              <p className="w-fit text-header-m font-bold font-number total-earnings" title="total earnings">
-                {totalEarnings > 0 ? totalEarnings : '--'}
-                {totalEarnings > 0 ? <span className="text-header-3xs">FIL</span> : ''}
-              </p>
+              <div className="w-fit text-header-m font-bold font-number total-earnings" title="total earnings">
+                {totalEarnings > 0
+                  ? <><span ref={earningsCounterCountUpRef} /><span>FIL</span></>
+                  : <span>--</span>
+                }
+
+              </div>
+            </div>
+            <div>
             </div>
           </div>
         </div>
