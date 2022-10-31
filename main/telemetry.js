@@ -4,6 +4,7 @@ const { InfluxDB } = require('@influxdata/influxdb-client')
 const { createHash } = require('node:crypto')
 const { getStationID } = require('./station-config')
 const { getFilAddress } = require('./station-config')
+const Sentry = require('@sentry/node')
 
 /** @typedef {import('@influxdata/influxdb-client').Point} Point */
 
@@ -20,7 +21,9 @@ const writeClient = client.getWriteApi(
 )
 
 setInterval(() => {
-  writeClient.flush().catch(console.error)
+  writeClient.flush().catch(err => {
+    Sentry.captureException(err)
+  })
 }, 5000).unref()
 
 /**
