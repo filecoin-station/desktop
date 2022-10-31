@@ -1,6 +1,5 @@
 'use strict'
 
-const Store = require('electron-store')
 const { app, BrowserWindow, dialog } = require('electron')
 const assert = require('node:assert')
 const consts = require('./consts')
@@ -9,9 +8,8 @@ const { fetch } = require('undici')
 const fs = require('node:fs/promises')
 const path = require('path')
 const { setTimeout } = require('timers/promises')
+const { getFilAddress, setFilAddress } = require('./station-config')
 const Sentry = require('@sentry/node')
-
-const configStore = new Store()
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -30,12 +28,6 @@ let webUrl
 
 /** @type {string | undefined} */
 let apiUrl
-
-const ConfigKeys = {
-  FilAddress: 'saturn.filAddress'
-}
-
-let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 
 /** @type {ReturnType<setInterval>} */
 let pollStatsInterval
@@ -76,7 +68,7 @@ function getSaturnBinaryPath () {
 }
 
 async function start (/** @type {Context} */ ctx) {
-  if (!filAddress) {
+  if (!getFilAddress()) {
     console.info('Saturn node requires FIL address. Please configure it in the Station UI.')
     return
   }
@@ -91,7 +83,7 @@ async function start (/** @type {Context} */ ctx) {
   appendToChildLog('Starting Saturn node')
   childProcess = execa(saturnBinaryPath, {
     env: {
-      FIL_WALLET_ADDRESS: filAddress,
+      FIL_WALLET_ADDRESS: getFilAddress(),
       ROOT_DIR: path.join(consts.CACHE_HOME, 'saturn')
     }
   })
@@ -209,21 +201,6 @@ function getWebUrl () {
 
 function getLog () {
   return childLog.join('\n')
-}
-
-/**
- * @returns {string | undefined}
- */
-function getFilAddress () {
-  return filAddress
-}
-
-/**
- * @param {string | undefined} address
- */
-function setFilAddress (address) {
-  filAddress = address
-  configStore.set(ConfigKeys.FilAddress, address)
 }
 
 /**

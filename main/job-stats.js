@@ -1,6 +1,9 @@
 'use strict'
 
 const Store = require('electron-store')
+const { Point } = require('@influxdata/influxdb-client')
+const { getFilAddress } = require('./station-config')
+const { writePoint } = require('./telemetry')
 
 /** @typedef {import('./typings').ModuleJobStatsMap} ModuleJobStatsMap */
 
@@ -24,6 +27,17 @@ class JobStats {
    * @param {number} count
    */
   setModuleJobsCompleted (moduleName, count) {
+    const filAddress = getFilAddress()
+    if (filAddress && moduleName in this.#perModuleJobStats) {
+      const diff = count - this.#perModuleJobStats[moduleName]
+      if (diff > 0) {
+        writePoint(
+          new Point('jobs-completed')
+            .stringField('module', moduleName)
+            .intField('value', diff)
+        )
+      }
+    }
     this.#perModuleJobStats[moduleName] = count
     this.#save()
   }
