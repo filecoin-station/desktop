@@ -167,10 +167,6 @@ async function start (/** @type {Context} */ ctx) {
 
     ready = false
   })
-  global.setTimeout(() => {
-    console.log('exit')
-    childProcess?.emit('exit', 1, 'SIGKILL')
-  }, 5000)
 
   try {
     await Promise.race([
