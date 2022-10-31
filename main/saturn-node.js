@@ -9,6 +9,7 @@ const { fetch } = require('undici')
 const fs = require('node:fs/promises')
 const path = require('path')
 const { setTimeout } = require('timers/promises')
+const Sentry = require('@sentry/node')
 
 const configStore = new Store()
 
@@ -159,9 +160,17 @@ async function start (/** @type {Context} */ ctx) {
     console.log(msg)
     appendToChildLog(msg)
     ctx.recordActivity({ source: 'Saturn', type: 'info', message: msg })
+    Sentry.captureException(new Error(msg), scope => {
+      scope.setExtra('logs', getLog())
+      return scope
+    })
 
     ready = false
   })
+  global.setTimeout(() => {
+    console.log('exit')
+    childProcess?.emit('exit', 1, 'SIGKILL')
+  }, 5000)
 
   try {
     await Promise.race([
