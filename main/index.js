@@ -111,6 +111,10 @@ app.on('before-quit', () => {
   Sentry.close()
 })
 
+app.on('second-instance', () => {
+  ctx.showUI()
+})
+
 process.on('uncaughtException', err => {
   Sentry.captureException(err)
   log.error(err)
