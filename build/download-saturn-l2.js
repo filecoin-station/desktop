@@ -2,7 +2,7 @@
 
 'use strict'
 
-const SATURN_DIST_TAG = 'v0.4.4'
+const SATURN_DIST_TAG = 'v0.4.5'
 
 const { fetch } = require('undici')
 const gunzip = require('gunzip-maybe')
