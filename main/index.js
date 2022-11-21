@@ -72,6 +72,10 @@ if (!app.requestSingleInstanceLock() && !inTest) {
   app.quit()
 }
 
+app.on('second-instance', () => {
+  ctx.showUI()
+})
+
 const jobStats = new JobStats()
 
 const activityLog = new ActivityLog()
@@ -109,10 +113,6 @@ app.on('before-quit', () => {
   // Flush pending events immediately
   // See https://docs.sentry.io/platforms/node/configuration/draining/
   Sentry.close()
-})
-
-app.on('second-instance', () => {
-  ctx.showUI()
 })
 
 process.on('uncaughtException', err => {
