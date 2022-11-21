@@ -152,12 +152,15 @@ async function start (/** @type {Context} */ ctx) {
     console.log(msg)
     appendToChildLog(msg)
     ctx.recordActivity({ source: 'Saturn', type: 'info', message: msg })
-    Sentry.captureException(new Error(msg), scope => {
+
+    ready = false
+  })
+
+  childProcess.on('close', () => {
+    Sentry.captureException('Saturn node exited', scope => {
       scope.setExtra('logs', getLog())
       return scope
     })
-
-    ready = false
   })
 
   try {
