@@ -68,7 +68,7 @@ if (process.platform === 'win32') {
 }
 
 // Only one instance can run at a time
-if (!app.requestSingleInstanceLock() && !inTest) {
+if (!inTest && !app.requestSingleInstanceLock()) {
   app.quit()
 }
 
