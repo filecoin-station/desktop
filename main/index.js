@@ -72,6 +72,8 @@ if (!inTest && !app.requestSingleInstanceLock()) {
   app.quit()
 }
 
+// When the user attempts to start the app and didn't notice the Station icon in
+// the tray, help them out by showing the main window
 app.on('second-instance', () => {
   ctx.showUI()
 })
