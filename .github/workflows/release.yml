@@ -17,14 +17,16 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Configure SENTRY env vars
-        run:
-          node ./build/configure-sentry.js >> $GITHUB_ENV
-
       - name: Install Sentry CLI
         run: |
           curl -sL https://sentry.io/get-cli/ | bash
           sentry-cli --version
+
+      - name: Configure SENTRY env vars
+        run:
+          node ./build/configure-sentry.js >> $GITHUB_ENV
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Finalize the Sentry release
         env:

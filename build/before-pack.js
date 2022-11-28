@@ -16,20 +16,27 @@ exports.default = async function ({ packager }) {
 }
 
 function getGitHubBuildMetadata () {
+  let buildNumber = process.env.GITHUB_RUN_NUMBER
+
+  // Release builds are created from git tags
+  if (process.env.GITHUB_REF_TYPE === 'tag') {
+    return {
+      buildTag: process.env.GITHUB_REF_NAME,
+      buildNumber
+    }
+  }
+
   // Disable Sentry error reporting for packages produced from community-contributed pull requests.
   //
   // We are not able to create Sentry Release record for those PRs. As a result, we cannot map error
   // stack traces to original source code and associate errors with the development environment
   if (!process.env.SENTRY_AUTH_TOKEN) {
-    return {
-      buildTag: null,
-      buildNumber: '1-dev'
-    }
+    buildNumber = undefined
   }
 
   return {
-    buildTag: process.env.GITHUB_REF_TYPE === 'tag' ? process.env.GITHUB_REF_NAME : null,
-    buildNumber: process.env.GITHUB_RUN_NUMBER ?? '1-dev'
+    buildTag: null,
+    buildNumber: buildNumber ?? '1-dev'
   }
 }
 
