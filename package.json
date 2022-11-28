@@ -76,7 +76,7 @@
     "@typescript-eslint/parser": "^5.42.1",
     "@vitejs/plugin-react": "^2.1.0",
     "@vitest/ui": "^0.24.3",
-    "autoprefixer": "^10.4.12",
+    "autoprefixer": "^10.4.13",
     "cross-env": "^7.0.3",
     "electron": "^21.0.1",
     "electron-builder": "^23.3.3",
