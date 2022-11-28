@@ -19,6 +19,8 @@ const saturnBinaryPath = getSaturnBinaryPath()
 let childProcess = null
 
 let ready = false
+/** @type {string | null} */
+let moduleExitReason = null
 
 /** @type {string[]} */
 let childLog = []
@@ -124,6 +126,7 @@ async function start (/** @type {Context} */ ctx) {
         console.log('Saturn node is up and ready (API URL: %s)', apiUrl)
         webUrl = `${apiUrl}webui`
         ready = true
+        moduleExitReason = null
         stdout.off('data', readyHandler)
 
         ctx.recordActivity({ source: 'Saturn', type: 'info', message: 'Saturn module started.' })
@@ -154,11 +157,13 @@ async function start (/** @type {Context} */ ctx) {
     ctx.recordActivity({ source: 'Saturn', type: 'info', message: msg })
 
     ready = false
+    moduleExitReason = signal || code ? reason : null
   })
 
   childProcess.on('close', () => {
     Sentry.captureException('Saturn node exited', scope => {
       scope.setExtra('logs', getLog())
+      scope.setExtra('reason', moduleExitReason)
       return scope
     })
   })
