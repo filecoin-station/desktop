@@ -1,6 +1,6 @@
 'use strict'
 
-const { notarize } = require('electron-notarize')
+const { notarize } = require('@electron/notarize')
 
 const isSet = (/** @type {string | undefined} */ value) => value && value !== 'false'
 
