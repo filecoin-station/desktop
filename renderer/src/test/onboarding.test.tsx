@@ -15,7 +15,7 @@ describe('Welcome page test', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
           getOnboardingCompleted: (status: boolean) => Promise.resolve(true),
-          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
         }
       })
 
@@ -46,7 +46,7 @@ describe('Welcome page test', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
           getOnboardingCompleted: (status: boolean) => Promise.resolve(false),
-          getDestinationWalletAddress: () => Promise.resolve(undefined),
+          getDestinationWalletAddress: () => Promise.resolve(undefined)
         }
       })
 
