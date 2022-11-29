@@ -112,6 +112,8 @@ async function start (/** @type {Context} */ ctx) {
     })
 
     let output = ''
+    moduleExitReason = null
+
     /**
      * @param {Buffer} data
      */
@@ -126,7 +128,6 @@ async function start (/** @type {Context} */ ctx) {
         console.log('Saturn node is up and ready (API URL: %s)', apiUrl)
         webUrl = `${apiUrl}webui`
         ready = true
-        moduleExitReason = null
         stdout.off('data', readyHandler)
 
         ctx.recordActivity({ source: 'Saturn', type: 'info', message: 'Saturn module started.' })
