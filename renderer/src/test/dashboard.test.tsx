@@ -19,8 +19,8 @@ describe('Dashboard page', () => {
       vi.restoreAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
-          getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
+          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+          setDestinationWalletAddress: (address: string | undefined) => Promise.resolve(undefined),
           getTotalJobsCompleted: () => Promise.resolve(0),
           getTotalEarnings: () => Promise.resolve(0),
           startSaturnNode: () => Promise.resolve(undefined),
@@ -121,8 +121,8 @@ describe('Dashboard page', () => {
       vi.restoreAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
-          getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
+          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+          setDestinationWalletAddress: (address: string | undefined) => Promise.resolve(undefined),
           getTotalJobsCompleted: () => Promise.resolve(100),
           getTotalEarnings: () => Promise.resolve(100),
           startSaturnNode: () => Promise.resolve(undefined),

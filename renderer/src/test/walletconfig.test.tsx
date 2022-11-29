@@ -13,8 +13,8 @@ describe('WalletConfig page test', () => {
     vi.restoreAllMocks()
     vi.mock('../lib/station-config', () => {
       return {
-        getFilAddress: () => Promise.resolve(undefined),
-        setFilAddress: (address: string | undefined) => Promise.resolve(undefined),
+        getDestinationWalletAddress: () => Promise.resolve(undefined),
+        setDestinationWalletAddress: (address: string | undefined) => Promise.resolve(undefined),
         startSaturnNode: () => Promise.resolve(undefined)
       }
     })

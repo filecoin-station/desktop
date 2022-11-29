@@ -24,6 +24,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('saturn:getLog', saturnNode.getLog)
   ipcMain.handle('saturn:getWebUrl', saturnNode.getWebUrl)
   ipcMain.handle('saturn:getFilAddress', saturnNode.getFilAddress)
+  ipcMain.handle('saturn:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
   // Station-wide config
   ipcMain.handle('station:getOnboardingCompleted', stationConfig.getOnboardingCompleted)
   ipcMain.handle('station:setOnboardingCompleted', (_event) => stationConfig.setOnboardingCompleted())
