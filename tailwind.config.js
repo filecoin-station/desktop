@@ -33,6 +33,7 @@ module.exports = {
       primary: '#2a1cf7',
       'primary-hover': '#1A1199',
       'primary-click': '#2317CC',
+      'primary-dark': '#330867',
       accent: '#40ffc4',
       secondary: '#30b7e8',
       'secondary-accent': '#d5f710',
@@ -40,16 +41,25 @@ module.exports = {
       grayscale: {
         100: '#f0f0f0',
         200: '#f7f7f7',
-        300: '#ededed',
-        350: '#ebeaea',
-        400: '#cccccc',
+        250: '#e9ebf1',
+        300: '#ebeaea',
+        400: '#c3cad9',
         500: '#b3b3b3',
         600: '#666666',
         700: '#313131'
       },
-      success: '#33cc9d',
-      error: '#ff4d81',
-      warning: '#f76003',
+      green: {
+        100: '#33cc9d',
+        200: '#68cc58'
+      },
+      red: {
+        100: '#ce5347',
+        200: '#ff4d81'
+      },
+      orange: {
+        100: '#f5c451',
+        200: '#f76003'
+      },
       transparent: '#ffffff00'
     }
   },

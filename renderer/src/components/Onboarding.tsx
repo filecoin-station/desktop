@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
-import { ReactComponent as Back } from './../assets/img/arrow-left.svg'
-import { ReactComponent as Page } from './../assets/img/paginator-page.svg'
-import { ReactComponent as CurrentPage } from './../assets/img/paginator-current.svg'
+import { ReactComponent as Back } from './../assets/img/icons/arrow-left.svg'
+import { ReactComponent as Page } from './../assets/img/icons/paginator-page.svg'
+import { ReactComponent as CurrentPage } from './../assets/img/icons/paginator-current.svg'
 
 interface FooterProps {
   page: number,
@@ -14,7 +14,7 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
   return (
     <div className="flex justify-between">
       <button
-        className="btn-secondary-small flex items-center group back-button"
+        className="btn-secondary-small flex items-center group back-button border-none"
         disabled={page === 0}
         onClick={prev}
         type="button">
@@ -27,7 +27,7 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
         })}
       </div>
       <button
-        className="btn-secondary-small icon-primary"
+        className="btn-secondary-small border-none"
         onClick={next}>
         <span className="">Continue</span>
       </button>
@@ -103,7 +103,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
             </div>
             <div className='pb-20 bottom-0 px-20'>
               <div className="flex flex-row gap-3 justify-between">
-                <button className="btn-secondary-small flex items-center group"
+                <button className="btn-secondary-small flex items-center group border-none underline underline-offset-4"
                   title="previous"
                   onClick={prev}>
                   <i><Back className="btn-icon-primary-small" fill='#2a1cf7' /></i>
