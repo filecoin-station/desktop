@@ -1,5 +1,6 @@
 export type ActivitySource = 'Station' | 'Saturn';
 export type ActivityType = 'info' | 'error';
+export type TransactionStatus = 'sent' | 'processing' | 'failed'
 
 export interface Activity {
   id: string;
@@ -7,6 +8,15 @@ export interface Activity {
   type: ActivityType;
   source: ActivitySource;
   message: string;
+}
+
+export type FILTransaction = {
+  hash: string
+  timestamp: number
+  status: TransactionStatus
+  outgoing: boolean
+  amount: string
+  address: string
 }
 
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
@@ -28,5 +38,6 @@ export interface Context {
 
   openReleaseNotes: () => void,
   restartToUpdate: () => void,
-  getUpdaterStatus: () => {updateAvailable: boolean}
+  getUpdaterStatus: () => {updateAvailable: boolean},
+  browseTransactionTracker: (transactionHash: string) => void
 }

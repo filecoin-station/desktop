@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import FilAddressForm from '../components/FilAddressForm'
 import BackgroundGraph from './../assets/img/graph.svg'
 import { useNavigate } from 'react-router-dom'
-import { startSaturnNode, setFilAddress as saveFilAddress } from '../lib/station-config'
+import { startSaturnNode, setDestinationWalletAddress as saveFilAddress } from '../lib/station-config'
 import UpdateBanner from '../components/UpdateBanner'
 
 const WalletConfig = (): JSX.Element => {
