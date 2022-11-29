@@ -1,62 +1,38 @@
-import { useEffect, useState } from 'react'
-import { stopSaturnNode, setDestinationWalletAddress, getDestinationWalletAddress } from '../lib/station-config'
-import ActivityLog from '../components/ActivityLog'
+import { useState } from 'react'
 import HeaderBackgroundImage from '../assets/img/header.png'
-import WalletIcon from '../assets/img/wallet.svg'
-import { useNavigate } from 'react-router-dom'
-import { confirmChangeWalletAddress } from '../lib/dialogs'
+import Modal from '../components/Modal'
+import ActivityLog from '../components/ActivityLog'
 import UpdateBanner from '../components/UpdateBanner'
+import WalletWidget from '../components/WalletWidget'
 import useStationActivity from '../hooks/StationActivity'
 
 const Dashboard = (): JSX.Element => {
-  const navigate = useNavigate()
-  const [address, setAddress] = useState<string | undefined>()
   const { totalJobs, totalEarnings, activities } = useStationActivity()
-  const shortAddress = (str: string) => str
-    ? str.substring(0, 4) + '...' + str.substring(str.length - 4, str.length)
-    : ''
-  const disconnect = async () => {
-    if (!(await confirmChangeWalletAddress())) return
-    await stopSaturnNode()
-    await setDestinationWalletAddress('')
-    setAddress(undefined)
-    navigate('/wallet', { replace: true })
-  }
-
-  useEffect(() => {
-    const loadStoredInfo = async () => {
-      setAddress(await getDestinationWalletAddress())
-    }
-    loadStoredInfo()
-  }, [])
+  const [walletCurtainIsOpen, setWalletCurtainIsOpen] = useState<boolean>(false)
+  const toggleCurtain = () => setWalletCurtainIsOpen(!walletCurtainIsOpen)
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-grayscale-100">
       <UpdateBanner />
+      <div className=''>
+        <Modal isOpen={walletCurtainIsOpen} setIsOpen={toggleCurtain} />
+      </div>
       <div className="relative">
         <div className="max-w-[744px] mx-auto">
-          <div className="absolute left-0 z-0 top-0 w-full h-[300px]"
+          <div className="absolute left-0 z-0 top-0 w-full h-[300px] bg-no-repeat bg-center"
             style={{
               backgroundImage: `url(${HeaderBackgroundImage})`,
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: '50% 0',
               WebkitMaskImage: 'linear-gradient(black, transparent)',
               maskImage: 'linear-gradient(black, transparent)'
             }}>
           </div>
-          <div className="h-[300px] flex flex-col relative z-10">
+          <div className="h-[300px] flex flex-col relative z-20">
             <div className="flex-grow flex pt-4 justify-end justify-items-end">
-              <div>
-                <button type="button" className="flex items-center cursor-pointer" title="logout" onClick={disconnect}>
-                  <img src={WalletIcon} alt=""/>
-                  <span className="text-right mx-3 fil-address" title="fil address">{address && shortAddress(address)}</span>
-                  <span className="underline text-primary">Change Wallet</span>
-                </button>
-              </div>
+              <WalletWidget onClick={toggleCurtain} />
             </div>
             <div className="mb-6">
               <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Jobs Completed</p>
-              <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs}</p>
+              <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs.toLocaleString()}</p>
             </div>
             <div className="mb-6">
               <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (coming soon)</p>
