@@ -8,7 +8,7 @@ const { fetch } = require('undici')
 const fs = require('node:fs/promises')
 const path = require('path')
 const { setTimeout } = require('timers/promises')
-const { getFilAddress, setFilAddress } = require('./station-config')
+const { getFilAddress } = require('./station-config')
 const Sentry = require('@sentry/node')
 
 /** @typedef {import('./typings').Context} Context */
@@ -276,6 +276,5 @@ module.exports = {
   isReady,
   getLog,
   getWebUrl,
-  getFilAddress,
-  setFilAddress
+  getFilAddress
 }

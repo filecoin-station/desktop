@@ -7,8 +7,11 @@ const ConfigKeys = {
   OnboardingCompleted: 'station.OnboardingCompleted',
   TrayOperationExplained: 'station.TrayOperationExplained',
   StationID: 'station.StationID',
-  FilAddress: 'station.FilAddress'
+  FilAddress: 'station.FilAddress',
+  DestinationFilAddress: 'station.FilAddress' // todo - replace by 'station.DestinationFilAddress'
 }
+
+/** @typedef {import('./typings').FILTransaction} TransactionMessage */
 
 // Use this to test migrations
 // https://github.com/sindresorhus/electron-store/issues/205
@@ -35,6 +38,7 @@ console.log('Loading Station configuration from', configStore.path)
 let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted, false))
 let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained, false))
 let FilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
+let DestinationFilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.DestinationFilAddress))
 const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID, randomUUID()))
 
 /**
@@ -75,18 +79,53 @@ function getFilAddress () {
 }
 
 /**
- * @param {string | undefined} address
+ * @returns {string}
  */
-function setFilAddress (address) {
-  FilAddress = address
-  configStore.set(ConfigKeys.FilAddress, address)
+function getStationID() {
+  return StationID
 }
 
 /**
  * @returns {string}
  */
-function getStationID () {
-  return StationID
+function getStationWalletAddress() {
+  return FilAddress || '' // needs refactor
+}
+
+/**
+ * @returns {string | undefined}
+ */
+function getDestinationWalletAddress() {
+  return DestinationFilAddress
+}
+
+/**
+ * @param {string | undefined} address
+ */
+function setDestinationWalletAddress(address) {
+  DestinationFilAddress = address
+  configStore.set(ConfigKeys.DestinationFilAddress, DestinationFilAddress)
+}
+
+/**
+ * @returns {number}
+ */
+function getStationWalletBalance() {
+  return 0 // todo - backend logic
+}
+
+/**
+ * @returns { TransactionMessage[] }
+ */
+function getStationWalletTransactionsHistory() {
+  return [] // todo - backend logic
+}
+
+/**
+ * @returns void
+ */
+function trasnferAllFundsToDestinationWallet() {
+  return {} // todo - backend logic
 }
 
 module.exports = {
@@ -95,6 +134,11 @@ module.exports = {
   getTrayOperationExplained,
   setTrayOperationExplained,
   getFilAddress,
-  setFilAddress,
-  getStationID
+  getStationID,
+  getStationWalletAddress,
+  getDestinationWalletAddress,
+  setDestinationWalletAddress,
+  getStationWalletBalance,
+  getStationWalletTransactionsHistory,
+  trasnferAllFundsToDestinationWallet
 }

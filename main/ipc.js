@@ -24,12 +24,16 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('saturn:getLog', saturnNode.getLog)
   ipcMain.handle('saturn:getWebUrl', saturnNode.getWebUrl)
   ipcMain.handle('saturn:getFilAddress', saturnNode.getFilAddress)
-  ipcMain.handle('saturn:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
   // Station-wide config
-  ipcMain.handle('station:getFilAddress', saturnNode.getFilAddress)
-  ipcMain.handle('station:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
   ipcMain.handle('station:getOnboardingCompleted', stationConfig.getOnboardingCompleted)
   ipcMain.handle('station:setOnboardingCompleted', (_event) => stationConfig.setOnboardingCompleted())
+  // Wallet-wide config
+  ipcMain.handle('station:getStationWalletAddress', stationConfig.getStationWalletAddress)
+  ipcMain.handle('station:getDestinationWalletAddress', stationConfig.getDestinationWalletAddress)
+  ipcMain.handle('station:setDestinationWalletAddress', (_event, address) => stationConfig.setDestinationWalletAddress(address))
+  ipcMain.handle('station:getStationWalletBalance', stationConfig.getStationWalletBalance)
+  ipcMain.handle('station:getStationWalletTransactionsHistory', stationConfig.getStationWalletTransactionsHistory)
+  ipcMain.handle('station:trasnferAllFundsToDestinationWallet', (_event, _args) => stationConfig.trasnferAllFundsToDestinationWallet())
 
   ipcMain.handle('station:getAllActivities', (_event, _args) => ctx.getAllActivities())
   ipcMain.handle('station:getTotalJobsCompleted', (_event, _args) => ctx.getTotalJobsCompleted())
@@ -39,6 +43,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('station:restartToUpdate', (_event, _args) => ctx.restartToUpdate())
   ipcMain.handle('station:openReleaseNotes', (_event) => ctx.openReleaseNotes())
   ipcMain.handle('station:getUpdaterStatus', (_events, _args) => ctx.getUpdaterStatus())
+  ipcMain.handle('station:browseTransactionTracker', (_events, transactoinHash) => ctx.browseTransactionTracker(transactoinHash))
 }
 
 module.exports = {
