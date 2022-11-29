@@ -148,6 +148,12 @@ async function start (/** @type {Context} */ ctx) {
     childProcess?.stderr?.removeAllListeners()
     childProcess?.stdout?.removeAllListeners()
     childProcess = null
+
+    Sentry.captureException('Saturn node exited', scope => {
+      scope.setExtra('logs', getLog())
+      scope.setExtra('reason', moduleExitReason)
+      return scope
+    })
   })
 
   childProcess.on('exit', (code, signal) => {
@@ -159,14 +165,6 @@ async function start (/** @type {Context} */ ctx) {
 
     ready = false
     moduleExitReason = signal || code ? reason : null
-  })
-
-  childProcess.on('close', () => {
-    Sentry.captureException('Saturn node exited', scope => {
-      scope.setExtra('logs', getLog())
-      scope.setExtra('reason', moduleExitReason)
-      return scope
-    })
   })
 
   try {
