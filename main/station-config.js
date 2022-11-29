@@ -79,6 +79,14 @@ function getFilAddress () {
 }
 
 /**
+ * @param {string | undefined} address
+ */
+function setFilAddress (address) {
+  FilAddress = address
+  configStore.set(ConfigKeys.FilAddress, address)
+}
+
+/**
  * @returns {string}
  */
 function getStationID() {
@@ -134,6 +142,7 @@ module.exports = {
   getTrayOperationExplained,
   setTrayOperationExplained,
   getFilAddress,
+  setFilAddress,
   getStationID,
   getStationWalletAddress,
   getDestinationWalletAddress,
