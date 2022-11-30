@@ -81,18 +81,19 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
           balance={walletBalance}
           enableTransferMode={enableTransferMode}
           transferAllFunds={transferAllFunds}
+          reset={reset}
           disabled={!destinationFilAddress} />
       )
     }
   }
 
   return (
-    <div className='relative'>
+    <div className='relative z-20'>
       <div className='h-8 bg-primary-dark flex items-center px-8' onClick={reset}>
         <p className='text text-body-3xs text-white opacity-80 mr-3'>STATION ADDRESS</p>
         <p className='text text-body-3xs text-white'>{stationAddress}</p>
       </div>
-      <div className='h-60 bg-primary bg-no-repeat bg-center' style={{ backgroundImage: `url(${HeaderBackgroundImage})` }}>
+      <div className='relative h-60 bg-primary bg-no-repeat bg-center z-20' style={{ backgroundImage: `url(${HeaderBackgroundImage})` }}>
         <div className="py-6 px-6 reset">
           <div className="flex flex-row justify-between align-baseline">
             { renderAddress() }
@@ -109,7 +110,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
         </div>
       </div>
       <div className="pb-6">
-        <WalletTransactionsHistory allTransactions={walletTransactions} latestTransaction={currentTransaction} />
+        <WalletTransactionsHistory allTransactions={walletTransactions} latestTransaction={currentTransaction}/>
       </div>
     </div>
   )

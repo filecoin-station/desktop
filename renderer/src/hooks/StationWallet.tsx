@@ -23,7 +23,7 @@ const useWallet = (): Wallet => {
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
   const [walletBalance, setWalletBalance] = useState<number>(0)
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[]>([])
-  const [currentTransaction, setCurrentTransaction] = useState<FILTransaction | undefined>()
+  const [currentTransaction, setCurrentTransaction] = useState<FILTransaction>()
 
   const editDestinationAddress = async (address: string | undefined) => {
     await setDestinationWalletAddress(address)
@@ -32,7 +32,6 @@ const useWallet = (): Wallet => {
 
   const dismissCurrentTransaction = () => {
     if (currentTransaction && currentTransaction.status !== 'processing') {
-      setWalletTransactions([currentTransaction, ...walletTransactions])
       setCurrentTransaction(undefined)
     }
   }
@@ -63,17 +62,16 @@ const useWallet = (): Wallet => {
       setWalletTransactions(await getStationWalletTransactionsHistory())
     }
     loadStoredInfo()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     const updateWalletTransactionsArray = (transactions: FILTransaction[]) => {
-      const newCurrentTransaction = transactions[0]
+      const [newCurrentTransaction, ...confirmedTransactions] = transactions
       if (newCurrentTransaction.status === 'processing' || (currentTransaction && +currentTransaction.timestamp === +newCurrentTransaction.timestamp)) {
         setCurrentTransaction(newCurrentTransaction)
         if (newCurrentTransaction.status !== 'processing') { setTimeout(() => { setWalletTransactions(transactions); setCurrentTransaction(undefined) }, 6000) }
-
-        const transactionsExceptLatest = transactions.filter((t) => { return t !== newCurrentTransaction })
-        setWalletTransactions(transactionsExceptLatest)
+        setWalletTransactions(confirmedTransactions)
       } else {
         setWalletTransactions(transactions)
       }
@@ -92,7 +90,7 @@ const useWallet = (): Wallet => {
     }
   }, [walletBalance])
 
-  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction }
+  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction}
 }
 
 export default useWallet
