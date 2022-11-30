@@ -6,10 +6,11 @@ interface TransferFundsButtonsProps {
   balance: number,
   enableTransferMode: () => void,
   transferAllFunds: () => void,
-  disabled: boolean
+  disabled: boolean,
+  reset: () => reset
 }
 
-const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, balance, enableTransferMode, transferAllFunds, disabled }) => {
+const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, balance, enableTransferMode, transferAllFunds, disabled, reset }) => {
   return (
     <>
       {transferMode
@@ -17,7 +18,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
           <button className="btn-primary bg-grayscale-250 text-primary" onClick={transferAllFunds}>
             <span className="text-2xs px-4 text-body-s">Send <span className='font-bold'>{balance} FIL</span></span>
           </button>
-          <button className="btn-primary" onClick={transferAllFunds}>
+          <button className="btn-primary" onClick={reset}>
             <span className="text-2xs px-4 text-body-s">Cancel</span>
           </button>
         </div>

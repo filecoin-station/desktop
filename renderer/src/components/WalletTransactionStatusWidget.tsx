@@ -17,21 +17,21 @@ const WalletTransactoinStatusWidget: FC<WalletTransactoinStatusWidgetProps> = ({
 
   if (currentTransaction?.status === 'sent') {
     return (
-      <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 ${renderBackground && 'bg-green-200 bg-opacity-10'}`}>
+      <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 transition-all duration-700 ease-in-out ${renderBackground && 'bg-green-200 bg-opacity-10'}`}>
         <SentIcon width={14} height={14} />
         <span className=' text-body-s text-green-200'>Sent</span>
       </div>
     )
   } else if (currentTransaction?.status === 'processing') {
     return (
-      <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 ${renderBackground && 'bg-[#F5C451] bg-opacity-10'}`}>
+      <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 transition-all duration-700 ease-in-out ${renderBackground && 'bg-[#F5C451] bg-opacity-10'}`}>
         <ProcessingIcon width={14} height={14} />
         <span className=' text-body-s text-[#F3AE0C]'>Processing...</span>
       </div>
     )
   } else if (currentTransaction?.status === 'failed') {
     return (
-      <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 justify-start ${renderBackground && 'bg-red-100 bg-opacity-10'}`}>
+      <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 justify-start transition-all duration-700 ease-in-out ${renderBackground && 'bg-red-100 bg-opacity-10'}`}>
         <FailedIcon width={14} height={14}/>
         <span className=' text-body-s text-red-100'>Failed</span>
         <p className="text-body-2xs text-red-100 underline ml-2 opacity-80 cursor-pointer" onClick={() => openExternalURL(currentTransaction.hash)}>View Transaction</p>
