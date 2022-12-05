@@ -40,7 +40,7 @@
   "homepage": "https://github.com/filecoin-project/filecoin-station#readme",
   "dependencies": {
     "@glif/filecoin-address": "^2.0.1",
-    "@influxdata/influxdb-client": "^1.32.0",
+    "@influxdata/influxdb-client": "^1.33.0",
     "@sentry/node": "^7.21.1",
     "@sentry/react": "^7.21.1",
     "@sentry/tracing": "^7.21.1",
