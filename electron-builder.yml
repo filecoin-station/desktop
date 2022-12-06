@@ -30,6 +30,10 @@ mac:
   gatekeeperAssess: false
   entitlements: 'build/entitlements.mac.plist'
   entitlementsInherit: 'build/entitlements.mac.plist'
+  target:
+    - target: dmg
+      arch: ['x64']
+
 
 dmg:
   iconSize: 160
