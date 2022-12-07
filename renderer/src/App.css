@@ -59,8 +59,8 @@
 @layer components {
   
   .input {
-    @apply text-header-3xs font-body border-dashed border-0 border-b text-white
-    bg-transparent appearance-none focus:outline-none focus:ring-0 focus:border-white border-white;
+    @apply text-header-3xs font-body text-white
+    bg-transparent appearance-none focus:outline-none focus:ring-0;
   }
 
   .btn-primary {

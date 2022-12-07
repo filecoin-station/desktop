@@ -33,7 +33,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
     setTransferMode(false)
   }
 
-  const enableEditMode = () => { 
+  const enableEditMode = () => {
     setEditMode(true)
     setTransferMode(false)
   }
@@ -54,17 +54,16 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   }
 
   const renderTransferButtons = () => {
-    if (!editMode || !destinationFilAddress) {
-      return (
-        <TransferFundsButtons
-          transferMode={transferMode}
-          balance={walletBalance}
-          enableTransferMode={enableTransferMode}
-          transferAllFunds={transferAllFunds}
-          reset={reset}
-          disabled={!destinationFilAddress} />
-      )
-    }
+    return (
+      <TransferFundsButtons
+        transferMode={transferMode}
+        balance={walletBalance}
+        enableTransferMode={enableTransferMode}
+        transferAllFunds={transferAllFunds}
+        reset={reset}
+        destinationFilAddress={destinationFilAddress}
+        editMode={editMode} />
+    )
   }
 
   return (
@@ -77,7 +76,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
         <div className="py-6 px-6">
           <div className="flex flex-row justify-between align-baseline" onClick={() => setTransferMode(false)}>
             <div className='w-full'>
-              <FilAddressForm destinationAddress={destinationFilAddress} saveDestinationAddress={saveAddress} 
+              <FilAddressForm destinationAddress={destinationFilAddress} saveDestinationAddress={saveAddress}
               editMode={editMode} transferMode={transferMode} enableEditMode={enableEditMode}/>
             </div>
           </div>
