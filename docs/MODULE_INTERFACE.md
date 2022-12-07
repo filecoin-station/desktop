@@ -48,7 +48,7 @@
     Example:
     ```json
     {
-      "NSuccessfulRetrievals": 1234
+      "jobsCompleted": 1234
     }
     ```
 
