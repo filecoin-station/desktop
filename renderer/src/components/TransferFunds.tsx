@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { ReactComponent as InfoIcon } from '../assets/img/icons/info.svg'
 
 interface TransferFundsButtonsProps {
@@ -6,25 +6,21 @@ interface TransferFundsButtonsProps {
   balance: number,
   enableTransferMode: () => void,
   transferAllFunds: () => void,
-  disabled: boolean,
-  reset: () => void
+  reset: () => void,
+  destinationFilAddress: string | undefined,
+  editMode: boolean
 }
 
-const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, balance, enableTransferMode, transferAllFunds, disabled, reset }) => {
+const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, balance, enableTransferMode, transferAllFunds, reset, destinationFilAddress, editMode }) => {
+  const [internalEditMode, setInternalEditMode] = useState<boolean>(false)
+
+  useEffect(() => { setInternalEditMode(transferMode) }, [transferMode])
+
+  const disabled = !destinationFilAddress
   return (
-    <div className='relative flex items-end w-full'>
-        <div className={`absolute w-fit right-0 flex gap-1 items-center transition delay-700 ${transferMode ? 'block' : 'invisible'}`}>
-          <button className={`btn-primary bg-grayscale-250 text-primary ease-in-out duration-500 ${transferMode ? '' : 'translate-x-[83%] opacity-0 bg-transparent text-white'}`}
-            onClick={transferAllFunds}>
-            <span className="text-2xs px-4 text-body-s">Send <span className='font-bold'>{balance} FIL</span></span>
-          </button>
-          <button className={`btn-primary  ease-in-out duration-100 ${transferMode ? 'delay-100' : 'opacity-0 bg-transparent text-white'}`}
-          onClick={reset}>
-            <span className="text-2xs px-4 text-body-s">Cancel</span>
-          </button>
-        </div>
-        <div className={`absolute w-fit right-0 flex items-center ${transferMode ? 'invisible opacity-0 duration-150' : 'delay-200 block'}`}>
-          <button className="btn-primary bg-transparent text-white border border-white border-solid border-1"
+    <div className={`relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-700 ${(!editMode || disabled) ? 'visible' : 'invisible -translate-y-32 opacity-0'}`}>
+        <div className={`absolute w-fit right-0 flex items-center ease-[cubic-bezier(0.85,0,0.15,1) duration-500 z-10 ${internalEditMode ? '-translate-x-32 opacity-0' : ''}`}>
+          <button className="btn-primary w-40 bg-grayscale-250 text-primary"
             disabled={disabled}
             onClick={enableTransferMode}>
             <span className="text-2xs px-4 text-body-s">Transfer FIL</span>
@@ -37,6 +33,16 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
               <InfoIcon className="fill-grayscale-400" width={'24px'} height={'24px'} />
             </div>
           }
+        </div>
+        <div className={`absolute w-fit right-0 flex gap-1 items-center ${internalEditMode ? 'z-20' : 'z-0'}`}>
+          <button className={`btn-primary w-40 bg-grayscale-250 text-primary ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${internalEditMode ? '' : 'translate-x-32 opacity-0'}`}
+            onClick={transferAllFunds}>
+            <span className="text-2xs px-4 text-body-s">Send <span className='font-bold'>{balance} FIL</span></span>
+          </button>
+          <button className={`btn-primary ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${internalEditMode ? '' : 'opacity-0'}`}
+            onClick={reset}>
+              <span className="text-2xs px-4 text-body-s">Cancel</span>
+          </button>
         </div>
     </div>
   )
