@@ -43,7 +43,7 @@
 
 6. A module's `stderr` will be stored in the same module-specific log file as its `stdout`, to be used for post-mortem debugging.
 
-7. A module exposes its stats via HTTPS, on an address communicated via `stdout` (see above `API:`). The response will be a JSON object. It is for Station to interpret the response and update its UI accordingly. The responses should be as consistent as possible.
+7. A module exposes its stats via HTTP(S), on an address communicated via `stdout` (see above `API:`). The response will be a JSON object. It is for Station to interpret the response and update its UI accordingly. The responses should be as consistent as possible.
 
     Example:
     ```json
