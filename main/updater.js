@@ -8,6 +8,9 @@ const ms = require('ms')
 const log = require('electron-log').scope('updater')
 const { showDialogSync } = require('./dialog')
 
+// Debug auto-updater problems
+require('electron-log').transports.file.level = 'debug'
+
 // must be global to avoid gc
 let updateNotification = null
 
@@ -30,6 +33,7 @@ function beforeQuitCleanup () {
 
 function setup (/** @type {import('./typings').Context} */ _ctx) {
   autoUpdater.autoDownload = false // we download manually in 'update-available'
+  autoUpdater.logger = log
 
   autoUpdater.on('error', onUpdaterError)
   autoUpdater.on('update-available', onUpdateAvailable)
