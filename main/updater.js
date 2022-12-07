@@ -21,13 +21,23 @@ let updateAvailable = false
 /** @type {string | undefined} */
 let nextVersion
 
+const nativeUpdater = require('electron').autoUpdater
 function quitAndInstall () {
+  log.info('Quit & install the update from %s', new Error('stack trace').stack)
   beforeQuitCleanup()
+  setImmediate(() => {
+    // See https://github.com/electron-userland/electron-builder/issues/3269#issuecomment-972631207
+    nativeUpdater.checkForUpdates()
+    nativeUpdater.once('update-downloaded', () => {
+      nativeUpdater.quitAndInstall()
+    })
+  })
   autoUpdater.quitAndInstall()
 }
 
 function beforeQuitCleanup () {
-  BrowserWindow.getAllWindows().forEach(w => w.removeAllListeners('close'))
+  log.info('cleanup before quitting from %s', new Error('stack trace').stack)
+  BrowserWindow.getAllWindows().forEach((w) => w.removeAllListeners('close'))
   app.removeAllListeners('window-all-closed')
 }
 
