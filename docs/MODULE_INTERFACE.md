@@ -43,14 +43,22 @@
 
 6. A module's `stderr` will be stored in the same module-specific log file as its `stdout`, to be used for post-mortem debugging.
 
-7. A module exposes its stats via HTTP(S), on an address communicated via `stdout` (see above `API:`). The response will be a JSON object. It is for Station to interpret the response and update its UI accordingly. The responses should be as consistent as possible.
+7. A module exposes its stats via HTTP(S), on an address communicated via
+`stdout` (see above `API:`). The response will be a JSON object with at least
+the following fields:
 
-    Example:
     ```json
     {
       "jobsCompleted": 1234
     }
     ```
+
+    The number of jobs completed is expected to be a monotonically increasing
+    number. It's the responsibility of the module to persist this number across
+    process restarts.
+    
+    The module may include additional fields in the JSON response, although
+    these will be ignored by Station.
 
 7. A module can be told to shut down via signal `SIGTERM`
 
