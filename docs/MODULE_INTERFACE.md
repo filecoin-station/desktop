@@ -24,7 +24,9 @@
 
 3. A module's executable gets passed the following environment variables:
     - `FIL_WALLET_ADDRESS` The user's Filecoin wallet address
-    - `ROOT_DIR` The long-lived working directory on disk
+    - `ROOT_DIR` The long-lived working directory on disk. The module must store
+      all of its files inside (subdirecotires of) this directory. The directory
+      isn't expected to be backed up or shared across machines in any way.
 
     Example:
     ```bash
