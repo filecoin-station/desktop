@@ -10,7 +10,6 @@ const {
   setTrayOperationExplained
 } = require('./station-config')
 const { showDialogSync } = require('./dialog')
-const log = require('electron-log').scope('ui')
 
 /**
  * @param {import('./typings').Context} ctx
@@ -100,7 +99,6 @@ module.exports = async function (ctx) {
   // that were added to keep app running when the UI is closed.
   // (Without this, the app would run forever and/or fail to update)
   app.on('before-quit', () => {
-    log.info('ui before-quit from %s', new Error('stack trace').stack)
     stopIpcEventForwarding()
     ui.removeAllListeners('close')
     devServer?.close()
