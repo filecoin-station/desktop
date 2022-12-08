@@ -12,7 +12,7 @@
     https://github.com/filecoin-saturn/L2-node/releases
     ```
 
-1. A module should run on as many operating systems as possible, without requiring any prior setup before executing its binary.
+1. A module should run on as many operating systems as possible, without requiring any prior setup before executing its binary. On macOS, x86 is required, arm64 nice to have.
 
 2. A module can provide a custom __command string__ for launching its executable. Ideally a module doesn't require any extra arguments when launching.
 
@@ -55,7 +55,7 @@ the following fields:
 
     The number of jobs completed is expected to be a monotonically increasing
     number. It's the responsibility of the module to persist this number across
-    process restarts.
+    process restarts, somewhere in `ROOT_DIR`.
     
     The module may include additional fields in the JSON response, although
     these will be ignored by Station.
