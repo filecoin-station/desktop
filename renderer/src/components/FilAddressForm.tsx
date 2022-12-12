@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useState, useEffect, useRef } from 'react'
 import { checkAddressString } from '@glif/filecoin-address'
 import { ReactComponent as Warning } from '../assets/img/icons/error.svg'
 import { ReactComponent as EditIcon } from '../assets/img/icons/edit.svg'
@@ -15,11 +15,20 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
   const [addressIsValid, setAddressIsValid] = useState<boolean | undefined>()
   const [inputAddr, setInputAddr] = useState<string>(destinationAddress)
   const [internalEditMode, setInternalEditMode] = useState<boolean>(false)
+  const ref = useRef(null)
 
   useEffect(() => {
     setInternalEditMode(editMode || destinationAddress === '')
     setInputAddr(destinationAddress)
   }, [editMode, destinationAddress])
+
+  useEffect(() => {
+    if (internalEditMode && ref.current) {
+      ref.current.focus()
+      if (destinationAddress.length > 0) { ref.current.setSelectionRange(destinationAddress.length, destinationAddress.length) }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [internalEditMode])
 
   useEffect(() => {
     if (inputAddr === '') {
@@ -39,6 +48,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
     if (addressIsValid) {
       saveDestinationAddress(inputAddr)
     }
+    ref.current.blur()
   }
 
   const computeBorderClasses = () => {
@@ -77,8 +87,9 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
           title="save address" type="submit" value="connect" onClick={handleSubmit}>
           <span className="text-xs px-4">Save</span>
         </button>
-        <button className={`flex flex-row items-end h-[30px] cursor-pointer group absolute mb-2 ml-4 left-[100px] ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${(!internalEditMode && !transferMode) ? 'visible' : 'opacity-0'}`}
-          tabIndex={0} onClick={() => enableEditMode()}
+        <button className={`flex flex-row items-end h-[30px] cursor-pointer group absolute mb-1 ml-4 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
+        ${destinationAddress.length > 30 ? 'left-[460px]' : 'left-[70px]'} ${(!internalEditMode && !transferMode) ? 'visible' : 'opacity-0'}`}
+          tabIndex={0} onClick={() => enableEditMode() }
           disabled={transferMode}>
           <EditIcon className="btn-icon-primary mr-1" />
           <span className='text-white hidden group-hover:block opacity-80 not-italic text-body-m font-body leading-[1.5rem]'>Edit</span>
@@ -90,9 +101,10 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
   return (
     <>
       <div className='relative flex w-full items-end ease-in-out pb-[15px] justify-between'>
-        <div className='relative z-0 flex flex-col mt-[20px] w-fit'>
+        <div className={`relative flex flex-col mt-[20px] w-fit ${internalEditMode ? 'z-10' : 'z-0'}`}>
           <input
-            spellCheck="false" autoComplete="off" type="text" name="address" size={internalEditMode ? 200 : destinationAddress.length}
+            ref={ref}
+            spellCheck="false" autoComplete="off" type="text" name="address"
             placeholder=" "
             disabled={!internalEditMode}
             tabIndex={0} value={inputAddr}
