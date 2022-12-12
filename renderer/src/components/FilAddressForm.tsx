@@ -16,8 +16,10 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
   const [inputAddr, setInputAddr] = useState<string>(destinationAddress)
   const [internalEditMode, setInternalEditMode] = useState<boolean>(false)
 
-  useEffect(() => setInternalEditMode(editMode), [editMode])
-  useEffect(() => { setInputAddr(destinationAddress) }, [editMode, destinationAddress])
+  useEffect(() => {
+    setInternalEditMode(editMode || destinationAddress === '')
+    setInputAddr(destinationAddress)
+  }, [editMode, destinationAddress])
 
   useEffect(() => {
     if (inputAddr === '') {
@@ -40,9 +42,12 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
   }
 
   const computeBorderClasses = () => {
-    const listOfClasses = `border border-b-[0.5px] h-[1px] border-dashed ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${internalEditMode ? '' : 'invisible opacity-0'}`
-    if (inputAddr === destinationAddress || !internalEditMode) {
-      return `${listOfClasses} border-white`
+    const listOfClasses = `border-b-[0.5px] border-white h-[1px] border-solid ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${internalEditMode ? '' : 'invisible opacity-0'}`
+    if (!editMode) {
+      return `${listOfClasses} border-white border-dashed`
+    }
+    if (internalEditMode && inputAddr === destinationAddress) {
+      return listOfClasses
     }
     if (addressIsValid) {
       return `${listOfClasses} border-solid border-green-100`
@@ -67,8 +72,8 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
     return (
       <>
         <button className={`btn-primary w-40 submit-address bg-grayscale-250 text-primary ease-[cubic-bezier(0.85,0,0.15,1)] duration-700
-        ${internalEditMode && (inputAddr !== destinationAddress || inputAddr.length > 0) ? 'visible' : 'invisible opacity-0 translate-y-32'}`}
-          disabled={!addressIsValid && !internalEditMode}
+        ${internalEditMode && editMode ? 'visible z-20' : 'invisible text-opacity-0 translate-y-[7.8rem]'}`}
+          disabled={(!addressIsValid && !internalEditMode) || (inputAddr === destinationAddress)}
           title="save address" type="submit" value="connect" onClick={handleSubmit}>
           <span className="text-xs px-4">Save</span>
         </button>
@@ -87,12 +92,13 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
       <div className='relative flex w-full items-end ease-in-out pb-[15px] justify-between'>
         <div className='relative z-0 flex flex-col mt-[20px] w-fit'>
           <input
-            spellCheck="false" autoComplete="off" type="text" name="address" size={destinationAddress.length}
+            spellCheck="false" autoComplete="off" type="text" name="address" size={internalEditMode ? 200 : destinationAddress.length}
             placeholder=" "
             disabled={!internalEditMode}
             tabIndex={0} value={inputAddr}
             onChange={(event) => { setInputAddr(event.target.value) }}
-            className='input fil-address mt-[7px] min-w-[90px] w-[460px] ease-in-out transition duration-300' />
+            className='input fil-address mt-[7px] min-w-[90px] w-[460px] ease-in-out transition duration-300'
+            onFocus={() => { enableEditMode() }}/>
           <label htmlFor="address"
             className="absolute duration-300 top-3 origin-top-lef pointer-events-none text-white opacity-80 font-body text-body-2xs uppercase mb-3">
             Your FIL Address</label>

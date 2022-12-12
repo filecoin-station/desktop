@@ -12,7 +12,7 @@ interface PropsWallet {
 }
 
 const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
-  const [editMode, setEditMode] = useState<boolean>(true)
+  const [editMode, setEditMode] = useState<boolean>(false)
   const [transferMode, setTransferMode] = useState<boolean>(false)
   const { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction } = useWallet()
 
@@ -21,12 +21,6 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
     reset()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
-
-  useEffect(() => {
-    if (!destinationFilAddress || destinationFilAddress === '') {
-      setEditMode(true)
-    }
-  }, [editMode, destinationFilAddress])
 
   const reset = () => {
     setEditMode(false)
@@ -73,17 +67,17 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
         <p className='text text-body-3xs text-white'>{stationAddress}</p>
       </div>
       <div className='relative h-60 bg-primary bg-no-repeat bg-center z-20' style={{ backgroundImage: `url(${HeaderBackgroundImage})` }}>
-        <div className="py-6 px-6">
+        <div className="flex flex-col justify-between h-full px-6 pt-6 pb-8">
           <div className="flex flex-row justify-between align-baseline" onClick={() => setTransferMode(false)}>
             <div className='w-full'>
               <FilAddressForm destinationAddress={destinationFilAddress} saveDestinationAddress={saveAddress}
               editMode={editMode} transferMode={transferMode} enableEditMode={enableEditMode}/>
             </div>
           </div>
-          <div className="flex flex-row justify-between align-baseline pt-6" onClick={() => setEditMode(false) }>
+          <div className="flex flex-row justify-between align-baseline" onClick={() => setEditMode(false) }>
             <div>
-              <p className="w-fit text-body-3xs text-white opacity-80 uppercase">Total FIL</p>
-              <p className="w-fit text-header-m text-white font-bold font-number">
+              <p className="w-fit text-body-3xs text-white opacity-80 uppercase leading-none">Total FIL</p>
+              <p className="w-fit text-header-m text-white font-bold font-number leading-none">
                 {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 3 })}<span className="text-header-3xs ml-3">FIL</span>
               </p>
             </div>
