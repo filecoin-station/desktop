@@ -90,7 +90,7 @@ const useWallet = (): Wallet => {
     }
   }, [walletBalance])
 
-  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction}
+  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction }
 }
 
 export default useWallet
