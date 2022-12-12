@@ -58,7 +58,7 @@
     "react-router-dom": "^6.4.5",
     "tar-fs": "^2.1.1",
     "undici": "^5.12.0",
-    "vite-plugin-svgr": "^2.2.2"
+    "vite-plugin-svgr": "^2.4.0"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
