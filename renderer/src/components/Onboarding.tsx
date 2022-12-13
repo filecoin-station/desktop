@@ -41,7 +41,7 @@ interface OnboardingProps {
 
 const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
   const [page, setPage] = useState(0)
-  const pages = 3
+  const pages = 4
   const next = () => setPage(page + 1)
   const prev = () => setPage(page - 1)
 
@@ -68,7 +68,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
       {page === 1 &&
         <div className={'w-[100%] max-w-[640px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)] onboarding-' + page}>
           <div className='bg-black px-20 py-16  rounded-t-[10px] min-h-[276px] flex'>
-            <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto"> Set up your rewards.</h1>
+            <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto">Set up your rewards.</h1>
           </div>
           <div className='min-h-[372px]'>
             <div className='pb-20 px-20 pt-16 min-h-[250px]'>
@@ -87,6 +87,27 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
       }
 
       {page === 2 &&
+        <div className={'w-[100%] max-w-[640px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)] onboarding-' + page}>
+          <div className='bg-black px-20 py-16  rounded-t-[10px] min-h-[276px] flex'>
+            <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto">Station-embedded wallet.</h1>
+          </div>
+          <div className='min-h-[372px]'>
+            <div className='pb-20 px-20 pt-16 min-h-[250px]'>
+              <p className="text-body-s my-3">
+                Station provides an internal wallet to receive network rewards that allow you to start contributing.
+              </p>
+              <p className="text-body-s my-3">
+                It is not suggested to use the Station Wallet as your main one, therefore it is strongly suggested to periodically transfer your earnings to your own ledger.
+              </p>
+            </div>
+            <div className='pb-20 bottom-0 px-20'>
+              <Footer page={page} pages={pages} next={next} prev={prev} />
+            </div>
+          </div>
+        </div>
+      }
+
+      {page === 3 &&
         <div className={'w-[100%] max-w-[940px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)] onboarding-' + page}>
           <div className='bg-black px-20 py-16  rounded-t-[10px] min-h-[276px] flex'>
             <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto">Before we launch.</h1>
