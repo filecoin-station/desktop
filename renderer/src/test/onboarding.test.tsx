@@ -14,8 +14,7 @@ describe('Welcome page test', () => {
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(true),
-          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
+          getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
         }
       })
 
@@ -30,12 +29,12 @@ describe('Welcome page test', () => {
 
     beforeEach(() => {
       vi.clearAllMocks()
-      render(<BrowserRouter> <Onboarding /></BrowserRouter >)
+      act(() => { render(<BrowserRouter> <Onboarding /></BrowserRouter >) })
     })
 
-    test('redirects to dashboard directly if user is onboarded', async () => {
+    test('Redirects to dashboard directly if user is onboarded', async () => {
       await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true }), { timeout: 3000 })
+      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }), { timeout: 3000 })
     })
   })
 
@@ -45,8 +44,7 @@ describe('Welcome page test', () => {
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(false),
-          getDestinationWalletAddress: () => Promise.resolve(undefined)
+          getOnboardingCompleted: (status: boolean) => Promise.resolve(false)
         }
       })
 
@@ -61,7 +59,7 @@ describe('Welcome page test', () => {
 
     beforeEach(() => {
       vi.restoreAllMocks()
-      render(<BrowserRouter> <Onboarding /></BrowserRouter >)
+      act(() => { render(<BrowserRouter> <Onboarding /></BrowserRouter >) })
     })
 
     test('show loading test', () => {
@@ -89,40 +87,9 @@ describe('Welcome page test', () => {
       await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1), { timeout: 3000 })
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
-      await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/accept/i)) }))
+      await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/Accept/i)) }))
       expect(mockedUsedNavigate).toHaveBeenCalledTimes(1)
-      expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true })
+      expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true })
     })
-  })
-
-  test('User has completed the onboarding and set up wallet previously', () => {
-    beforeAll(() => {
-      vi.clearAllMocks()
-      vi.mock('../lib/station-config', () => {
-        return {
-          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
-        }
-      })
-
-      vi.mock('react-router-dom', async () => {
-        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-        return {
-          ...router,
-          useNavigate: () => mockedUsedNavigate
-        }
-      })
-    })
-
-    beforeEach(() => {
-      vi.resetAllMocks()
-      render(<BrowserRouter> <Onboarding /></BrowserRouter >)
-    })
-
-    test('redirects to dashboard directly if user is onboarded', async () => {
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }), { timeout: 3000 })
-    }, { timeout: 10000 })
   })
 })

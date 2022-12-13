@@ -1,12 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { act } from 'react-dom/test-utils'
 import '@testing-library/jest-dom'
 import '../lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard'
 
-const mockedUsedNavigate = vi.fn()
 const getUpdaterStatus = vi.fn(() => Promise.resolve(false))
 
 describe('Dashboard page', () => {
@@ -19,28 +18,19 @@ describe('Dashboard page', () => {
       vi.restoreAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
-          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          setDestinationWalletAddress: (address: string | undefined) => Promise.resolve(undefined),
+          getStationWalletBalance: () => Promise.resolve(0),
+          getStationWalletTransactionsHistory: () => Promise.resolve([]),
+          getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+          getDestinationWalletAddress: () => Promise.resolve(''),
           getTotalJobsCompleted: () => Promise.resolve(0),
           getTotalEarnings: () => Promise.resolve(0),
-          startSaturnNode: () => Promise.resolve(undefined),
-          stopSaturnNode: () => Promise.resolve(undefined),
           getAllActivities: () => Promise.resolve([])
-        }
-      })
-
-      vi.mock('react-router-dom', async () => {
-        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-        return {
-          ...router,
-          useNavigate: () => mockedUsedNavigate
         }
       })
     })
 
     beforeEach(() => {
       vi.clearAllMocks()
-
       Object.defineProperty(window, 'electron', {
         writable: true,
         value: {
@@ -48,7 +38,9 @@ describe('Dashboard page', () => {
             onActivityLogged,
             onEarningsChanged,
             onJobProcessed,
-            onUpdateAvailable: vi.fn((callback) => () => ({}))
+            onUpdateAvailable: vi.fn((callback) => () => ({})),
+            onTransactionUpdate: vi.fn((callback) => () => ({})),
+            onBalanceUpdate: vi.fn((callback) => () => ({}))
           },
           getUpdaterStatus: vi.fn(() => Promise.resolve(false)),
           dialogs: {
@@ -56,14 +48,8 @@ describe('Dashboard page', () => {
           }
         }
       })
-      render(<BrowserRouter><Dashboard /></BrowserRouter>)
+      act(() => { render(<BrowserRouter><Dashboard /></BrowserRouter>) })
     })
-
-    test('display wallet short address', async () => {
-      expect(document.getElementsByClassName('fil-address').length).toBe(1)
-      await waitFor(() => { expect((screen.getByTitle('fil address')).textContent).toBe('f16m...n4qa') })
-    })
-
     test('display jobs counter', async () => {
       await waitFor(() => { expect((screen.getByTitle('total jobs')).textContent).toBe('0') })
     })
@@ -74,12 +60,6 @@ describe('Dashboard page', () => {
 
     test('displays empty activty log', () => {
       expect(document.getElementsByClassName('activity-item').length).toBe(0)
-    })
-
-    test('logs out wallet', async () => {
-      act(() => { fireEvent.click(screen.getByTitle('logout')) })
-      await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledTimes(1) })
-      await waitFor(() => { expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true }) })
     })
   })
 
@@ -121,12 +101,12 @@ describe('Dashboard page', () => {
       vi.restoreAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
-          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          setDestinationWalletAddress: (address: string | undefined) => Promise.resolve(undefined),
+          getStationWalletBalance: () => Promise.resolve(0),
+          getStationWalletTransactionsHistory: () => Promise.resolve([]),
+          getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+          getDestinationWalletAddress: () => Promise.resolve(''),
           getTotalJobsCompleted: () => Promise.resolve(100),
           getTotalEarnings: () => Promise.resolve(100),
-          startSaturnNode: () => Promise.resolve(undefined),
-          stopSaturnNode: () => Promise.resolve(undefined),
           getAllActivities: () => Promise.resolve([
             {
               id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
@@ -136,14 +116,6 @@ describe('Dashboard page', () => {
               message: 'Saturn node exited with code: 2'
             }
           ])
-        }
-      })
-
-      vi.mock('react-router-dom', async () => {
-        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-        return {
-          ...router,
-          useNavigate: () => mockedUsedNavigate
         }
       })
     })
@@ -157,15 +129,17 @@ describe('Dashboard page', () => {
             onActivityLogged,
             onEarningsChanged,
             onJobProcessed,
-            onUpdateAvailable
+            onUpdateAvailable,
+            onTransactionUpdate: vi.fn((callback) => () => ({})),
+            onBalanceUpdate: vi.fn((callback) => () => ({}))
           },
           getUpdaterStatus
         }
       })
-      render(<BrowserRouter><Dashboard /></BrowserRouter>)
+      act(() => { render(<BrowserRouter><Dashboard /></BrowserRouter>) })
     })
 
-    test('sbscribes and listens the activity logger', async () => {
+    test('subscribes and listens the activity logger', async () => {
       await waitFor(() => { expect(onActivityLogged).toBeCalledTimes(1) }, { timeout: 10 })
       await waitFor(() => { expect(document.getElementsByClassName('activity-item').length).toBe(2) }, { timeout: 3000 })
     })
