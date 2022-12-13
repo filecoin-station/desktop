@@ -8,9 +8,12 @@ import { BrowserRouter } from 'react-router-dom'
 const mockedUsedNavigate = vi.fn()
 
 describe('Welcome page test', () => {
-  test('User has completed the onboarding previously', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  describe('User has completed the onboarding previously', () => {
     beforeAll(() => {
-      vi.restoreAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
@@ -38,9 +41,8 @@ describe('Welcome page test', () => {
     })
   })
 
-  test('User has not completed the onboarding', () => {
+  describe('User has not completed the onboarding', () => {
     beforeAll(() => {
-      vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
@@ -58,7 +60,7 @@ describe('Welcome page test', () => {
     })
 
     beforeEach(() => {
-      vi.restoreAllMocks()
+      vi.clearAllMocks()
       act(() => { render(<BrowserRouter> <Onboarding /></BrowserRouter >) })
     })
 
@@ -88,8 +90,7 @@ describe('Welcome page test', () => {
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/Accept/i)) }))
-      expect(mockedUsedNavigate).toHaveBeenCalledTimes(1)
-      expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true })
+      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }))
     })
   })
 })
