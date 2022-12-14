@@ -6,34 +6,27 @@ import '../lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard'
 
-describe('Dashboard wallet display', () => {
-  // beforeEach(() => {
-  //   vi.restoreAllMocks()
-  // })
+const mockedSetDestinationWalletAddress = vi.fn()
 
+vi.mock('../lib/station-config', () => ({
+  getStationWalletBalance: () => Promise.resolve(0),
+  getStationWalletTransactionsHistory: () => Promise.resolve([]),
+  getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+  getDestinationWalletAddress: () => Promise.resolve(''),
+  setDestinationWalletAddress: () => mockedSetDestinationWalletAddress,
+  getTotalJobsCompleted: () => Promise.resolve(0),
+  getTotalEarnings: () => Promise.resolve(0),
+  getAllActivities: () => Promise.resolve([])
+}))
+
+describe('Dashboard wallet display', () => {
   describe('Wallet modal empty state', () => {
-    const mockedSetDestinationWalletAddress = vi.fn((addresss: string | undefined) => ({}))
     const onActivityLogged = vi.fn((callback) => () => ({}))
     const onEarningsChanged = vi.fn((callback) => () => ({}))
     const onJobProcessed = vi.fn((callback) => () => ({}))
     const onUpdateAvailable = vi.fn((callback) => () => ({}))
     const onTransactionUpdate = vi.fn((callback) => () => ({}))
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
-
-    beforeAll(() => {
-      vi.mock('../lib/station-config', () => {
-        return {
-          getStationWalletBalance: () => Promise.resolve(0),
-          getStationWalletTransactionsHistory: () => Promise.resolve([]),
-          getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          getDestinationWalletAddress: () => Promise.resolve(''),
-          setDestinationWalletAddress: () => mockedSetDestinationWalletAddress,
-          getTotalJobsCompleted: () => Promise.resolve(0),
-          getTotalEarnings: () => Promise.resolve(0),
-          getAllActivities: () => Promise.resolve([])
-        }
-      })
-    })
 
     beforeEach(() => {
       vi.clearAllMocks()

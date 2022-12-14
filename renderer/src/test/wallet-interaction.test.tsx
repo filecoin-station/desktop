@@ -6,13 +6,38 @@ import '../lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
 import Dashboard from '../pages/Dashboard'
 
+const mockedTransferAllFunds = vi.fn()
+
+vi.mock('../lib/station-config', () => ({
+  getStationWalletBalance: () => Promise.resolve(9.999),
+  getStationWalletTransactionsHistory: () => Promise.resolve([
+    {
+      hash: 'bafy2bzacebi5g5t5x77aeuviwfx5np4xo2f6viunt4bjnnecfjbjqzhufxfk2',
+      timestamp: new Date('01/12/2022'),
+      status: 'sent',
+      outgoing: true,
+      amount: 4000,
+      address: 'f0123'
+    },
+    {
+      hash: 'bafy2bzacebi5g5t5x77aeuviwfx5np4xo2f6viunt4bjnnecfjbjqzhufxfk3',
+      timestamp: new Date('01/01/2022'),
+      status: 'sent',
+      outgoing: false,
+      amount: 4000,
+      address: ''
+    }
+  ]),
+  getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+  getDestinationWalletAddress: () => Promise.resolve('f0123'),
+  setDestinationWalletAddress: () => () => Promise.resolve(),
+  getTotalJobsCompleted: () => Promise.resolve(0),
+  getTotalEarnings: () => Promise.resolve(0),
+  getAllActivities: () => Promise.resolve([]),
+  trasnferAllFundsToDestinationWallet: () => mockedTransferAllFunds()
+}))
+
 describe('Dashboard wallet interactions', () => {
-  // beforeEach(() => {
-  //   vi.restoreAllMocks()
-  // })
-
-  const mockedTransferAllFunds = vi.fn()
-
   describe('Wallet with transactions and balance', () => {
     const onActivityLogged = vi.fn((callback) => () => ({}))
     const onEarningsChanged = vi.fn((callback) => () => ({}))
@@ -20,39 +45,6 @@ describe('Dashboard wallet interactions', () => {
     const onUpdateAvailable = vi.fn((callback) => () => ({}))
     const onTransactionUpdate = vi.fn((callback) => () => ({}))
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
-
-    beforeAll(() => {
-      vi.mock('../lib/station-config', () => {
-        return {
-          getStationWalletBalance: () => Promise.resolve(9.999),
-          getStationWalletTransactionsHistory: () => Promise.resolve([
-            {
-              hash: 'bafy2bzacebi5g5t5x77aeuviwfx5np4xo2f6viunt4bjnnecfjbjqzhufxfk2',
-              timestamp: new Date('01/12/2022'),
-              status: 'sent',
-              outgoing: true,
-              amount: 4000,
-              address: 'f0123'
-            },
-            {
-              hash: 'bafy2bzacebi5g5t5x77aeuviwfx5np4xo2f6viunt4bjnnecfjbjqzhufxfk3',
-              timestamp: new Date('01/01/2022'),
-              status: 'sent',
-              outgoing: false,
-              amount: 4000,
-              address: ''
-            }
-          ]),
-          getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          getDestinationWalletAddress: () => Promise.resolve('f0123'),
-          setDestinationWalletAddress: () => () => Promise.resolve(),
-          getTotalJobsCompleted: () => Promise.resolve(0),
-          getTotalEarnings: () => Promise.resolve(0),
-          getAllActivities: () => Promise.resolve([]),
-          trasnferAllFundsToDestinationWallet: () => mockedTransferAllFunds()
-        }
-      })
-    })
 
     beforeEach(() => {
       vi.clearAllMocks()

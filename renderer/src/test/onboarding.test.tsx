@@ -6,6 +6,13 @@ import Onboarding from '../pages/Onboarding'
 import { BrowserRouter } from 'react-router-dom'
 
 const mockedUsedNavigate = vi.fn()
+vi.mock('react-router-dom', async () => {
+  const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
+  return {
+    ...router,
+    useNavigate: () => mockedUsedNavigate
+  }
+})
 
 describe('Welcome page test', () => {
   beforeEach(() => {
@@ -47,14 +54,6 @@ describe('Welcome page test', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
           getOnboardingCompleted: (status: boolean) => Promise.resolve(false)
-        }
-      })
-
-      vi.mock('react-router-dom', async () => {
-        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-        return {
-          ...router,
-          useNavigate: () => mockedUsedNavigate
         }
       })
     })
