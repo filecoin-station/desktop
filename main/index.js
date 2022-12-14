@@ -42,8 +42,12 @@ const { setup: setupDialogs } = require('./dialog')
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
-log.info('Filecoin Station build version:', BUILD_VERSION, isDev ? '[DEV]' : '', inTest ? '[TEST]' : '')
-log.info('Running on %s %s version %s', os.platform(), os.arch(), os.release())
+log.info('Filecoin Station build version: %s %s-%s%s%s', BUILD_VERSION, os.platform(), os.arch(), isDev ? ' [DEV]' : '', inTest ? ' [TEST]' : '')
+log.info('Machine spec: %s version %s', os.type(), os.release())
+// TODO(bajtos) print machine architecture after we upgrade to Electron with Node.js 18
+// log.info('Machine spec: %s %s version %s', os.type(),
+//   os.machine(),
+//   os.release())
 
 // Expose additional metadata for Electron preload script
 process.env.STATION_BUILD_VERSION = BUILD_VERSION
