@@ -47,7 +47,7 @@ describe('Dashboard wallet display', () => {
           }
         }
       })
-      act(() => { render(<BrowserRouter><Dashboard /></BrowserRouter>) })
+      render(<BrowserRouter><Dashboard /></BrowserRouter>)
     })
 
     test('Wallet curtain opens on click widget and closes on click background shadow', () => {

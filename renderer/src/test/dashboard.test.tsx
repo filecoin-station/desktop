@@ -52,7 +52,7 @@ describe('Dashboard page', () => {
           }
         }
       })
-      act(() => { render(<BrowserRouter><Dashboard /></BrowserRouter>) })
+      render(<BrowserRouter><Dashboard /></BrowserRouter>)
     })
 
     test('display jobs counter', () => {
@@ -143,7 +143,7 @@ describe('Dashboard page', () => {
           getUpdaterStatus
         }
       })
-      act(() => { render(<BrowserRouter><Dashboard /></BrowserRouter>) })
+      render(<BrowserRouter><Dashboard /></BrowserRouter>)
     })
 
     test('subscribes and listens the activity logger', () => {

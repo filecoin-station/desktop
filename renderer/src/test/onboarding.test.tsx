@@ -39,7 +39,7 @@ describe('Welcome page test', () => {
 
     beforeEach(() => {
       vi.clearAllMocks()
-      act(() => { render(<BrowserRouter> <Onboarding /></BrowserRouter >) })
+      render(<BrowserRouter> <Onboarding /></BrowserRouter >)
     })
 
     test('Redirects to dashboard directly if user is onboarded', async () => {
@@ -60,7 +60,7 @@ describe('Welcome page test', () => {
 
     beforeEach(() => {
       vi.clearAllMocks()
-      act(() => { render(<BrowserRouter> <Onboarding /></BrowserRouter >) })
+      render(<BrowserRouter> <Onboarding /></BrowserRouter >)
     })
 
     test('show loading test', () => {
