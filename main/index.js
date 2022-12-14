@@ -1,8 +1,11 @@
 'use strict'
 
 const { app, dialog } = require('electron')
-const log = require('electron-log')
+const electronLog = require('electron-log')
 const path = require('node:path')
+
+console.log('Log file:', electronLog.transports.file.findLogPath())
+const log = electronLog.scope('main')
 
 // Override the place where we look for config files when running the end-to-end test suite.
 // We must call this early on, before any of our modules accesses the config store.
@@ -23,6 +26,7 @@ const { ActivityLog } = require('./activity-log')
 const { BUILD_VERSION } = require('./consts')
 const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
+const os = require('os')
 const saturnNode = require('./saturn-node')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
@@ -38,7 +42,8 @@ const { setup: setupDialogs } = require('./dialog')
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
-console.log('Filecoin Station build version:', BUILD_VERSION)
+log.info('Filecoin Station build version:', BUILD_VERSION, isDev ? '[DEV]' : '', inTest ? '[TEST]' : '')
+log.info('Running on %s %s version %s', os.platform(), os.arch(), os.release())
 
 // Expose additional metadata for Electron preload script
 process.env.STATION_BUILD_VERSION = BUILD_VERSION
