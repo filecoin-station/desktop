@@ -28,7 +28,7 @@ const configStore = new Store({
     }
   },
   beforeEachMigration: (_, context) => {
-    console.log(`Migrating station-config from ${context.fromVersion} → ${context.toVersion}`)
+    log.info(`Migrating station-config from ${context.fromVersion} → ${context.toVersion}`)
   }
 })
 
