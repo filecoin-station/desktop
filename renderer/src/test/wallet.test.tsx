@@ -98,7 +98,7 @@ describe('Dashboard wallet display', () => {
       expect(document.getElementsByClassName('destination-address')[0]).toHaveValue('f0111')
       expect(document.getElementsByClassName('submit-address')[0]).not.toBeDisabled()
       fireEvent.click(document.getElementsByClassName('submit-address')[0])
-      waitFor(() => { expect(mockedSetDestinationWalletAddress).toHaveBeenCalled() })
+      waitFor(() => { expect(mockedSetDestinationWalletAddress).toHaveBeenCalledOnce() })
     })
   })
 })
