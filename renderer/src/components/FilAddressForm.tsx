@@ -15,7 +15,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
   const [addressIsValid, setAddressIsValid] = useState<boolean | undefined>()
   const [inputAddr, setInputAddr] = useState<string>(destinationAddress)
   const [internalEditMode, setInternalEditMode] = useState<boolean>(false)
-  const ref = useRef(null)
+  const ref = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setInternalEditMode(editMode || destinationAddress === '')
@@ -48,7 +48,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
     if (addressIsValid) {
       saveDestinationAddress(inputAddr)
     }
-    ref.current.blur()
+    if (ref.current) { ref.current.blur() }
   }
 
   const computeBorderClasses = () => {
