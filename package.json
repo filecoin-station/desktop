@@ -41,7 +41,7 @@
   "dependencies": {
     "@glif/filecoin-address": "^2.0.1",
     "@influxdata/influxdb-client": "^1.33.0",
-    "@sentry/node": "^7.23.0",
+    "@sentry/node": "^7.26.0",
     "@sentry/react": "^7.24.2",
     "@sentry/tracing": "^7.21.1",
     "dayjs": "^1.11.7",
