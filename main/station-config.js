@@ -132,7 +132,7 @@ function getStationWalletTransactionsHistory() {
 /**
  * @returns void
  */
-function trasnferAllFundsToDestinationWallet() {
+function transferAllFundsToDestinationWallet() {
   return {} // todo - backend logic
 }
 
