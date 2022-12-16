@@ -1,24 +1,17 @@
 import { useEffect, useState } from 'react'
-import {
-  getAllActivities, stopSaturnNode,
-  setFilAddress, getFilAddress,
-  getTotalEarnings, getTotalJobsCompleted
-} from '../lib/station-config'
-import { ActivityEventMessage } from '../typings'
+import { stopSaturnNode, setFilAddress, getFilAddress } from '../lib/station-config'
 import ActivityLog from '../components/ActivityLog'
 import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
 import { useNavigate } from 'react-router-dom'
 import { confirmChangeWalletAddress } from '../lib/dialogs'
 import UpdateBanner from '../components/UpdateBanner'
+import useStationActivity from '../hooks/StationActivity'
 
 const Dashboard = (): JSX.Element => {
   const navigate = useNavigate()
-
   const [address, setAddress] = useState<string | undefined>()
-  const [totalJobs, setTotalJobs] = useState<number>(0)
-  const [totalEarnings, setTotalEarnigs] = useState<number>(0)
-  const [activities, setActivities] = useState<ActivityEventMessage[]>([])
+  const { totalJobs, totalEarnings, activities } = useStationActivity()
   const shortAddress = (str: string) => str
     ? str.substring(0, 4) + '...' + str.substring(str.length - 4, str.length)
     : ''
@@ -32,24 +25,9 @@ const Dashboard = (): JSX.Element => {
 
   useEffect(() => {
     const loadStoredInfo = async () => {
-      Promise.all([
-        (async () => { setAddress(await getFilAddress()) })(),
-        (async () => { setActivities(await getAllActivities()) })(),
-        (async () => { setTotalEarnigs(await getTotalEarnings()) })(),
-        (async () => { setTotalJobs(await getTotalJobsCompleted()) })()
-      ])
+      setAddress(await getFilAddress())
     }
     loadStoredInfo()
-
-    const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
-    const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(setTotalEarnigs)
-    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(setTotalJobs)
-
-    return () => {
-      unsubscribeOnActivityLogged()
-      unsubscribeOnEarningsChanged()
-      unsubscribeOnJobProcessed()
-    }
   }, [])
 
   return (
