@@ -44,7 +44,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('station:restartToUpdate', (_event, _args) => ctx.restartToUpdate())
   ipcMain.handle('station:openReleaseNotes', (_event) => ctx.openReleaseNotes())
   ipcMain.handle('station:getUpdaterStatus', (_events, _args) => ctx.getUpdaterStatus())
-  ipcMain.handle('station:browseTransactionTracker', (_events, transactoinHash) => ctx.browseTransactionTracker(transactoinHash))
+  ipcMain.handle('station:browseTransactionTracker', (_events, transactionHash) => ctx.browseTransactionTracker(transactionHash))
 }
 
 module.exports = {
