@@ -69,8 +69,8 @@ export async function getStationWalletTransactionsHistory (): Promise<FILTransac
   return await window.electron.stationConfig.getStationWalletTransactionsHistory()
 }
 
-export async function trasnferAllFundsToDestinationWallet (): Promise<void> {
-  return await window.electron.stationConfig.trasnferAllFundsToDestinationWallet()
+export async function transferAllFundsToDestinationWallet (): Promise<void> {
+  return await window.electron.stationConfig.transferAllFundsToDestinationWallet()
 }
 
 export function brownseTransactionTracker (transactionHash: string): void {
