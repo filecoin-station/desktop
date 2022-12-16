@@ -89,28 +89,28 @@ function setFilAddress (address) {
 /**
  * @returns {string}
  */
-function getStationID() {
+function getStationID () {
   return StationID
 }
 
 /**
  * @returns {string}
  */
-function getStationWalletAddress() {
-  return FilAddress || '' // needs refactor
+function getStationWalletAddress () {
+  return FilAddress || ''
 }
 
 /**
  * @returns {string | undefined}
  */
-function getDestinationWalletAddress() {
+function getDestinationWalletAddress () {
   return DestinationFilAddress
 }
 
 /**
  * @param {string | undefined} address
  */
-function setDestinationWalletAddress(address) {
+function setDestinationWalletAddress (address) {
   DestinationFilAddress = address
   configStore.set(ConfigKeys.DestinationFilAddress, DestinationFilAddress)
 }
@@ -118,21 +118,21 @@ function setDestinationWalletAddress(address) {
 /**
  * @returns {number}
  */
-function getStationWalletBalance() {
+function getStationWalletBalance () {
   return 0 // todo - backend logic
 }
 
 /**
  * @returns { TransactionMessage[] }
  */
-function getStationWalletTransactionsHistory() {
+function getStationWalletTransactionsHistory () {
   return [] // todo - backend logic
 }
 
 /**
  * @returns void
  */
-function transferAllFundsToDestinationWallet() {
+function transferAllFundsToDestinationWallet () {
   return {} // todo - backend logic
 }
 
@@ -149,5 +149,5 @@ module.exports = {
   setDestinationWalletAddress,
   getStationWalletBalance,
   getStationWalletTransactionsHistory,
-  trasnferAllFundsToDestinationWallet
+  transferAllFundsToDestinationWallet
 }
