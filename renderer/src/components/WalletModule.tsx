@@ -5,7 +5,7 @@ import FilAddressForm from './FilAddressForm'
 import WalletTransactionsHistory from './WalletTransactionsHistory'
 import useWallet from '../hooks/StationWallet'
 import TransferFundsButtons from './TransferFunds'
-import { trasnferAllFundsToDestinationWallet } from '../lib/station-config'
+import { transferAllFundsToDestinationWallet } from '../lib/station-config'
 
 interface PropsWallet {
   isOpen: boolean,
@@ -43,7 +43,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   }
 
   const transferAllFunds = async () => {
-    await trasnferAllFundsToDestinationWallet()
+    await transferAllFundsToDestinationWallet()
     setTransferMode(false)
   }
 

@@ -48,7 +48,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
     if (addressIsValid) {
       saveDestinationAddress(inputAddr)
     }
-    if (ref.current) { ref.current.blur() }
+    if (ref.current) { ref.current.blur() }
   }
 
   const computeBorderClasses = () => {
