@@ -150,7 +150,9 @@ async function start (/** @type {Context} */ ctx) {
     childProcess = null
 
     Sentry.captureException('Saturn node exited', scope => {
-      scope.setExtra('logs', getLog())
+      scope.setExtra('logs', getLog({
+        maxLines: 10 // The Sentry UI can't show the full 100 lines
+      }))
       scope.setExtra('reason', moduleExitReason)
       return scope
     })
@@ -206,8 +208,8 @@ function getWebUrl () {
   return webUrl
 }
 
-function getLog () {
-  return childLog.join('\n')
+function getLog ({ maxLines = Infinity } = {}) {
+  return childLog.slice(-maxLines).join('\n')
 }
 
 /**
