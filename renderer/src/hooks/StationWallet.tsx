@@ -32,7 +32,6 @@ const useWallet = (): Wallet => {
 
   const dismissCurrentTransaction = () => {
     if (currentTransaction && currentTransaction.status !== 'processing') {
-      setWalletTransactions([currentTransaction, ...walletTransactions])
       setCurrentTransaction(undefined)
     }
   }
@@ -63,6 +62,7 @@ const useWallet = (): Wallet => {
       setWalletTransactions(await getStationWalletTransactionsHistory())
     }
     loadStoredInfo()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
