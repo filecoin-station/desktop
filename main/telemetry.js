@@ -3,7 +3,7 @@
 const { InfluxDB } = require('@influxdata/influxdb-client')
 const { createHash } = require('node:crypto')
 const { getStationID } = require('./station-config')
-const { getFilAddress } = require('./station-config')
+const wallet = require('./wallet')
 const Sentry = require('@sentry/node')
 
 /** @typedef {import('@influxdata/influxdb-client').Point} Point */
@@ -30,11 +30,8 @@ setInterval(() => {
  * @param {Point} point
  */
 const writePoint = point => {
-  const filAddress = getFilAddress()
-  if (filAddress) {
-    const hash = createHash('sha256').update(filAddress).digest('hex')
-    point.stringField('wallet', hash)
-  }
+  const hash = createHash('sha256').update(wallet.getAddress()).digest('hex')
+  point.stringField('wallet', hash)
   point.stringField('station', getStationID())
   writeClient.writePoint(point)
 }

@@ -8,8 +8,8 @@ const { fetch } = require('undici')
 const fs = require('node:fs/promises')
 const path = require('path')
 const { setTimeout } = require('timers/promises')
-const { getFilAddress, setFilAddress } = require('./station-config')
 const Sentry = require('@sentry/node')
+const wallet = require('./wallet')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -70,8 +70,8 @@ function getSaturnBinaryPath () {
 }
 
 async function start (/** @type {Context} */ ctx) {
-  if (!getFilAddress()) {
-    console.info('Saturn node requires FIL address. Please configure it in the Station UI.')
+  if (!wallet.getAddress()) {
+    console.info('Saturn node requires FIL address')
     return
   }
 
@@ -85,7 +85,7 @@ async function start (/** @type {Context} */ ctx) {
   appendToChildLog('Starting Saturn node')
   childProcess = execa(saturnBinaryPath, {
     env: {
-      FIL_WALLET_ADDRESS: getFilAddress(),
+      FIL_WALLET_ADDRESS: wallet.getAddress(),
       ROOT_DIR: path.join(consts.CACHE_HOME, 'saturn')
     }
   })
@@ -283,7 +283,5 @@ module.exports = {
   isRunning,
   isReady,
   getLog,
-  getWebUrl,
-  getFilAddress,
-  setFilAddress
+  getWebUrl
 }

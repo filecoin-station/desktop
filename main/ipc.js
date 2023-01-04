@@ -4,6 +4,7 @@ const { ipcMain } = require('electron')
 
 const saturnNode = require('./saturn-node')
 const stationConfig = require('./station-config')
+const wallet = require('./wallet')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -23,13 +24,11 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('saturn:stop', saturnNode.stop)
   ipcMain.handle('saturn:getLog', saturnNode.getLog)
   ipcMain.handle('saturn:getWebUrl', saturnNode.getWebUrl)
-  ipcMain.handle('saturn:getFilAddress', saturnNode.getFilAddress)
-  ipcMain.handle('saturn:setFilAddress', (_event, address) => saturnNode.setFilAddress(address))
   // Station-wide config
   ipcMain.handle('station:getOnboardingCompleted', stationConfig.getOnboardingCompleted)
   ipcMain.handle('station:setOnboardingCompleted', (_event) => stationConfig.setOnboardingCompleted())
   // Wallet-wide config
-  ipcMain.handle('station:getStationWalletAddress', stationConfig.getStationWalletAddress)
+  ipcMain.handle('station:getStationWalletAddress', wallet.getAddress)
   ipcMain.handle('station:getDestinationWalletAddress', stationConfig.getDestinationWalletAddress)
   ipcMain.handle('station:setDestinationWalletAddress', (_event, address) => stationConfig.setDestinationWalletAddress(address))
   ipcMain.handle('station:getStationWalletBalance', stationConfig.getStationWalletBalance)

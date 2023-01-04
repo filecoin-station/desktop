@@ -28,6 +28,7 @@ const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
 const os = require('os')
 const saturnNode = require('./saturn-node')
+const wallet = require('./wallet')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
@@ -157,6 +158,7 @@ async function run () {
 
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
 
+    await wallet.setup()
     await saturnNode.setup(ctx)
     setupDialogs(ctx)
   } catch (e) {

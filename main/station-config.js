@@ -39,7 +39,6 @@ log.info('Loading Station configuration from', configStore.path)
 
 let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted, false))
 let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained, false))
-let FilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 let DestinationFilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.DestinationFilAddress))
 const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID, randomUUID()))
 
@@ -74,32 +73,10 @@ function setTrayOperationExplained () {
 }
 
 /**
- * @returns {string | undefined}
- */
-function getFilAddress () {
-  return FilAddress || 'f0111' // needs refactor - same as getStationWalletAddress
-}
-
-/**
- * @param {string | undefined} address
- */
-function setFilAddress (address) {
-  FilAddress = address
-  configStore.set(ConfigKeys.FilAddress, address)
-}
-
-/**
  * @returns {string}
  */
 function getStationID () {
   return StationID
-}
-
-/**
- * @returns {string}
- */
-function getStationWalletAddress () {
-  return FilAddress || ''
 }
 
 /**
@@ -143,10 +120,7 @@ module.exports = {
   setOnboardingCompleted,
   getTrayOperationExplained,
   setTrayOperationExplained,
-  getFilAddress,
-  setFilAddress,
   getStationID,
-  getStationWalletAddress,
   getDestinationWalletAddress,
   setDestinationWalletAddress,
   getStationWalletBalance,
