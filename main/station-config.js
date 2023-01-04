@@ -10,7 +10,7 @@ const ConfigKeys = {
   TrayOperationExplained: 'station.TrayOperationExplained',
   StationID: 'station.StationID',
   FilAddress: 'station.FilAddress',
-  DestinationFilAddress: 'station.FilAddress' // todo - replace by 'station.DestinationFilAddress'
+  DestinationFilAddress: 'station.DestinationFilAddress'
 }
 
 /** @typedef {import('./typings').FILTransaction} TransactionMessage */
@@ -77,7 +77,7 @@ function setTrayOperationExplained () {
  * @returns {string | undefined}
  */
 function getFilAddress () {
-  return FilAddress
+  return FilAddress || 'f0111' // needs refactor - same as getStationWalletAddress
 }
 
 /**

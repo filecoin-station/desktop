@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { ReactComponent as Warning } from '../assets/img/error.svg'
+import { ReactComponent as Warning } from '../assets/img/icons/error.svg'
 import { openReleaseNotes, restartToUpdate } from '../lib/station-config'
 
 const UpdateBanner = () => {

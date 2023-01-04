@@ -53,8 +53,7 @@ export async function getDestinationWalletAddress (): Promise<string | undefined
 }
 
 export async function setDestinationWalletAddress (address: string | undefined): Promise<void> {
-  return await window.electron.saturnNode.setFilAddress(address)
-  // return await window.electron.stationConfig.setDestinationWalletAddress(address)
+  return await window.electron.stationConfig.setDestinationWalletAddress(address)
 }
 
 export async function getStationWalletAddress (): Promise<string> {
