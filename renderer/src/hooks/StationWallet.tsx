@@ -23,7 +23,7 @@ const useWallet = (): Wallet => {
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
   const [walletBalance, setWalletBalance] = useState<number>(0)
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[]>([])
-  const [currentTransaction, setCurrentTransaction] = useState<FILTransaction | undefined>()
+  const [currentTransaction, setCurrentTransaction] = useState<FILTransaction>()
 
   const editDestinationAddress = async (address: string | undefined) => {
     await setDestinationWalletAddress(address)
@@ -67,13 +67,11 @@ const useWallet = (): Wallet => {
 
   useEffect(() => {
     const updateWalletTransactionsArray = (transactions: FILTransaction[]) => {
-      const newCurrentTransaction = transactions[0]
+      const [newCurrentTransaction, ...confirmedTransactions] = transactions
       if (newCurrentTransaction.status === 'processing' || (currentTransaction && +currentTransaction.timestamp === +newCurrentTransaction.timestamp)) {
         setCurrentTransaction(newCurrentTransaction)
         if (newCurrentTransaction.status !== 'processing') { setTimeout(() => { setWalletTransactions(transactions); setCurrentTransaction(undefined) }, 6000) }
-
-        const transactionsExceptLatest = transactions.filter((t) => { return t !== newCurrentTransaction })
-        setWalletTransactions(transactionsExceptLatest)
+        setWalletTransactions(confirmedTransactions)
       } else {
         setWalletTransactions(transactions)
       }
