@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { stopSaturnNode, setFilAddress, getFilAddress } from '../lib/station-config'
+import { stopSaturnNode, setDestinationWalletAddress, getDestinationWalletAddress } from '../lib/station-config'
 import ActivityLog from '../components/ActivityLog'
 import HeaderBackgroundImage from '../assets/img/header.png'
 import WalletIcon from '../assets/img/wallet.svg'
@@ -18,14 +18,14 @@ const Dashboard = (): JSX.Element => {
   const disconnect = async () => {
     if (!(await confirmChangeWalletAddress())) return
     await stopSaturnNode()
-    await setFilAddress('')
+    await setDestinationWalletAddress('')
     setAddress(undefined)
     navigate('/wallet', { replace: true })
   }
 
   useEffect(() => {
     const loadStoredInfo = async () => {
-      setAddress(await getFilAddress())
+      setAddress(await getDestinationWalletAddress())
     }
     loadStoredInfo()
   }, [])

@@ -15,7 +15,7 @@ describe('Welcome page test', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
           getOnboardingCompleted: (status: boolean) => Promise.resolve(true),
-          getFilAddress: () => Promise.resolve(undefined)
+          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
         }
       })
 
@@ -46,7 +46,7 @@ describe('Welcome page test', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
           getOnboardingCompleted: (status: boolean) => Promise.resolve(false),
-          getFilAddress: () => Promise.resolve(undefined)
+          getDestinationWalletAddress: () => Promise.resolve(undefined)
         }
       })
 
@@ -100,7 +100,7 @@ describe('Welcome page test', () => {
       vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
-          getFilAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
           setOnboardingCompleted: () => Promise.resolve(undefined),
           getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
         }

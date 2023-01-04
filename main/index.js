@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, dialog } = require('electron')
+const { app, dialog, shell } = require('electron')
 const electronLog = require('electron-log')
 const path = require('node:path')
 
@@ -117,7 +117,8 @@ const ctx = {
   confirmChangeWalletAddress: () => { throw new Error('never get here') },
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
-  getUpdaterStatus: () => { throw new Error('never get here') }
+  getUpdaterStatus: () => { throw new Error('never get here') },
+  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://explorer.glif.io/tx/${transactionHash}`) }
 }
 
 app.on('before-quit', () => {

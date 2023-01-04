@@ -1,4 +1,4 @@
-import { ActivityEventMessage } from '../typings'
+import { ActivityEventMessage, FILTransaction } from '../typings'
 
 export async function getOnboardingCompleted (): Promise<boolean> {
   return await window.electron.stationConfig.getOnboardingCompleted()
@@ -6,18 +6,6 @@ export async function getOnboardingCompleted (): Promise<boolean> {
 
 export async function setOnboardingCompleted (): Promise<void> {
   return await window.electron.stationConfig.setOnboardingCompleted()
-}
-
-export async function getFilAddress (): Promise<string | undefined> {
-  return await window.electron.stationConfig.getFilAddress()
-}
-
-export async function setFilAddress (address: string | undefined): Promise<void> {
-  return await window.electron.stationConfig.setFilAddress(address)
-}
-
-export async function setStationFilAddress (address: string | undefined): Promise<void> {
-  return await window.electron.stationConfig.setFilAddress(address)
 }
 
 export async function isSaturnNodeRunning (): Promise<boolean> {
@@ -58,4 +46,33 @@ export async function restartToUpdate (): Promise<void> {
 
 export function openReleaseNotes (): void {
   return window.electron.openReleaseNotes()
+}
+
+export async function getDestinationWalletAddress (): Promise<string | undefined> {
+  return await window.electron.stationConfig.getDestinationWalletAddress()
+}
+
+export async function setDestinationWalletAddress (address: string | undefined): Promise<void> {
+  return await window.electron.saturnNode.setFilAddress(address)
+  // return await window.electron.stationConfig.setDestinationWalletAddress(address)
+}
+
+export async function getStationWalletAddress (): Promise<string> {
+  return await window.electron.stationConfig.getStationWalletAddress()
+}
+
+export async function getStationWalletBalance (): Promise<number> {
+  return await window.electron.stationConfig.getStationWalletBalance()
+}
+
+export async function getStationWalletTransactionsHistory (): Promise<FILTransaction[]> {
+  return await window.electron.stationConfig.getStationWalletTransactionsHistory()
+}
+
+export async function transferAllFundsToDestinationWallet (): Promise<void> {
+  return await window.electron.stationConfig.transferAllFundsToDestinationWallet()
+}
+
+export function brownseTransactionTracker (transactionHash: string): void {
+  return window.electron.stationConfig.browseTransactionTracker(transactionHash)
 }
