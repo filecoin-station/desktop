@@ -3,6 +3,8 @@
 const Store = require('electron-store')
 const { randomUUID } = require('crypto')
 
+const log = require('electron-log').scope('config')
+
 const ConfigKeys = {
   OnboardingCompleted: 'station.OnboardingCompleted',
   TrayOperationExplained: 'station.TrayOperationExplained',
@@ -29,11 +31,11 @@ const configStore = new Store({
     }
   },
   beforeEachMigration: (_, context) => {
-    console.log(`Migrating station-config from ${context.fromVersion} → ${context.toVersion}`)
+    log.info(`Migrating station-config from ${context.fromVersion} → ${context.toVersion}`)
   }
 })
 
-console.log('Loading Station configuration from', configStore.path)
+log.info('Loading Station configuration from', configStore.path)
 
 let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted, false))
 let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained, false))

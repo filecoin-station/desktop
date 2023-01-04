@@ -150,7 +150,8 @@ async function start (/** @type {Context} */ ctx) {
     childProcess = null
 
     Sentry.captureException('Saturn node exited', scope => {
-      scope.setExtra('logs', getLog())
+      // Sentry UI can't show the full 100 lines
+      scope.setExtra('logs', childLog.slice(-10).join('\n'))
       scope.setExtra('reason', moduleExitReason)
       return scope
     })
