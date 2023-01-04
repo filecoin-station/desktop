@@ -29,6 +29,7 @@ function beforeQuitCleanup () {
 }
 
 function setup (/** @type {import('./typings').Context} */ _ctx) {
+  autoUpdater.logger = log
   autoUpdater.autoDownload = false // we download manually in 'update-available'
 
   autoUpdater.on('error', onUpdaterError)
