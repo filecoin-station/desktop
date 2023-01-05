@@ -111,7 +111,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
             placeholder=" "
             disabled={!internalEditMode}
             tabIndex={0}
-            value={inputAddr}
+            value={internalEditMode ? inputAddr : `${inputAddr.slice(0, 6)} ... ${inputAddr.slice(-6)}`}
             onChange={(event) => { setInputAddr(event.target.value) }}
             className='input fil-address mt-[7px] min-w-[90px] w-[460px] ease-in-out transition duration-300'
             onFocus={() => { enableEditMode() }}/>
