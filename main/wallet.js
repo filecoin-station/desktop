@@ -6,6 +6,7 @@ const { default: Filecoin, HDWalletProvider } = require('@glif/filecoin-wallet-p
 const { CoinType } = require('@glif/filecoin-address')
 const electronLog = require('electron-log')
 const assert = require('assert')
+const { request, gql } = require('graphql-request')
 
 const log = electronLog.scope('wallet')
 
@@ -51,6 +52,51 @@ async function getBalance () {
   return balance.decimalPlaces(3).toNumber()
 }
 
+async function listTransactions () {
+  const url = 'https://graph.glif.link/query'
+  const query = gql`
+    query Messages($address: String!, $limit: Int!, $offset: Int!) {
+      messages(address: $address, limit: $limit, offset: $offset) {
+        cid
+        to {
+          id
+          robust
+        }
+        from {
+          id
+          robust
+        }
+        nonce
+        height
+        method
+        params
+        value
+      }
+    }
+  `
+  const variables = {
+    address,
+    limit: 100,
+    offset: 0
+  }
+  const { messages = [] } = await request(url, query, variables)
+  await Promise.all(messages.map(async message => {
+    const query = gql`
+      query Tipset($height: Uint64!) {
+        tipset(height: $height) {
+          minTimestamp
+        }
+      }
+    `
+    const variables = {
+      height: message.height
+    }
+    const { tipset } = await request(url, query, variables)
+    message.timestamp = new Date(tipset.minTimestamp * 1000)
+  }))
+  return messages
+}
+
 /**
  * @returns {string}
  */
@@ -61,5 +107,6 @@ function getAddress () {
 module.exports = {
   setup,
   getAddress,
-  getBalance
+  getBalance,
+  listTransactions
 }
