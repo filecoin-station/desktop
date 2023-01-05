@@ -28,11 +28,6 @@ export default defineConfig({
     sourcemap: true,
     target: 'chrome100'
   },
-  // resolve: {
-  //   alias: {
-  //     buffer: 'buffer/'
-  //   }
-  // },
   test: {
     globals: true,
     environment: 'jsdom',
