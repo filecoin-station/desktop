@@ -95,13 +95,6 @@ function setDestinationWalletAddress (address) {
 }
 
 /**
- * @returns {number}
- */
-function getStationWalletBalance () {
-  return 0 // todo - backend logic
-}
-
-/**
  * @returns { TransactionMessage[] }
  */
 function getStationWalletTransactionsHistory () {
@@ -123,7 +116,6 @@ module.exports = {
   getStationID,
   getDestinationWalletAddress,
   setDestinationWalletAddress,
-  getStationWalletBalance,
   getStationWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
 }

@@ -5,10 +5,13 @@ const { generateMnemonic } = require('@zondax/filecoin-signing-tools')
 const { default: Filecoin, HDWalletProvider } = require('@glif/filecoin-wallet-provider')
 const { CoinType } = require('@glif/filecoin-address')
 const electronLog = require('electron-log')
+const assert = require('assert')
 
 const log = electronLog.scope('wallet')
 
-let address = '' /** @type {string} */
+let address = ''
+/** @type {Filecoin | null} */
+let provider = null
 
 /**
  * @returns {Promise<string>}
@@ -28,7 +31,7 @@ async function getSeedPhrase () {
 
 async function setup () {
   const seed = await getSeedPhrase()
-  const provider = new Filecoin(new HDWalletProvider(seed), {
+  provider = new Filecoin(new HDWalletProvider(seed), {
     apiAddress: 'https://api.node.glif.io/rpc/v0'
   })
   ;[address] = await provider.wallet.getAccounts(
@@ -40,6 +43,15 @@ async function setup () {
 }
 
 /**
+ * @returns {Promise<number>}
+ */
+async function getBalance () {
+  assert(provider)
+  const balance = await provider.getBalance(address)
+  return balance.decimalPlaces(3).toNumber()
+}
+
+/**
  * @returns {string}
  */
 function getAddress () {
@@ -48,5 +60,6 @@ function getAddress () {
 
 module.exports = {
   setup,
-  getAddress
+  getAddress,
+  getBalance
 }
