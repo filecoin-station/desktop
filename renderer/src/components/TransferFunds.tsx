@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import { ReactComponent as InfoIcon } from '../assets/img/icons/info.svg'
+import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 
 interface TransferFundsButtonsProps {
   transferMode: boolean,
@@ -37,7 +38,15 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
       <div className={`absolute w-fit right-0 flex gap-1 items-center ${internalTransferMode ? 'z-20' : 'z-0'} `}>
         <button className={`btn-primary w-40 bg-grayscale-250 text-primary ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${internalTransferMode ? '' : 'translate-x-[7.6rem] text-opacity-0 '} `}
           onClick={transferAllFunds}>
-          <span className="text-2xs px-4 text-body-s">Send <span className='font-bold'>{balance} FIL</span></span>
+          <span className="text-2xs px-4 text-body-s">
+            Send{' '}
+            <span className='font-bold'>
+              {new FilecoinNumber(balance, 'fil')
+                .decimalPlaces(3, BigNumber.ROUND_DOWN)
+                .toString()}
+              {' '}FIL
+            </span>
+          </span>
         </button>
         <button className={`btn-primary ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${internalTransferMode ? '' : 'opacity-0'}`}
           onClick={reset}>
