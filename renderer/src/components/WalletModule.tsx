@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react'
+import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 import HeaderBackgroundImage from '../assets/img/header-curtain.png'
 
 import FilAddressForm from './FilAddressForm'
@@ -78,7 +79,10 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
             <div>
               <p className="w-fit text-body-3xs text-white opacity-80 uppercase leading-none">Total FIL</p>
               <p className="w-fit text-header-m text-white font-bold font-number leading-none">
-                {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 3 })}<span className="text-header-3xs ml-3">FIL</span>
+                {new FilecoinNumber(walletBalance, 'fil')
+                  .decimalPlaces(3, BigNumber.ROUND_DOWN)
+                  .toString()}
+                <span className="text-header-3xs ml-3">FIL</span>
               </p>
             </div>
             { renderTransferButtons() }

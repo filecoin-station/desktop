@@ -60,7 +60,7 @@ export async function getStationWalletAddress (): Promise<string> {
   return await window.electron.stationConfig.getStationWalletAddress()
 }
 
-export async function getStationWalletBalance (): Promise<number> {
+export async function getStationWalletBalance (): Promise<string> {
   return await window.electron.stationConfig.getStationWalletBalance()
 }
 

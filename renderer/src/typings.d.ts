@@ -31,7 +31,7 @@ export declare global {
         getStationWalletAddress: () => Promise<string>,
         getDestinationWalletAddress: () => Promise<string | undefined>,
         setDestinationWalletAddress: (address: string | undefined) => Promise<void>,
-        getStationWalletBalance: () => Promise<number>,
+        getStationWalletBalance: () => Promise<string>,
         getStationWalletTransactionsHistory: () => Promise<TransactionMessage[]>,
         transferAllFundsToDestinationWallet: () => Promise<void>,
         browseTransactionTracker: (transactionHash: string) => void

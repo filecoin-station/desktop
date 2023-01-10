@@ -21,7 +21,7 @@ interface Wallet {
 const useWallet = (): Wallet => {
   const [stationAddress, setStationAddress] = useState<string>('')
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
-  const [walletBalance, setWalletBalance] = useState<number>(0)
+  const [walletBalance, setWalletBalance] = useState<string | undefined>()
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[]>([])
   const [currentTransaction, setCurrentTransaction] = useState<FILTransaction>()
 

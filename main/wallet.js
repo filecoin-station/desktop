@@ -47,12 +47,12 @@ async function setup () {
 }
 
 /**
- * @returns {Promise<number>}
+ * @returns {Promise<string>}
  */
 async function getBalance () {
   assert(provider)
   const balance = await provider.getBalance(address)
-  return balance.decimalPlaces(3).toNumber()
+  return balance.toFil()
 }
 
 async function listTransactions () {
@@ -106,7 +106,6 @@ async function listTransactions () {
       ? message.to.robust
       : message.from.robust
   }))
-  console.log({ transactions })
   return transactions
 }
 
