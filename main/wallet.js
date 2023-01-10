@@ -7,8 +7,9 @@ const { CoinType } = require('@glif/filecoin-address')
 const electronLog = require('electron-log')
 const assert = require('assert')
 const { request, gql } = require('graphql-request')
+const { FilecoinNumber } = require('@glif/filecoin-number')
 
-/** @typedef {import('./typings').Message} Message */
+/** @typedef {import('./typings').GQLMessage} GQLMessage */
 
 const log = electronLog.scope('wallet')
 
@@ -61,11 +62,9 @@ async function listTransactions () {
       messages(address: $address, limit: $limit, offset: $offset) {
         cid
         to {
-          id
           robust
         }
         from {
-          id
           robust
         }
         nonce
@@ -81,7 +80,7 @@ async function listTransactions () {
     limit: 100,
     offset: 0
   }
-  /** @type {{messages: Message[]}} */
+  /** @type {{messages: GQLMessage[]}} */
   const { messages = [] } = await request(url, query, variables)
   await Promise.all(messages.map(async message => {
     const query = gql`
@@ -95,9 +94,20 @@ async function listTransactions () {
       height: message.height
     }
     const { tipset } = await request(url, query, variables)
-    message.timestamp = new Date(tipset.minTimestamp * 1000)
+    message.timestamp = tipset.minTimestamp * 1000
   }))
-  return messages
+  const transactions = messages.map(message => ({
+    hash: message.cid,
+    timestamp: message.timestamp,
+    status: 'sent',
+    outgoing: message.from.robust === address,
+    amount: new FilecoinNumber(message.value, 'attofil').toFil(),
+    address: message.from.robust === address
+      ? message.to.robust
+      : message.from.robust
+  }))
+  console.log({ transactions })
+  return transactions
 }
 
 /**

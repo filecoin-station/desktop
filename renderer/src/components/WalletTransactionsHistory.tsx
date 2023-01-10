@@ -17,10 +17,16 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
   const renderTransactionHistory = () => {
     return (
       <>
-      <div className={`ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}><WalletOnboarding /></div>
+      <div className={`ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}>
+        <WalletOnboarding />
+      </div>
       <div className={`ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
         <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
-        { allTransactions.map((transaction, index) => <div key={transaction.timestamp}><Transaction transaction={transaction} /></div>)}
+        {allTransactions.map(transaction => (
+          <div key={transaction.hash}>
+            <Transaction transaction={transaction} />
+          </div>
+        ))}
       </div>
       </>
     )
@@ -97,7 +103,7 @@ const Transaction: FC<TransactionProps> = ({ transaction }) => {
               {transaction.outgoing ? 'Sent' : 'Received'}
               <span className='font-bold mx-1'>{transaction.amount} FIL</span>
               {transaction.outgoing && 'to'}
-              {transaction.outgoing && <span className='font-bold mx-1'>{transaction.address}</span>}
+              {transaction.outgoing && <span className='font-bold mx-1'>{transaction.address.slice(0, 6)} ... {transaction.address.slice(-6)}</span>}
             </span>
           </div>
           <div className='flex invisible group-hover:visible'>

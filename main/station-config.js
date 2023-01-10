@@ -13,8 +13,6 @@ const ConfigKeys = {
   DestinationFilAddress: 'station.DestinationFilAddress'
 }
 
-/** @typedef {import('./typings').FILTransaction} TransactionMessage */
-
 // Use this to test migrations
 // https://github.com/sindresorhus/electron-store/issues/205
 // require('electron').app.setVersion('9999.9.9')
@@ -95,13 +93,6 @@ function setDestinationWalletAddress (address) {
 }
 
 /**
- * @returns { TransactionMessage[] }
- */
-function getStationWalletTransactionsHistory () {
-  return [] // todo - backend logic
-}
-
-/**
  * @returns void
  */
 function transferAllFundsToDestinationWallet () {
@@ -116,6 +107,5 @@ module.exports = {
   getStationID,
   getDestinationWalletAddress,
   setDestinationWalletAddress,
-  getStationWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
 }

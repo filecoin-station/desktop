@@ -19,6 +19,22 @@ export type FILTransaction = {
   address: string
 }
 
+export interface GQLMessage {
+  cid: string;
+  to: {
+    robust: string;
+  }
+  from: {
+    robust: string;
+  }
+  nonce: number;
+  height: number;
+  method: string;
+  params: string;
+  value: string;
+  timestamp: number?;
+}
+
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
 
 export type ModuleJobStatsMap = Record<string, number>;
@@ -40,22 +56,4 @@ export interface Context {
   restartToUpdate: () => void,
   getUpdaterStatus: () => {updateAvailable: boolean},
   browseTransactionTracker: (transactionHash: string) => void
-}
-
-export interface Message {
-  cid: string;
-  to: {
-    id: string;
-    robust: string;
-  }
-  from: {
-    id: string;
-    robust: string;
-  }
-  nonce: number;
-  height: number;
-  method: string;
-  params: string;
-  value: string;
-  timestamp: Date?;
 }
