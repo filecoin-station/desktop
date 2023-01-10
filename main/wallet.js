@@ -8,6 +8,8 @@ const electronLog = require('electron-log')
 const assert = require('assert')
 const { request, gql } = require('graphql-request')
 
+/** @typedef {import('./typings').Message} Message */
+
 const log = electronLog.scope('wallet')
 
 let address = ''
@@ -79,6 +81,7 @@ async function listTransactions () {
     limit: 100,
     offset: 0
   }
+  /** @type {{messages: Message[]}} */
   const { messages = [] } = await request(url, query, variables)
   await Promise.all(messages.map(async message => {
     const query = gql`

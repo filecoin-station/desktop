@@ -41,3 +41,21 @@ export interface Context {
   getUpdaterStatus: () => {updateAvailable: boolean},
   browseTransactionTracker: (transactionHash: string) => void
 }
+
+export interface Message {
+  cid: string;
+  to: {
+    id: string;
+    robust: string;
+  }
+  from: {
+    id: string;
+    robust: string;
+  }
+  nonce: number;
+  height: number;
+  method: string;
+  params: string;
+  value: string;
+  timestamp: Date?;
+}
