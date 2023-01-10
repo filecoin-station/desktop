@@ -48,19 +48,6 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
     setTransferMode(false)
   }
 
-  const renderTransferButtons = () => {
-    return (
-      <TransferFundsButtons
-        transferMode={transferMode}
-        balance={walletBalance}
-        enableTransferMode={enableTransferMode}
-        transferAllFunds={transferAllFunds}
-        reset={reset}
-        destinationFilAddress={destinationFilAddress}
-        editMode={editMode} />
-    )
-  }
-
   return (
     <div className='relative z-20'>
       <div className='h-8 bg-primary-dark flex items-center px-8' onClick={reset}>
@@ -85,7 +72,15 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
                 <span className="text-header-3xs ml-3">FIL</span>
               </p>
             </div>
-            { renderTransferButtons() }
+            <TransferFundsButtons
+              transferMode={transferMode}
+              balance={walletBalance}
+              enableTransferMode={enableTransferMode}
+              transferAllFunds={transferAllFunds}
+              reset={reset}
+              destinationFilAddress={destinationFilAddress}
+              editMode={editMode}
+            />
           </div>
         </div>
       </div>
