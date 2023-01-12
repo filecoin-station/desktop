@@ -75,7 +75,7 @@ const RecentTransaction: FC<TransactionProps> = ({ transaction }) => {
               {displayTransition?.status === 'sent' ? 'Sent' : displayTransition?.status === 'failed' ? 'Failed to send' : 'Sending'}
               <span className='font-bold mx-1'>{displayTransition?.amount} FIL</span>
               {displayTransition?.outgoing && 'to'}
-              {displayTransition?.outgoing && <span className='font-bold mx-1'>{displayTransition?.address}</span>}
+              {displayTransition?.outgoing && <span className='font-bold mx-1'>{displayTransition?.address.slice(0, 6)} ... {displayTransition?.address.slice(-6)}</span>}
             </span>
           </div>
         </div>
