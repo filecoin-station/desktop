@@ -67,5 +67,7 @@ export interface Context {
   openReleaseNotes: () => void,
   restartToUpdate: () => void,
   getUpdaterStatus: () => {updateAvailable: boolean},
-  browseTransactionTracker: (transactionHash: string) => void
+  browseTransactionTracker: (transactionHash: string) => void,
+
+  transactionUpdate: (transactions: FILTransaction[]) => void
 }
