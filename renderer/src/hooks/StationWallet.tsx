@@ -70,7 +70,6 @@ const useWallet = (): Wallet => {
       const [newCurrentTransaction, ...confirmedTransactions] = transactions
       if (newCurrentTransaction.status === 'processing' || (currentTransaction && +currentTransaction.timestamp === +newCurrentTransaction.timestamp)) {
         setCurrentTransaction(newCurrentTransaction)
-        if (newCurrentTransaction.status !== 'processing') { setTimeout(() => { setWalletTransactions(transactions); setCurrentTransaction(undefined) }, 6000) }
         setWalletTransactions(confirmedTransactions)
       } else {
         setWalletTransactions(transactions)

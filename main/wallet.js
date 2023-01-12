@@ -268,6 +268,10 @@ async function transferFunds (from, to, amount) {
     processingTransaction.status = 'failed'
     ctx.transactionUpdate([processingTransaction, ...transactions])
   }
+
+  await timers.setTimeout(6000)
+  processingTransaction = null
+  ctx.transactionUpdate(transactions)
 }
 
 /*
