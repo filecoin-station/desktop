@@ -8,8 +8,12 @@ const electronLog = require('electron-log')
 const assert = require('assert')
 const { request, gql } = require('graphql-request')
 const { FilecoinNumber } = require('@glif/filecoin-number')
+const { Message } = require('@glif/filecoin-message')
+const { getDestinationWalletAddress } = require('./station-config')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
+/** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
+/** @typedef {import('bignumber.js').BigNumber} BigNumber */
 
 const log = electronLog.scope('wallet')
 
@@ -56,6 +60,7 @@ async function getBalance () {
 }
 
 async function listTransactions () {
+  console.log('listTransactions')
   const url = 'https://graph.glif.link/query'
   const query = gql`
     query Messages($address: String!, $limit: Int!, $offset: Int!) {
@@ -82,31 +87,127 @@ async function listTransactions () {
   }
   /** @type {{messages: GQLMessage[]}} */
   const { messages = [] } = await request(url, query, variables)
-  await Promise.all(messages.map(async message => {
-    const query = gql`
-      query Tipset($height: Uint64!) {
-        tipset(height: $height) {
-          minTimestamp
+  console.log({ messages })
+
+  await Promise.all([
+    ...messages.map(async message => {
+      const query = gql`
+        query Tipset($height: Uint64!) {
+          tipset(height: $height) {
+            minTimestamp
+          }
         }
+      `
+      const variables = {
+        height: message.height
       }
-    `
-    const variables = {
-      height: message.height
-    }
-    const { tipset } = await request(url, query, variables)
-    message.timestamp = tipset.minTimestamp * 1000
-  }))
-  const transactions = messages.map(message => ({
-    hash: message.cid,
-    timestamp: message.timestamp,
-    status: 'sent',
-    outgoing: message.from.robust === address,
-    amount: new FilecoinNumber(message.value, 'attofil').toFil(),
-    address: message.from.robust === address
-      ? message.to.robust
-      : message.from.robust
-  }))
+      const { tipset } = await request(url, query, variables)
+      message.timestamp = tipset.minTimestamp * 1000
+    }),
+    ...messages.map(async message => {
+      const query = gql`
+        query StateReplay($cid: String!) {
+          stateReplay(cid: $cid) {
+            receipt {
+              return
+              exitCode
+              gasUsed
+            }
+            executionTrace {
+              executionTrace
+            }
+          }
+        }
+      `
+      const variables = {
+        cid: message.cid
+      }
+      /** @type {{stateReplay: GQLStateReplay}} */
+      const { stateReplay } = await request(url, query, variables)
+      message.exitCode = stateReplay.receipt.exitCode
+    })
+  ])
+
+  const transactions = messages
+    .map(message => ({
+      hash: message.cid,
+      timestamp: message.timestamp,
+      status: message.exitCode === 0 ? 'sent' : 'failed',
+      outgoing: message.from.robust === address,
+      amount: new FilecoinNumber(message.value, 'attofil').toFil(),
+      address: message.from.robust === address
+        ? message.to.robust
+        : message.from.robust
+    }))
+    .filter(transaction => transaction.status === 'sent')
+
+  console.log({ transactions })
   return transactions
+}
+
+/**
+ * @param {string} from
+ * @param {string} to
+ * @param {FilecoinNumber} amount
+ * @returns Promise<FilecoinNumber>
+ */
+async function getGasLimit (from, to, amount) {
+  assert(provider)
+  const message = new Message({
+    to,
+    from,
+    nonce: 0,
+    value: amount.toAttoFil(),
+    method: 0,
+    params: ''
+  })
+  const messageWithGas = await provider.gasEstimateMessageGas(
+    message.toLotusType()
+  )
+  console.log({ messageWithGas, gasLimit: messageWithGas.gasLimit, ret: new FilecoinNumber(messageWithGas.gasLimit, 'attofil').toFil() })
+  return new FilecoinNumber(messageWithGas.gasLimit, 'attofil')
+}
+
+/**
+ * @param {string} from
+ * @param {string} to
+ * @param {FilecoinNumber} amount
+ * @returns {Promise<string>}
+ */
+async function transferFunds (from, to, amount) {
+  console.log({ transferAmount: amount.toString() })
+  assert(provider)
+  const gasLimit = await getGasLimit(from, to, amount)
+  const message = new Message({
+    to,
+    from,
+    nonce: await provider.getNonce(from),
+    value: amount.minus(gasLimit).toAttoFil(),
+    method: 0,
+    params: ''
+  })
+  console.log({ messageAfterGasSubtracted: message, value: message.value.toString() })
+  const messageWithGas = await provider.gasEstimateMessageGas(
+    message.toLotusType()
+  )
+  const lotusMessage = messageWithGas.toLotusType()
+  const msgValid = await provider.simulateMessage(lotusMessage)
+  assert(msgValid, 'Message is invalid')
+  const signedMessage = await provider.wallet.sign(from, lotusMessage)
+  const { '/': cid } = await provider.sendMessage(signedMessage)
+  console.log({ CID: cid })
+  return cid
+}
+
+/*
+ * @returns {Promise<void>}
+ */
+async function transferAllFundsToDestinationWallet () {
+  assert(provider)
+  const to = getDestinationWalletAddress()
+  assert(to)
+  const balance = await provider.getBalance(address)
+  await transferFunds(address, to, balance)
 }
 
 /**
@@ -120,5 +221,6 @@ module.exports = {
   setup,
   getAddress,
   getBalance,
-  listTransactions
+  listTransactions,
+  transferAllFundsToDestinationWallet
 }

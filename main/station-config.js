@@ -92,13 +92,6 @@ function setDestinationWalletAddress (address) {
   configStore.set(ConfigKeys.DestinationFilAddress, DestinationFilAddress)
 }
 
-/**
- * @returns void
- */
-function transferAllFundsToDestinationWallet () {
-  return {} // todo - backend logic
-}
-
 module.exports = {
   getOnboardingCompleted,
   setOnboardingCompleted,
@@ -106,6 +99,5 @@ module.exports = {
   setTrayOperationExplained,
   getStationID,
   getDestinationWalletAddress,
-  setDestinationWalletAddress,
-  transferAllFundsToDestinationWallet
+  setDestinationWalletAddress
 }

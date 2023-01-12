@@ -33,6 +33,18 @@ export interface GQLMessage {
   params: string;
   value: string;
   timestamp: number?;
+  exitCode: number?;
+}
+
+export interface GQLStateReplay {
+  receipt: {
+    return: string;
+    exitCode: number;
+    gasUsed: number;
+  }
+  executionTrace: {
+    executionTrace: string;
+  }
 }
 
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;

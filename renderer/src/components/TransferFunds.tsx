@@ -4,7 +4,7 @@ import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 
 interface TransferFundsButtonsProps {
   transferMode: boolean,
-  balance: number,
+  balance: string | undefined,
   enableTransferMode: () => void,
   transferAllFunds: () => void,
   reset: () => void,
@@ -17,7 +17,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
 
   useEffect(() => { setInternalTransferMode(transferMode) }, [transferMode])
 
-  const disabled = !destinationFilAddress || balance === 0
+  const disabled = !destinationFilAddress || balance === '0'
   return (
     <div className={`relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-700 ${(!editMode) ? 'visible' : 'z-0 -translate-y-[7.8rem] text-opacity-0 opacity-0'} ${(editMode && disabled) && 'invisible opacity-0'}`}>
       <div className={`absolute w-fit right-0 flex items-center ease-[cubic-bezier(0.85,0,0.15,1) duration-500 z-10 ${(internalTransferMode && !disabled) ? '-translate-x-[8rem] opacity-0' : ''}`}>
@@ -36,12 +36,14 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
         }
       </div>
       <div className={`absolute w-fit right-0 flex gap-1 items-center ${internalTransferMode ? 'z-20' : 'z-0'} `}>
-        <button className={`btn-primary w-48 bg-grayscale-250 text-primary ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${internalTransferMode ? '' : 'translate-x-[7.6rem] text-opacity-0 '} `}
-          onClick={transferAllFunds}>
+        <button
+          className={`btn-primary w-48 bg-grayscale-250 text-primary ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${internalTransferMode ? '' : 'translate-x-[7.6rem] text-opacity-0 '} `}
+          onClick={transferAllFunds}
+        >
           <span className="text-2xs px-4 text-body-s">
             Send{' '}
             <span className='font-bold'>
-              {new FilecoinNumber(balance, 'fil')
+              {new FilecoinNumber(String(balance), 'fil')
                 .decimalPlaces(3, BigNumber.ROUND_DOWN)
                 .toString()}
               {' '}FIL

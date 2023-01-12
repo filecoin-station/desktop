@@ -61,7 +61,7 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.on('station:update-available', listener)
       return () => ipcRenderer.removeListener('station:update-available', listener)
     },
-    onBalanceUpdate: (/** @type {(value: number) => void} */ callback) => {
+    onBalanceUpdate: (/** @type {(value: string) => void} */ callback) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, balance) => callback(balance)
       ipcRenderer.on('station:wallet-balance-update', listener)

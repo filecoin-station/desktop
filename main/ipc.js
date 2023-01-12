@@ -33,7 +33,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('station:setDestinationWalletAddress', (_event, address) => stationConfig.setDestinationWalletAddress(address))
   ipcMain.handle('station:getStationWalletBalance', wallet.getBalance)
   ipcMain.handle('station:getStationWalletTransactionsHistory', wallet.listTransactions)
-  ipcMain.handle('station:transferAllFundsToDestinationWallet', (_event, _args) => stationConfig.transferAllFundsToDestinationWallet())
+  ipcMain.handle('station:transferAllFundsToDestinationWallet', (_event, _args) => wallet.transferAllFundsToDestinationWallet())
 
   ipcMain.handle('station:getAllActivities', (_event, _args) => ctx.getAllActivities())
   ipcMain.handle('station:getTotalJobsCompleted', (_event, _args) => ctx.getTotalJobsCompleted())

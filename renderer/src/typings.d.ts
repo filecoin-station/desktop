@@ -42,7 +42,7 @@ export declare global {
         onEarningsChanged: (callback) => () => void,
         onUpdateAvailable: (callback: () => void) => () => void,
         onTransactionUpdate (callback: (allTransactions: TransactionMessage[]) => void),
-        onBalanceUpdate (callback: (balance: number) => void)
+        onBalanceUpdate (callback: (balance: string) => void)
       },
       dialogs: {
         confirmChangeWalletAddress: () => Promise<boolean>

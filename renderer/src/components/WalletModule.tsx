@@ -66,7 +66,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
             <div>
               <p className="w-fit text-body-3xs text-white opacity-80 uppercase leading-none">Total FIL</p>
               <p className="w-fit text-header-m text-white font-bold font-number leading-none">
-                {new FilecoinNumber(walletBalance, 'fil')
+                {new FilecoinNumber(String(walletBalance), 'fil')
                   .decimalPlaces(3, BigNumber.ROUND_DOWN)
                   .toString()}
                 <span className="text-header-3xs ml-3">FIL</span>

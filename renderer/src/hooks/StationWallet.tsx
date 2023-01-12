@@ -11,7 +11,7 @@ import { FILTransaction } from '../typings'
 interface Wallet {
   stationAddress: string,
   destinationFilAddress: string | undefined,
-  walletBalance: number,
+  walletBalance: string | undefined,
   walletTransactions: FILTransaction[] | [],
   editDestinationAddress: (address: string|undefined) => void,
   currentTransaction: FILTransaction | undefined,
@@ -84,7 +84,7 @@ const useWallet = (): Wallet => {
   }, [currentTransaction])
 
   useEffect(() => {
-    const unsubscribeOnBalanceUpdate = window.electron.stationEvents.onBalanceUpdate(setWalletBalance)
+    const unsubscribeOnBalanceUpdate = window.electron.stationEvents.onBalanceUpdate(balance => setWalletBalance(balance))
     return () => {
       unsubscribeOnBalanceUpdate()
     }
