@@ -10,6 +10,7 @@ const { request, gql } = require('graphql-request')
 const { FilecoinNumber } = require('@glif/filecoin-number')
 const { Message } = require('@glif/filecoin-message')
 const { getDestinationWalletAddress } = require('./station-config')
+const timers = require('timers/promises')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -18,6 +19,7 @@ const { getDestinationWalletAddress } = require('./station-config')
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 
 const log = electronLog.scope('wallet')
+const url = 'https://graph.glif.link/query'
 
 let address = ''
 /** @type {Filecoin | null} */
@@ -72,9 +74,32 @@ async function getBalance () {
   return balance.toFil()
 }
 
+/**
+ * @param {string} cid
+ * @returns {Promise<GQLStateReplay>}
+ */
+async function getStateReplay (cid) {
+  const query = gql`
+    query StateReplay($cid: String!) {
+      stateReplay(cid: $cid) {
+        receipt {
+          return
+          exitCode
+          gasUsed
+        }
+        executionTrace {
+          executionTrace
+        }
+      }
+    }
+  `
+  const variables = { cid }
+  /** @type {{stateReplay: GQLStateReplay}} */
+  const { stateReplay } = await request(url, query, variables)
+  return stateReplay
+}
+
 async function listTransactions () {
-  console.log('listTransactions')
-  const url = 'https://graph.glif.link/query'
   const query = gql`
     query Messages($address: String!, $limit: Int!, $offset: Int!) {
       messages(address: $address, limit: $limit, offset: $offset) {
@@ -226,7 +251,18 @@ async function transferFunds (from, to, amount) {
     const { '/': cid } = await provider.sendMessage(signedMessage)
     console.log({ CID: cid })
 
-    processingTransaction.status = 'sent'
+    while (true) {
+      try {
+        const stateReplay = await getStateReplay(cid)
+        processingTransaction.status = stateReplay.receipt.exitCode === 0
+          ? 'sent'
+          : 'failed'
+        break
+      } catch {
+        await timers.setTimeout(1000)
+      }
+    }
+
     ctx.transactionUpdate([processingTransaction, ...transactions])
   } catch (err) {
     processingTransaction.status = 'failed'
