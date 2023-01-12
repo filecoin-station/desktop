@@ -209,6 +209,16 @@ async function getGasLimit (from, to, amount) {
   return new FilecoinNumber(messageWithGas.gasLimit, 'attofil')
 }
 
+function sendTransactionsToUI () {
+  assert(ctx)
+  const transactionUpdate = []
+  if (processingTransaction) {
+    transactionUpdate.push(processingTransaction)
+  }
+  transactionUpdate.push(...transactions)
+  ctx.transactionUpdate(transactionUpdate)
+}
+
 /**
  * @param {string} from
  * @param {string} to
@@ -226,7 +236,7 @@ async function transferFunds (from, to, amount) {
     amount: amount.toString(),
     address: to
   }
-  ctx.transactionUpdate([processingTransaction, ...transactions])
+  sendTransactionsToUI()
 
   try {
     console.log({ transferAmount: amount.toString() })
@@ -262,16 +272,14 @@ async function transferFunds (from, to, amount) {
         await timers.setTimeout(1000)
       }
     }
-
-    ctx.transactionUpdate([processingTransaction, ...transactions])
   } catch (err) {
     processingTransaction.status = 'failed'
-    ctx.transactionUpdate([processingTransaction, ...transactions])
   }
 
+  sendTransactionsToUI()
   await timers.setTimeout(6000)
   processingTransaction = null
-  ctx.transactionUpdate(transactions)
+  sendTransactionsToUI()
 }
 
 /*
