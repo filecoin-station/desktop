@@ -85,7 +85,13 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
         </div>
       </div>
       <div className="pb-6">
-        <WalletTransactionsHistory allTransactions={walletTransactions} latestTransaction={currentTransaction}/>
+        {walletTransactions
+          ? (
+              <WalletTransactionsHistory allTransactions={walletTransactions} latestTransaction={currentTransaction }/>
+            )
+          : (
+              <>loading...</>
+            )}
       </div>
     </div>
   )

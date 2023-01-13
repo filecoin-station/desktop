@@ -12,7 +12,7 @@ interface Wallet {
   stationAddress: string,
   destinationFilAddress: string | undefined,
   walletBalance: string | undefined,
-  walletTransactions: FILTransaction[] | [],
+  walletTransactions: FILTransaction[] | undefined,
   editDestinationAddress: (address: string|undefined) => void,
   currentTransaction: FILTransaction | undefined,
   dismissCurrentTransaction: () => void
@@ -22,7 +22,7 @@ const useWallet = (): Wallet => {
   const [stationAddress, setStationAddress] = useState<string>('')
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
   const [walletBalance, setWalletBalance] = useState<string | undefined>()
-  const [walletTransactions, setWalletTransactions] = useState<FILTransaction[]>([])
+  const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | undefined>()
   const [currentTransaction, setCurrentTransaction] = useState<FILTransaction>()
 
   const editDestinationAddress = async (address: string | undefined) => {
@@ -55,7 +55,7 @@ const useWallet = (): Wallet => {
       setWalletBalance(await getStationWalletBalance())
     }
     loadStoredInfo()
-    const interval = setInterval(loadStoredInfo, 3000)
+    const interval = setInterval(loadStoredInfo, 10000)
     return () => clearInterval(interval)
   }, [])
 
@@ -64,7 +64,7 @@ const useWallet = (): Wallet => {
       setWalletTransactions(await getStationWalletTransactionsHistory())
     }
     loadStoredInfo()
-    const interval = setInterval(loadStoredInfo, 3000)
+    const interval = setInterval(loadStoredInfo, 10000)
     return () => clearInterval(interval)
   }, [])
 
