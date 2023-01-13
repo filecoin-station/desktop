@@ -17,6 +17,7 @@ const timers = require('timers/promises')
 /** @typedef {import('bignumber.js').BigNumber} BigNumber */
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
+/** @typedef {import('./typings').TransactionStatus} TransactionStatus */
 
 const log = electronLog.scope('wallet')
 const url = 'https://graph.glif.link/query'
@@ -170,16 +171,21 @@ async function listTransactions () {
   ])
 
   transactions = messages
-    .map(message => ({
-      hash: message.cid,
-      timestamp: message.timestamp,
-      status: message.exitCode === 0 ? 'sent' : 'failed',
-      outgoing: message.from.robust === address,
-      amount: new FilecoinNumber(message.value, 'attofil').toFil(),
-      address: message.from.robust === address
-        ? message.to.robust
-        : message.from.robust
-    }))
+    .map(message => {
+      assert(message.timestamp)
+      /** @type {TransactionStatus} */
+      const status = message.exitCode === 0 ? 'sent' : 'failed'
+      return {
+        hash: message.cid,
+        timestamp: message.timestamp,
+        status,
+        outgoing: message.from.robust === address,
+        amount: new FilecoinNumber(message.value, 'attofil').toFil(),
+        address: message.from.robust === address
+          ? message.to.robust
+          : message.from.robust
+      }
+    })
     .filter(transaction => transaction.status === 'sent')
 
   console.log({ transactions })
