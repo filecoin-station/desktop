@@ -71,8 +71,7 @@ function getSaturnBinaryPath () {
 
 async function start (/** @type {Context} */ ctx) {
   if (!wallet.getAddress()) {
-    console.info('Saturn node requires FIL address')
-    return
+    throw new Error('Saturn node requires FIL address')
   }
 
   console.log('Starting Saturn node...')
