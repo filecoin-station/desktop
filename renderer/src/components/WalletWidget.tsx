@@ -26,7 +26,7 @@ const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
         <WalletIcon />
         <span className="text-right mx-3" title="wallet">
           <span className='font-bold'>
-            {new FilecoinNumber(walletBalance, 'fil')
+            {new FilecoinNumber(String(walletBalance), 'fil')
               .decimalPlaces(3, BigNumber.ROUND_DOWN)
               .toString()}
           </span>
