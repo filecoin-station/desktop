@@ -52,7 +52,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
     <div className='relative z-20'>
       <div className='h-8 bg-primary-dark flex items-center px-8' onClick={reset}>
         <p className='text text-body-3xs text-white opacity-80 mr-3'>STATION ADDRESS</p>
-        <p className='text text-body-3xs text-white'>{`${stationAddress.slice(0, 6)} ... ${stationAddress.slice(-6)}`}</p>
+        <p className='text text-body-3xs text-white'>{stationAddress.slice(0, 6)} &hellip; {stationAddress.slice(-6)}</p>
       </div>
       <div className='relative h-60 bg-primary bg-no-repeat bg-center z-20' style={{ backgroundImage: `url(${HeaderBackgroundImage})` }}>
         <div className="flex flex-col justify-between h-full px-6 pt-6 pb-8">

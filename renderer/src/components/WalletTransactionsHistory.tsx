@@ -75,7 +75,7 @@ const RecentTransaction: FC<TransactionProps> = ({ transaction }) => {
               {displayTransition?.status === 'sent' ? 'Sent' : displayTransition?.status === 'failed' ? 'Failed to send' : 'Sending'}
               <span className='font-bold mx-1'>{displayTransition?.amount} FIL</span>
               {displayTransition?.outgoing && 'to'}
-              {displayTransition?.outgoing && <span className='font-bold mx-1'>{displayTransition?.address.slice(0, 6)} ... {displayTransition?.address.slice(-6)}</span>}
+              {displayTransition?.outgoing && <span className='font-bold mx-1'>{displayTransition?.address.slice(0, 6)} &hellip; {displayTransition?.address.slice(-6)}</span>}
             </span>
           </div>
         </div>
@@ -103,7 +103,7 @@ const Transaction: FC<TransactionProps> = ({ transaction }) => {
               {transaction.outgoing ? 'Sent' : 'Received'}
               <span className='font-bold mx-1'>{transaction.amount} FIL</span>
               {transaction.outgoing && 'to'}
-              {transaction.outgoing && <span className='font-bold mx-1'>{transaction.address.slice(0, 6)} ... {transaction.address.slice(-6)}</span>}
+              {transaction.outgoing && <span className='font-bold mx-1'>{transaction.address.slice(0, 6)} &hellip; {transaction.address.slice(-6)}</span>}
             </span>
           </div>
           <div className='flex invisible group-hover:visible'>
