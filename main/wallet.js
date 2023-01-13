@@ -7,14 +7,13 @@ const { CoinType } = require('@glif/filecoin-address')
 const electronLog = require('electron-log')
 const assert = require('assert')
 const { request, gql } = require('graphql-request')
-const { FilecoinNumber } = require('@glif/filecoin-number')
+const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
 const { Message } = require('@glif/filecoin-message')
 const { getDestinationWalletAddress } = require('./station-config')
 const timers = require('timers/promises')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
-/** @typedef {import('bignumber.js').BigNumber} BigNumber */
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {import('./typings').TransactionStatus} TransactionStatus */
@@ -171,10 +170,11 @@ async function listTransactions () {
   ])
 
   transactions = messages
+    .filter(message => message.exitCode === 0)
     .map(message => {
       assert(message.timestamp)
       /** @type {TransactionStatus} */
-      const status = message.exitCode === 0 ? 'sent' : 'failed'
+      const status = 'sent'
       return {
         hash: message.cid,
         timestamp: message.timestamp,
@@ -186,9 +186,7 @@ async function listTransactions () {
           : message.from.robust
       }
     })
-    .filter(transaction => transaction.status === 'sent')
 
-  console.log({ transactions })
   return transactions
 }
 
@@ -206,13 +204,19 @@ async function getGasLimit (from, to, amount) {
     nonce: 0,
     value: amount.toAttoFil(),
     method: 0,
-    params: ''
+    params: '',
+    gasPremium: 0,
+    gasFeeCap: 0,
+    gasLimit: 0
   })
   const messageWithGas = await provider.gasEstimateMessageGas(
     message.toLotusType()
   )
-  console.log({ messageWithGas, gasLimit: messageWithGas.gasLimit, ret: new FilecoinNumber(messageWithGas.gasLimit, 'attofil').toFil() })
-  return new FilecoinNumber(messageWithGas.gasLimit, 'attofil')
+  const feeCapStr = messageWithGas.gasFeeCap.toFixed(0, BigNumber.ROUND_CEIL)
+  const feeCap = new FilecoinNumber(feeCapStr, 'attofil')
+  const gas = feeCap.times(messageWithGas.gasLimit)
+  console.log({ messageWithGas, gasLimit: messageWithGas.gasLimit, gas })
+  return gas
 }
 
 function sendTransactionsToUI () {
@@ -266,6 +270,9 @@ async function transferFunds (from, to, amount) {
     const signedMessage = await provider.wallet.sign(from, lotusMessage)
     const { '/': cid } = await provider.sendMessage(signedMessage)
     console.log({ CID: cid })
+
+    processingTransaction.hash = cid
+    sendTransactionsToUI()
 
     while (true) {
       try {
