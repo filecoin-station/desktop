@@ -55,6 +55,8 @@ const useWallet = (): Wallet => {
       setWalletBalance(await getStationWalletBalance())
     }
     loadStoredInfo()
+    const interval = setInterval(loadStoredInfo, 3000)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -62,16 +64,18 @@ const useWallet = (): Wallet => {
       setWalletTransactions(await getStationWalletTransactionsHistory())
     }
     loadStoredInfo()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    const interval = setInterval(loadStoredInfo, 3000)
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
-    const updateWalletTransactionsArray = (transactions: FILTransaction[]) => {
+    const updateWalletTransactionsArray = async (transactions: FILTransaction[]) => {
       const [newCurrentTransaction, ...confirmedTransactions] = transactions
       if (newCurrentTransaction.status === 'processing' || (currentTransaction && +currentTransaction.timestamp === +newCurrentTransaction.timestamp)) {
         setCurrentTransaction(newCurrentTransaction)
         setWalletTransactions(confirmedTransactions)
       } else {
+        setWalletBalance(await getStationWalletBalance())
         setWalletTransactions(transactions)
       }
     }
