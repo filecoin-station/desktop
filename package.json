@@ -57,7 +57,7 @@
     "react-helmet-async": "^1.3.0",
     "react-router-dom": "^6.6.2",
     "tar-fs": "^2.1.1",
-    "undici": "^5.14.0",
+    "undici": "^5.15.0",
     "vite-plugin-svgr": "^2.4.0"
   },
   "devDependencies": {
