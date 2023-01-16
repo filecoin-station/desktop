@@ -10,7 +10,8 @@ const { request, gql } = require('graphql-request')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
 const { Message } = require('@glif/filecoin-message')
 const { getDestinationWalletAddress } = require('./station-config')
-const timers = require('timers/promises')
+const timers = require('node:timers/promises')
+const pDebounce = require('p-debounce')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -317,6 +318,6 @@ module.exports = {
   setup,
   getAddress,
   getBalance,
-  listTransactions,
+  listTransactions: pDebounce(listTransactions, 0),
   transferAllFundsToDestinationWallet
 }
