@@ -70,22 +70,11 @@ const useWallet = (): Wallet => {
         setWalletTransactions(stationWalletTransactionHistory)
       }
     }
-    ;(async () => {
-      while (true) {
-        if (cleanedUp) {
-          break
-        }
-        try {
-          await loadStoredInfo()
-        } catch (err) {
-          console.error(err)
-          Sentry.captureException(err)
-        }
-        await sleep(10000)
-      }
-    })()
+    const interval = setInterval(loadStoredInfo, 10000)
+    loadStoredInfo()
     return () => {
       cleanedUp = true
+      clearInterval(interval)
     }
   }, [])
 

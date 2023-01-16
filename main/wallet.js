@@ -100,6 +100,7 @@ async function getStateReplay (cid) {
 }
 
 async function listTransactions () {
+  console.log(new Date(), 'listTransactions')
   const query = gql`
     query Messages($address: String!, $limit: Int!, $offset: Int!) {
       messages(address: $address, limit: $limit, offset: $offset) {
