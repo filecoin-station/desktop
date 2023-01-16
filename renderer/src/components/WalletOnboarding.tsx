@@ -4,7 +4,7 @@ import { ReactComponent as WalletIcon } from '../assets/img/icons/wallet.svg'
 
 const WalletOnboarding = () => {
   return (
-    <div className='flex flex-col gap-3 px-6 pt-12'>
+    <div className='flex flex-col gap-3 px-6 pt-2'>
           <div className='flex flex-row align-middle h-[90px] w-full bg-grayscale-100 rounded'>
             <div className='w-[80px] min-w-[80px] bg-primary h-full rounded-l grid place-items-center'>
               <WalletIcon width={32} height={32} fill="white" />

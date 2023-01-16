@@ -4,12 +4,13 @@ import dayjs from 'dayjs'
 import { ReactComponent as IncomeIcon } from '../assets/img/icons/income.svg'
 import { ReactComponent as OutcomeIcon } from '../assets/img/icons/outcome.svg'
 import { ReactComponent as ExternalLinkIcon } from '../assets/img/icons/external.svg'
+import { ReactComponent as LoadingIcon } from '../assets/img/icons/loading.svg'
 import WalletTransactoinStatusWidget from './WalletTransactionStatusWidget'
 import { brownseTransactionTracker } from '../lib/station-config'
 import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
-  allTransactions: FILTransaction[] | [],
+  allTransactions: FILTransaction[] | [] | null,
   latestTransaction: FILTransaction | undefined
 }
 
@@ -17,10 +18,15 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
   const renderTransactionHistory = () => {
     return (
       <>
-      <div className={`ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}><WalletOnboarding /></div>
-      <div className={`ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
+      <div className={`ease-in-out transition-all duration-1000 ${allTransactions && allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}>
+        <div className={`px-8 w-100 flex flex-row justify-end transition duration-100 ${allTransactions === null ? 'visible' : 'opacity-0 invisible'}`}>
+            <LoadingIcon className='animate-spin h-6 w-6 opacity-80 duration-300'/>
+        </div>
+        <WalletOnboarding />
+      </div>
+      <div className={`h-[calc(100vh_-_305px)] ease-in-out transition-all duration-1000 ${allTransactions && allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
         <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
-        { allTransactions.map((transaction, index) => <div key={transaction.timestamp}><Transaction transaction={transaction} /></div>)}
+        { allTransactions && allTransactions.map((transaction, index) => <div key={transaction.timestamp}><Transaction transaction={transaction} /></div>)}
       </div>
       </>
     )
@@ -29,7 +35,7 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
   return (
     <div className='transition-all duration-1000 ease-in-out'>
       <RecentTransaction transaction={latestTransaction}/>
-      <div className='pt-8'>
+      <div className='pt-8 overflow-y-scroll'>
         {renderTransactionHistory()}
       </div>
     </div>
