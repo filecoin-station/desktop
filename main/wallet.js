@@ -11,7 +11,6 @@ const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
 const { Message } = require('@glif/filecoin-message')
 const { getDestinationWalletAddress } = require('./station-config')
 const timers = require('node:timers/promises')
-const pDebounce = require('p-debounce')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -318,6 +317,6 @@ module.exports = {
   setup,
   getAddress,
   getBalance,
-  listTransactions: pDebounce(listTransactions, 0),
+  listTransactions,
   transferAllFundsToDestinationWallet
 }
