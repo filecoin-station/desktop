@@ -22,9 +22,8 @@ const writeClient = client.getWriteApi(
 
 setInterval(() => {
   writeClient.flush().catch(err => {
-    if (!/HttpError|getAddrInfo|RequestTimedOutError/i.test(String(err))) {
-      Sentry.captureException(err)
-    }
+    if (/HttpError|getAddrInfo|RequestTimedOutError/i.test(String(err))) return;
+    Sentry.captureException(err)
   })
 }, 5000).unref()
 
