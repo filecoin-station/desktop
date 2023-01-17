@@ -61,6 +61,7 @@ test.describe.serial('Application launch', async () => {
   test('navigate to dashboard', async () => {
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Continue")')
+    await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Accept")')
     expect(new URL(await mainWindow.url()).pathname).toBe('/dashboard')
   })
