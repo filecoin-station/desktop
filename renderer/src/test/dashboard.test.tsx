@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
 import '@testing-library/jest-dom'
 import '../lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
