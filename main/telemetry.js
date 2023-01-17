@@ -23,7 +23,7 @@ const writeClient = client.getWriteApi(
 setInterval(() => {
   writeClient.flush().catch(err => {
     // Ignore unactionable InfluxDB errors
-    if (/HttpError|getAddrInfo|RequestTimedOutError/i.test(String(err))) return;
+    if (/HttpError|getAddrInfo|RequestTimedOutError/i.test(String(err))) return
     Sentry.captureException(err)
   })
 }, 5000).unref()
