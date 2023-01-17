@@ -27,7 +27,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
       ref.current.focus()
       if (destinationAddress.length > 0) { ref.current.setSelectionRange(destinationAddress.length, destinationAddress.length) }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [internalEditMode])
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
     return (
       <div className='relative'>
         <div className={`absolute flex flex-row items-center mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${(internalEditMode && !addressIsValid) ? 'visible' : 'invisible opacity-0'}`}>
-          <Warning width={'12px'} height={'12px'} fill="#ff4d81" className='mr-1'/>
+          <Warning width={'12px'} height={'12px'} fill="#ff4d81" className='mr-1' />
           <span className="text-body-2xs text-red-200">The FIL address entered is invalid. Please check and try again.</span>
         </div>
         <p className={`absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${(internalEditMode && addressIsValid) ? 'visible' : 'invisible opacity-0'}`}>Enter an address to receive your FIL.</p>
@@ -88,8 +88,8 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
           <span className="text-xs px-4">Save</span>
         </button>
         <button className={`flex flex-row items-end h-[30px] cursor-pointer group absolute mb-1 ml-4 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
-        ${destinationAddress.length > 30 ? 'left-[460px]' : 'left-[70px]'} ${(!internalEditMode && !transferMode) ? 'visible' : 'opacity-0'}`}
-          tabIndex={0} onClick={() => enableEditMode() }
+        ${destinationAddress.length > 5 ? 'left-[168px]' : 'left-[80px]'} ${(!internalEditMode && !transferMode) ? 'visible' : 'opacity-0'}`}
+          tabIndex={0} onClick={() => enableEditMode()}
           disabled={transferMode}>
           <EditIcon className="btn-icon-primary mr-1" />
           <span className='text-white hidden group-hover:block opacity-80 not-italic text-body-m font-body leading-[1.5rem]'>Edit</span>
@@ -97,7 +97,16 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
       </>
     )
   }
-
+  const renderDisplayAddress = () => {
+    if (!internalEditMode) {
+      if (inputAddr.length > 5) {
+        return `${inputAddr.slice(0, 6)} . . . ${inputAddr.slice(inputAddr.length - 6, inputAddr.length)}`
+      } else {
+        return `${inputAddr.slice(0, 2)} . . . ${inputAddr.slice(inputAddr.length - 2, inputAddr.length)}`
+      }
+    }
+    return inputAddr
+  }
   return (
     <>
       <div className='relative flex w-full items-end ease-in-out pb-[15px] justify-between'>
@@ -107,17 +116,17 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
             spellCheck="false" autoComplete="off" type="text" name="address"
             placeholder=" "
             disabled={!internalEditMode}
-            tabIndex={0} value={inputAddr}
+            tabIndex={0} value={renderDisplayAddress()}
             onChange={(event) => { setInputAddr(event.target.value) }}
             className='input fil-address mt-[7px] min-w-[90px] w-[460px] ease-in-out transition duration-300'
-            onFocus={() => { enableEditMode() }}/>
+            onFocus={() => { enableEditMode() }} />
           <label htmlFor="address"
             className="absolute duration-300 top-3 origin-top-lef pointer-events-none text-white opacity-80 font-body text-body-2xs uppercase mb-3">
             Your FIL Address</label>
-          <div className={ computeBorderClasses() } />
-          { renderBottomMessage() }
+          <div className={computeBorderClasses()} />
+          {renderBottomMessage()}
         </div>
-        { renderActionButton() }
+        {renderActionButton()}
       </div>
     </>
   )
