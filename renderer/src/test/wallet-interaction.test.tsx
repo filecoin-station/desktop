@@ -34,7 +34,7 @@ vi.mock('../lib/station-config', () => ({
   getTotalJobsCompleted: () => Promise.resolve(0),
   getTotalEarnings: () => Promise.resolve(0),
   getAllActivities: () => Promise.resolve([]),
-  trasnferAllFundsToDestinationWallet: () => mockedTransferAllFunds()
+  transferAllFundsToDestinationWallet: () => mockedTransferAllFunds()
 }))
 
 describe('Dashboard wallet interactions', () => {
