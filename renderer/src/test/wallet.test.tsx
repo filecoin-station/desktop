@@ -94,8 +94,8 @@ describe('Dashboard wallet display', () => {
     test('Wallet setup destination address', () => {
       fireEvent.click(document.getElementsByClassName('address-edit')[0])
       waitFor(() => expect(document.getElementsByClassName('submit-address')[0]).toBeDisabled())
-      fireEvent.change(document.getElementsByClassName('destination-address')[0], { target: { value: 'f0111' } })
-      expect(document.getElementsByClassName('destination-address')[0]).toHaveValue('f0111')
+      fireEvent.change(document.getElementsByClassName('destination-address')[0], { target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg' } })
+      expect(document.getElementsByClassName('destination-address')[0]).toHaveValue('f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg')
       expect(document.getElementsByClassName('submit-address')[0]).not.toBeDisabled()
       fireEvent.click(document.getElementsByClassName('submit-address')[0])
       waitFor(() => { expect(mockedSetDestinationWalletAddress).toHaveBeenCalledOnce() })
