@@ -12,7 +12,7 @@ interface Wallet {
   stationAddress: string,
   destinationFilAddress: string | undefined,
   walletBalance: number,
-  walletTransactions: FILTransaction[] | [] | null,
+  walletTransactions: FILTransaction[] | [],
   editDestinationAddress: (address: string|undefined) => void,
   currentTransaction: FILTransaction | undefined,
   dismissCurrentTransaction: () => void
@@ -22,7 +22,7 @@ const useWallet = (): Wallet => {
   const [stationAddress, setStationAddress] = useState<string>('')
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
   const [walletBalance, setWalletBalance] = useState<number>(0)
-  const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | null>(null)
+  const [walletTransactions, setWalletTransactions] = useState<FILTransaction[]>([])
   const [currentTransaction, setCurrentTransaction] = useState<FILTransaction>()
 
   const editDestinationAddress = async (address: string | undefined) => {
