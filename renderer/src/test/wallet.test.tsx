@@ -68,7 +68,7 @@ describe('Dashboard wallet display', () => {
     })
 
     test('Wallet displays internal address', () => {
-      expect(document.getElementsByClassName('station-address')[0]).toHaveTextContent('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
+      expect(document.getElementsByClassName('station-address')[0]).toHaveTextContent('f16m5s . . . ron4qa')
     })
 
     test('Wallet displays empty destination address', () => {
