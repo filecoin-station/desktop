@@ -11,6 +11,7 @@ const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
 const { Message } = require('@glif/filecoin-message')
 const { getDestinationWalletAddress } = require('./station-config')
 const timers = require('node:timers/promises')
+const Store = require('electron-store')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -20,6 +21,9 @@ const timers = require('node:timers/promises')
 
 const log = electronLog.scope('wallet')
 const url = 'https://graph.glif.link/query'
+const transactionsStore = new Store({
+  name: 'wallet-transactions'
+})
 
 let address = ''
 /** @type {Filecoin | null} */
@@ -27,7 +31,7 @@ let provider = null
 /** @type {Context | null} */
 let ctx = null
 /** @type {FILTransaction[]} */
-let transactions = []
+let transactions = loadStoredEntries()
 /** @type {FILTransaction | null} */
 let processingTransaction = null
 
@@ -187,6 +191,7 @@ async function listTransactions () {
           : message.from.robust
       }
     })
+  transactionsStore.set('transactions', transactions)
 
   return transactions
 }
@@ -312,6 +317,14 @@ async function transferAllFundsToDestinationWallet () {
  */
 function getAddress () {
   return address
+}
+
+/**
+ * @returns {FILTransaction[]}
+ */
+function loadStoredEntries () {
+  // A workaround to fix false TypeScript errors
+  return /** @type {any} */(transactionsStore.get('transactions', []))
 }
 
 module.exports = {
