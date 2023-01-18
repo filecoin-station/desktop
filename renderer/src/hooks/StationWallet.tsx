@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import * as Sentry from '@sentry/react'
 import {
   getDestinationWalletAddress,
   setDestinationWalletAddress,
@@ -9,7 +8,6 @@ import {
 } from '../lib/station-config'
 import { FILTransaction } from '../typings'
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 interface Wallet {
   stationAddress: string,
@@ -63,19 +61,10 @@ const useWallet = (): Wallet => {
   }, [])
 
   useEffect(() => {
-    let cleanedUp = false
     const loadStoredInfo = async () => {
-      const stationWalletTransactionHistory = await getStationWalletTransactionsHistory()
-      if (!cleanedUp) {
-        setWalletTransactions(stationWalletTransactionHistory)
-      }
+      setWalletTransactions(await getStationWalletTransactionsHistory())
     }
-    const interval = setInterval(loadStoredInfo, 10000)
     loadStoredInfo()
-    return () => {
-      cleanedUp = true
-      clearInterval(interval)
-    }
   }, [])
 
   useEffect(() => {

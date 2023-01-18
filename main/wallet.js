@@ -67,6 +67,17 @@ async function setup (_ctx) {
     CoinType.MAIN
   )
   log.info('Address: %s', address)
+
+  ;(async () => {
+    while (true) {
+      try {
+        await updateTransactions()
+      } catch (err) {
+        log.error('Updating transactions', err)
+      }
+      await timers.setTimeout(10000)
+    }
+  })()
 }
 
 /**
@@ -103,8 +114,11 @@ async function getStateReplay (cid) {
   return stateReplay
 }
 
-async function listTransactions () {
-  console.log(new Date(), 'listTransactions')
+/**
+ * @returns {Promise<void>}
+ */
+async function updateTransactions () {
+  console.log(new Date(), 'updateTransactions')
   const query = gql`
     query Messages($address: String!, $limit: Int!, $offset: Int!) {
       messages(address: $address, limit: $limit, offset: $offset) {
@@ -192,7 +206,10 @@ async function listTransactions () {
       }
     })
   transactionsStore.set('transactions', transactions)
+  sendTransactionsToUI()
+}
 
+function listTransactions () {
   return transactions
 }
 
