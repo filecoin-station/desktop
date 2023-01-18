@@ -1,4 +1,5 @@
-// This is called by GitHub Actions workflow to determine the build version to report to Sentry
+// This is called by GitHub Actions workflow to determine the build version to
+// report to Sentry
 
 'use strict'
 

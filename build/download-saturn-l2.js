@@ -36,7 +36,8 @@ async function main () {
   await Promise.all(
     assets
       .map(async ({ name, browser_download_url: url }) => {
-        const match = name.match(/^L2-node_([A-Za-z0-9]+)_([A-Za-z0-9_]+)\.(tar\.gz|zip)$/)
+        const reg = /^L2-node_([A-Za-z0-9]+)_([A-Za-z0-9_]+)\.(tar\.gz|zip)$/
+        const match = name.match(reg)
         const platform = match && getPlatform(match[1])
         if (!match || platform !== process.platform) {
           console.log(' ⨯ skipping %s', name)
@@ -67,12 +68,17 @@ async function main () {
           await pipeline(res.body, gunzip(), tar.extract(outFile))
         } else {
           // Darwin needs to be a zip for notarization
-          await mkdir(path.join(outDir, 'l2node-darwin-x64'), { recursive: true })
+          await mkdir(
+            path.join(outDir, 'l2node-darwin-x64'),
+            { recursive: true }
+          )
           const parser = unzip.Parse()
           await Promise.all([
             (async () => {
               while (true) {
-                const [entry] = /** @type {[UnzipStreamEntry]} */ (await once(parser, 'entry'))
+                const [entry] =
+                  /** @type {[UnzipStreamEntry]} */
+                  await once(parser, 'entry')
                 if (entry.path === 'L2-node') {
                   const outPath = `${outDir}/l2node-darwin-x64/saturn-L2-node`
                   await pipeline(entry, createWriteStream(outPath))
