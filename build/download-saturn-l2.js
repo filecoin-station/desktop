@@ -55,12 +55,15 @@ async function main () {
 
         if (res.status >= 300) {
           throw new Error(
-            `Cannot fetch saturn-l2 binary ${name}: ${res.status}\n${await res.text()}`
+            `Cannot fetch saturn-l2 binary ${name}: ${res.status}\n` +
+            await res.text()
           )
         }
 
         if (!res.body) {
-          throw new Error(`Cannot fetch saturn-l2 binary ${name}: no response body`)
+          throw new Error(
+            `Cannot fetch saturn-l2 binary ${name}: no response body`
+          )
         }
 
         const outFile = path.join(outDir, outName)
@@ -114,7 +117,10 @@ async function fetchReleaseMetadata () {
     }
   )
   if (res.status >= 300) {
-    throw new Error(`Cannot fetch saturn-l2 release ${SATURN_DIST_TAG}: ${res.status}\n${await res.text()}`)
+    throw new Error(
+      `Cannot fetch saturn-l2 release ${SATURN_DIST_TAG}: ${res.status}\n` +
+      await res.text()
+    )
   }
 
   /** @type {any} */

@@ -30,8 +30,7 @@
         "@typescript-eslint/no-var-requires": "off",
         "max-len": ["error", {
           "code": 80,
-          "ignoreUrls": true,
-          "ignoreTemplateLiterals": true
+          "ignoreUrls": true
         }]
       }
     },
