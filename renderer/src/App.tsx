@@ -18,7 +18,9 @@ const App = ():JSX.Element => {
       <Router>
         <Routes>
           <Route path="/" element={<Onboarding />} />
-          <Route path="*" element={
+          <Route
+            path="*"
+            element={
             <>
               <Sentry />
               <Plausible />
@@ -27,7 +29,8 @@ const App = ():JSX.Element => {
                 <Route path="/dashboard" element={<Dashboard />} />
               </Routes>
             </>
-          }>
+            }
+          >
           </Route>
         </Routes>
       </Router>

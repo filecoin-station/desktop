@@ -58,9 +58,12 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ setFilAddress }) => {
             name="address"
             placeholder=" "
             tabIndex={0}
-            onChange={handleChangeAddress} />
-          <label htmlFor="address"
-            className="absolute duration-300 top-3 origin-top-left text-black pointer-events-none font-body uppercase">
+            onChange={handleChangeAddress}
+          />
+          <label
+            htmlFor="address"
+            className="absolute duration-300 top-3 origin-top-left text-black pointer-events-none font-body uppercase"
+          >
             FIL Address</label>
 
           <ValidationError message={validationError} />
@@ -74,7 +77,8 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ setFilAddress }) => {
           disabled={inputAddr.length === 0}
           title="connect"
           type="submit"
-          value="connect">
+          value="connect"
+        >
           <span className="text-xs px-4">Connect</span>
         </button>
       </div>

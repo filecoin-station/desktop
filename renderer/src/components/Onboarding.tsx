@@ -17,7 +17,8 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
         className="btn-secondary-small flex items-center group back-button"
         disabled={page === 0}
         onClick={prev}
-        type="button">
+        type="button"
+      >
         <i><Back className="btn-icon-primary-small" fill={page === 0 ? '#b3b3b3' : '#2a1cf7'} /></i>
         <span>Back</span>
       </button>
@@ -28,7 +29,8 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
       </div>
       <button
         className="btn-secondary-small icon-primary"
-        onClick={next}>
+        onClick={next}
+      >
         <span className="">Continue</span>
       </button>
     </div>
@@ -103,15 +105,19 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
             </div>
             <div className='pb-20 bottom-0 px-20'>
               <div className="flex flex-row gap-3 justify-between">
-                <button className="btn-secondary-small flex items-center group"
+                <button
+                  className="btn-secondary-small flex items-center group"
                   title="previous"
-                  onClick={prev}>
+                  onClick={prev}
+                >
                   <i><Back className="btn-icon-primary-small" fill='#2a1cf7' /></i>
                   <span>Back</span>
                 </button>
-                <button className="btn-primary-small"
+                <button
+                  className="btn-primary-small"
                   title="accept"
-                  onClick={() => { onFinish() }}>Accept
+                  onClick={() => { onFinish() }}
+                >Accept
                 </button>
               </div>
             </div>
