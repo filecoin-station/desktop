@@ -237,6 +237,14 @@ async function updateTransactions () {
     )
   }
 
+  // Add transaction potentially not yet returned by the API
+  for (const transaction of transactions) {
+    if (!updatedTransactions.find(tx => tx.hash === transaction.hash)) {
+      updatedTransactions.push(transaction)
+      break
+    }
+  }
+
   // Update state
   transactions = updatedTransactions
 
@@ -314,14 +322,16 @@ function sendTransactionsToUI () {
 async function transferFunds (from, to, amount) {
   assert(ctx)
 
-  processingTransaction = {
+  const transaction = {
+    height: 0,
     hash: '',
     timestamp: Date.now(),
-    status: 'processing',
+    status: /** @type {TransactionStatus} */ ('processing'),
     outgoing: true,
     amount: amount.toString(),
     address: to
   }
+  transactions.push(transaction)
   sendTransactionsToUI()
 
   try {
@@ -347,13 +357,13 @@ async function transferFunds (from, to, amount) {
     const { '/': cid } = await provider.sendMessage(signedMessage)
     console.log({ CID: cid })
 
-    processingTransaction.hash = cid
+    transaction.hash = cid
     sendTransactionsToUI()
   } catch (err) {
-    processingTransaction.status = 'failed'
+    transaction.status = 'failed'
     sendTransactionsToUI()
     await timers.setTimeout(6000)
-    processingTransaction = null
+    transactions.splice(transactions.findIndex(tx => tx.hash === transaction.hash), 1)
     sendTransactionsToUI()
   }
 }
