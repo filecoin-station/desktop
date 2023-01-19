@@ -375,8 +375,9 @@ async function transferAllFundsToDestinationWallet () {
   assert(provider)
   const to = getDestinationWalletAddress()
   assert(to)
-  const balance = await provider.getBalance(address)
-  await transferFunds(address, to, balance)
+  // const balance = await provider.getBalance(address)
+  // FIXME: Only transfer a little FIL for now
+  await transferFunds(address, to, new FilecoinNumber('1', 'attofil'))
 }
 
 /**
