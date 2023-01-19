@@ -293,7 +293,11 @@ function getTransactionsForUI () {
   const sent = []
 
   for (const transaction of transactions) {
-    if (!processing && transaction.status === 'processing') {
+    if (
+      !processing &&
+      transaction.status === 'processing' &&
+      transaction.outgoing
+    ) {
       processing = transaction
     } else if (transaction.status === 'sent') {
       sent.push(transaction)
