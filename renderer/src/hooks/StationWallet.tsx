@@ -8,7 +8,6 @@ import {
 } from '../lib/station-config'
 import { FILTransaction } from '../typings'
 
-
 interface Wallet {
   stationAddress: string,
   destinationFilAddress: string | undefined,
@@ -70,11 +69,11 @@ const useWallet = (): Wallet => {
   useEffect(() => {
     const updateWalletTransactionsArray = async (transactions: FILTransaction[]) => {
       const [newCurrentTransaction, ...confirmedTransactions] = transactions
-      if (newCurrentTransaction.status === 'processing' || (currentTransaction && +currentTransaction.timestamp === +newCurrentTransaction.timestamp)) {
+      if (newCurrentTransaction?.status === 'processing') {
         setCurrentTransaction(newCurrentTransaction)
         setWalletTransactions(confirmedTransactions)
       } else {
-        setWalletBalance(await getStationWalletBalance())
+        setCurrentTransaction(undefined)
         setWalletTransactions(transactions)
       }
     }

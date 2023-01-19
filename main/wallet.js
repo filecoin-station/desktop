@@ -15,8 +15,10 @@ const Store = require('electron-store')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
+/** @typedef {import('./typings').GQLTipset} GQLTipset */
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
+/** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
 /** @typedef {import('./typings').TransactionStatus} TransactionStatus */
 
 const log = electronLog.scope('wallet')
@@ -25,6 +27,9 @@ const transactionsStore = new Store({
   name: 'wallet-transactions'
 })
 
+// FIXME
+// transactionsStore.set('transactions', [])
+
 let address = ''
 /** @type {Filecoin | null} */
 let provider = null
@@ -32,8 +37,7 @@ let provider = null
 let ctx = null
 /** @type {FILTransaction[]} */
 let transactions = loadStoredEntries()
-/** @type {FILTransaction | null} */
-let processingTransaction = null
+console.log('Loaded transactions', transactions)
 
 /**
  * @returns {Promise<string>}
@@ -115,10 +119,27 @@ async function getStateReplay (cid) {
 }
 
 /**
- * @returns {Promise<void>}
+ * @param {number} height
+ * @returns Promise<GQLTipset>
  */
-async function updateTransactions () {
-  console.log(new Date(), 'updateTransactions')
+async function getTipset (height) {
+  const query = gql`
+    query Tipset($height: Uint64!) {
+      tipset(height: $height) {
+        minTimestamp
+      }
+    }
+  `
+  const variables = { height }
+  const { tipset } = await request(url, query, variables)
+  return tipset
+}
+
+/**
+ * @param {string} address
+ * @returns Promise<GQLMessage[]>
+ */
+async function getMessages (address) {
   const query = gql`
     query Messages($address: String!, $limit: Int!, $offset: Int!) {
       messages(address: $address, limit: $limit, offset: $offset) {
@@ -144,73 +165,90 @@ async function updateTransactions () {
   }
   /** @type {{messages: GQLMessage[]}} */
   const { messages = [] } = await request(url, query, variables)
+  return messages
+}
 
-  await Promise.all([
-    ...messages.map(async message => {
-      const query = gql`
-        query Tipset($height: Uint64!) {
-          tipset(height: $height) {
-            minTimestamp
+/**
+ * @returns {Promise<void>}
+ */
+async function updateTransactions () {
+  console.log(new Date(), 'updateTransactions')
+
+  // Load messages
+  const messages = await getMessages(address)
+
+  // Convert messages to transactions (loading)
+  /** @type {FILTransactionProcessing[]} */
+  const transactionsLoading = messages.map(message => {
+    return {
+      height: message.height,
+      hash: message.cid,
+      timestamp: null,
+      status: null,
+      outgoing: message.from.robust === address,
+      amount: new FilecoinNumber(message.value, 'attofil').toFil(),
+      address: message.from.robust === address
+        ? message.to.robust
+        : message.from.robust
+    }
+  })
+
+  /** @type {FILTransaction[]} */
+  const updatedTransactions = []
+
+  for (const transactionProcessing of transactionsLoading) {
+    // Find matching transaction
+    const tx = transactions.find(tx => tx.hash === transactionProcessing.hash)
+
+    // Complete already loaded data
+    // Keep references alive by prefering `tx`
+    const transaction = tx || transactionProcessing
+
+    if (!transaction.timestamp) {
+      transaction.timestamp =
+        (await getTipset(transaction.height)).minTimestamp * 1000
+    }
+
+    if (!transaction.status) {
+      transaction.status = 'processing'
+      ;(async () => {
+        while (true) {
+          try {
+            const stateReplay = await getStateReplay(transaction.hash)
+            transaction.status = stateReplay.receipt.exitCode === 0
+              ? 'sent'
+              : 'failed'
+            transactionsStore.set('transactions', updatedTransactions)
+            sendTransactionsToUI()
+            break
+          } catch (err) {
+            console.error(
+              `Failed getting status for ${transactionProcessing.hash}`
+            )
+            await timers.setTimeout(1000)
           }
         }
-      `
-      const variables = {
-        height: message.height
-      }
-      const { tipset } = await request(url, query, variables)
-      message.timestamp = tipset.minTimestamp * 1000
-    }),
-    ...messages.map(async message => {
-      try {
-        const query = gql`
-          query StateReplay($cid: String!) {
-            stateReplay(cid: $cid) {
-              receipt {
-                return
-                exitCode
-                gasUsed
-              }
-              executionTrace {
-                executionTrace
-              }
-            }
-          }
-        `
-        const variables = {
-          cid: message.cid
-        }
-        /** @type {{stateReplay: GQLStateReplay}} */
-        const { stateReplay } = await request(url, query, variables)
-        message.exitCode = stateReplay.receipt.exitCode
-      } catch (err) {
-        console.error(`Failed getting status for ${message.cid}`)
-      }
-    })
-  ])
+      })()
+    }
 
-  transactions = messages
-    .filter(message => message.exitCode === 0)
-    .map(message => {
-      assert(message.timestamp)
-      /** @type {TransactionStatus} */
-      const status = 'sent'
-      return {
-        hash: message.cid,
-        timestamp: message.timestamp,
-        status,
-        outgoing: message.from.robust === address,
-        amount: new FilecoinNumber(message.value, 'attofil').toFil(),
-        address: message.from.robust === address
-          ? message.to.robust
-          : message.from.robust
-      }
-    })
-  transactionsStore.set('transactions', transactions)
+    updatedTransactions.push(
+      /** @type {FILTransaction} */
+      (transaction)
+    )
+  }
+
+  // Update state
+  transactions = updatedTransactions
+
+  // Save transactions
+  transactionsStore.set('transactions', updatedTransactions)
+
+  // Send transaction state to UI
   sendTransactionsToUI()
 }
 
 function listTransactions () {
-  return transactions
+  return getTransactionsForUI()
 }
 
 /**
@@ -242,14 +280,29 @@ async function getGasLimit (from, to, amount) {
   return gas
 }
 
+function getTransactionsForUI () {
+  let processing
+  const sent = []
+
+  for (const transaction of transactions) {
+    if (!processing && transaction.status === 'processing') {
+      processing = transaction
+    } else if (transaction.status === 'sent') {
+      sent.push(transaction)
+    }
+  }
+  const update = [
+    ...(processing ? [processing] : []),
+    ...sent
+  ]
+
+  console.log({ update })
+  return update
+}
+
 function sendTransactionsToUI () {
   assert(ctx)
-  const transactionUpdate = []
-  if (processingTransaction) {
-    transactionUpdate.push(processingTransaction)
-  }
-  transactionUpdate.push(...transactions)
-  ctx.transactionUpdate(transactionUpdate)
+  ctx.transactionUpdate(getTransactionsForUI())
 }
 
 /**
@@ -296,26 +349,13 @@ async function transferFunds (from, to, amount) {
 
     processingTransaction.hash = cid
     sendTransactionsToUI()
-
-    while (true) {
-      try {
-        const stateReplay = await getStateReplay(cid)
-        processingTransaction.status = stateReplay.receipt.exitCode === 0
-          ? 'sent'
-          : 'failed'
-        break
-      } catch {
-        await timers.setTimeout(1000)
-      }
-    }
   } catch (err) {
     processingTransaction.status = 'failed'
+    sendTransactionsToUI()
+    await timers.setTimeout(6000)
+    processingTransaction = null
+    sendTransactionsToUI()
   }
-
-  sendTransactionsToUI()
-  await timers.setTimeout(6000)
-  processingTransaction = null
-  sendTransactionsToUI()
 }
 
 /*

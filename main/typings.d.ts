@@ -10,13 +10,24 @@ export interface Activity {
   message: string;
 }
 
+export type FILTransactionProcessing = {
+  hash: string;
+  height: number;
+  timestamp: number?;
+  status: TransactionStatus?;
+  outgoing: boolean;
+  amount: string;
+  address: string;
+}
+
 export type FILTransaction = {
-  hash: string
-  timestamp: number
-  status: TransactionStatus
-  outgoing: boolean
-  amount: string
-  address: string
+  hash: string;
+  height: number;
+  timestamp: number;
+  status: TransactionStatus;
+  outgoing: boolean;
+  amount: string;
+  address: string;
 }
 
 export interface GQLMessage {
@@ -34,6 +45,10 @@ export interface GQLMessage {
   value: string;
   timestamp: number?;
   exitCode: number?;
+}
+
+export interface GQLTipset {
+  minHeight: number;
 }
 
 export interface GQLStateReplay {
