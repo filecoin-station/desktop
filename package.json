@@ -79,7 +79,7 @@
     "@vitest/ui": "^0.27.2",
     "autoprefixer": "^10.4.13",
     "cross-env": "^7.0.3",
-    "electron": "^22.0.2",
+    "electron": "^22.0.3",
     "electron-builder": "^23.6.0",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.32.0",
