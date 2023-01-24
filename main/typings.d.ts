@@ -11,9 +11,9 @@ export interface Activity {
 }
 
 export type FILTransactionProcessing = {
-  hash: string?;
-  height: number?;
-  timestamp: number?;
+  hash?: string;
+  height?: number;
+  timestamp?: number;
   status: TransactionStatus?;
   outgoing: boolean;
   amount: string;

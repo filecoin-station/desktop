@@ -184,7 +184,6 @@ async function updateTransactions () {
     return {
       height: message.height,
       hash: message.cid,
-      timestamp: null,
       status: null,
       outgoing: message.from.robust === address,
       amount: new FilecoinNumber(message.value, 'attofil').toFil(),
@@ -336,8 +335,6 @@ async function transferFunds (from, to, amount) {
 
   /** @type {FILTransactionProcessing} */
   const transaction = {
-    hash: null,
-    height: null,
     timestamp: new Date().getTime(),
     status: /** @type {TransactionStatus} */ ('processing'),
     outgoing: true,
