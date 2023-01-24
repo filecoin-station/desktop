@@ -10,18 +10,21 @@ export interface Activity {
   message: string;
 }
 
-export type FILTransactionProcessing = {
-  hash?: string;
-  height?: number;
-  timestamp?: number;
+export type FILTransaction = {
+  hash: string;
+  height: number;
+  timestamp: number;
   status: TransactionStatus?;
   outgoing: boolean;
   amount: string;
   address: string;
 }
 
-export type FILTransaction = FILTransactionProcessing &
-  Required<Pick<FILTransactionProcessing, 'hash' | 'timestamp' | 'status'>>
+// helper
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+
+// FILTransaction with certain properties changed to optional
+type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'timestamp' | 'status' | 'height'>
 
 export interface GQLMessage {
   cid: string;
