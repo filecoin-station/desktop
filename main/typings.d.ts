@@ -14,7 +14,7 @@ export type FILTransaction = {
   hash: string;
   height: number;
   timestamp: number;
-  status: TransactionStatus?;
+  status: TransactionStatus;
   outgoing: boolean;
   amount: string;
   address: string;

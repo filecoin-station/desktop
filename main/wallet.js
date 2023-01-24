@@ -184,7 +184,6 @@ async function updateTransactions () {
     return {
       height: message.height,
       hash: message.cid,
-      status: null,
       outgoing: message.from.robust === address,
       amount: new FilecoinNumber(message.value, 'attofil').toFil(),
       address: message.from.robust === address
