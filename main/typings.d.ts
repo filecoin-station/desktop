@@ -20,15 +20,8 @@ export type FILTransactionProcessing = {
   address: string;
 }
 
-export type FILTransaction = {
-  hash: string;
-  height: number;
-  timestamp: number;
-  status: TransactionStatus;
-  outgoing: boolean;
-  amount: string;
-  address: string;
-}
+export type FILTransaction = FILTransactionProcessing &
+  Required<Pick<FILTransactionProcessing, 'hash' | 'timestamp' | 'status'>>
 
 export interface GQLMessage {
   cid: string;
