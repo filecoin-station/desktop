@@ -35,9 +35,10 @@ let address = ''
 let provider = null
 /** @type {Context | null} */
 let ctx = null
-/** @type {FILTransaction[]} */
+/** @type {(FILTransaction|FILTransactionProcessing)[]} */
 let transactions = loadStoredEntries()
-console.log('Loaded transactions', transactions)
+/** @type {Set<string>} */
+const stateReplaysBeingFetched = new Set()
 
 /**
  * @returns {Promise<string>}
@@ -193,7 +194,7 @@ async function updateTransactions () {
     }
   })
 
-  /** @type {FILTransaction[]} */
+  /** @type {(FILTransaction|FILTransactionProcessing)[]} */
   const updatedTransactions = []
 
   for (const transactionProcessing of transactionsLoading) {
@@ -204,20 +205,27 @@ async function updateTransactions () {
     // Keep references alive by prefering `tx`
     const transaction = tx || transactionProcessing
 
-    if (!transaction.timestamp) {
+    if (!transaction.timestamp && transaction.height) {
       transaction.timestamp =
         (await getTipset(transaction.height)).minTimestamp * 1000
     }
 
-    if (!transaction.status) {
+    if (
+      transaction.hash &&
+      (!transaction.status || transaction.status === 'processing') &&
+      !stateReplaysBeingFetched.has(transaction.hash)
+    ) {
+      const { hash } = transaction
+      stateReplaysBeingFetched.add(hash)
       transaction.status = 'processing'
       ;(async () => {
         while (true) {
           try {
-            const stateReplay = await getStateReplay(transaction.hash)
+            const stateReplay = await getStateReplay(hash)
             transaction.status = stateReplay.receipt.exitCode === 0
               ? 'sent'
               : 'failed'
+            stateReplaysBeingFetched.delete(hash)
             transactionsStore.set('transactions', updatedTransactions)
             sendTransactionsToUI()
             break
@@ -308,13 +316,13 @@ function getTransactionsForUI () {
     ...sent
   ]
 
-  console.log({ update })
   return update
 }
 
 function sendTransactionsToUI () {
   assert(ctx)
   ctx.transactionUpdate(getTransactionsForUI())
+  console.log({ transactions: getTransactionsForUI() })
 }
 
 /**
@@ -326,10 +334,11 @@ function sendTransactionsToUI () {
 async function transferFunds (from, to, amount) {
   assert(ctx)
 
+  /** @type {FILTransactionProcessing} */
   const transaction = {
-    height: 0,
-    hash: '',
-    timestamp: Date.now(),
+    hash: null,
+    height: null,
+    timestamp: new Date().getTime(),
     status: /** @type {TransactionStatus} */ ('processing'),
     outgoing: true,
     amount: amount.toString(),
@@ -364,10 +373,13 @@ async function transferFunds (from, to, amount) {
     transaction.hash = cid
     sendTransactionsToUI()
   } catch (err) {
+    // TODO: This won't actually be sent, since we don't transmit failed
+    // transactions to the UI. We should probably do that. Or the frontend
+    // can figure this out!
+    // Success is also currently not displayed :/
+    // Start sending all transactions to the UI, because ultimately this is a
+    // view layer question
     transaction.status = 'failed'
-    sendTransactionsToUI()
-    await timers.setTimeout(6000)
-    transactions.splice(transactions.findIndex(tx => tx.hash === transaction.hash), 1)
     sendTransactionsToUI()
   }
 }
@@ -381,7 +393,7 @@ async function transferAllFundsToDestinationWallet () {
   assert(to)
   // const balance = await provider.getBalance(address)
   // FIXME: Only transfer a little FIL for now
-  await transferFunds(address, to, new FilecoinNumber('1', 'attofil'))
+  await transferFunds(address, to, new FilecoinNumber('0.00001', 'fil'))
 }
 
 /**

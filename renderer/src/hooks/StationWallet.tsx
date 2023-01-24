@@ -6,7 +6,7 @@ import {
   getStationWalletBalance,
   getStationWalletTransactionsHistory
 } from '../lib/station-config'
-import { FILTransaction } from '../typings'
+import { FILTransaction, FILTransactionProcessing } from '../typings'
 
 interface Wallet {
   stationAddress: string,
@@ -14,7 +14,7 @@ interface Wallet {
   walletBalance: string | undefined,
   walletTransactions: FILTransaction[] | undefined,
   editDestinationAddress: (address: string|undefined) => void,
-  currentTransaction: FILTransaction | undefined,
+  currentTransaction: FILTransactionProcessing | undefined,
   dismissCurrentTransaction: () => void
 }
 
@@ -23,7 +23,7 @@ const useWallet = (): Wallet => {
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
   const [walletBalance, setWalletBalance] = useState<string | undefined>()
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | undefined>()
-  const [currentTransaction, setCurrentTransaction] = useState<FILTransaction>()
+  const [currentTransaction, setCurrentTransaction] = useState<FILTransactionProcessing>()
 
   const editDestinationAddress = async (address: string | undefined) => {
     await setDestinationWalletAddress(address)
@@ -61,21 +61,20 @@ const useWallet = (): Wallet => {
 
   useEffect(() => {
     const loadStoredInfo = async () => {
-      setWalletTransactions(await getStationWalletTransactionsHistory())
+      const { processing, confirmed } = splitWalletTransactions(
+        await getStationWalletTransactionsHistory()
+      )
+      setCurrentTransaction(processing)
+      setWalletTransactions(confirmed)
     }
     loadStoredInfo()
   }, [])
 
   useEffect(() => {
-    const updateWalletTransactionsArray = async (transactions: FILTransaction[]) => {
-      const [newCurrentTransaction, ...confirmedTransactions] = transactions
-      if (newCurrentTransaction?.status === 'processing') {
-        setCurrentTransaction(newCurrentTransaction)
-        setWalletTransactions(confirmedTransactions)
-      } else {
-        setCurrentTransaction(undefined)
-        setWalletTransactions(transactions)
-      }
+    const updateWalletTransactionsArray = async (transactions: (FILTransaction|FILTransactionProcessing)[]) => {
+      const { processing, confirmed } = splitWalletTransactions(transactions)
+      setCurrentTransaction(processing)
+      setWalletTransactions(confirmed)
     }
 
     const unsubscribeOnTransactionUpdate = window.electron.stationEvents.onTransactionUpdate(updateWalletTransactionsArray)
@@ -92,6 +91,19 @@ const useWallet = (): Wallet => {
   }, [walletBalance])
 
   return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction }
+}
+
+interface SplitTransactions {
+  processing: FILTransactionProcessing | undefined,
+  confirmed: FILTransaction[]
+}
+
+const splitWalletTransactions = (transactions: (FILTransaction|FILTransactionProcessing)[]): SplitTransactions => {
+  const processing: FILTransactionProcessing | null =
+  transactions.filter(tx => tx.status === 'processing')[0] as FILTransactionProcessing
+  const confirmed: FILTransaction[] =
+  transactions.filter(tx => tx.status !== 'processing') as FILTransaction[]
+  return { processing, confirmed }
 }
 
 export default useWallet

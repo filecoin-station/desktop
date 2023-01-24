@@ -73,7 +73,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
           <Warning width={'12px'} height={'12px'} fill="#ff4d81" className='mr-1' />
           <span className="text-body-2xs text-red-200">The FIL address entered is invalid. Please check and try again.</span>
         </div>
-        <p className={`absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${(internalEditMode && addressIsValid) ? 'visible' : 'invisible opacity-0'}`}>Enter an address to receive your FIL.</p>
+        <p className={`absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${(internalEditMode && addressIsValid) ? 'visible' : 'invisible opacity-0'}`}>Enter a destination address for the transfer</p>
       </div>
     )
   }
@@ -125,7 +125,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
             onFocus={() => { enableEditMode() }} />
           <label htmlFor="address"
             className="absolute duration-300 top-3 origin-top-lef pointer-events-none text-white opacity-80 font-body text-body-2xs uppercase mb-3">
-            Your FIL Address</label>
+            Destination Address</label>
           <div className={computeBorderClasses()} />
           {renderBottomMessage()}
         </div>

@@ -11,8 +11,8 @@ export interface Activity {
 }
 
 export type FILTransactionProcessing = {
-  hash: string;
-  height: number;
+  hash: string?;
+  height: number?;
   timestamp: number?;
   status: TransactionStatus?;
   outgoing: boolean;
@@ -84,5 +84,5 @@ export interface Context {
   getUpdaterStatus: () => {updateAvailable: boolean},
   browseTransactionTracker: (transactionHash: string) => void,
 
-  transactionUpdate: (transactions: FILTransaction[]) => void
+  transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void
 }

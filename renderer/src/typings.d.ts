@@ -32,7 +32,7 @@ export declare global {
         getDestinationWalletAddress: () => Promise<string | undefined>,
         setDestinationWalletAddress: (address: string | undefined) => Promise<void>,
         getStationWalletBalance: () => Promise<string>,
-        getStationWalletTransactionsHistory: () => Promise<TransactionMessage[]>,
+        getStationWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>,
         transferAllFundsToDestinationWallet: () => Promise<void>,
         browseTransactionTracker: (transactionHash: string) => void
       },
@@ -41,7 +41,7 @@ export declare global {
         onJobProcessed: (callback) => () => void,
         onEarningsChanged: (callback) => () => void,
         onUpdateAvailable: (callback: () => void) => () => void,
-        onTransactionUpdate (callback: (allTransactions: TransactionMessage[]) => void),
+        onTransactionUpdate (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void),
         onBalanceUpdate (callback: (balance: string) => void)
       },
       dialogs: {
@@ -62,10 +62,21 @@ export type ActivityEventMessage = {
 export type FILTransactionStatus = 'sent' | 'processing' | 'failed'
 
 export type FILTransaction = {
-  hash: string
-  timestamp: number
-  status: TransactionStatus
-  outgoing: boolean
-  amount: string
-  address: string
+  hash: string;
+  height: number;
+  timestamp: number;
+  status: TransactionStatus;
+  outgoing: boolean;
+  amount: string;
+  address: string;
+}
+
+export type FILTransactionProcessing = {
+  hash: string?;
+  height: number?;
+  timestamp: number?;
+  status: TransactionStatus?;
+  outgoing: boolean;
+  amount: string;
+  address: string;
 }
