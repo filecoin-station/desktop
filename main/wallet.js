@@ -27,9 +27,6 @@ const transactionsStore = new Store({
   name: 'wallet-transactions'
 })
 
-// FIXME
-// transactionsStore.set('transactions', [])
-
 let address = ''
 /** @type {Filecoin | null} */
 let provider = null
