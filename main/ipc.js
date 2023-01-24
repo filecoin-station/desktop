@@ -16,7 +16,8 @@ const ipcMainEvents = Object.freeze({
   UPDATE_CHECK_FINISHED: 'station:update-check:finished',
   UPDATE_AVAILABLE: 'station:update-available',
 
-  TRANSACTION_UPDATE: 'station:transaction-update'
+  TRANSACTION_UPDATE: 'station:transaction-update',
+  BALANCE_UPDATE: 'station:wallet-balance-update'
 })
 
 function setupIpcMain (/** @type {Context} */ ctx) {

@@ -120,7 +120,8 @@ const ctx = {
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
   browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://explorer.glif.io/tx/${transactionHash}`) },
-  transactionUpdate: (transactions) => { ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions) }
+  transactionUpdate: (transactions) => { ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions) },
+  balanceUpdate: (balance) => { ipcMain.emit(ipcMainEvents.BALANCE_UPDATE, balance) }
 }
 
 app.on('before-quit', () => {

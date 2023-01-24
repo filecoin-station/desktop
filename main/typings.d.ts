@@ -80,5 +80,6 @@ export interface Context {
   getUpdaterStatus: () => {updateAvailable: boolean},
   browseTransactionTracker: (transactionHash: string) => void,
 
-  transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void
+  transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void,
+  balanceUpdate: (balance:string) => void
 }

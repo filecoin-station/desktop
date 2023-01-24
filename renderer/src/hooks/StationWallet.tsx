@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   getDestinationWalletAddress,
   setDestinationWalletAddress,
@@ -25,7 +25,7 @@ const useWallet = (): Wallet => {
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | undefined>()
   const [currentTransaction, setCurrentTransaction] = useState<FILTransactionProcessing>()
 
-  const setTransactions = (
+  const setTransactions = useCallback((
     processing: FILTransactionProcessing | undefined,
     confirmed: FILTransaction[]
   ) => {
@@ -35,11 +35,11 @@ const useWallet = (): Wallet => {
       !processing
     ) {
       const status = confirmed.find(tx => tx.hash === currentTransaction.hash)
-          ? 'sent'
-          : 'failed'
+        ? 'sent'
+        : 'failed'
       const newCurrentTransaction = {
         ...currentTransaction,
-        status,
+        status
       }
       setCurrentTransaction(newCurrentTransaction)
       setTimeout(() => {
@@ -53,7 +53,7 @@ const useWallet = (): Wallet => {
       setCurrentTransaction(processing)
     }
     setWalletTransactions(confirmed)
-  }
+  }, [currentTransaction])
 
   const editDestinationAddress = async (address: string | undefined) => {
     await setDestinationWalletAddress(address)
@@ -85,8 +85,6 @@ const useWallet = (): Wallet => {
       setWalletBalance(await getStationWalletBalance())
     }
     loadStoredInfo()
-    const interval = setInterval(loadStoredInfo, 10000)
-    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -97,10 +95,10 @@ const useWallet = (): Wallet => {
       setTransactions(processing, confirmed)
     }
     loadStoredInfo()
-  }, [])
+  }, [setTransactions])
 
   useEffect(() => {
-    const updateWalletTransactionsArray = async (transactions: (FILTransaction|FILTransactionProcessing)[]) => {
+    const updateWalletTransactionsArray = (transactions: (FILTransaction|FILTransactionProcessing)[]) => {
       const { processing, confirmed } = splitWalletTransactions(transactions)
       setTransactions(processing, confirmed)
     }
@@ -109,7 +107,18 @@ const useWallet = (): Wallet => {
     return () => {
       unsubscribeOnTransactionUpdate()
     }
-  }, [currentTransaction])
+  }, [setTransactions])
+
+  useEffect(() => {
+    const updateWalletBalance = (balance: string) => {
+      setWalletBalance(balance)
+    }
+
+    const unsubscribeOnBalanceUpdate = window.electron.stationEvents.onBalanceUpdate(updateWalletBalance)
+    return () => {
+      unsubscribeOnBalanceUpdate()
+    }
+  }, [])
 
   useEffect(() => {
     const unsubscribeOnBalanceUpdate = window.electron.stationEvents.onBalanceUpdate(balance => setWalletBalance(balance))

@@ -23,8 +23,8 @@ const Store = require('electron-store')
 
 const log = electronLog.scope('wallet')
 const url = 'https://graph.glif.link/query'
-const transactionsStore = new Store({
-  name: 'wallet-transactions'
+const walletStore = new Store({
+  name: 'wallet'
 })
 
 let address = ''
@@ -32,8 +32,8 @@ let address = ''
 let provider = null
 /** @type {Context | null} */
 let ctx = null
-/** @type {(FILTransaction|FILTransactionProcessing)[]} */
 let transactions = loadStoredEntries()
+let balance = loadBalance()
 /** @type {Set<string>} */
 const stateReplaysBeingFetched = new Set()
 
@@ -73,22 +73,33 @@ async function setup (_ctx) {
   ;(async () => {
     while (true) {
       try {
-        await updateTransactions()
+        updateBalance()
+      } catch (err) {
+        log.error('Updating balance', err)
+      }
+      try {
+        updateTransactions()
       } catch (err) {
         log.error('Updating transactions', err)
       }
-      await timers.setTimeout(10000)
+      await timers.setTimeout(10_000)
     }
   })()
 }
 
 /**
- * @returns {Promise<string>}
+ * @returns {string}
  */
-async function getBalance () {
-  assert(provider)
-  const balance = await provider.getBalance(address)
+function getBalance () {
   return balance.toFil()
+}
+
+async function updateBalance () {
+  assert(provider)
+  assert(ctx)
+  balance = (await provider.getBalance(address))
+  walletStore.set('balance', balance.toFil())
+  ctx.balanceUpdate(balance.toFil())
 }
 
 /**
@@ -221,7 +232,12 @@ async function updateTransactions () {
               ? 'sent'
               : 'failed'
             stateReplaysBeingFetched.delete(hash)
-            transactionsStore.set('transactions', updatedTransactions)
+            walletStore.set('transactions', updatedTransactions)
+            if (transaction.status === 'sent') {
+              try {
+                await updateBalance()
+              } catch {}
+            }
             sendTransactionsToUI()
             break
           } catch (err) {
@@ -252,7 +268,7 @@ async function updateTransactions () {
   transactions = updatedTransactions
 
   // Save transactions
-  transactionsStore.set('transactions', updatedTransactions)
+  walletStore.set('transactions', updatedTransactions)
 
   // Send transaction state to UI
   sendTransactionsToUI()
@@ -327,6 +343,7 @@ function sendTransactionsToUI () {
  */
 async function transferFunds (from, to, amount) {
   assert(ctx)
+  assert(provider)
 
   /** @type {FILTransactionProcessing} */
   const transaction = {
@@ -341,7 +358,6 @@ async function transferFunds (from, to, amount) {
 
   try {
     console.log({ transferAmount: amount.toString() })
-    assert(provider)
     const gasLimit = await getGasLimit(from, to, amount)
     const message = new Message({
       to,
@@ -377,9 +393,9 @@ async function transferAllFundsToDestinationWallet () {
   assert(provider)
   const to = getDestinationWalletAddress()
   assert(to)
-  // const balance = await provider.getBalance(address)
   // FIXME: Only transfer a little FIL for now
   await transferFunds(address, to, new FilecoinNumber('0.00001', 'fil'))
+  await updateBalance()
 }
 
 /**
@@ -390,11 +406,22 @@ function getAddress () {
 }
 
 /**
- * @returns {FILTransaction[]}
+ * @returns {(FILTransaction|FILTransactionProcessing)[]}
  */
 function loadStoredEntries () {
   // A workaround to fix false TypeScript errors
-  return /** @type {any} */(transactionsStore.get('transactions', []))
+  return /** @type {any} */ (walletStore.get('transactions', []))
+}
+
+/**
+ * @returns {FilecoinNumber}
+ */
+function loadBalance () {
+  // A workaround to fix false TypeScript errors
+  return new FilecoinNumber(
+    /** @type {string} */ (walletStore.get('balance', '0')),
+    'fil'
+  )
 }
 
 module.exports = {

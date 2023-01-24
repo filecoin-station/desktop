@@ -131,10 +131,16 @@ function setupIpcEventForwarding (ui) {
   }
   ipcMain.on(ipcMainEvents.TRANSACTION_UPDATE, onTransactionUpdate)
 
+  const onBalanceUpdate = (/** @type {unknown[]} */ ...args) => {
+    ui.webContents.send(ipcMainEvents.BALANCE_UPDATE, ...args)
+  }
+  ipcMain.on(ipcMainEvents.BALANCE_UPDATE, onBalanceUpdate)
+
   return function stopIpcEventForwarding () {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     ipcMain.removeListener(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
     ipcMain.removeListener(ipcMainEvents.UPDATE_AVAILABLE, onUpdateAvailable)
     ipcMain.removeListener(ipcMainEvents.TRANSACTION_UPDATE, onTransactionUpdate)
+    ipcMain.removeListener(ipcMainEvents.BALANCE_UPDATE, onBalanceUpdate)
   }
 }
