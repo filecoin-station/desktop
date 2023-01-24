@@ -25,6 +25,36 @@ const useWallet = (): Wallet => {
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | undefined>()
   const [currentTransaction, setCurrentTransaction] = useState<FILTransactionProcessing>()
 
+  const setTransactions = (
+    processing: FILTransactionProcessing | undefined,
+    confirmed: FILTransaction[]
+  ) => {
+    if (
+      currentTransaction &&
+      currentTransaction.status === 'processing' &&
+      !processing
+    ) {
+      const status = confirmed.find(tx => tx.hash === currentTransaction.hash)
+          ? 'sent'
+          : 'failed'
+      const newCurrentTransaction = {
+        ...currentTransaction,
+        status,
+      }
+      setCurrentTransaction(newCurrentTransaction)
+      setTimeout(() => {
+        setCurrentTransaction(tx =>
+          tx === newCurrentTransaction
+            ? undefined
+            : tx
+        )
+      }, 10_000)
+    } else if (processing) {
+      setCurrentTransaction(processing)
+    }
+    setWalletTransactions(confirmed)
+  }
+
   const editDestinationAddress = async (address: string | undefined) => {
     await setDestinationWalletAddress(address)
     setDestinationFilAddress(address)
@@ -64,8 +94,7 @@ const useWallet = (): Wallet => {
       const { processing, confirmed } = splitWalletTransactions(
         await getStationWalletTransactionsHistory()
       )
-      setCurrentTransaction(processing)
-      setWalletTransactions(confirmed)
+      setTransactions(processing, confirmed)
     }
     loadStoredInfo()
   }, [])
@@ -73,8 +102,7 @@ const useWallet = (): Wallet => {
   useEffect(() => {
     const updateWalletTransactionsArray = async (transactions: (FILTransaction|FILTransactionProcessing)[]) => {
       const { processing, confirmed } = splitWalletTransactions(transactions)
-      setCurrentTransaction(processing)
-      setWalletTransactions(confirmed)
+      setTransactions(processing, confirmed)
     }
 
     const unsubscribeOnTransactionUpdate = window.electron.stationEvents.onTransactionUpdate(updateWalletTransactionsArray)

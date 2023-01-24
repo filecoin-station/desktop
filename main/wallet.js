@@ -231,7 +231,7 @@ async function updateTransactions () {
             console.error(
               `Failed getting status for ${transactionProcessing.hash}`
             )
-            await timers.setTimeout(1000)
+            await timers.setTimeout(12_000)
           }
         }
       })()
@@ -320,7 +320,6 @@ function getTransactionsForUI () {
 function sendTransactionsToUI () {
   assert(ctx)
   ctx.transactionUpdate(getTransactionsForUI())
-  console.log({ transactions: getTransactionsForUI() })
 }
 
 /**
@@ -369,13 +368,6 @@ async function transferFunds (from, to, amount) {
     transaction.hash = cid
     sendTransactionsToUI()
   } catch (err) {
-    // TODO: This won't actually be sent, since we don't transmit failed
-    // transactions to the UI. We should probably do that. Or the frontend
-    // can figure this out!
-    // Success is also currently not displayed :/
-    // Start sending all transactions to the UI, because ultimately this is a
-    // view layer question. Attach the data the status was last changed, so the
-    // frontend can figure out if it should display it.
     transaction.status = 'failed'
     sendTransactionsToUI()
   }
