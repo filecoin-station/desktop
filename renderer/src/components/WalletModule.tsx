@@ -86,6 +86,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
               reset={reset}
               destinationFilAddress={destinationFilAddress}
               editMode={editMode}
+              hasCurrentTransaction={currentTransaction !== undefined}
             />
           </div>
         </div>

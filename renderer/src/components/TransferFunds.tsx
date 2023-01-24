@@ -9,11 +9,14 @@ interface TransferFundsButtonsProps {
   transferAllFunds: () => void,
   reset: () => void,
   destinationFilAddress: string | undefined,
-  editMode: boolean
+  editMode: boolean,
+  hasCurrentTransaction: boolean
 }
 
-const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, balance, enableTransferMode, transferAllFunds, reset, destinationFilAddress, editMode }) => {
-  const disabled = !destinationFilAddress || Number(balance) < 0.001
+const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, balance, enableTransferMode, transferAllFunds, reset, destinationFilAddress, editMode, hasCurrentTransaction }) => {
+  const disabled = !destinationFilAddress
+    || hasCurrentTransaction
+    || Number(balance) < 0.001
   return (
     <div className={`relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-300 ${(!editMode) ? 'visible' : 'z-0 -translate-y-[7.8rem] text-opacity-0'} ${(editMode && disabled) && 'invisible opacity-0'}`}>
       <div className={`absolute w-fit right-0 flex items-center ease-[cubic-bezier(0.85,0,0.15,1) duration-500 z-10 ${(transferMode && !disabled) ? '-translate-x-[8rem] opacity-0' : ''}`}>
@@ -22,7 +25,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
           onClick={enableTransferMode}>
           <span className={`text-2xs px-4 text-body-s ${disabled ? 'text-white text-opacity-80' : 'text-primary'}`}>Transfer FIL</span>
         </button>
-        {disabled &&
+        {disabled && !hasCurrentTransaction &&
           <div className="absolute -left-[13px] mb-[1px] hover:-left-[89px] hover:-top-[87.5px] flex flex-col items-center group">
             <div className='w-44 px-2 py-4 mb-[13px] rounded-lg bg-grayscale-200 hidden group-hover:block'>
               <p className='text-body-2xs text-center'>We need a FIL address and positive balance to transfer your FIL</p>

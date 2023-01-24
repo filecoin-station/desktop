@@ -23,7 +23,7 @@ const useWallet = (): Wallet => {
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
   const [walletBalance, setWalletBalance] = useState<string | undefined>()
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | undefined>()
-  const [currentTransaction, setCurrentTransaction] = useState<FILTransactionProcessing>()
+  const [currentTransaction, setCurrentTransaction] = useState<FILTransactionProcessing | undefined>()
 
   const setTransactions = useCallback((
     processing: FILTransactionProcessing | undefined,
