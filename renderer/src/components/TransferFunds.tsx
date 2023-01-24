@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { ReactComponent as InfoIcon } from '../assets/img/icons/info.svg'
 import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 
@@ -13,14 +13,10 @@ interface TransferFundsButtonsProps {
 }
 
 const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, balance, enableTransferMode, transferAllFunds, reset, destinationFilAddress, editMode }) => {
-  const [internalTransferMode, setInternalTransferMode] = useState<boolean>(false)
-
-  useEffect(() => { setInternalTransferMode(transferMode) }, [transferMode])
-
   const disabled = !destinationFilAddress || Number(balance) < 0.001
   return (
     <div className={`relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-300 ${(!editMode) ? 'visible' : 'z-0 -translate-y-[7.8rem] text-opacity-0'} ${(editMode && disabled) && 'invisible opacity-0'}`}>
-      <div className={`absolute w-fit right-0 flex items-center ease-[cubic-bezier(0.85,0,0.15,1) duration-500 z-10 ${(internalTransferMode && !disabled) ? '-translate-x-[8rem] opacity-0' : ''}`}>
+      <div className={`absolute w-fit right-0 flex items-center ease-[cubic-bezier(0.85,0,0.15,1) duration-500 z-10 ${(transferMode && !disabled) ? '-translate-x-[8rem] opacity-0' : ''}`}>
         <button className="btn-primary w-40 bg-grayscale-250 border-0"
           disabled={disabled}
           onClick={enableTransferMode}>
@@ -35,8 +31,8 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
           </div>
         }
       </div>
-      <div className={`absolute w-full justify-end right-0 flex gap-1 items-center ${internalTransferMode ? 'z-20' : 'z-0'} `}>
-        <button className={`btn-primary w-fit min-w-[160px] bg-grayscale-250 text-primary border-0 ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${internalTransferMode ? '' : 'translate-x-[7.6rem] text-opacity-0 opacity-0'} `}
+      <div className={`absolute w-full justify-end right-0 flex gap-1 items-center ${transferMode ? 'z-20' : 'z-0'} `}>
+        <button className={`btn-primary w-fit min-w-[160px] bg-grayscale-250 text-primary border-0 ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${transferMode ? '' : 'translate-x-[7.6rem] text-opacity-0 opacity-0'} `}
           onClick={transferAllFunds}>
           <span className="text-2xs px-4 text-body-s">
             Send{' '}
@@ -48,7 +44,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
             </span>
           </span>
         </button>
-        <button className={`btn-primary ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${internalTransferMode ? '' : 'opacity-0'}`}
+        <button className={`btn-primary ease-[cubic-bezier(0.85,0,0.15,1) duration-500 ${transferMode ? '' : 'opacity-0'}`}
           onClick={reset}>
             <span className="text-2xs px-4 text-body-s">Cancel</span>
         </button>
