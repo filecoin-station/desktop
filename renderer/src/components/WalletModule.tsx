@@ -45,8 +45,8 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   }
 
   const transferAllFunds = async () => {
-    await transferAllFundsToDestinationWallet()
     setTransferMode(false)
+    await transferAllFundsToDestinationWallet()
   }
 
   return (
