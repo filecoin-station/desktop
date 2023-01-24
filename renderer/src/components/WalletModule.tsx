@@ -64,7 +64,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   return (
     <div className='relative z-20'>
       <div className='h-8 bg-primary-dark flex items-center px-8'>
-        <p className='text text-body-3xs text-white opacity-80 mr-3'>STATION ADDRESS</p>
+        <p className='text text-body-3xs text-white opacity-80 mr-3'>YOUR STATION ADDRESS</p>
         <p className='text text-body-3xs text-white'> {`${stationAddress.slice(0, 6)} . . . ${stationAddress.slice(stationAddress.length - 6, stationAddress.length)}`}</p>
         <button className={'h-full w-auto flex flex-row items-center justify-start group ml-2 cursor-pointer'}
           tabIndex={0} onClick={() => navigator.clipboard.writeText(stationAddress) }>

@@ -11,8 +11,7 @@ const WalletOnboarding = () => {
             </div>
             <div className='py-3 px-6 pr-24'>
               <p className='text-body-s text-primary font-body uppercase'>YOUR STATION WALLET</p>
-              <p className='text-body-2xs mt-1'>Your Station Wallet has a unique address, where all the FIL you earn will be stored.
-                Station will send your FIL earnings to this wallet on a daily basis. </p>
+              <p className='text-body-2xs mt-1'>Your Station Wallet has a unique address, where all the FIL you earn will be stored. Station will send FIL to this wallet on a regular basis, based on your contributions.</p>
             </div>
           </div>
           <div className='flex flex-row align-middle h-[90px] w-full bg-grayscale-100 rounded'>
@@ -21,8 +20,7 @@ const WalletOnboarding = () => {
             </div>
             <div className='py-3 px-6 pr-24'>
               <p className='text-body-s text-primary font-body uppercase'>TRANSFERRING YOUR FIL</p>
-              <p className='text-body-2xs mt-1'>In order to transfer FIL out of your Station Wallet,
-                you need to set a FIL address to send out your FIL. We recommend you transfer your FIL at least every 30 days.</p>
+              <p className='text-body-2xs mt-1'>In order to transfer FIL out of your Station Wallet, you need to set a destination FIL address to which to send your FIL. We recommend you regularly transfer the FIL in your Station Wallet to a more secure wallet.</p>
             </div>
           </div>
           <div className='flex flex-row align-middle h-[90px] w-full bg-grayscale-100 rounded'>
@@ -31,8 +29,7 @@ const WalletOnboarding = () => {
             </div>
             <div className='py-3 px-6 pr-24'>
               <p className='text-body-s text-primary font-body uppercase'>GAS FEES</p>
-              <p className='text-body-2xs mt-1'>All transfers of assets in the blockchain incur on gas fees,
-                which vary depending on the network's activity and are deducted from the total amount you're transferring.</p>
+              <p className='text-body-2xs mt-1'>All transactions on the blockchain incur a small gas fee, which can vary depending on network activity. This is deducted from the total amount you are transferring.</p>
             </div>
           </div>
         </div>
