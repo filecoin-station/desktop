@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { fireEvent, render, waitFor } from '@testing-library/react'
-import { act } from 'react-dom/test-utils'
+import { fireEvent, render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import '../lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
@@ -30,6 +29,33 @@ describe('Dashboard wallet display', () => {
 
     beforeEach(() => {
       vi.clearAllMocks()
+      vi.mock('../hooks/StationWallet', async () => {
+        return {
+          default: () => {
+            let destination = ''
+            return {
+              stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+              destinationFilAddress: destination,
+              walletBalance: 0,
+              walletTransactions: [],
+              editDestinationAddress: (value: string) => { destination = value },
+              currentTransaction: undefined,
+              dismissCurrentTransaction: () => ({})
+            }
+          }
+        }
+      })
+
+      vi.mock('../hooks/StationActivity', async () => {
+        return {
+          default: () => ({
+            totalJobs: 0,
+            totalEarnings: 0,
+            activities: []
+          })
+        }
+      })
+
       Object.defineProperty(window, 'electron', {
         writable: true,
         value: {
@@ -41,7 +67,7 @@ describe('Dashboard wallet display', () => {
             onTransactionUpdate,
             onBalanceUpdate
           },
-          getUpdaterStatus: vi.fn(() => Promise.resolve(false)),
+          getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({}))),
           dialogs: {
             confirmChangeWalletAddress: () => Promise.resolve(true)
           }
@@ -92,12 +118,12 @@ describe('Dashboard wallet display', () => {
     })
 
     test('Wallet setup destination address', () => {
-      fireEvent.click(document.getElementsByClassName('address-edit')[0])
+      act(() => fireEvent.click(document.getElementsByClassName('address-edit')[0]))
       waitFor(() => expect(document.getElementsByClassName('submit-address')[0]).toBeDisabled())
-      fireEvent.change(document.getElementsByClassName('destination-address')[0], { target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg' } })
+      act(() => fireEvent.change(document.getElementsByClassName('destination-address')[0], { target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg' } }))
       expect(document.getElementsByClassName('destination-address')[0]).toHaveValue('f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg')
       expect(document.getElementsByClassName('submit-address')[0]).not.toBeDisabled()
-      fireEvent.click(document.getElementsByClassName('submit-address')[0])
+      act(() => fireEvent.click(document.getElementsByClassName('submit-address')[0]))
       waitFor(() => { expect(mockedSetDestinationWalletAddress).toHaveBeenCalledOnce() })
     })
   })
