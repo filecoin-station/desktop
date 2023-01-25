@@ -157,28 +157,6 @@ describe('Dashboard page', () => {
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
     const getUpdaterStatus = vi.fn(() => new Promise((resolve, reject) => ({})))
 
-    beforeAll(() => {
-      // vi.mock('../lib/station-config', () => {
-      //   return {
-      //     getStationWalletBalance: () => Promise.resolve(0),
-      //     getStationWalletTransactionsHistory: () => Promise.resolve([]),
-      //     getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-      //     getDestinationWalletAddress: () => Promise.resolve(''),
-      //     getTotalJobsCompleted: () => Promise.resolve(100),
-      //     getTotalEarnings: () => Promise.resolve(100),
-      //     getAllActivities: () => Promise.resolve([
-      //       {
-      //         id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
-      //         timestamp: 166386083297,
-      //         source: 'Saturn',
-      //         type: 'info',
-      //         message: 'Saturn node exited with code: 2'
-      //       }
-      //     ])
-      //   }
-      // })
-    })
-
     beforeEach(() => {
       vi.mock('../hooks/StationWallet', async () => {
         return {
