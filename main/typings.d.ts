@@ -24,7 +24,8 @@ export type FILTransaction = {
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 // FILTransaction with certain properties changed to optional
-type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'timestamp' | 'status' | 'height'>
+export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
+export type FILTransactionLoading = PartialBy<FILTransaction, 'status' | 'timestamp'>
 
 export interface GQLMessage {
   cid: string;

@@ -2,18 +2,20 @@ import { FC } from 'react'
 import { ReactComponent as SentIcon } from '../assets/img/icons/sent.svg'
 import { ReactComponent as FailedIcon } from '../assets/img/icons/failed.svg'
 import { ReactComponent as ProcessingIcon } from '../assets/img/icons/processing.svg'
-import { FILTransaction } from '../typings'
+import { FILTransaction, FILTransactionProcessing } from '../typings'
 import { brownseTransactionTracker } from '../lib/station-config'
 
-interface WalletTransactoinStatusWidgetProps {
-  currentTransaction: FILTransaction,
+interface WalletTransactionStatusWidgetProps {
+  currentTransaction: FILTransactionProcessing | FILTransaction,
   renderBackground: boolean
 }
 
-const WalletTransactoinStatusWidget: FC<WalletTransactoinStatusWidgetProps> = ({ currentTransaction, renderBackground = true }) => {
+const WalletTransactionStatusWidget: FC<WalletTransactionStatusWidgetProps> = ({ currentTransaction, renderBackground = true }) => {
   const openExternalURL = (hash: string) => {
     brownseTransactionTracker(hash)
   }
+
+  const hash = currentTransaction?.hash
 
   if (currentTransaction?.status === 'sent') {
     return (
@@ -34,7 +36,9 @@ const WalletTransactoinStatusWidget: FC<WalletTransactoinStatusWidgetProps> = ({
       <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 justify-start transition-all duration-700 ease-in-out ${renderBackground && 'bg-red-100 bg-opacity-10'}`}>
         <FailedIcon width={14} height={14}/>
         <span className=' text-body-s text-red-100'>Failed</span>
-        <p className="text-body-2xs text-red-100 underline ml-2 opacity-80 cursor-pointer" onClick={() => openExternalURL(currentTransaction.hash)}>View Transaction</p>
+        {hash && (
+          <p className="text-body-2xs text-red-100 underline ml-2 opacity-80 cursor-pointer" onClick={() => openExternalURL(hash)}>View Transaction</p>
+        )}
       </div>
     )
   }
@@ -42,4 +46,4 @@ const WalletTransactoinStatusWidget: FC<WalletTransactoinStatusWidgetProps> = ({
   return (<></>)
 }
 
-export default WalletTransactoinStatusWidget
+export default WalletTransactionStatusWidget

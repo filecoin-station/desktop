@@ -3,8 +3,8 @@ import useWallet from '../hooks/StationWallet'
 import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 
 import { ReactComponent as WalletIcon } from '../assets/img/icons/wallet.svg'
-import WalletTransactoinStatusWidget from './WalletTransactionStatusWidget'
-import { FILTransaction } from '../typings'
+import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
+import { FILTransactionProcessing } from '../typings'
 
 interface WalletWidgetProps {
   onClick: () => void
@@ -12,7 +12,7 @@ interface WalletWidgetProps {
 
 const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
   const { walletBalance, currentTransaction, dismissCurrentTransaction } = useWallet()
-  const [displayTransition, setDisplayTransaction] = useState<FILTransaction|undefined>(undefined)
+  const [displayTransition, setDisplayTransaction] = useState<FILTransactionProcessing|undefined>(undefined)
 
   useEffect(() => {
     if (currentTransaction !== undefined) {
@@ -39,7 +39,7 @@ const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
       </div>
       <div className={`transition duration-1000 ease-in-out opacity-0 ${currentTransaction ? 'opacity-100' : 'opacity-0'}`}
         onTransitionEnd={() => !currentTransaction && setDisplayTransaction(undefined)}>
-        {displayTransition && <WalletTransactoinStatusWidget currentTransaction={displayTransition} renderBackground={true} />}
+        {displayTransition && <WalletTransactionStatusWidget currentTransaction={displayTransition} renderBackground={true} />}
       </div>
     </div>
   )

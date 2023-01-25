@@ -19,6 +19,7 @@ const Store = require('electron-store')
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
+/** @typedef {import('./typings').FILTransactionLoading} FILTransactionLoading */
 /** @typedef {import('./typings').TransactionStatus} TransactionStatus */
 
 const log = electronLog.scope('wallet')
@@ -187,7 +188,7 @@ async function updateTransactions () {
   const messages = await getMessages(address)
 
   // Convert messages to transactions (loading)
-  /** @type {FILTransactionProcessing[]} */
+  /** @type {FILTransactionLoading[]} */
   const transactionsLoading = messages.map(message => {
     return {
       height: message.height,
@@ -348,7 +349,7 @@ async function transferFunds (from, to, amount) {
   /** @type {FILTransactionProcessing} */
   const transaction = {
     timestamp: new Date().getTime(),
-    status: /** @type {TransactionStatus} */ ('processing'),
+    status: 'processing',
     outgoing: true,
     amount: amount.toString(),
     address: to

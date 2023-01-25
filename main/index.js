@@ -161,7 +161,7 @@ async function run () {
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
 
     await wallet.setup(ctx)
-    // await saturnNode.setup(ctx)
+    await saturnNode.setup(ctx)
     setupDialogs(ctx)
   } catch (e) {
     handleError(e)

@@ -1,16 +1,16 @@
 import { FC, useState, useEffect } from 'react'
-import { FILTransaction } from '../typings'
+import { FILTransaction, FILTransactionProcessing } from '../typings'
 import dayjs from 'dayjs'
 import { ReactComponent as IncomeIcon } from '../assets/img/icons/income.svg'
 import { ReactComponent as OutcomeIcon } from '../assets/img/icons/outcome.svg'
 import { ReactComponent as ExternalLinkIcon } from '../assets/img/icons/external.svg'
-import WalletTransactoinStatusWidget from './WalletTransactionStatusWidget'
+import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
 import { brownseTransactionTracker } from '../lib/station-config'
 import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
   allTransactions: FILTransaction[] | [],
-  latestTransaction: FILTransaction | undefined
+  latestTransaction: FILTransactionProcessing | undefined
 }
 
 const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTransactions = [], latestTransaction }) => {
@@ -36,12 +36,12 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
   )
 }
 
-interface TransactionProps {
-  transaction: FILTransaction | undefined
+interface RecentTransactionProps {
+  transaction: FILTransactionProcessing | undefined
 }
 
-const RecentTransaction: FC<TransactionProps> = ({ transaction }) => {
-  const [displayTransition, setDisplayTransaction] = useState<FILTransaction | undefined>({} as FILTransaction)
+const RecentTransaction: FC<RecentTransactionProps> = ({ transaction }) => {
+  const [displayTransition, setDisplayTransaction] = useState<FILTransactionProcessing | undefined>({} as FILTransactionProcessing)
 
   useEffect(() => {
     if (transaction !== undefined) {
@@ -73,10 +73,14 @@ const RecentTransaction: FC<TransactionProps> = ({ transaction }) => {
             </span>
           </div>
         </div>
-        <div className="ml-[97px]"> {displayTransition && <WalletTransactoinStatusWidget currentTransaction={displayTransition} renderBackground={false} />}</div>
+        <div className="ml-[97px]"> {displayTransition && <WalletTransactionStatusWidget currentTransaction={displayTransition} renderBackground={false} />}</div>
       </div>
     </div>
   )
+}
+
+interface TransactionProps {
+  transaction: FILTransaction | undefined
 }
 
 const Transaction: FC<TransactionProps> = ({ transaction }) => {

@@ -14,9 +14,9 @@ interface TransferFundsButtonsProps {
 }
 
 const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, balance, enableTransferMode, transferAllFunds, reset, destinationFilAddress, editMode, hasCurrentTransaction }) => {
-  const disabled = !destinationFilAddress
-    || hasCurrentTransaction
-    || Number(balance) < 0.001
+  const disabled = !destinationFilAddress ||
+    hasCurrentTransaction ||
+    Number(balance) < 0.001
   return (
     <div className={`relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-300 ${(!editMode) ? 'visible' : 'z-0 -translate-y-[7.8rem] text-opacity-0'} ${(editMode && disabled) && 'invisible opacity-0'}`}>
       <div className={`absolute w-fit right-0 flex items-center ease-[cubic-bezier(0.85,0,0.15,1) duration-500 z-10 ${(transferMode && !disabled) ? '-translate-x-[8rem] opacity-0' : ''}`}>

@@ -1,4 +1,8 @@
-import { ActivityEventMessage, FILTransaction } from '../typings'
+import {
+  ActivityEventMessage,
+  FILTransaction,
+  FILTransactionProcessing
+} from '../typings'
 import pDebounce from 'p-debounce'
 
 export async function getOnboardingCompleted (): Promise<boolean> {
@@ -65,7 +69,7 @@ export async function getStationWalletBalance (): Promise<string> {
   return await window.electron.stationConfig.getStationWalletBalance()
 }
 
-export const getStationWalletTransactionsHistory = pDebounce(async function (): Promise<FILTransaction[]> {
+export const getStationWalletTransactionsHistory = pDebounce(async function (): Promise<(FILTransaction|FILTransactionProcessing)[]> {
   return await window.electron.stationConfig.getStationWalletTransactionsHistory()
 }, 0)
 
