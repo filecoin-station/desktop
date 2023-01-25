@@ -6,16 +6,25 @@ import Onboarding from '../pages/Onboarding'
 import { BrowserRouter } from 'react-router-dom'
 
 const mockedUsedNavigate = vi.fn()
+vi.mock('react-router-dom', async () => {
+  const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
+  return {
+    ...router,
+    useNavigate: () => mockedUsedNavigate
+  }
+})
 
 describe('Welcome page test', () => {
-  test('User has completed the onboarding previously', () => {
+  beforeEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  describe('User has completed the onboarding previously', () => {
     beforeAll(() => {
-      vi.restoreAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(true),
-          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
+          getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
         }
       })
 
@@ -33,34 +42,24 @@ describe('Welcome page test', () => {
       render(<BrowserRouter> <Onboarding /></BrowserRouter >)
     })
 
-    test('redirects to dashboard directly if user is onboarded', async () => {
+    test('Redirects to dashboard directly if user is onboarded', async () => {
       await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true }), { timeout: 3000 })
+      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }), { timeout: 3000 })
     })
   })
 
-  test('User has not completed the onboarding', () => {
+  describe('User has not completed the onboarding', () => {
     beforeAll(() => {
-      vi.clearAllMocks()
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(false),
-          getDestinationWalletAddress: () => Promise.resolve(undefined)
-        }
-      })
-
-      vi.mock('react-router-dom', async () => {
-        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-        return {
-          ...router,
-          useNavigate: () => mockedUsedNavigate
+          getOnboardingCompleted: (status: boolean) => Promise.resolve(false)
         }
       })
     })
 
     beforeEach(() => {
-      vi.restoreAllMocks()
+      vi.clearAllMocks()
       render(<BrowserRouter> <Onboarding /></BrowserRouter >)
     })
 
@@ -89,40 +88,8 @@ describe('Welcome page test', () => {
       await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1), { timeout: 3000 })
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
-      await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/accept/i)) }))
-      expect(mockedUsedNavigate).toHaveBeenCalledTimes(1)
-      expect(mockedUsedNavigate).toHaveBeenCalledWith('/wallet', { replace: true })
+      await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/Accept/i)) }))
+      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }))
     })
-  })
-
-  test('User has completed the onboarding and set up wallet previously', () => {
-    beforeAll(() => {
-      vi.clearAllMocks()
-      vi.mock('../lib/station-config', () => {
-        return {
-          getDestinationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
-        }
-      })
-
-      vi.mock('react-router-dom', async () => {
-        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-        return {
-          ...router,
-          useNavigate: () => mockedUsedNavigate
-        }
-      })
-    })
-
-    beforeEach(() => {
-      vi.resetAllMocks()
-      render(<BrowserRouter> <Onboarding /></BrowserRouter >)
-    })
-
-    test('redirects to dashboard directly if user is onboarded', async () => {
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }), { timeout: 3000 })
-    }, { timeout: 10000 })
   })
 })

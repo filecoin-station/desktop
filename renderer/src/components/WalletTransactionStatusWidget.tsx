@@ -3,16 +3,16 @@ import { ReactComponent as SentIcon } from '../assets/img/icons/sent.svg'
 import { ReactComponent as FailedIcon } from '../assets/img/icons/failed.svg'
 import { ReactComponent as ProcessingIcon } from '../assets/img/icons/processing.svg'
 import { FILTransaction } from '../typings'
-import { brownseTransactionTracker } from '../lib/station-config'
+import { browseTransactionTracker } from '../lib/station-config'
 
-interface WalletTransactoinStatusWidgetProps {
+interface WalletTransactionStatusWidgetProps {
   currentTransaction: FILTransaction,
   renderBackground: boolean
 }
 
-const WalletTransactoinStatusWidget: FC<WalletTransactoinStatusWidgetProps> = ({ currentTransaction, renderBackground = true }) => {
+const WalletTransactionStatusWidget: FC<WalletTransactionStatusWidgetProps> = ({ currentTransaction, renderBackground = true }) => {
   const openExternalURL = (hash: string) => {
-    brownseTransactionTracker(hash)
+    browseTransactionTracker(hash)
   }
 
   if (currentTransaction?.status === 'sent') {
@@ -42,4 +42,4 @@ const WalletTransactoinStatusWidget: FC<WalletTransactoinStatusWidgetProps> = ({
   return (<></>)
 }
 
-export default WalletTransactoinStatusWidget
+export default WalletTransactionStatusWidget

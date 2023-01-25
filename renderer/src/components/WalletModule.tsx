@@ -5,7 +5,6 @@ import FilAddressForm from './FilAddressForm'
 import WalletTransactionsHistory from './WalletTransactionsHistory'
 import useWallet from '../hooks/StationWallet'
 import TransferFundsButtons from './TransferFunds'
-import { transferAllFundsToDestinationWallet } from '../lib/station-config'
 import { ReactComponent as CopyIcon } from '../assets/img/icons/copy.svg'
 
 interface PropsWallet {
@@ -15,7 +14,7 @@ interface PropsWallet {
 const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [transferMode, setTransferMode] = useState<boolean>(false)
-  const { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction } = useWallet()
+  const { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction, transferAllFundsToDestinationWallet } = useWallet()
 
   useEffect(() => {
     dismissCurrentTransaction()
@@ -64,8 +63,8 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   return (
     <div className='relative z-20'>
       <div className='h-8 bg-primary-dark flex items-center px-8'>
-        <p className='text text-body-3xs text-white opacity-80 mr-3'>YOUR STATION ADDRESS</p>
-        <p className='text text-body-3xs text-white'> {`${stationAddress.slice(0, 6)} . . . ${stationAddress.slice(stationAddress.length - 6, stationAddress.length)}`}</p>
+        <p className='text text-body-3xs text-white opacity-80 mr-3'>STATION ADDRESS</p>
+        <p className='station-address text text-body-3xs text-white'> {`${stationAddress.slice(0, 6)} . . . ${stationAddress.slice(stationAddress.length - 6, stationAddress.length)}`}</p>
         <button className={'h-full w-auto flex flex-row items-center justify-start group ml-2 cursor-pointer'}
           tabIndex={0} onClick={() => navigator.clipboard.writeText(stationAddress) }>
           <CopyIcon className="btn-icon-primary mr-1 h-[12px] opacity-80 group-hover:opacity-100" />
@@ -83,7 +82,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
           <div className="flex flex-row justify-between align-baseline" onClick={() => setEditMode(false)}>
             <div>
               <p className="w-fit text-body-3xs text-white opacity-80 uppercase leading-none">Total FIL</p>
-              <p className="w-fit text-header-m text-white font-bold font-number leading-none">
+              <p className="wallet-balance w-fit text-header-m text-white font-bold font-number leading-none">
                 {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 3 })}<span className="text-header-3xs ml-3">FIL</span>
               </p>
             </div>
