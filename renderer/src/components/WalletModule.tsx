@@ -16,7 +16,7 @@ interface PropsWallet {
 const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [transferMode, setTransferMode] = useState<boolean>(false)
-  const { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction } = useWallet()
+  const { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, processingTransaction, dismissCurrentTransaction } = useWallet()
 
   useEffect(() => {
     dismissCurrentTransaction()
@@ -86,7 +86,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
               reset={reset}
               destinationFilAddress={destinationFilAddress}
               editMode={editMode}
-              hasCurrentTransaction={currentTransaction !== undefined}
+              hasCurrentTransaction={processingTransaction !== undefined}
             />
           </div>
         </div>
@@ -94,7 +94,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
       <div className="pb-6">
         {walletTransactions
           ? (
-              <WalletTransactionsHistory allTransactions={walletTransactions} latestTransaction={currentTransaction} />
+              <WalletTransactionsHistory allTransactions={walletTransactions} processingTransaction={processingTransaction} />
             )
           : (
               <>loading...</>

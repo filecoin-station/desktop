@@ -6,32 +6,32 @@ import { FILTransaction, FILTransactionProcessing } from '../typings'
 import { brownseTransactionTracker } from '../lib/station-config'
 
 interface WalletTransactionStatusWidgetProps {
-  currentTransaction: FILTransactionProcessing | FILTransaction,
+  processingTransaction: FILTransactionProcessing | FILTransaction,
   renderBackground: boolean
 }
 
-const WalletTransactionStatusWidget: FC<WalletTransactionStatusWidgetProps> = ({ currentTransaction, renderBackground = true }) => {
+const WalletTransactionStatusWidget: FC<WalletTransactionStatusWidgetProps> = ({ processingTransaction, renderBackground = true }) => {
   const openExternalURL = (hash: string) => {
     brownseTransactionTracker(hash)
   }
 
-  const hash = currentTransaction?.hash
+  const hash = processingTransaction?.hash
 
-  if (currentTransaction?.status === 'sent') {
+  if (processingTransaction?.status === 'sent') {
     return (
       <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 transition-all duration-700 ease-in-out ${renderBackground && 'bg-green-200 bg-opacity-10'}`}>
         <SentIcon width={14} height={14} />
         <span className=' text-body-s text-green-200'>Sent</span>
       </div>
     )
-  } else if (currentTransaction?.status === 'processing') {
+  } else if (processingTransaction?.status === 'processing') {
     return (
       <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 transition-all duration-700 ease-in-out ${renderBackground && 'bg-[#F5C451] bg-opacity-10'}`}>
         <ProcessingIcon width={14} height={14} />
         <span className=' text-body-s text-[#F3AE0C]'>Processing...</span>
       </div>
     )
-  } else if (currentTransaction?.status === 'failed') {
+  } else if (processingTransaction?.status === 'failed') {
     return (
       <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 justify-start transition-all duration-700 ease-in-out ${renderBackground && 'bg-red-100 bg-opacity-10'}`}>
         <FailedIcon width={14} height={14}/>

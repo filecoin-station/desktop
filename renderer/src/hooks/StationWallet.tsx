@@ -14,7 +14,7 @@ interface Wallet {
   walletBalance: string | undefined,
   walletTransactions: FILTransaction[] | undefined,
   editDestinationAddress: (address: string|undefined) => void,
-  currentTransaction: FILTransactionProcessing | undefined,
+  processingTransaction: FILTransactionProcessing | undefined,
   dismissCurrentTransaction: () => void
 }
 
@@ -23,22 +23,22 @@ const useWallet = (): Wallet => {
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
   const [walletBalance, setWalletBalance] = useState<string | undefined>()
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | undefined>()
-  const [currentTransaction, setCurrentTransaction] = useState<FILTransactionProcessing | undefined>()
+  const [processingTransaction, setCurrentTransaction] = useState<FILTransactionProcessing | undefined>()
 
   const setTransactions = useCallback((
     processing: FILTransactionProcessing | undefined,
     confirmed: FILTransaction[]
   ) => {
     if (
-      currentTransaction &&
-      currentTransaction.status === 'processing' &&
+      processingTransaction &&
+      processingTransaction.status === 'processing' &&
       !processing
     ) {
-      const status = confirmed.find(tx => tx.hash === currentTransaction.hash)
+      const status = confirmed.find(tx => tx.hash === processingTransaction.hash)
         ? 'sent'
         : 'failed'
       const newCurrentTransaction = {
-        ...currentTransaction,
+        ...processingTransaction,
         status
       }
       setCurrentTransaction(newCurrentTransaction)
@@ -53,7 +53,7 @@ const useWallet = (): Wallet => {
       setCurrentTransaction(processing)
     }
     setWalletTransactions(confirmed)
-  }, [currentTransaction])
+  }, [processingTransaction])
 
   const editDestinationAddress = async (address: string | undefined) => {
     await setDestinationWalletAddress(address)
@@ -61,7 +61,7 @@ const useWallet = (): Wallet => {
   }
 
   const dismissCurrentTransaction = () => {
-    if (currentTransaction && currentTransaction.status !== 'processing') {
+    if (processingTransaction && processingTransaction.status !== 'processing') {
       setCurrentTransaction(undefined)
     }
   }
@@ -127,7 +127,7 @@ const useWallet = (): Wallet => {
     }
   }, [walletBalance])
 
-  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction }
+  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, processingTransaction, dismissCurrentTransaction }
 }
 
 interface SplitTransactions {

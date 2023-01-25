@@ -10,15 +10,15 @@ import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
   allTransactions: FILTransaction[] | [],
-  latestTransaction: FILTransactionProcessing | undefined
+  processingTransaction: FILTransactionProcessing | undefined
 }
 
-const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTransactions = [], latestTransaction }) => {
+const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTransactions = [], processingTransaction }) => {
   const renderTransactionHistory = () => {
     return (
       <>
         <div className={`ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}><WalletOnboarding /></div>
-        <div className={`${latestTransaction ? 'h-[calc(100vh_-_470px)]' : 'h-[calc(100vh_-_305px)]'} ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
+        <div className={`${processingTransaction ? 'h-[calc(100vh_-_470px)]' : 'h-[calc(100vh_-_305px)]'} ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
           <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
           {allTransactions.map((transaction, index) => <div key={transaction.hash}><Transaction transaction={transaction} /></div>)}
         </div>
@@ -28,7 +28,7 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
 
   return (
     <div className='transition-all duration-1000 ease-in-out'>
-      <RecentTransaction transaction={latestTransaction} />
+      <ProcessingTransaction transaction={processingTransaction} />
       <div className='pt-8 overflow-y-scroll'>
         {renderTransactionHistory()}
       </div>
@@ -36,11 +36,11 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
   )
 }
 
-interface RecentTransactionProps {
+interface ProcessingTransactionProps {
   transaction: FILTransactionProcessing | undefined
 }
 
-const RecentTransaction: FC<RecentTransactionProps> = ({ transaction }) => {
+const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) => {
   const [displayTransition, setDisplayTransaction] = useState<FILTransactionProcessing | undefined>({} as FILTransactionProcessing)
 
   useEffect(() => {
@@ -73,7 +73,7 @@ const RecentTransaction: FC<RecentTransactionProps> = ({ transaction }) => {
             </span>
           </div>
         </div>
-        <div className="ml-[97px]"> {displayTransition && <WalletTransactionStatusWidget currentTransaction={displayTransition} renderBackground={false} />}</div>
+        <div className="ml-[97px]"> {displayTransition && <WalletTransactionStatusWidget processingTransaction={displayTransition} renderBackground={false} />}</div>
       </div>
     </div>
   )

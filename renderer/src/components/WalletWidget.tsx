@@ -11,14 +11,14 @@ interface WalletWidgetProps {
 }
 
 const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
-  const { walletBalance, currentTransaction, dismissCurrentTransaction } = useWallet()
+  const { walletBalance, processingTransaction, dismissCurrentTransaction } = useWallet()
   const [displayTransition, setDisplayTransaction] = useState<FILTransactionProcessing|undefined>(undefined)
 
   useEffect(() => {
-    if (currentTransaction !== undefined) {
-      setDisplayTransaction(currentTransaction)
+    if (processingTransaction !== undefined) {
+      setDisplayTransaction(processingTransaction)
     }
-  }, [currentTransaction])
+  }, [processingTransaction])
 
   return (
     <div className="cursor-pointer" onClick={() => { onClick(); dismissCurrentTransaction() }}>
@@ -37,9 +37,9 @@ const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
           <span className="text-primary underline underline-offset-8">Open Wallet</span>
         </button>
       </div>
-      <div className={`transition duration-1000 ease-in-out opacity-0 ${currentTransaction ? 'opacity-100' : 'opacity-0'}`}
-        onTransitionEnd={() => !currentTransaction && setDisplayTransaction(undefined)}>
-        {displayTransition && <WalletTransactionStatusWidget currentTransaction={displayTransition} renderBackground={true} />}
+      <div className={`transition duration-1000 ease-in-out opacity-0 ${processingTransaction ? 'opacity-100' : 'opacity-0'}`}
+        onTransitionEnd={() => !processingTransaction && setDisplayTransaction(undefined)}>
+        {displayTransition && <WalletTransactionStatusWidget processingTransaction={displayTransition} renderBackground={true} />}
       </div>
     </div>
   )
