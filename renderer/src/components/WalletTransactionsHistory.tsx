@@ -18,7 +18,7 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
     return (
       <>
         <div className={`ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}><WalletOnboarding /></div>
-        <div className={`h-[calc(100vh_-_305px)] ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
+        <div className={`${latestTransaction ? 'h-[calc(100vh_-_470px)]' : 'h-[calc(100vh_-_305px)]'} ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
           <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
           {allTransactions.map((transaction, index) => <div key={transaction.timestamp}><Transaction transaction={transaction} /></div>)}
         </div>
