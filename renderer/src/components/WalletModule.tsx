@@ -92,13 +92,9 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
         </div>
       </div>
       <div className="pb-6">
-        {walletTransactions
-          ? (
-              <WalletTransactionsHistory allTransactions={walletTransactions} processingTransaction={processingTransaction} />
-            )
-          : (
-              <>loading...</>
-            )}
+        {walletTransactions && (
+          <WalletTransactionsHistory allTransactions={walletTransactions} processingTransaction={processingTransaction} />
+        )}
       </div>
     </div>
   )
