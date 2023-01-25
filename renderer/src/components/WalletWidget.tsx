@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import useWallet from '../hooks/StationWallet'
 
 import { ReactComponent as WalletIcon } from '../assets/img/icons/wallet.svg'
-import WalletTransactoinStatusWidget from './WalletTransactionStatusWidget'
+import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
 import { FILTransaction } from '../typings'
 
 interface WalletWidgetProps {
@@ -30,7 +30,7 @@ const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
       </div>
       <div className={`transition duration-1000 ease-in-out opacity-0 ${currentTransaction ? 'opacity-100' : 'opacity-0'}`}
         onTransitionEnd={() => !currentTransaction && setDisplayTransaction(undefined)}>
-        {displayTransition && <WalletTransactoinStatusWidget currentTransaction={displayTransition} renderBackground={true} />}
+        {displayTransition && <WalletTransactionStatusWidget currentTransaction={displayTransition} renderBackground={true} />}
       </div>
     </div>
   )

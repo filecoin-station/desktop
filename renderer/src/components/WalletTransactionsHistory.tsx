@@ -4,8 +4,8 @@ import dayjs from 'dayjs'
 import { ReactComponent as IncomeIcon } from '../assets/img/icons/income.svg'
 import { ReactComponent as OutcomeIcon } from '../assets/img/icons/outcome.svg'
 import { ReactComponent as ExternalLinkIcon } from '../assets/img/icons/external.svg'
-import WalletTransactoinStatusWidget from './WalletTransactionStatusWidget'
-import { brownseTransactionTracker } from '../lib/station-config'
+import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
+import { browseTransactionTracker } from '../lib/station-config'
 import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
@@ -73,14 +73,14 @@ const RecentTransaction: FC<TransactionProps> = ({ transaction }) => {
             </span>
           </div>
         </div>
-        <div className="ml-[97px]"> {displayTransition && <WalletTransactoinStatusWidget currentTransaction={displayTransition} renderBackground={false} />}</div>
+        <div className="ml-[97px]"> {displayTransition && <WalletTransactionStatusWidget currentTransaction={displayTransition} renderBackground={false} />}</div>
       </div>
     </div>
   )
 }
 
 const Transaction: FC<TransactionProps> = ({ transaction }) => {
-  const openExternalURL = (hash: string) => { brownseTransactionTracker(hash) }
+  const openExternalURL = (hash: string) => { browseTransactionTracker(hash) }
   if (transaction) {
     return (
       <div className='px-8 hover:bg-primary hover:bg-opacity-[5%] group'>
