@@ -88,7 +88,6 @@ describe('Welcome page test', () => {
       await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1), { timeout: 3000 })
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
-      await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/Accept/i)) }))
       await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }))
     })
