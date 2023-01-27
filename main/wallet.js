@@ -98,7 +98,7 @@ function getBalance () {
 async function updateBalance () {
   assert(provider)
   assert(ctx)
-  balance = (await provider.getBalance(address))
+  balance = await provider.getBalance(address)
   walletStore.set('balance', balance.toFil())
   ctx.balanceUpdate(balance.toFil())
 }
