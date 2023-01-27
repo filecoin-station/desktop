@@ -74,12 +74,12 @@ async function setup (_ctx) {
   ;(async () => {
     while (true) {
       try {
-        updateBalance()
+        await updateBalance()
       } catch (err) {
         log.error('Updating balance', err)
       }
       try {
-        updateTransactions()
+        await updateTransactions()
       } catch (err) {
         log.error('Updating transactions', err)
       }
