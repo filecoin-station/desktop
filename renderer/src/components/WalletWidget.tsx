@@ -21,7 +21,7 @@ const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
   }, [processingTransaction])
 
   return (
-    <div className="cursor-pointer" onClick={() => { onClick(); dismissCurrentTransaction() }}>
+    <div className="wallet-widget cursor-pointer" onClick={() => { onClick(); dismissCurrentTransaction() }}>
       <div className='flex items-center '>
         <WalletIcon />
         <span className="text-right mx-3" title="wallet">

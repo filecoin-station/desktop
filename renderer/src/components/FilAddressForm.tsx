@@ -87,7 +87,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
           title="save address" type="submit" value="connect" onClick={handleSubmit}>
           <span className="text-xs px-4">Save</span>
         </button>
-        <button className={`flex flex-row items-end h-[30px] cursor-pointer group absolute mb-1 ml-4 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
+        <button className={`address-edit flex flex-row items-end h-[30px] cursor-pointer group absolute mb-1 ml-4 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
         ${destinationAddress.length > 5 ? 'left-[168px]' : 'left-[80px]'} ${(!internalEditMode && !transferMode) ? 'visible' : 'opacity-0'}`}
           tabIndex={0} onClick={() => enableEditMode()}
           disabled={transferMode}>
@@ -121,7 +121,8 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
             disabled={!internalEditMode}
             tabIndex={0} value={renderDisplayAddress()}
             onChange={(event) => { setInputAddr(event.target.value) }}
-            className='input fil-address mt-[7px] min-w-[90px] w-[460px] ease-in-out transition duration-300'
+            id='destination-address'
+            className='destination-address input fil-address mt-[7px] min-w-[90px] w-[460px] ease-in-out transition duration-300'
             onFocus={() => { enableEditMode() }} />
           <label htmlFor="address"
             className="absolute duration-300 top-3 origin-top-lef pointer-events-none text-white opacity-80 font-body text-body-2xs uppercase mb-3">

@@ -5,7 +5,7 @@ import { ReactComponent as IncomeIcon } from '../assets/img/icons/income.svg'
 import { ReactComponent as OutcomeIcon } from '../assets/img/icons/outcome.svg'
 import { ReactComponent as ExternalLinkIcon } from '../assets/img/icons/external.svg'
 import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
-import { brownseTransactionTracker } from '../lib/station-config'
+import { browseTransactionTracker } from '../lib/station-config'
 import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
@@ -17,10 +17,10 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
   const renderTransactionHistory = () => {
     return (
       <>
-        <div className={`ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}><WalletOnboarding /></div>
-        <div className={`${processingTransaction ? 'h-[calc(100vh_-_470px)]' : 'h-[calc(100vh_-_305px)]'} ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
-          <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
-          {allTransactions.map((transaction, index) => <div key={transaction.hash}><Transaction transaction={transaction} /></div>)}
+        <div className={`wallet-onboarding ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}><WalletOnboarding /></div>
+        <div className={`wallet-history ${processingTransaction ? 'h-[calc(100vh_-_470px)]' : 'h-[calc(100vh_-_305px)]'} ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
+           <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
+          {allTransactions.map((transaction, index) => <div className='wallet-transaction' key={transaction.hash}><Transaction transaction={transaction} /></div>)}
         </div>
       </>
     )
@@ -84,7 +84,7 @@ interface TransactionProps {
 }
 
 const Transaction: FC<TransactionProps> = ({ transaction }) => {
-  const openExternalURL = (hash: string) => { brownseTransactionTracker(hash) }
+  const openExternalURL = (hash: string) => { browseTransactionTracker(hash) }
   if (transaction) {
     return (
       <div className='px-8 hover:bg-primary hover:bg-opacity-[5%] group'>

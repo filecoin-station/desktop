@@ -3,7 +3,7 @@ import { ReactComponent as SentIcon } from '../assets/img/icons/sent.svg'
 import { ReactComponent as FailedIcon } from '../assets/img/icons/failed.svg'
 import { ReactComponent as ProcessingIcon } from '../assets/img/icons/processing.svg'
 import { FILTransaction, FILTransactionProcessing } from '../typings'
-import { brownseTransactionTracker } from '../lib/station-config'
+import { browseTransactionTracker } from '../lib/station-config'
 
 interface WalletTransactionStatusWidgetProps {
   processingTransaction: FILTransactionProcessing | FILTransaction,
@@ -12,7 +12,7 @@ interface WalletTransactionStatusWidgetProps {
 
 const WalletTransactionStatusWidget: FC<WalletTransactionStatusWidgetProps> = ({ processingTransaction, renderBackground = true }) => {
   const openExternalURL = (hash: string) => {
-    brownseTransactionTracker(hash)
+    browseTransactionTracker(hash)
   }
 
   const hash = processingTransaction?.hash

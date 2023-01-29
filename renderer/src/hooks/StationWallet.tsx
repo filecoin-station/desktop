@@ -4,7 +4,8 @@ import {
   setDestinationWalletAddress,
   getStationWalletAddress,
   getStationWalletBalance,
-  getStationWalletTransactionsHistory
+  getStationWalletTransactionsHistory,
+  transferAllFundsToDestinationWallet
 } from '../lib/station-config'
 import { FILTransaction, FILTransactionProcessing } from '../typings'
 
@@ -15,7 +16,8 @@ interface Wallet {
   walletTransactions: FILTransaction[] | undefined,
   editDestinationAddress: (address: string|undefined) => void,
   processingTransaction: FILTransactionProcessing | undefined,
-  dismissCurrentTransaction: () => void
+  dismissCurrentTransaction: () => void,
+  transferAllFundsToDestinationWallet: () => Promise<void>
 }
 
 const useWallet = (): Wallet => {
@@ -127,7 +129,7 @@ const useWallet = (): Wallet => {
     }
   }, [walletBalance])
 
-  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, processingTransaction, dismissCurrentTransaction }
+  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, processingTransaction, dismissCurrentTransaction, transferAllFundsToDestinationWallet }
 }
 
 interface SplitTransactions {
