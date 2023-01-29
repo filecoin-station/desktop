@@ -139,7 +139,7 @@ interface SplitTransactions {
 
 const splitWalletTransactions = (transactions: (FILTransaction|FILTransactionProcessing)[]): SplitTransactions => {
   const processing: FILTransactionProcessing | null =
-  transactions.filter(tx => tx.status === 'processing')[0] as FILTransactionProcessing
+  transactions.find(tx => tx.status === 'processing') as FILTransactionProcessing
   const confirmed: FILTransaction[] =
   transactions.filter(tx => tx.status !== 'processing') as FILTransaction[]
   return { processing, confirmed }
