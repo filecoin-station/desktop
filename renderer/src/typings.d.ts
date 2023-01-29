@@ -62,13 +62,13 @@ export type ActivityEventMessage = {
 export type FILTransactionStatus = 'sent' | 'processing' | 'failed'
 
 export type FILTransaction = {
-  hash: string;
-  height: number;
-  timestamp: number;
-  status: TransactionStatus;
-  outgoing: boolean;
-  amount: string;
-  address: string;
+  hash: string
+  height: number
+  timestamp: number
+  status: TransactionStatus
+  outgoing: boolean
+  amount: string
+  address: string
 }
 
 // helper
