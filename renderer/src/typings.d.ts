@@ -77,3 +77,11 @@ type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 // FILTransaction with certain properties changed to optional
 type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
 type FILTransactionLoading = PartialBy<FILTransaction, 'status' | 'timestamp'>
+
+export function isFILTransactionProcessing (tx: FILTransaction | FILTransactionProcessing): tx is FILTransactionProcessing {
+  return tx.status === 'processing'
+}
+
+export function isFILTransactionConfirmed (tx: FILTransaction | FILTransactionProcessing): tx is FILTransaction {
+  return tx.status !== 'processing'
+}
