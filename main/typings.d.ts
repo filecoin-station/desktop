@@ -1,6 +1,6 @@
 export type ActivitySource = 'Station' | 'Saturn';
 export type ActivityType = 'info' | 'error';
-export type TransactionStatus = 'sent' | 'processing' | 'failed'
+export type TransactionStatus = 'succeeded' | 'processing' | 'failed'
 
 export interface Activity {
   id: string;

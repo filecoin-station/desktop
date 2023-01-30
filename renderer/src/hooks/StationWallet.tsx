@@ -42,7 +42,7 @@ const useWallet = (): Wallet => {
       !processing
     ) {
       const status = confirmed.find(tx => tx.hash === processingTransaction.hash)
-        ? 'sent'
+        ? 'succeeded'
         : 'failed'
       const newCurrentTransaction = {
         ...processingTransaction,

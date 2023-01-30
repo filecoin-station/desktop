@@ -230,11 +230,11 @@ async function updateTransactions () {
           try {
             const stateReplay = await getStateReplay(hash)
             transaction.status = stateReplay.receipt.exitCode === 0
-              ? 'sent'
+              ? 'succeeded'
               : 'failed'
             stateReplaysBeingFetched.delete(hash)
             walletStore.set('transactions', updatedTransactions)
-            if (transaction.status === 'sent') {
+            if (transaction.status === 'succeeded') {
               try {
                 await updateBalance()
               } catch {}
@@ -319,7 +319,7 @@ function getTransactionsForUI () {
       transaction.outgoing
     ) {
       processing = transaction
-    } else if (transaction.status === 'sent') {
+    } else if (transaction.status === 'succeeded') {
       sent.push(transaction)
     }
   }

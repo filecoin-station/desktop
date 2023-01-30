@@ -52,7 +52,7 @@ const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) 
   return (
     <div className={`pt-8 pb-8 bg-opacity-10 h-[165px] transition-all duration-1000 ease-in-out
                   ${transaction ? 'mt-0' : '-mt-[165px]'}
-                  ${displayTransition?.status === 'sent' ? 'bg-green-200' : displayTransition?.status === 'failed' ? 'bg-red-100' : 'bg-orange-100'}`}
+                  ${displayTransition?.status === 'succeeded' ? 'bg-green-200' : displayTransition?.status === 'failed' ? 'bg-red-100' : 'bg-orange-100'}`}
       onTransitionEnd={() => !transaction && setDisplayTransaction(undefined)}>
       <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">ONGOING TRANSFER</p>
       <div className='px-8'>
@@ -66,7 +66,7 @@ const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) 
               {dayjs(displayTransition?.timestamp).format('HH:MM')}
             </span>
             <span className='text-body-s text-black'>
-              {displayTransition?.status === 'sent' ? 'Sent' : displayTransition?.status === 'failed' ? 'Failed to send' : 'Sending'}
+              {displayTransition?.status === 'succeeded' ? 'Sent' : displayTransition?.status === 'failed' ? 'Failed to send' : 'Sending'}
               <span className='font-bold mx-1'>{displayTransition?.amount} FIL</span>
               {displayTransition?.outgoing && 'to'}
               {displayTransition?.outgoing && <span className='font-bold mx-1'>{displayTransition?.address.slice(0, 6)} &hellip; {displayTransition?.address.slice(-6)}</span>}

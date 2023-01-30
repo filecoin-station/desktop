@@ -59,7 +59,7 @@ export type ActivityEventMessage = {
   message: string
 }
 
-export type FILTransactionStatus = 'sent' | 'processing' | 'failed'
+export type FILTransactionStatus = 'succeeded' | 'processing' | 'failed'
 
 export type FILTransaction = {
   hash: string

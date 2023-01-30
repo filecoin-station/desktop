@@ -17,7 +17,7 @@ const WalletTransactionStatusWidget: FC<WalletTransactionStatusWidgetProps> = ({
 
   const hash = processingTransaction?.hash
 
-  if (processingTransaction?.status === 'sent') {
+  if (processingTransaction?.status === 'succeeded') {
     return (
       <div className={`w-fit rounded-[2px] mt-3 pl-2 pr-4 flex items-center gap-2 transition-all duration-700 ease-in-out ${renderBackground && 'bg-green-200 bg-opacity-10'}`}>
         <SentIcon width={14} height={14} />
