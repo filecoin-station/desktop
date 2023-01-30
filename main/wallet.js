@@ -73,19 +73,23 @@ async function setup (_ctx) {
 
   ;(async () => {
     while (true) {
-      try {
-        await updateBalance()
-      } catch (err) {
-        log.error('Updating balance', err)
-      }
-      try {
-        await updateTransactions()
-      } catch (err) {
-        log.error('Updating transactions', err)
-      }
+      await refreshState()
       await timers.setTimeout(10_000)
     }
   })()
+}
+
+async function refreshState () {
+  try {
+    await updateBalance()
+  } catch (err) {
+    log.error('Updating balance', err)
+  }
+  try {
+    await updateTransactions()
+  } catch (err) {
+    log.error('Updating transactions', err)
+  }
 }
 
 /**
