@@ -143,11 +143,10 @@ interface SplitTransactions {
 }
 
 const splitWalletTransactions = (transactions: (FILTransaction|FILTransactionProcessing)[]): SplitTransactions => {
-  const processing: FILTransactionProcessing | undefined =
-  transactions.find(isFILTransactionProcessing)
-  const confirmed: FILTransaction[] =
-  transactions.filter(isFILTransactionConfirmed)
-  return { processing, confirmed }
+  return {
+    processing: transactions.find(isFILTransactionProcessing),
+    confirmed: transactions.filter(isFILTransactionConfirmed)
+  }
 }
 
 export default useWallet
