@@ -1,7 +1,5 @@
 'use strict'
 
-const keytar = require('keytar')
-const { generateMnemonic } = require('@zondax/filecoin-signing-tools')
 const { default: Filecoin, HDWalletProvider } = require('@glif/filecoin-wallet-provider')
 const { CoinType } = require('@glif/filecoin-address')
 const electronLog = require('electron-log')
@@ -12,6 +10,7 @@ const { Message } = require('@glif/filecoin-message')
 const { getDestinationWalletAddress } = require('./station-config')
 const timers = require('node:timers/promises')
 const Store = require('electron-store')
+const backend = require('./wallet-backend')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -42,14 +41,11 @@ const stateReplaysBeingFetched = new Set()
  * @returns {Promise<string>}
  */
 async function getSeedPhrase () {
-  const service = 'filecoin-station-wallet'
-  let seed = await keytar.getPassword(service, 'seed')
-  if (seed) {
-    log.info('Using existing seed phrase')
-  } else {
-    seed = generateMnemonic()
-    await keytar.setPassword(service, 'seed', seed)
+  const { seed, isNew } = await backend.getSeedPhrase()
+  if (isNew) {
     log.info('Created new seed phrase')
+  } else {
+    log.info('Using existing seed phrase')
   }
   return seed
 }
@@ -435,5 +431,6 @@ module.exports = {
   getAddress,
   getBalance,
   listTransactions,
-  transferAllFundsToDestinationWallet
+  transferAllFundsToDestinationWallet,
+  getSeedPhrase
 }

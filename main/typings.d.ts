@@ -84,3 +84,8 @@ export interface Context {
   transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void,
   balanceUpdate: (balance:string) => void
 }
+
+export interface WalletSeed {
+  seed: string;
+  isNew: boolean;
+}
