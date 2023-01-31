@@ -1,16 +1,13 @@
 'use strict'
 
-const { default: Filecoin, HDWalletProvider } = require('@glif/filecoin-wallet-provider')
-const { CoinType } = require('@glif/filecoin-address')
 const electronLog = require('electron-log')
 const assert = require('assert')
 const { request, gql } = require('graphql-request')
-const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
-const { Message } = require('@glif/filecoin-message')
+const { FilecoinNumber } = require('@glif/filecoin-number')
 const { getDestinationWalletAddress } = require('./station-config')
 const timers = require('node:timers/promises')
 const Store = require('electron-store')
-const backend = require('./wallet-backend')
+const { WalletBackend } = require('./wallet-backend')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -27,9 +24,8 @@ const walletStore = new Store({
   name: 'wallet'
 })
 
-let address = ''
-/** @type {Filecoin | null} */
-let provider = null
+const backend = new WalletBackend()
+
 /** @type {Context | null} */
 let ctx = null
 let transactions = loadStoredEntries()
@@ -38,34 +34,19 @@ let balance = loadBalance()
 const stateReplaysBeingFetched = new Set()
 
 /**
- * @returns {Promise<string>}
- */
-async function getSeedPhrase () {
-  const { seed, isNew } = await backend.getSeedPhrase()
-  if (isNew) {
-    log.info('Created new seed phrase')
-  } else {
-    log.info('Using existing seed phrase')
-  }
-  return seed
-}
-
-/**
  * @param {Context} _ctx
  */
 async function setup (_ctx) {
   ctx = _ctx
 
-  const seed = await getSeedPhrase()
-  provider = new Filecoin(new HDWalletProvider(seed), {
-    apiAddress: 'https://api.node.glif.io/rpc/v0'
-  })
-  ;[address] = await provider.wallet.getAccounts(
-    0,
-    1,
-    CoinType.MAIN
-  )
-  log.info('Address: %s', address)
+  const { seedIsNew } = await backend.setup()
+  if (seedIsNew) {
+    log.info('Created new seed phrase')
+  } else {
+    log.info('Using existing seed phrase')
+  }
+
+  log.info('Address: %s', backend.address)
 
   ;(async () => {
     while (true) {
@@ -96,9 +77,8 @@ function getBalance () {
 }
 
 async function updateBalance () {
-  assert(provider)
   assert(ctx)
-  balance = await provider.getBalance(address)
+  balance = await backend.fetchBalance()
   walletStore.set('balance', balance.toFil())
   ctx.balanceUpdate(balance.toFil())
 }
@@ -182,10 +162,12 @@ async function getMessages (address) {
  * @returns {Promise<void>}
  */
 async function updateTransactions () {
+  assert(backend.address)
+
   console.log(new Date(), 'updateTransactions')
 
   // Load messages
-  const messages = await getMessages(address)
+  const messages = await getMessages(backend.address)
 
   // Convert messages to transactions (loading)
   /** @type {FILTransactionLoading[]} */
@@ -193,9 +175,9 @@ async function updateTransactions () {
     return {
       height: message.height,
       hash: message.cid,
-      outgoing: message.from.robust === address,
+      outgoing: message.from.robust === backend.address,
       amount: new FilecoinNumber(message.value, 'attofil').toFil(),
-      address: message.from.robust === address
+      address: message.from.robust === backend.address
         ? message.to.robust
         : message.from.robust
     }
@@ -279,35 +261,6 @@ function listTransactions () {
   return getTransactionsForUI()
 }
 
-/**
- * @param {string} from
- * @param {string} to
- * @param {FilecoinNumber} amount
- * @returns Promise<FilecoinNumber>
- */
-async function getGasLimit (from, to, amount) {
-  assert(provider)
-  const message = new Message({
-    to,
-    from,
-    nonce: 0,
-    value: amount.toAttoFil(),
-    method: 0,
-    params: '',
-    gasPremium: 0,
-    gasFeeCap: 0,
-    gasLimit: 0
-  })
-  const messageWithGas = await provider.gasEstimateMessageGas(
-    message.toLotusType()
-  )
-  const feeCapStr = messageWithGas.gasFeeCap.toFixed(0, BigNumber.ROUND_CEIL)
-  const feeCap = new FilecoinNumber(feeCapStr, 'attofil')
-  const gas = feeCap.times(messageWithGas.gasLimit)
-  console.log({ messageWithGas, gasLimit: messageWithGas.gasLimit, gas })
-  return gas
-}
-
 function getTransactionsForUI () {
   let processing
   const sent = []
@@ -344,7 +297,6 @@ function sendTransactionsToUI () {
  */
 async function transferFunds (from, to, amount) {
   assert(ctx)
-  assert(provider)
 
   /** @type {FILTransactionProcessing} */
   const transaction = {
@@ -359,26 +311,7 @@ async function transferFunds (from, to, amount) {
 
   try {
     console.log({ transferAmount: amount.toString() })
-    const gasLimit = await getGasLimit(from, to, amount)
-    const message = new Message({
-      to,
-      from,
-      nonce: await provider.getNonce(from),
-      value: amount.minus(gasLimit).toAttoFil(),
-      method: 0,
-      params: ''
-    })
-    console.log({ messageAfterGasSubtracted: message, value: message.value.toString() })
-    const messageWithGas = await provider.gasEstimateMessageGas(
-      message.toLotusType()
-    )
-    const lotusMessage = messageWithGas.toLotusType()
-    const msgValid = await provider.simulateMessage(lotusMessage)
-    assert(msgValid, 'Message is invalid')
-    const signedMessage = await provider.wallet.sign(from, lotusMessage)
-    const { '/': cid } = await provider.sendMessage(signedMessage)
-    console.log({ CID: cid })
-
+    const cid = await backend.transferFunds(from, to, amount)
     transaction.hash = cid
     sendTransactionsToUI()
   } catch (err) {
@@ -391,12 +324,12 @@ async function transferFunds (from, to, amount) {
  * @returns {Promise<void>}
  */
 async function transferAllFundsToDestinationWallet () {
-  assert(provider)
+  assert(backend.address)
   const to = getDestinationWalletAddress()
   assert(to)
   // FIXME: Only transfer a little FIL for now
   const balance = new FilecoinNumber('0.00001', 'fil')
-  await transferFunds(address, to, balance)
+  await transferFunds(backend.address, to, balance)
   await updateBalance()
 }
 
@@ -404,7 +337,7 @@ async function transferAllFundsToDestinationWallet () {
  * @returns {string}
  */
 function getAddress () {
-  return address
+  return backend.address || ''
 }
 
 /**
@@ -431,6 +364,5 @@ module.exports = {
   getAddress,
   getBalance,
   listTransactions,
-  transferAllFundsToDestinationWallet,
-  getSeedPhrase
+  transferAllFundsToDestinationWallet
 }
