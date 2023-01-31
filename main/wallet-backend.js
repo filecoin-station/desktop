@@ -7,8 +7,10 @@ const { CoinType } = require('@glif/filecoin-address')
 const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
+const { request, gql } = require('graphql-request')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
+/** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
 
 class WalletBackend {
   constructor () {
@@ -16,6 +18,7 @@ class WalletBackend {
     this.provider = null
     /** @type {string | null} */
     this.address = null
+    this.url = 'https://graph.glif.link/query'
   }
 
   async setup () {
@@ -121,6 +124,31 @@ class WalletBackend {
     const { '/': cid } = await this.provider.sendMessage(signedMessage)
 
     return cid
+  }
+
+  /**
+   * @param {string} cid
+   * @returns {Promise<GQLStateReplay>}
+   */
+  async getStateReplay (cid) {
+    const query = gql`
+      query StateReplay($cid: String!) {
+        stateReplay(cid: $cid) {
+          receipt {
+            return
+            exitCode
+            gasUsed
+          }
+          executionTrace {
+            executionTrace
+          }
+        }
+      }
+    `
+    const variables = { cid }
+    /** @type {{stateReplay: GQLStateReplay}} */
+    const { stateReplay } = await request(this.url, query, variables)
+    return stateReplay
   }
 }
 

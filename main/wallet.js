@@ -84,31 +84,6 @@ async function updateBalance () {
 }
 
 /**
- * @param {string} cid
- * @returns {Promise<GQLStateReplay>}
- */
-async function getStateReplay (cid) {
-  const query = gql`
-    query StateReplay($cid: String!) {
-      stateReplay(cid: $cid) {
-        receipt {
-          return
-          exitCode
-          gasUsed
-        }
-        executionTrace {
-          executionTrace
-        }
-      }
-    }
-  `
-  const variables = { cid }
-  /** @type {{stateReplay: GQLStateReplay}} */
-  const { stateReplay } = await request(url, query, variables)
-  return stateReplay
-}
-
-/**
  * @param {number} height
  * @returns Promise<GQLTipset>
  */
@@ -210,7 +185,7 @@ async function updateTransactions () {
       ;(async () => {
         while (true) {
           try {
-            const stateReplay = await getStateReplay(hash)
+            const stateReplay = await backend.getStateReplay(hash)
             transaction.status = stateReplay.receipt.exitCode === 0
               ? 'succeeded'
               : 'failed'
