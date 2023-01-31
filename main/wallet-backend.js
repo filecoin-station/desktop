@@ -12,6 +12,7 @@ const { request, gql } = require('graphql-request')
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
 /** @typedef {import('./typings').GQLTipset} GQLTipset */
+/** @typedef {import('./typings').GQLMessage} GQLMessage */
 
 class WalletBackend {
   constructor () {
@@ -91,13 +92,6 @@ class WalletBackend {
   }
 
   /**
-   * @returns {Promise<void>}
-   */
-  async fetchAllTransactions () {
-    /* ... */
-  }
-
-  /**
    * @param {string} from
    * @param {string} to
    * @param {FilecoinNumber} amount
@@ -167,6 +161,39 @@ class WalletBackend {
     const variables = { height }
     const { tipset } = await request(this.url, query, variables)
     return tipset
+  }
+
+  /**
+   * @param {string} address
+   * @returns Promise<GQLMessage[]>
+   */
+  async getMessages (address) {
+    const query = gql`
+      query Messages($address: String!, $limit: Int!, $offset: Int!) {
+        messages(address: $address, limit: $limit, offset: $offset) {
+          cid
+          to {
+            robust
+          }
+          from {
+            robust
+          }
+          nonce
+          height
+          method
+          params
+          value
+        }
+      }
+    `
+    const variables = {
+      address,
+      limit: 100,
+      offset: 0
+    }
+    /** @type {{messages: GQLMessage[]}} */
+    const { messages = [] } = await request(this.url, query, variables)
+    return messages
   }
 }
 

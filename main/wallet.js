@@ -2,15 +2,12 @@
 
 const electronLog = require('electron-log')
 const assert = require('assert')
-const { request, gql } = require('graphql-request')
 const { FilecoinNumber } = require('@glif/filecoin-number')
 const { getDestinationWalletAddress } = require('./station-config')
 const timers = require('node:timers/promises')
 const Store = require('electron-store')
 const { WalletBackend } = require('./wallet-backend')
 
-/** @typedef {import('./typings').GQLMessage} GQLMessage */
-/** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
@@ -18,7 +15,6 @@ const { WalletBackend } = require('./wallet-backend')
 /** @typedef {import('./typings').TransactionStatus} TransactionStatus */
 
 const log = electronLog.scope('wallet')
-const url = 'https://graph.glif.link/query'
 const walletStore = new Store({
   name: 'wallet'
 })
@@ -83,39 +79,6 @@ async function updateBalance () {
 }
 
 /**
- * @param {string} address
- * @returns Promise<GQLMessage[]>
- */
-async function getMessages (address) {
-  const query = gql`
-    query Messages($address: String!, $limit: Int!, $offset: Int!) {
-      messages(address: $address, limit: $limit, offset: $offset) {
-        cid
-        to {
-          robust
-        }
-        from {
-          robust
-        }
-        nonce
-        height
-        method
-        params
-        value
-      }
-    }
-  `
-  const variables = {
-    address,
-    limit: 100,
-    offset: 0
-  }
-  /** @type {{messages: GQLMessage[]}} */
-  const { messages = [] } = await request(url, query, variables)
-  return messages
-}
-
-/**
  * @returns {Promise<void>}
  */
 async function updateTransactions () {
@@ -124,7 +87,7 @@ async function updateTransactions () {
   console.log(new Date(), 'updateTransactions')
 
   // Load messages
-  const messages = await getMessages(backend.address)
+  const messages = await backend.getMessages(backend.address)
 
   // Convert messages to transactions (loading)
   /** @type {FILTransactionLoading[]} */
