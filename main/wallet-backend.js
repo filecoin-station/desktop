@@ -11,6 +11,7 @@ const { request, gql } = require('graphql-request')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
+/** @typedef {import('./typings').GQLTipset} GQLTipset */
 
 class WalletBackend {
   constructor () {
@@ -149,6 +150,23 @@ class WalletBackend {
     /** @type {{stateReplay: GQLStateReplay}} */
     const { stateReplay } = await request(this.url, query, variables)
     return stateReplay
+  }
+
+  /**
+   * @param {number} height
+   * @returns Promise<GQLTipset>
+   */
+  async getTipset (height) {
+    const query = gql`
+      query Tipset($height: Uint64!) {
+        tipset(height: $height) {
+          minTimestamp
+        }
+      }
+    `
+    const variables = { height }
+    const { tipset } = await request(this.url, query, variables)
+    return tipset
   }
 }
 

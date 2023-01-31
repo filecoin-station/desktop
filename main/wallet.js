@@ -11,7 +11,6 @@ const { WalletBackend } = require('./wallet-backend')
 
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
-/** @typedef {import('./typings').GQLTipset} GQLTipset */
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
@@ -81,23 +80,6 @@ async function updateBalance () {
   balance = await backend.fetchBalance()
   walletStore.set('balance', balance.toFil())
   ctx.balanceUpdate(balance.toFil())
-}
-
-/**
- * @param {number} height
- * @returns Promise<GQLTipset>
- */
-async function getTipset (height) {
-  const query = gql`
-    query Tipset($height: Uint64!) {
-      tipset(height: $height) {
-        minTimestamp
-      }
-    }
-  `
-  const variables = { height }
-  const { tipset } = await request(url, query, variables)
-  return tipset
 }
 
 /**
@@ -171,7 +153,7 @@ async function updateTransactions () {
 
     if (!transaction.timestamp && transaction.height) {
       transaction.timestamp =
-        (await getTipset(transaction.height)).minTimestamp * 1000
+        (await backend.getTipset(transaction.height)).minTimestamp * 1000
     }
 
     if (
