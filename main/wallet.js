@@ -61,6 +61,7 @@ async function refreshState () {
     log.error('Updating balance', err)
   }
   try {
+    console.log(new Date(), 'fetchAllTransactions')
     await backend.fetchAllTransactions()
   } catch (err) {
     log.error('Updating transactions', err)

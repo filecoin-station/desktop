@@ -215,8 +215,6 @@ class WalletBackend {
   async fetchAllTransactions () {
     assert(this.address)
 
-    console.log(new Date(), 'updateTransactions')
-
     // Load messages
     const messages = await this.getMessages(this.address)
 
