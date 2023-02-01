@@ -20,10 +20,10 @@ const walletStore = new Store({
 })
 
 const backend = new WalletBackend()
+backend.transactions = loadStoredEntries()
 
 /** @type {Context | null} */
 let ctx = null
-let transactions = loadStoredEntries()
 let balance = loadBalance()
 /** @type {Set<string>} */
 const stateReplaysBeingFetched = new Set()
@@ -108,7 +108,7 @@ async function updateTransactions () {
 
   for (const transactionProcessing of transactionsLoading) {
     // Find matching transaction
-    const tx = transactions.find(tx => tx.hash === transactionProcessing.hash)
+    const tx = backend.transactions.find(tx => tx.hash === transactionProcessing.hash)
 
     // Complete already loaded data
     // Keep references alive by prefering `tx`
@@ -160,7 +160,7 @@ async function updateTransactions () {
   }
 
   // Add transaction potentially not yet returned by the API
-  for (const transaction of transactions) {
+  for (const transaction of backend.transactions) {
     if (!updatedTransactions.find(tx => tx.hash === transaction.hash)) {
       updatedTransactions.push(transaction)
       break
@@ -168,7 +168,7 @@ async function updateTransactions () {
   }
 
   // Update state
-  transactions = updatedTransactions
+  backend.transactions = updatedTransactions
 
   // Save transactions
   walletStore.set('transactions', updatedTransactions)
@@ -185,7 +185,7 @@ function getTransactionsForUI () {
   let processing
   const sent = []
 
-  for (const transaction of transactions) {
+  for (const transaction of backend.transactions) {
     if (
       !processing &&
       transaction.status === 'processing' &&
@@ -226,7 +226,7 @@ async function transferFunds (from, to, amount) {
     amount: amount.toString(),
     address: to
   }
-  transactions.push(transaction)
+  backend.transactions.push(transaction)
   sendTransactionsToUI()
 
   try {

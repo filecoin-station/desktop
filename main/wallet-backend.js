@@ -13,6 +13,8 @@ const { request, gql } = require('graphql-request')
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
 /** @typedef {import('./typings').GQLTipset} GQLTipset */
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
+/** @typedef {import('./typings').FILTransaction} FILTransaction */
+/** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
 
 class WalletBackend {
   constructor () {
@@ -21,6 +23,8 @@ class WalletBackend {
     /** @type {string | null} */
     this.address = null
     this.url = 'https://graph.glif.link/query'
+    /** @type {(FILTransaction|FILTransactionProcessing)[]} */
+    this.transactions = []
   }
 
   async setup () {
