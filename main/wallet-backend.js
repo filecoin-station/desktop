@@ -8,6 +8,7 @@ const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
 const { request, gql } = require('graphql-request')
+const timers = require('node:timers/promises')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -15,6 +16,7 @@ const { request, gql } = require('graphql-request')
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
+/** @typedef {import('./typings').FILTransactionLoading} FILTransactionLoading */
 
 class WalletBackend {
   constructor () {
@@ -25,6 +27,13 @@ class WalletBackend {
     this.url = 'https://graph.glif.link/query'
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
     this.transactions = []
+    // FIXME
+    /** @type {Set<string>} */
+    this.stateReplaysBeingFetched = new Set()
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    this.onTransactionUpdate = () => {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    this.onTransactionSucceeded = () => {}
   }
 
   async setup () {
@@ -198,6 +207,99 @@ class WalletBackend {
     /** @type {{messages: GQLMessage[]}} */
     const { messages = [] } = await request(this.url, query, variables)
     return messages
+  }
+
+  /**
+   * @returns {Promise<void>}
+   */
+  async fetchAllTransactions () {
+    assert(this.address)
+
+    console.log(new Date(), 'updateTransactions')
+
+    // Load messages
+    const messages = await this.getMessages(this.address)
+
+    // Convert messages to transactions (loading)
+    /** @type {FILTransactionLoading[]} */
+    const transactionsLoading = messages.map(message => {
+      return {
+        height: message.height,
+        hash: message.cid,
+        outgoing: message.from.robust === this.address,
+        amount: new FilecoinNumber(message.value, 'attofil').toFil(),
+        address: message.from.robust === this.address
+          ? message.to.robust
+          : message.from.robust
+      }
+    })
+
+    /** @type {(FILTransaction|FILTransactionProcessing)[]} */
+    const updatedTransactions = []
+
+    for (const transactionProcessing of transactionsLoading) {
+      // Find matching transaction
+      const tx = this.transactions.find(tx => tx.hash === transactionProcessing.hash)
+
+      // Complete already loaded data
+      // Keep references alive by prefering `tx`
+      const transaction = tx || transactionProcessing
+
+      if (!transaction.timestamp && transaction.height) {
+        transaction.timestamp =
+          (await this.getTipset(transaction.height)).minTimestamp * 1000
+      }
+
+      if (
+        transaction.hash &&
+        (!transaction.status || transaction.status === 'processing') &&
+        !this.stateReplaysBeingFetched.has(transaction.hash)
+      ) {
+        const { hash } = transaction
+        this.stateReplaysBeingFetched.add(hash)
+        transaction.status = 'processing'
+        ;(async () => {
+          while (true) {
+            try {
+              const stateReplay = await this.getStateReplay(hash)
+              transaction.status = stateReplay.receipt.exitCode === 0
+                ? 'succeeded'
+                : 'failed'
+              this.stateReplaysBeingFetched.delete(hash)
+              if (transaction.status === 'succeeded') {
+                try {
+                  await this.onTransactionSucceeded()
+                } catch {}
+              }
+              this.onTransactionUpdate()
+              break
+            } catch (err) {
+              console.error(
+                `Failed getting status for ${transactionProcessing.hash}`
+              )
+              await timers.setTimeout(12_000)
+            }
+          }
+        })()
+      }
+
+      updatedTransactions.push(
+        /** @type {FILTransaction} */
+        (transaction)
+      )
+    }
+
+    // Add transaction potentially not yet returned by the API
+    for (const transaction of this.transactions) {
+      if (!updatedTransactions.find(tx => tx.hash === transaction.hash)) {
+        updatedTransactions.push(transaction)
+        break
+      }
+    }
+
+    // Update state
+    this.transactions = updatedTransactions
+    this.onTransactionUpdate()
   }
 }
 
