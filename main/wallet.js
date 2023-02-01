@@ -19,10 +19,6 @@ const walletStore = new Store({
 
 const backend = new WalletBackend()
 backend.transactions = loadStoredEntries()
-backend.onTransactionUpdate = function () {
-  walletStore.set('transactions', backend.transactions)
-  sendTransactionsToUI()
-}
 backend.onTransactionSucceeded = async function () {
   await updateBalance()
 }
@@ -63,6 +59,8 @@ async function refreshState () {
   try {
     console.log(new Date(), 'fetchAllTransactions')
     await backend.fetchAllTransactions()
+    walletStore.set('transactions', backend.transactions)
+    sendTransactionsToUI()
   } catch (err) {
     log.error('Updating transactions', err)
   }

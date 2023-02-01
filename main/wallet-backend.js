@@ -8,7 +8,6 @@ const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
 const { request, gql } = require('graphql-request')
-const timers = require('node:timers/promises')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -27,11 +26,6 @@ class WalletBackend {
     this.url = 'https://graph.glif.link/query'
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
     this.transactions = []
-    // FIXME
-    /** @type {Set<string>} */
-    this.stateReplaysBeingFetched = new Set()
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.onTransactionUpdate = () => {}
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.onTransactionSucceeded = () => {}
   }
@@ -217,6 +211,7 @@ class WalletBackend {
 
     // Load messages
     const messages = await this.getMessages(this.address)
+    console.log({ messages })
 
     // Convert messages to transactions (loading)
     /** @type {FILTransactionLoading[]} */
@@ -235,50 +230,47 @@ class WalletBackend {
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
     const updatedTransactions = []
 
-    for (const transactionProcessing of transactionsLoading) {
+    for (const transactionLoading of transactionsLoading) {
       // Find matching transaction
-      const tx = this.transactions.find(tx => tx.hash === transactionProcessing.hash)
+      const tx = this.transactions.find(tx => tx.hash === transactionLoading.hash)
 
       // Complete already loaded data
       // Keep references alive by prefering `tx`
-      const transaction = tx || transactionProcessing
+      const transaction = tx || transactionLoading
 
       if (!transaction.timestamp && transaction.height) {
-        transaction.timestamp =
-          (await this.getTipset(transaction.height)).minTimestamp * 1000
+        try {
+          transaction.timestamp =
+            (await this.getTipset(transaction.height)).minTimestamp * 1000
+        } catch (err) {
+          console.error(
+            `Failed getting tipset for ${transactionLoading.hash}`
+          )
+        }
       }
 
       if (
         transaction.hash &&
-        (!transaction.status || transaction.status === 'processing') &&
-        !this.stateReplaysBeingFetched.has(transaction.hash)
+        (!transaction.status || transaction.status === 'processing')
       ) {
         const { hash } = transaction
-        this.stateReplaysBeingFetched.add(hash)
         transaction.status = 'processing'
-        ;(async () => {
-          while (true) {
+        try {
+          const stateReplay = await this.getStateReplay(hash)
+          transaction.status = stateReplay.receipt.exitCode === 0
+            ? 'succeeded'
+            : 'failed'
+          if (transaction.status === 'succeeded') {
             try {
-              const stateReplay = await this.getStateReplay(hash)
-              transaction.status = stateReplay.receipt.exitCode === 0
-                ? 'succeeded'
-                : 'failed'
-              this.stateReplaysBeingFetched.delete(hash)
-              if (transaction.status === 'succeeded') {
-                try {
-                  await this.onTransactionSucceeded()
-                } catch {}
-              }
-              this.onTransactionUpdate()
-              break
-            } catch (err) {
-              console.error(
-                `Failed getting status for ${transactionProcessing.hash}`
-              )
-              await timers.setTimeout(12_000)
-            }
+              await this.onTransactionSucceeded()
+            } catch {}
           }
-        })()
+          break
+        } catch (err) {
+          console.error(
+            `Failed getting status for ${transactionLoading.hash}`
+          )
+        }
       }
 
       updatedTransactions.push(
@@ -297,7 +289,6 @@ class WalletBackend {
 
     // Update state
     this.transactions = updatedTransactions
-    this.onTransactionUpdate()
   }
 }
 
