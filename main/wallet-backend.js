@@ -8,6 +8,7 @@ const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
 const { request, gql } = require('graphql-request')
+const { default: pMap } = require('p-map')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
@@ -231,7 +232,7 @@ class WalletBackend {
     )
 
     // Fetch `.timestamp`
-    for (const transaction of transactions) {
+    await pMap(transactions, async transaction => {
       if (!transaction.timestamp && transaction.height) {
         try {
           transaction.timestamp =
@@ -240,10 +241,10 @@ class WalletBackend {
           transaction.error = new Error('Failed fetching tipset')
         }
       }
-    }
+    }, { concurrency: 1 })
 
     // Fetch `.status`
-    for (const transaction of transactions) {
+    await pMap(transactions, async transaction => {
       if (
         !transaction.error &&
         transaction.hash &&
@@ -261,12 +262,11 @@ class WalletBackend {
               await this.onTransactionSucceeded()
             } catch {}
           }
-          break
         } catch (err) {
           transaction.error = new Error('Failed fetching state replay')
         }
       }
-    }
+    }, { concurrency: 1 })
 
     // Add locally known transactions not yet returned by the API
     for (const transaction of this.transactions) {
