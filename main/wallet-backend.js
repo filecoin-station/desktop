@@ -198,9 +198,9 @@ class WalletBackend {
       limit: 100,
       offset: 0
     }
-    /** @type {{messages: GQLMessage[]}} */
-    const { messages = [] } = await request(this.url, query, variables)
-    return messages
+    /** @type {{messages: GQLMessage[] | null}} */
+    const { messages } = await request(this.url, query, variables)
+    return messages || []
   }
 
   /**
@@ -211,7 +211,6 @@ class WalletBackend {
 
     // Load messages
     const messages = await this.getMessages(this.address)
-    console.log({ messages })
 
     // Convert messages to transactions (loading)
     /** @type {FILTransactionLoading[]} */
