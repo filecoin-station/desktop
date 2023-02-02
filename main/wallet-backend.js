@@ -224,29 +224,28 @@ class WalletBackend {
         : message.from.robust
     }))
 
-    /** @type {(FILTransaction|FILTransactionProcessing)[]} */
-    const updatedTransactions = []
+    // Fill in already loaded data
+    const transactions = transactionsLoading.map(transactionLoading =>
+      this.transactions.find(tx => tx.hash === transactionLoading.hash) ||
+      transactionLoading
+    )
 
-    for (const transactionLoading of transactionsLoading) {
-      // Find matching transaction
-      const tx = this.transactions.find(tx => tx.hash === transactionLoading.hash)
-
-      // Complete already loaded data
-      // Keep references alive by prefering `tx`
-      const transaction = tx || transactionLoading
-
+    // Fetch `.timestamp`
+    for (const transaction of transactions) {
       if (!transaction.timestamp && transaction.height) {
         try {
           transaction.timestamp =
             (await this.getTipset(transaction.height)).minTimestamp * 1000
         } catch (err) {
-          console.error(
-            `Failed getting tipset for ${transactionLoading.hash}`
-          )
+          transaction.error = new Error('Failed fetching tipset')
         }
       }
+    }
 
+    // Fetch `.status`
+    for (const transaction of transactions) {
       if (
+        !transaction.error &&
         transaction.hash &&
         (!transaction.status || transaction.status === 'processing')
       ) {
@@ -264,28 +263,22 @@ class WalletBackend {
           }
           break
         } catch (err) {
-          console.error(
-            `Failed getting status for ${transactionLoading.hash}`
-          )
+          transaction.error = new Error('Failed fetching state replay')
         }
       }
-
-      updatedTransactions.push(
-        /** @type {FILTransaction} */
-        (transaction)
-      )
     }
 
-    // Add transaction potentially not yet returned by the API
+    // Add locally known transactions not yet returned by the API
     for (const transaction of this.transactions) {
-      if (!updatedTransactions.find(tx => tx.hash === transaction.hash)) {
-        updatedTransactions.push(transaction)
+      if (!transactions.find(tx => tx.hash === transaction.hash)) {
+        transactions.push(transaction)
         break
       }
     }
 
     // Update state
-    this.transactions = updatedTransactions
+    this.transactions =
+      /** @type {(FILTransaction|FILTransactionProcessing)[]} */ (transactions)
   }
 }
 
