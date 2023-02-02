@@ -214,17 +214,15 @@ class WalletBackend {
 
     // Convert messages to transactions (loading)
     /** @type {FILTransactionLoading[]} */
-    const transactionsLoading = messages.map(message => {
-      return {
-        height: message.height,
-        hash: message.cid,
-        outgoing: message.from.robust === this.address,
-        amount: new FilecoinNumber(message.value, 'attofil').toFil(),
-        address: message.from.robust === this.address
-          ? message.to.robust
-          : message.from.robust
-      }
-    })
+    const transactionsLoading = messages.map(message => ({
+      height: message.height,
+      hash: message.cid,
+      outgoing: message.from.robust === this.address,
+      amount: new FilecoinNumber(message.value, 'attofil').toFil(),
+      address: message.from.robust === this.address
+        ? message.to.robust
+        : message.from.robust
+    }))
 
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
     const updatedTransactions = []
