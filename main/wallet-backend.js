@@ -8,7 +8,7 @@ const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
 const { request, gql } = require('graphql-request')
-const { default: pMap } = require('p-map')
+const pMap = require('p-map')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
