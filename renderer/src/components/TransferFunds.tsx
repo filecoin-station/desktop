@@ -26,7 +26,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
           <span className={`text-2xs px-4 text-body-s ${disabled ? 'text-white text-opacity-80' : 'text-primary'}`}>Transfer FIL</span>
         </button>
         {disabled && !hasCurrentTransaction &&
-          <div className="wallet-transfer-tooltip absolute -left-[13px] mb-[1px] hover:-left-[89px] hover:-top-[69.5px] flex flex-col items-center group">
+          <div className="wallet-transfer-tooltip absolute -left-[13px] mb-[1px] hover:-left-[89px] hover:-top-[87.5px] flex flex-col items-center group">
             <div className='w-44 px-2 py-4 mb-[13px] rounded-lg bg-grayscale-200 hidden group-hover:block'>
               <p className='text-body-2xs text-center'>We need a FIL address and positive balance to transfer your FIL</p>
             </div>
