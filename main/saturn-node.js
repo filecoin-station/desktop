@@ -83,6 +83,7 @@ async function start (/** @type {Context} */ ctx) {
   childLog = []
   appendToChildLog('Starting Saturn node')
 
+  return
   childProcess = execa(saturnBinaryPath, {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress(),

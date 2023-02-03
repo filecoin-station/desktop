@@ -279,6 +279,7 @@ class WalletBackend {
     // Update state
     this.transactions =
       /** @type {(FILTransaction|FILTransactionProcessing)[]} */ (transactions)
+    console.log('Fetched transactions', this.transactions)
   }
 }
 
