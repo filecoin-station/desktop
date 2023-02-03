@@ -73,7 +73,27 @@ function getBalance () {
   return balance.toFil()
 }
 
+// Inline `p-debounce.promise` from
+// https://github.com/sindresorhus/p-debounce/blob/1ba9d31dd81eee55b93ef67e38b8fa24781df63b/index.js#L38-L53
+// since v5 is ESM only.
+// This reduces the concurrency of `updateBalance` to 1, to prevent race
+// conditions.
+
+/** @type {Promise<void>|undefined} */
+let updateBalancePromise
 async function updateBalance () {
+  if (updateBalancePromise) {
+    return updateBalancePromise
+  }
+  try {
+    updateBalancePromise = _updateBalance()
+    return await updateBalancePromise
+  } finally {
+    updateBalancePromise = undefined
+  }
+}
+
+async function _updateBalance () {
   assert(ctx)
   balance = await backend.fetchBalance()
   walletStore.set('balance', balance.toFil())
