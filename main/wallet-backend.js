@@ -18,6 +18,8 @@ const pMap = require('p-map')
 /** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
 /** @typedef {import('./typings').FILTransactionLoading} FILTransactionLoading */
 
+const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
+
 class WalletBackend {
   constructor () {
     /** @type {Filecoin | null} */
@@ -31,7 +33,7 @@ class WalletBackend {
     this.onTransactionSucceeded = () => {}
   }
 
-  async setup ({ disableKeytar = false } = {}) {
+  async setup ({ disableKeytar = DISABLE_KEYTAR } = {}) {
     const { seed, isNew } = await this.getSeedPhrase({ disableKeytar })
     this.provider = new Filecoin(new HDWalletProvider(seed), {
       apiAddress: 'https://api.node.glif.io/rpc/v0'
@@ -43,7 +45,7 @@ class WalletBackend {
   /**
    * @returns {Promise<WalletSeed>}
    */
-  async getSeedPhrase ({ disableKeytar = false } = {}) {
+  async getSeedPhrase ({ disableKeytar = DISABLE_KEYTAR } = {}) {
     const service = 'filecoin-station-wallet'
     let seed
     if (!disableKeytar) {
