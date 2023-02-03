@@ -31,8 +31,8 @@ class WalletBackend {
     this.onTransactionSucceeded = () => {}
   }
 
-  async setup ({ useExistingSeed = true } = {}) {
-    const { seed, isNew } = await this.getSeedPhrase({ useExistingSeed })
+  async setup ({ disableKeytar = false } = {}) {
+    const { seed, isNew } = await this.getSeedPhrase({ disableKeytar })
     this.provider = new Filecoin(new HDWalletProvider(seed), {
       apiAddress: 'https://api.node.glif.io/rpc/v0'
     })
@@ -43,10 +43,10 @@ class WalletBackend {
   /**
    * @returns {Promise<WalletSeed>}
    */
-  async getSeedPhrase ({ useExistingSeed = true } = {}) {
+  async getSeedPhrase ({ disableKeytar = false } = {}) {
     const service = 'filecoin-station-wallet'
     let seed
-    if (useExistingSeed) {
+    if (!disableKeytar) {
       seed = await keytar.getPassword(service, 'seed')
       if (seed) {
         return { seed, isNew: false }
@@ -54,7 +54,9 @@ class WalletBackend {
     }
 
     seed = generateMnemonic()
-    await keytar.setPassword(service, 'seed', seed)
+    if (!disableKeytar) {
+      await keytar.setPassword(service, 'seed', seed)
+    }
     return { seed, isNew: true }
   }
 
