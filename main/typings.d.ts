@@ -18,7 +18,7 @@ export type FILTransaction = {
   outgoing: boolean;
   amount: string;
   address: string;
-  error?: Error;
+  error?: string;
 }
 
 // helper

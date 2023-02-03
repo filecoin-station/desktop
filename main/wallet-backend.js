@@ -238,7 +238,7 @@ class WalletBackend {
           transaction.timestamp =
             (await this.getTipset(transaction.height)).minTimestamp * 1000
         } catch (err) {
-          transaction.error = new Error('Failed fetching tipset')
+          transaction.error = 'Failed fetching tipset'
         }
       }
     }, { concurrency: 1 })
@@ -263,7 +263,7 @@ class WalletBackend {
             } catch {}
           }
         } catch (err) {
-          transaction.error = new Error('Failed fetching state replay')
+          transaction.error = 'Failed fetching state replay'
         }
       }
     }, { concurrency: 1 })
