@@ -46,4 +46,12 @@ describe('Wallet Backend', function () {
       assert(gasLimit)
     })
   })
+
+  describe('fetchAllTransactions()', function () {
+    it('fetches all transactions', async function () {
+      assert(backend)
+      await backend.fetchAllTransactions()
+      assert(backend.transactions)
+    })
+  })
 })
