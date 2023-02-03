@@ -31,8 +31,8 @@ class WalletBackend {
     this.onTransactionSucceeded = () => {}
   }
 
-  async setup (useExistingSeed = true) {
-    const { seed, isNew } = await this.getSeedPhrase(useExistingSeed)
+  async setup ({ useExistingSeed = true } = {}) {
+    const { seed, isNew } = await this.getSeedPhrase({ useExistingSeed })
     this.provider = new Filecoin(new HDWalletProvider(seed), {
       apiAddress: 'https://api.node.glif.io/rpc/v0'
     })
@@ -41,10 +41,9 @@ class WalletBackend {
   }
 
   /**
-   * @param {boolean} useExistingSeed
    * @returns {Promise<WalletSeed>}
    */
-  async getSeedPhrase (useExistingSeed = true) {
+  async getSeedPhrase ({ useExistingSeed = true } = {}) {
     const service = 'filecoin-station-wallet'
     let seed
     if (useExistingSeed) {

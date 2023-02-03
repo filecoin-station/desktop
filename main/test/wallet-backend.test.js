@@ -19,7 +19,7 @@ describe('Wallet Backend', function () {
   describe('setup()', function () {
     it('sets up provider and address', async function () {
       backend = new WalletBackend()
-      await backend.setup(false)
+      await backend.setup({ useExistingSeed: false })
       assert(backend.provider)
       assert(backend.address)
     })
