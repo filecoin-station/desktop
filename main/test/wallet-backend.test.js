@@ -8,7 +8,7 @@ describe('Wallet Backend', function () {
   describe('getSeedPhrase()', function () {
     it('gets a seed phrase', async function () {
       const backend = new WalletBackend()
-      const { seed } = await backend.getSeedPhrase()
+      const { seed } = await backend.getSeedPhrase({ disableKeytar: true })
       assert(seed)
     })
   })
