@@ -158,6 +158,7 @@ async function transferFunds (from, to, amount) {
     transaction.hash = cid
     sendTransactionsToUI()
   } catch (err) {
+    log.error('Transferring funds', err)
     transaction.status = 'failed'
     sendTransactionsToUI()
   }
