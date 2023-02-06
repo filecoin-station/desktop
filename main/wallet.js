@@ -11,7 +11,6 @@ const { WalletBackend } = require('./wallet-backend')
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
-/** @typedef {import('./typings').FILTransactionFailed} FILTransactionFailed */
 
 const log = electronLog.scope('wallet')
 const walletStore = new Store({
@@ -142,7 +141,7 @@ function sendTransactionsToUI () {
 async function transferFunds (from, to, amount) {
   assert(ctx)
 
-  /** @type {FILTransaction|FILTransactionProcessing|FILTransactionFailed} */
+  /** @type {FILTransactionProcessing} */
   const transaction = {
     timestamp: new Date().getTime(),
     status: 'processing',
@@ -160,15 +159,7 @@ async function transferFunds (from, to, amount) {
     sendTransactionsToUI()
   } catch (err) {
     log.error('Transferring funds', err)
-
-    backend.transactions.splice(
-      backend.transactions.indexOf(transaction),
-      1,
-      {
-        ...transaction,
-        status: 'failed'
-      }
-    )
+    transaction.status = 'failed'
     sendTransactionsToUI()
   }
 }
