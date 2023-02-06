@@ -143,7 +143,7 @@ jobs:
         continue-on-error: true # empty steps.tag.outputs.tag will inform the next step
 
       - name: Build binaries with electron-builder
-        uses: samuelmeuli/action-electron-builder@6b1a1e42305b129c198a980c7ae4967ac69f9163 # https://github.com/samuelmeuli/action-electron-builder/pull/92
+        uses: samuelmeuli/action-electron-builder@@6b1a1e42305b129c198a980c7ae4967ac69f9163 # https://github.com/samuelmeuli/action-electron-builder/pull/92
         with:
           args: --publish onTag # attach signed binaries to a release draft only when building a tag
           release: false # keep github release as draft for manual inspection
