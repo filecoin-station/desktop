@@ -18,6 +18,10 @@ const walletStore = new Store({
 })
 
 const backend = new WalletBackend({
+  async onTransactionUpdate () {
+    walletStore.set('transactions', backend.transactions)
+    sendTransactionsToUI()
+  },
   async onTransactionSucceeded () {
     await updateBalance()
   }
@@ -58,10 +62,7 @@ async function refreshState () {
     log.error('Updating balance', err)
   }
   try {
-    console.log(new Date(), 'fetchAllTransactions')
     await backend.fetchAllTransactions()
-    walletStore.set('transactions', backend.transactions)
-    sendTransactionsToUI()
   } catch (err) {
     log.error('Updating transactions', err)
   }
@@ -142,26 +143,12 @@ function sendTransactionsToUI () {
 async function transferFunds (from, to, amount) {
   assert(ctx)
 
-  /** @type {FILTransactionProcessing} */
-  const transaction = {
-    timestamp: new Date().getTime(),
-    status: 'processing',
-    outgoing: true,
-    amount: amount.toString(),
-    address: to
-  }
-  backend.transactions.push(transaction)
-  sendTransactionsToUI()
-
   try {
     console.log({ transferAmount: amount.toString() })
     const cid = await backend.transferFunds(from, to, amount)
-    transaction.hash = cid
-    sendTransactionsToUI()
+    console.log({ cid })
   } catch (err) {
     log.error('Transferring funds', err)
-    transaction.status = 'failed'
-    sendTransactionsToUI()
   }
 }
 

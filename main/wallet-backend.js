@@ -26,7 +26,8 @@ async function noop () {}
 class WalletBackend {
   constructor ({
     disableKeytar = DISABLE_KEYTAR,
-    onTransactionSucceeded = noop
+    onTransactionSucceeded = noop,
+    onTransactionUpdate = noop
   } = {}) {
     /** @type {Filecoin | null} */
     this.provider = null
@@ -35,8 +36,9 @@ class WalletBackend {
     this.url = 'https://graph.glif.link/query'
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
     this.transactions = []
-    this.onTransactionSucceeded = onTransactionSucceeded
     this.disableKeytar = disableKeytar
+    this.onTransactionSucceeded = onTransactionSucceeded
+    this.onTransactionUpdate = onTransactionUpdate
   }
 
   async setup () {
@@ -121,25 +123,46 @@ class WalletBackend {
   async transferFunds (from, to, amount) {
     assert(this.provider)
 
-    const gasLimit = await this.getGasLimit(from, to, amount)
-    const message = new Message({
-      to,
-      from,
-      nonce: await this.provider.getNonce(from),
-      value: amount.minus(gasLimit).toAttoFil(),
-      method: 0,
-      params: ''
-    })
-    const messageWithGas = await this.provider.gasEstimateMessageGas(
-      message.toLotusType()
-    )
-    const lotusMessage = messageWithGas.toLotusType()
-    const msgValid = await this.provider.simulateMessage(lotusMessage)
-    assert(msgValid, 'Message is invalid')
-    const signedMessage = await this.provider.wallet.sign(from, lotusMessage)
-    const { '/': cid } = await this.provider.sendMessage(signedMessage)
+    /** @type {FILTransactionProcessing} */
+    const transaction = {
+      timestamp: new Date().getTime(),
+      status: 'processing',
+      outgoing: true,
+      amount: amount.toString(),
+      address: to
+    }
+    this.transactions.push(transaction)
+    this.onTransactionUpdate()
 
-    return cid
+    try {
+      const gasLimit = await this.getGasLimit(from, to, amount)
+      const message = new Message({
+        to,
+        from,
+        nonce: await this.provider.getNonce(from),
+        value: amount.minus(gasLimit).toAttoFil(),
+        method: 0,
+        params: ''
+      })
+      const messageWithGas = await this.provider.gasEstimateMessageGas(
+        message.toLotusType()
+      )
+      const lotusMessage = messageWithGas.toLotusType()
+      const msgValid = await this.provider.simulateMessage(lotusMessage)
+      assert(msgValid, 'Message is invalid')
+      const signedMessage = await this.provider.wallet.sign(from, lotusMessage)
+      const { '/': cid } = await this.provider.sendMessage(signedMessage)
+
+      transaction.hash = cid
+      this.onTransactionUpdate()
+
+      return cid
+    } catch (err) {
+      transaction.status = 'failed'
+      this.onTransactionUpdate()
+
+      throw err
+    }
   }
 
   /**
@@ -292,7 +315,6 @@ class WalletBackend {
     // Update state
     this.transactions =
       /** @type {(FILTransaction|FILTransactionProcessing)[]} */ (transactions)
-    console.log('Fetched transactions', this.transactions)
   }
 }
 
