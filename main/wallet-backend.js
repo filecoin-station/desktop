@@ -289,6 +289,7 @@ class WalletBackend {
         transaction.status = 'processing'
         try {
           const stateReplay = await this.getStateReplay(hash)
+          console.log(stateReplay)
           transaction.status = stateReplay.receipt.exitCode === 0
             ? 'succeeded'
             : 'failed'
