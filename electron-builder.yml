@@ -6,11 +6,11 @@ extraMetadata:
 
 files:
   - filter:
-    - main/**/*
-    - assets/**/*
-    - renderer/dist/**/*
-    - node_modules/**/*
-    - package.json
+    - ./main/**/*
+    - ./assets/**/*
+    - ./renderer/dist/**/*
+    - ./node_modules/**/*
+    - ./package.json
 
 extraResources:
   - from: './build/saturn/l2node-${platform}-${arch}'
