@@ -163,8 +163,6 @@ async function transferAllFundsToDestinationWallet () {
   assert(backend.address)
   const to = getDestinationWalletAddress()
   assert(to)
-  // FIXME: Only transfer a little FIL for now
-  const balance = new FilecoinNumber('0.00001', 'fil')
   await transferFunds(backend.address, to, balance)
   await updateBalance()
 }
