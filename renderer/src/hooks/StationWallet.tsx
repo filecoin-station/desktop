@@ -7,7 +7,13 @@ import {
   getStationWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
 } from '../lib/station-config'
-import { FILTransaction, FILTransactionProcessing, FILTransactionStatus } from '../typings'
+import {
+  FILTransaction,
+  FILTransactionProcessing,
+  FILTransactionStatus,
+  isFILTransactionConfirmed,
+  isFILTransactionProcessing
+} from '../typings'
 
 interface Wallet {
   stationAddress: string,
@@ -33,7 +39,7 @@ const useWallet = (): Wallet => {
   ) => {
     if (
       processingTransaction &&
-      processingTransaction.status === 'processing' &&
+      isFILTransactionProcessing(processingTransaction) &&
       !processing
     ) {
       const status: FILTransactionStatus =
@@ -139,11 +145,10 @@ interface SplitTransactions {
 }
 
 const splitWalletTransactions = (transactions: (FILTransaction|FILTransactionProcessing)[]): SplitTransactions => {
-  const processing: FILTransactionProcessing | null =
-  transactions.find(tx => tx.status === 'processing') as FILTransactionProcessing
-  const confirmed: FILTransaction[] =
-  transactions.filter(tx => tx.status !== 'processing') as FILTransaction[]
-  return { processing, confirmed }
+  return {
+    processing: transactions.find(isFILTransactionProcessing),
+    confirmed: transactions.filter(isFILTransactionConfirmed)
+  }
 }
 
 export default useWallet
