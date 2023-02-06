@@ -19,7 +19,7 @@ extraResources:
 
 asarUnpack: 'main/**/scripts/**/*'
 
-beforePack: 'build/before-pack.js'
+beforePack: './build/before-pack.js'
 afterSign: './build/notarize-macos.js'
 artifactName: '${productName}.${ext}'
 
