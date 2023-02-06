@@ -7,7 +7,7 @@ import {
   getStationWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
 } from '../lib/station-config'
-import { FILTransaction, FILTransactionProcessing } from '../typings'
+import { FILTransaction, FILTransactionProcessing, FILTransactionFailed } from '../typings'
 
 interface Wallet {
   stationAddress: string,
@@ -15,7 +15,7 @@ interface Wallet {
   walletBalance: string | undefined,
   walletTransactions: FILTransaction[] | undefined,
   editDestinationAddress: (address: string|undefined) => void,
-  processingTransaction: FILTransactionProcessing | undefined,
+  processingTransaction: FILTransactionProcessing | FILTransaction | undefined,
   dismissCurrentTransaction: () => void,
   transferAllFundsToDestinationWallet: () => Promise<void>
 }
@@ -25,7 +25,7 @@ const useWallet = (): Wallet => {
   const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
   const [walletBalance, setWalletBalance] = useState<string | undefined>()
   const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | undefined>()
-  const [processingTransaction, setCurrentTransaction] = useState<FILTransactionProcessing | undefined>()
+  const [processingTransaction, setCurrentTransaction] = useState<FILTransactionProcessing|FILTransactionFailed | undefined>()
 
   const setTransactions = useCallback((
     processing: FILTransactionProcessing | undefined,

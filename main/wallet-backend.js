@@ -17,6 +17,7 @@ const pMap = require('p-map')
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
 /** @typedef {import('./typings').FILTransactionLoading} FILTransactionLoading */
+/** @typedef {import('./typings').FILTransactionFailed} FILTransactionFailed */
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 
@@ -27,7 +28,7 @@ class WalletBackend {
     /** @type {string | null} */
     this.address = null
     this.url = 'https://graph.glif.link/query'
-    /** @type {(FILTransaction|FILTransactionProcessing)[]} */
+    /** @type {(FILTransaction|FILTransactionProcessing|FILTransactionFailed)[]} */
     this.transactions = []
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     this.onTransactionSucceeded = () => {}
