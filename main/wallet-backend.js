@@ -282,7 +282,6 @@ class WalletBackend {
     // Fetch `.status`
     await pMap(transactions, async transaction => {
       if (
-        !transaction.error &&
         transaction.hash &&
         (!transaction.status || transaction.status === 'processing')
       ) {
