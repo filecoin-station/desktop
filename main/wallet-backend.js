@@ -315,6 +315,7 @@ class WalletBackend {
     // Update state
     this.transactions =
       /** @type {(FILTransaction|FILTransactionProcessing)[]} */ (transactions)
+    this.onTransactionUpdate()
   }
 }
 
