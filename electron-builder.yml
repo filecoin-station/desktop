@@ -13,14 +13,14 @@ files:
     - package.json
 
 extraResources:
-  - from: 'build/saturn/l2node-${platform}-${arch}'
+  - from: './build/saturn/l2node-${platform}-${arch}'
     to: 'saturn-l2-node'
     filter: ['*']
 
-asarUnpack: 'main/**/scripts/**/*'
+asarUnpack: './main/**/scripts/**/*'
 
-beforePack: 'build/before-pack.js'
-afterSign: 'build/notarize-macos.js'
+beforePack: './build/before-pack.js'
+afterSign: './build/notarize-macos.js'
 artifactName: '${productName}.${ext}'
 
 mac:
@@ -28,8 +28,8 @@ mac:
   darkModeSupport: true
   hardenedRuntime: true
   gatekeeperAssess: false
-  entitlements: 'build/entitlements.mac.plist'
-  entitlementsInherit: 'build/entitlements.mac.plist'
+  entitlements: './build/entitlements.mac.plist'
+  entitlementsInherit: './build/entitlements.mac.plist'
   target:
     - target: dmg
       arch: ['x64']
