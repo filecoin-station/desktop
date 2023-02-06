@@ -162,8 +162,6 @@ jobs:
           APPLEID: ${{ secrets.apple_id }}
           APPLEIDPASS: ${{ secrets.apple_id_pass }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: electron-builder
-          NPM_CONFIG_LOGLEVEL: silly
 
       - name: Show dist/
         run: du -sh dist/ && ls -l dist/
