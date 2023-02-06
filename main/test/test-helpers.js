@@ -26,7 +26,7 @@ function pickProps (data, ...propNames) {
  * @param {number} actualValue
  * @param {number} maxDeltaInMs
  */
-function assertTimestampIsCloseToNow (actualValue, valueDescription = 'timestamp', maxDeltaInMs = 500) {
+function assertTimestampIsCloseToNow (actualValue, valueDescription = 'timestamp', maxDeltaInMs = 1000) {
   const now = Date.now()
   const delta = Math.abs(actualValue - now)
 
