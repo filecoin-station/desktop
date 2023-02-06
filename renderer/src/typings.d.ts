@@ -75,5 +75,7 @@ export type FILTransaction = {
 type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 // FILTransaction with certain properties changed to optional
+// A processing transaction can have all statuses, because we're briefly showing
+// succeeded and failed ones in the same place as the processing one.
 type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
 type FILTransactionLoading = PartialBy<FILTransaction, 'status' | 'timestamp'>
