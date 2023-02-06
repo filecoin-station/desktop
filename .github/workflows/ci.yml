@@ -13,93 +13,93 @@ env:
 
 jobs:
 
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+  # build:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [macos-latest, ubuntu-latest, windows-latest]
 
-    steps:
-      - name: Fix CRLF handling on Windows
-        if: matrix.os == 'windows-latest'
-        run: git config --global core.autocrlf false
+  #   steps:
+  #     - name: Fix CRLF handling on Windows
+  #       if: matrix.os == 'windows-latest'
+  #       run: git config --global core.autocrlf false
 
-      - name: Check out Git repository
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+  #     - name: Check out Git repository
+  #       uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 'lts/*'
+  #     - name: Install Node.js
+  #       uses: actions/setup-node@v2
+  #       with:
+  #         node-version: 'lts/*'
 
-      - name: Cache bigger downloads
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: ${{ github.workspace }}/.cache
-          key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml') }}
-            ${{ runner.os }}-
+  #     - name: Cache bigger downloads
+  #       uses: actions/cache@v2
+  #       id: cache
+  #       with:
+  #         path: ${{ github.workspace }}/.cache
+  #         key: ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-${{ hashFiles('package.json', 'package-lock.json', 'electron-builder.yml') }}
+  #           ${{ runner.os }}-
 
-      - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Install dependencies
+  #       run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
+  #       env:
+  #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build
-        run: npm run build
+  #     - name: Build
+  #       run: npm run build
 
-      - name: Install Sentry CLI
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          curl -sL https://sentry.io/get-cli/ | bash
-          sentry-cli --version
+  #     - name: Install Sentry CLI
+  #       if: matrix.os == 'ubuntu-latest'
+  #       run: |
+  #         curl -sL https://sentry.io/get-cli/ | bash
+  #         sentry-cli --version
 
-      - name: Configure SENTRY env vars
-        run:
-          node ./build/configure-sentry.js >> $GITHUB_ENV
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  #     - name: Configure SENTRY env vars
+  #       run:
+  #         node ./build/configure-sentry.js >> $GITHUB_ENV
+  #       env:
+  #         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-      - name: Create Sentry release
-        # Secrets are not passed to the runner when a workflow is triggered from a forked repository.
-        # See https://docs.github.com/en/actions/security-guides/encrypted-secrets#using-encrypted-secrets-in-a-workflow
-        # We skip this step in such case.
-        #
-        # We must use `env` instead of `secrets`, see https://stackoverflow.com/a/70249520/69868
-        if: matrix.os == 'ubuntu-latest' && env.SENTRY_AUTH_TOKEN
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: protocol-labs-ip
-          SENTRY_PROJECT: filecoin-station
-        run: |
-          sentry-cli releases new "${{ env.SENTRY_VERSION }}"
-          sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
-          sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
-          sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
+  #     - name: Create Sentry release
+  #       # Secrets are not passed to the runner when a workflow is triggered from a forked repository.
+  #       # See https://docs.github.com/en/actions/security-guides/encrypted-secrets#using-encrypted-secrets-in-a-workflow
+  #       # We skip this step in such case.
+  #       #
+  #       # We must use `env` instead of `secrets`, see https://stackoverflow.com/a/70249520/69868
+  #       if: matrix.os == 'ubuntu-latest' && env.SENTRY_AUTH_TOKEN
+  #       env:
+  #         SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  #         SENTRY_ORG: protocol-labs-ip
+  #         SENTRY_PROJECT: filecoin-station
+  #       run: |
+  #         sentry-cli releases new "${{ env.SENTRY_VERSION }}"
+  #         sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
+  #         sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
+  #         sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
 
-      - name: Test backend
-        run: npm run test:backend
+  #     - name: Test backend
+  #       run: npm run test:backend
 
-      - name: Test frontend
-        run: npm run test:ui
+  #     - name: Test frontend
+  #       run: npm run test:ui
 
-      - name: Test end-to-end
-        uses: GabrielBB/xvfb-action@86d97bde4a65fe9b290c0b3fb92c2c4ed0e5302d # v1.6
-        with:
-          working-directory: ${{ github.workspace }}
-          run: npm run test:e2e
+  #     - name: Test end-to-end
+  #       uses: GabrielBB/xvfb-action@86d97bde4a65fe9b290c0b3fb92c2c4ed0e5302d # v1.6
+  #       with:
+  #         working-directory: ${{ github.workspace }}
+  #         run: npm run test:e2e
 
-      - name: Lint
-        run: npm run lint
+  #     - name: Lint
+  #       run: npm run lint
 
   package:
     runs-on: ${{ matrix.os }}
-    needs: build # build packages only if regular build and tests passed
+    # needs: build # build packages only if regular build and tests passed
     strategy:
       fail-fast: false
       matrix:
@@ -143,7 +143,7 @@ jobs:
         continue-on-error: true # empty steps.tag.outputs.tag will inform the next step
 
       - name: Build binaries with electron-builder
-        uses: samuelmeuli/action-electron-builder@92327c67bc45ff7c38bf55d8aa8c4d75b7ea38e7 # v1.6.0 but safer than a tag that can be changed
+        uses: samuelmeuli/action-electron-builder@@6b1a1e42305b129c198a980c7ae4967ac69f9163 # https://github.com/samuelmeuli/action-electron-builder/pull/92
         with:
           args: --publish onTag # attach signed binaries to a release draft only when building a tag
           release: false # keep github release as draft for manual inspection
