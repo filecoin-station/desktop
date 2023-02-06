@@ -17,11 +17,12 @@ const walletStore = new Store({
   name: 'wallet'
 })
 
-const backend = new WalletBackend()
+const backend = new WalletBackend({
+  async onTransactionSucceeded () {
+    await updateBalance()
+  }
+})
 backend.transactions = loadStoredEntries()
-backend.onTransactionSucceeded = async function () {
-  await updateBalance()
-}
 
 /** @type {Context | null} */
 let ctx = null

@@ -20,8 +20,14 @@ const pMap = require('p-map')
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+async function noop () {}
+
 class WalletBackend {
-  constructor () {
+  constructor ({
+    disableKeytar = DISABLE_KEYTAR,
+    onTransactionSucceeded = noop
+  } = {}) {
     /** @type {Filecoin | null} */
     this.provider = null
     /** @type {string | null} */
@@ -29,12 +35,12 @@ class WalletBackend {
     this.url = 'https://graph.glif.link/query'
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
     this.transactions = []
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    this.onTransactionSucceeded = () => {}
+    this.onTransactionSucceeded = onTransactionSucceeded
+    this.disableKeytar = disableKeytar
   }
 
-  async setup ({ disableKeytar = DISABLE_KEYTAR } = {}) {
-    const { seed, isNew } = await this.getSeedPhrase({ disableKeytar })
+  async setup () {
+    const { seed, isNew } = await this.getSeedPhrase()
     this.provider = new Filecoin(new HDWalletProvider(seed), {
       apiAddress: 'https://api.node.glif.io/rpc/v0'
     })
@@ -45,10 +51,10 @@ class WalletBackend {
   /**
    * @returns {Promise<WalletSeed>}
    */
-  async getSeedPhrase ({ disableKeytar = DISABLE_KEYTAR } = {}) {
+  async getSeedPhrase () {
     const service = 'filecoin-station-wallet'
     let seed
-    if (!disableKeytar) {
+    if (!this.disableKeytar) {
       seed = await keytar.getPassword(service, 'seed')
       if (seed) {
         return { seed, isNew: false }
@@ -56,7 +62,7 @@ class WalletBackend {
     }
 
     seed = generateMnemonic()
-    if (!disableKeytar) {
+    if (!this.disableKeytar) {
       await keytar.setPassword(service, 'seed', seed)
     }
     return { seed, isNew: true }
