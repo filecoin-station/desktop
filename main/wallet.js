@@ -103,14 +103,18 @@ async function _updateBalance () {
 }
 
 function listTransactions () {
-  return getTransactionsForUI()
+  return getTransactionsForUI(backend.transactions)
 }
 
-function getTransactionsForUI () {
+/**
+ * @param {(FILTransaction|FILTransactionProcessing)[]} transactions
+ * @returns {(FILTransaction|FILTransactionProcessing)[]}
+ */
+function getTransactionsForUI (transactions) {
   let processing
   const sent = []
 
-  for (const transaction of backend.transactions) {
+  for (const transaction of transactions) {
     if (
       !processing &&
       transaction.status === 'processing' &&
@@ -131,7 +135,7 @@ function getTransactionsForUI () {
 
 function sendTransactionsToUI () {
   assert(ctx)
-  ctx.transactionUpdate(getTransactionsForUI())
+  ctx.transactionUpdate(listTransactions())
 }
 
 /**
@@ -196,5 +200,6 @@ module.exports = {
   getAddress,
   getBalance,
   listTransactions,
-  transferAllFundsToDestinationWallet
+  transferAllFundsToDestinationWallet,
+  getTransactionsForUI
 }
