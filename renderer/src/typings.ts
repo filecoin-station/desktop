@@ -1,15 +1,14 @@
-import { Activity } from '../main/typings'
+import { Activity } from '../../main/typings'
 
-export declare global {
+declare global {
   interface Window {
     electron: {
       stationBuildVersion: string,
 
       getAllActivities(): Promise<Activity[]>,
-      onActivityLogged(callback: (allActivities: Activity[]) => void),
 
       getTotalJobsCompleted(): Promise<number>,
-      onJobStatsUpdated (callback: (totalJobCount: number) => void),
+      onJobStatsUpdated (callback: (totalJobCount: number) => void): () => void,
 
       getUpdaterStatus(): Promise<{updateAvailable: boolean}>,
       openReleaseNotes(): void,
@@ -37,12 +36,12 @@ export declare global {
         browseTransactionTracker: (transactionHash: string) => void
       },
       stationEvents: {
-        onActivityLogged: (callback) => () => void,
-        onJobProcessed: (callback) => () => void,
-        onEarningsChanged: (callback) => () => void,
+        onActivityLogged: (callback: (allActivities: Activity[]) => void) => () => void,
+        onJobProcessed: (callback: (value: number) => void) => () => void,
+        onEarningsChanged: (callback: (value: number) => void) => () => void,
         onUpdateAvailable: (callback: () => void) => () => void,
-        onTransactionUpdate (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void),
-        onBalanceUpdate (callback: (balance: string) => void)
+        onTransactionUpdate: (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void) => () => void,
+        onBalanceUpdate: (callback: (balance: string) => void) => () => void
       },
       dialogs: {
         confirmChangeWalletAddress: () => Promise<boolean>
@@ -65,7 +64,7 @@ export type FILTransaction = {
   hash: string
   height: number
   timestamp: number
-  status: TransactionStatus
+  status: FILTransactionStatus
   outgoing: boolean
   amount: string
   address: string
@@ -77,5 +76,5 @@ type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 // FILTransaction with certain properties changed to optional
 // A processing transaction can have all statuses, because we're briefly showing
 // succeeded and failed ones in the same place as the processing one.
-type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
-type FILTransactionLoading = PartialBy<FILTransaction, 'status' | 'timestamp'>
+export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
+export type FILTransactionLoading = PartialBy<FILTransaction, 'status' | 'timestamp'>

@@ -7,7 +7,7 @@ import {
   getStationWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
 } from '../lib/station-config'
-import { FILTransaction, FILTransactionProcessing } from '../typings'
+import { FILTransaction, FILTransactionProcessing, FILTransactionStatus } from '../typings'
 
 interface Wallet {
   stationAddress: string,
@@ -36,9 +36,10 @@ const useWallet = (): Wallet => {
       processingTransaction.status === 'processing' &&
       !processing
     ) {
-      const status = confirmed.find(tx => tx.hash === processingTransaction.hash)
-        ? 'succeeded'
-        : 'failed'
+      const status: FILTransactionStatus =
+        confirmed.find(tx => tx.hash === processingTransaction.hash)
+          ? 'succeeded'
+          : 'failed'
       const newCurrentTransaction = {
         ...processingTransaction,
         status
