@@ -143,27 +143,19 @@ jobs:
         continue-on-error: true # empty steps.tag.outputs.tag will inform the next step
 
       - name: Build binaries with electron-builder
-        uses: samuelmeuli/action-electron-builder@6b1a1e42305b129c198a980c7ae4967ac69f9163 # https://github.com/samuelmeuli/action-electron-builder/pull/92
-        with:
-          args: --publish onTag # attach signed binaries to a release draft only when building a tag
-          release: false # keep github release as draft for manual inspection
-          max_attempts: 2
-          # GH token for attaching atrifacts to release draft on tag build
-          github_token: ${{ secrets.github_token }}
-          # Windows signing
-          windows_certs: ${{ secrets.windows_certs }}
-          windows_certs_password: ${{ secrets.windows_certs_password }}
-          # Apple signing
-          mac_certs: ${{ secrets.mac_certs }}
-          mac_certs_password: ${{ secrets.mac_certs_password }}
+        run: |
+          npm run build
+          npx --no-install electron-builder --publish onTag
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.mac_certs }}
+          CSC_KEY_PASSWORD: ${{ secrets.mac_certs_password }}
           CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
           # Apple notarization
           APPLEID: ${{ secrets.apple_id }}
           APPLEIDPASS: ${{ secrets.apple_id_pass }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEBUG: electron-builder
-          NPM_CONFIG_LOGLEVEL: silly
       - name: Show dist/
         run: du -sh dist/ && ls -l dist/
 
