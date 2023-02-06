@@ -144,6 +144,7 @@ jobs:
 
       - name: Build binaries with electron-builder
         run: |
+          npm run build
           npx --no-install electron-builder --mac --publish onTag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
