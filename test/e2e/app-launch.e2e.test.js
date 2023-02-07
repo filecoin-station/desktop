@@ -29,7 +29,8 @@ test.describe.serial('Application launch', async () => {
       env: {
         ...process.env,
         NODE_ENV: 'test',
-        STATION_ROOT: stationRootDir
+        STATION_ROOT: stationRootDir,
+        DISABLE_KEYTAR: 'true'
       },
       timeout: 30000 * TIMEOUT_MULTIPLIER
     })

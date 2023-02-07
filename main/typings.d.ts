@@ -1,6 +1,6 @@
 export type ActivitySource = 'Station' | 'Saturn';
 export type ActivityType = 'info' | 'error';
-export type TransactionStatus = 'sent' | 'processing' | 'failed'
+export type TransactionStatus = 'succeeded' | 'processing' | 'failed'
 
 export interface Activity {
   id: string;
@@ -11,12 +11,55 @@ export interface Activity {
 }
 
 export type FILTransaction = {
-  hash: string
-  timestamp: number
-  status: TransactionStatus
-  outgoing: boolean
-  amount: string
-  address: string
+  hash: string;
+  height: number;
+  timestamp: number;
+  status: TransactionStatus;
+  outgoing: boolean;
+  amount: string;
+  address: string;
+  error?: string;
+}
+
+// helper
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+// FILTransaction with certain properties changed to optional
+// A processing transaction can have all statuses, because we're briefly showing
+// succeeded and failed ones in the same place as the processing one.
+export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>;
+export type FILTransactionLoading = PartialBy<FILTransaction, 'status' | 'timestamp'>;
+
+export interface GQLMessage {
+  cid: string;
+  to: {
+    robust: string;
+  }
+  from: {
+    robust: string;
+  }
+  nonce: number;
+  height: number;
+  method: string;
+  params: string;
+  value: string;
+  timestamp: number?;
+  exitCode: number?;
+}
+
+export interface GQLTipset {
+  minHeight: number;
+}
+
+export interface GQLStateReplay {
+  receipt: {
+    return: string;
+    exitCode: number;
+    gasUsed: number;
+  }
+  executionTrace: {
+    executionTrace: string;
+  }
 }
 
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
@@ -39,5 +82,13 @@ export interface Context {
   openReleaseNotes: () => void,
   restartToUpdate: () => void,
   getUpdaterStatus: () => {updateAvailable: boolean},
-  browseTransactionTracker: (transactionHash: string) => void
+  browseTransactionTracker: (transactionHash: string) => void,
+
+  transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void,
+  balanceUpdate: (balance:string) => void
+}
+
+export interface WalletSeed {
+  seed: string;
+  isNew: boolean;
 }

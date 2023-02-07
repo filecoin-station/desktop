@@ -113,7 +113,10 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
         <div className={`relative flex flex-col mt-[20px] w-fit ${internalEditMode ? 'z-10' : 'z-0'}`}>
           <input
             ref={ref}
-            spellCheck="false" autoComplete="off" type="text" name="address"
+            spellCheck="false"
+            autoComplete="off"
+            type="text"
+            name="address"
             placeholder=" "
             disabled={!internalEditMode}
             tabIndex={0} value={renderDisplayAddress()}

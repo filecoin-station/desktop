@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react'
+import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 import HeaderBackgroundImage from '../assets/img/header-curtain.png'
 
 import FilAddressForm from './FilAddressForm'
@@ -14,7 +15,7 @@ interface PropsWallet {
 const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [transferMode, setTransferMode] = useState<boolean>(false)
-  const { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, currentTransaction, dismissCurrentTransaction, transferAllFundsToDestinationWallet } = useWallet()
+  const { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, processingTransaction, dismissCurrentTransaction, transferAllFundsToDestinationWallet } = useWallet()
 
   useEffect(() => {
     dismissCurrentTransaction()
@@ -43,21 +44,8 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   }
 
   const transferAllFunds = async () => {
-    await transferAllFundsToDestinationWallet()
     setTransferMode(false)
-  }
-
-  const renderTransferButtons = () => {
-    return (
-      <TransferFundsButtons
-        transferMode={transferMode}
-        balance={walletBalance}
-        enableTransferMode={enableTransferMode}
-        transferAllFunds={transferAllFunds}
-        reset={reset}
-        destinationFilAddress={destinationFilAddress}
-        editMode={editMode} />
-    )
+    await transferAllFundsToDestinationWallet()
   }
 
   return (
@@ -83,15 +71,29 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
             <div>
               <p className="w-fit text-body-3xs text-white opacity-80 uppercase leading-none">Total FIL</p>
               <p className="wallet-balance w-fit text-header-m text-white font-bold font-number leading-none">
-                {walletBalance.toLocaleString(undefined, { minimumFractionDigits: 3 })}<span className="text-header-3xs ml-3">FIL</span>
+                {new FilecoinNumber(String(walletBalance), 'fil')
+                  .decimalPlaces(3, BigNumber.ROUND_DOWN)
+                  .toString()}
+                <span className="text-header-3xs ml-3">FIL</span>
               </p>
             </div>
-            {renderTransferButtons()}
+            <TransferFundsButtons
+              transferMode={transferMode}
+              balance={walletBalance}
+              enableTransferMode={enableTransferMode}
+              transferAllFunds={transferAllFunds}
+              reset={reset}
+              destinationFilAddress={destinationFilAddress}
+              editMode={editMode}
+              hasCurrentTransaction={processingTransaction !== undefined}
+            />
           </div>
         </div>
       </div>
       <div className="pb-6">
-        <WalletTransactionsHistory allTransactions={walletTransactions} latestTransaction={currentTransaction} />
+        {walletTransactions && (
+          <WalletTransactionsHistory allTransactions={walletTransactions} processingTransaction={processingTransaction} />
+        )}
       </div>
     </div>
   )
