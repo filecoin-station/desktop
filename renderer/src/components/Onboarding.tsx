@@ -1,7 +1,7 @@
 import { FC, useState } from 'react'
-import { ReactComponent as Back } from './../assets/img/arrow-left.svg'
-import { ReactComponent as Page } from './../assets/img/paginator-page.svg'
-import { ReactComponent as CurrentPage } from './../assets/img/paginator-current.svg'
+import { ReactComponent as Back } from './../assets/img/icons/arrow-left.svg'
+import { ReactComponent as Page } from './../assets/img/icons/paginator-page.svg'
+import { ReactComponent as CurrentPage } from './../assets/img/icons/paginator-current.svg'
 
 interface FooterProps {
   page: number,
@@ -14,7 +14,7 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
   return (
     <div className="flex justify-between">
       <button
-        className="btn-secondary-small flex items-center group back-button"
+        className="btn-secondary-small flex items-center group back-button border-none"
         disabled={page === 0}
         onClick={prev}
         type="button">
@@ -27,7 +27,7 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
         })}
       </div>
       <button
-        className="btn-secondary-small icon-primary"
+        className="btn-secondary-small border-none"
         onClick={next}>
         <span className="">Continue</span>
       </button>
@@ -68,15 +68,15 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
       {page === 1 &&
         <div className={'w-[100%] max-w-[640px] bg-white rounded-[10px] shadow-[0px_5px_25px_rgba(0,0,0,0.1)] onboarding-' + page}>
           <div className='bg-black px-20 py-16  rounded-t-[10px] min-h-[276px] flex'>
-            <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto"> Set up your rewards.</h1>
+            <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto">Rewards</h1>
           </div>
           <div className='min-h-[372px]'>
             <div className='pb-20 px-20 pt-16 min-h-[250px]'>
               <p className="text-body-s my-3">
-                Before you start, you will need to link a FIL address to Station.
+                To get you set up, Station will create a new Filecoin Wallet, just for you.
               </p>
               <p className="text-body-s my-3">
-                Filecoin will be transferred to your wallet periodically according to your participation.
+                FIL will be transferred to your wallet according to your participation in the economy.
               </p>
             </div>
             <div className='pb-20 bottom-0 px-20'>
@@ -103,7 +103,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
             </div>
             <div className='pb-20 bottom-0 px-20'>
               <div className="flex flex-row gap-3 justify-between">
-                <button className="btn-secondary-small flex items-center group"
+                <button className="btn-secondary-small flex items-center group border-none underline underline-offset-4"
                   title="previous"
                   onClick={prev}>
                   <i><Back className="btn-icon-primary-small" fill='#2a1cf7' /></i>

@@ -13,20 +13,22 @@
     src: url('assets/fonts/SpaceGrotesk/SpaceGrotesk-Regular.ttf');
   }
   @font-face {
+    font-family: "SpaceGrotesk";
+    font-weight: 700;
+    src: url('assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.ttf');
+  }
+  @font-face {
     font-family: "SpaceMono";
     src: url('assets/fonts/SpaceMono/SpaceMono-Regular.ttf');
   }
-
-  .title {
-    @apply text-header-l font-title text-primary leading-[1.25] tracking-[-0.4px];
-  }
-
-  .subtitle {
-    @apply text-header-xxs font-title text-secondary tracking-[-0.4px];
+  @font-face {
+    font-family: "SpaceMono";
+    font-weight: 700;
+    src: url('assets/fonts/SpaceMono/SpaceMono-Bold.ttf');
   }
 
   body {
-    @apply font-body text-black tracking-[-0.4px];
+    @apply font-body text-black overflow-x-hidden;
     -webkit-user-select: none;
     -webkit-app-region: drag;
   }
@@ -40,19 +42,34 @@
   input {
     -webkit-user-select: text;
   }
+  p {
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
 
+  .title {
+    @apply text-header-l font-title text-primary leading-[1.25] tracking-[-0.4px];
+  }
+
+  .subtitle {
+    @apply text-header-xxs font-title text-secondary tracking-[-0.4px];
+  }
 }
 
 @layer components {
+  
   .input {
-    @apply text-body-l font-body pt-3 pb-2 px-0 mt-0 border-dashed border-0 border-b 
-    bg-transparent appearance-none focus:outline-none focus:ring-0 focus:border-black border-grayscale-700;
+    @apply text-header-3xs font-body text-white
+    bg-transparent appearance-none focus:outline-none focus:ring-0;
   }
 
   .btn-primary {
-    @apply py-2 px-4 rounded-full font-body text-body-m  text-white
-     bg-primary hover:bg-primary-hover visited:bg-primary-click
-     disabled:bg-grayscale-500 disabled:text-white
+    @apply py-2 px-4 h-12 rounded-full font-body text-body-s w-fit
+    bg-transparent text-white border border-white border-solid
+    hover:bg-white hover:text-primary hover:drop-shadow-[0_6px_12px_rgba(0,0,0,0.25)]
+    active:bg-grayscale-250 active:text-primary active:drop-shadow-[0_2px_4px_rgba(0,0,0,0.32)]
+    disabled:bg-transparent disabled:text-white disabled:opacity-50
+    disabled:outline disabled:outline-1 disabled:outline-white
   }
 
   .btn-primary-small {
@@ -70,13 +87,17 @@
     group-disabled:fill-grayscale-500
   }
 
+  .icon-primary-white path {
+    @apply fill-white
+  }
+
   .icon-warning path {
-    @apply fill-warning group-hover:fill-warning group-visited:fill-warning
+    @apply fill-orange-200 group-hover:fill-orange-200 group-visited:fill-orange-200
     group-disabled:fill-grayscale-500
   }
 
   .icon-error path {
-    @apply fill-error group-hover:fill-error group-visited:fill-error
+    @apply fill-red-200 group-hover:fill-red-200 group-visited:fill-red-200
     group-disabled:fill-grayscale-500
   }
 
@@ -107,51 +128,15 @@
      visited:text-primary-click visited:decoration-primary-click/70
   }
 
-
-  .gradient-space-marine {
-    @apply bg-gradient-to-r from-tertiary-accent to-secondary
-  }
-
-  .gradient-deep-marine {
-    @apply bg-gradient-to-r from-primary to-secondary
-  }
-
-  .gradient-space-turqoise {
-    @apply bg-gradient-to-r from-tertiary-accent to-accent
-  }
-
-  .gradient-space-fire {
-    @apply bg-gradient-to-r from-tertiary-accent to-warning
-  }
-
-  .gradient-sun-fire {
-    @apply bg-gradient-to-r from-secondary-accent to-warning
-  }
-
-  .gradient-bg {
-    background: radial-gradient(94.55% 459.39% at 92% 11%, #F7F7F7 40.53%, rgba(247, 247, 247, 0.34) 80.12%, rgba(247, 247, 247, 0.58) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
-    transform: rotate(-180deg);
-  }
-
-  .gradient-bg-2 {
-    background: radial-gradient(137.12% 101.03% at 50% 0%, #F8F7F7 40.53%, #F7F7F7 78.03%, rgba(247, 247, 247, 0.95) 100%);
-    backdrop-filter: blur(5px);
-    /* Note: backdrop-filter has minimal browser support */
-    transform: rotate(-180deg);
-  }
-
-  input:focus ~ label,
-  input:not(:placeholder-shown) ~ label{
-    --tw-translate-x: 0;
-    --tw-translate-y: 0;
-    --tw-rotate: 0;
-    --tw-skew-x: 0;
-    --tw-skew-y: 0;
-    transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
-      skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-    --tw-scale-x: 0.75;
-    --tw-scale-y: 0.75;
-    --tw-translate-y: -1.5rem;
+  input:focus ~ label,	
+  input:not(:placeholder-shown) ~ label{	
+    --tw-rotate: 0;	
+    --tw-skew-x: 0;	
+    --tw-skew-y: 0;	
+    transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))	
+      skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));	
+    --tw-translate-y: -2rem;
+    @apply text-body-3xs
   }
 
 }

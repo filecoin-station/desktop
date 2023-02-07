@@ -1,13 +1,9 @@
 import { useEffect } from 'react'
-import { getFilAddress, startSaturnNode } from '../lib/station-config'
+import { startSaturnNode } from '../lib/station-config'
 
 const Saturn = () => {
   useEffect(() => {
-    (async () => {
-      if (await getFilAddress()) {
-        startSaturnNode()
-      }
-    })()
+    startSaturnNode()
   }, [])
 
   return null
