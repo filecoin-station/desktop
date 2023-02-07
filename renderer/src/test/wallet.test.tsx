@@ -102,7 +102,7 @@ describe('Dashboard wallet display', () => {
     })
 
     test('Wallet displays correct balance', () => {
-      expect(document.getElementsByClassName('wallet-balance')[0].textContent).toBe('0.000FIL')
+      expect(document.getElementsByClassName('wallet-balance')[0].textContent).toBe('0FIL')
     })
 
     test('Wallet withdraws disabled', () => {

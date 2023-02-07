@@ -2,7 +2,8 @@
 
 /** @typedef {import('electron').IpcRendererEvent} IpcRendererEvent */
 /** @typedef {import('./typings').Activity} Activity */
-/** @typedef {import('./typings').FILTransaction} TransactionMessage */
+/** @typedef {import('./typings').FILTransaction} FILTransaction */
+/** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
 
 const { contextBridge, ipcRenderer } = require('electron')
 
@@ -61,13 +62,13 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.on('station:update-available', listener)
       return () => ipcRenderer.removeListener('station:update-available', listener)
     },
-    onBalanceUpdate: (/** @type {(value: number) => void} */ callback) => {
+    onBalanceUpdate: (/** @type {(value: string) => void} */ callback) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, balance) => callback(balance)
       ipcRenderer.on('station:wallet-balance-update', listener)
       return () => ipcRenderer.removeListener('station:wallet-balance-update', listener)
     },
-    onTransactionUpdate: (/** @type {(value: TransactionMessage) => void} */ callback) => {
+    onTransactionUpdate: (/** @type {(value: (FILTransaction|FILTransactionProcessing)[]) => void} */ callback) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, transactions) => callback(transactions)
       ipcRenderer.on('station:transaction-update', listener)

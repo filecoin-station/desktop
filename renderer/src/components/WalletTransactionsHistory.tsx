@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react'
-import { FILTransaction } from '../typings'
+import { FILTransaction, FILTransactionProcessing } from '../typings'
 import dayjs from 'dayjs'
 import { ReactComponent as IncomeIcon } from '../assets/img/icons/income.svg'
 import { ReactComponent as OutcomeIcon } from '../assets/img/icons/outcome.svg'
@@ -10,17 +10,17 @@ import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
   allTransactions: FILTransaction[] | [],
-  latestTransaction: FILTransaction | undefined
+  processingTransaction: FILTransactionProcessing | undefined
 }
 
-const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTransactions = [], latestTransaction }) => {
+const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTransactions = [], processingTransaction }) => {
   const renderTransactionHistory = () => {
     return (
       <>
         <div className={`wallet-onboarding ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? ' fixed opacity-0 invisible translate-y-[200px]' : 'visible'}`}><WalletOnboarding /></div>
-        <div className={`wallet-history ${latestTransaction ? 'h-[calc(100vh_-_470px)]' : 'h-[calc(100vh_-_305px)]'} ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
+        <div className={`wallet-history ${processingTransaction ? 'h-[calc(100vh_-_470px)]' : 'h-[calc(100vh_-_305px)]'} ease-in-out transition-all duration-1000 ${allTransactions.length > 0 ? 'visible' : ' fixed opacity-0 invisible -translate-y-[50px]'}`}>
            <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
-          {allTransactions.map((transaction, index) => <div className='wallet-transaction' key={transaction.timestamp}><Transaction transaction={transaction} /></div>)}
+          {allTransactions.map((transaction, index) => <div className='wallet-transaction' key={transaction.hash}><Transaction transaction={transaction} /></div>)}
         </div>
       </>
     )
@@ -28,7 +28,7 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
 
   return (
     <div className='transition-all duration-1000 ease-in-out'>
-      <RecentTransaction transaction={latestTransaction} />
+      <ProcessingTransaction transaction={processingTransaction} />
       <div className='pt-8 overflow-y-scroll'>
         {renderTransactionHistory()}
       </div>
@@ -36,12 +36,12 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({ allTran
   )
 }
 
-interface TransactionProps {
-  transaction: FILTransaction | undefined
+interface ProcessingTransactionProps {
+  transaction: FILTransactionProcessing | undefined
 }
 
-const RecentTransaction: FC<TransactionProps> = ({ transaction }) => {
-  const [displayTransition, setDisplayTransaction] = useState<FILTransaction | undefined>({} as FILTransaction)
+const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) => {
+  const [displayTransition, setDisplayTransaction] = useState<FILTransactionProcessing | undefined>({} as FILTransactionProcessing)
 
   useEffect(() => {
     if (transaction !== undefined) {
@@ -52,7 +52,7 @@ const RecentTransaction: FC<TransactionProps> = ({ transaction }) => {
   return (
     <div className={`pt-8 pb-8 bg-opacity-10 h-[165px] transition-all duration-1000 ease-in-out
                   ${transaction ? 'mt-0' : '-mt-[165px]'}
-                  ${displayTransition?.status === 'sent' ? 'bg-green-200' : displayTransition?.status === 'failed' ? 'bg-red-100' : 'bg-orange-100'}`}
+                  ${displayTransition?.status === 'succeeded' ? 'bg-green-200' : displayTransition?.status === 'failed' ? 'bg-red-100' : 'bg-orange-100'}`}
       onTransitionEnd={() => !transaction && setDisplayTransaction(undefined)}>
       <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">ONGOING TRANSFER</p>
       <div className='px-8'>
@@ -66,17 +66,21 @@ const RecentTransaction: FC<TransactionProps> = ({ transaction }) => {
               {dayjs(displayTransition?.timestamp).format('HH:MM')}
             </span>
             <span className='text-body-s text-black'>
-              {displayTransition?.status === 'sent' ? 'Sent' : displayTransition?.status === 'failed' ? 'Failed to send' : 'Sending'}
+              {displayTransition?.status === 'succeeded' ? 'Sent' : displayTransition?.status === 'failed' ? 'Failed to send' : 'Sending'}
               <span className='font-bold mx-1'>{displayTransition?.amount} FIL</span>
               {displayTransition?.outgoing && 'to'}
-              {displayTransition?.outgoing && <span className='font-bold mx-1'>{displayTransition?.address}</span>}
+              {displayTransition?.outgoing && <span className='font-bold mx-1'>{displayTransition?.address.slice(0, 6)} &hellip; {displayTransition?.address.slice(-6)}</span>}
             </span>
           </div>
         </div>
-        <div className="ml-[97px]"> {displayTransition && <WalletTransactionStatusWidget currentTransaction={displayTransition} renderBackground={false} />}</div>
+        <div className="ml-[97px]"> {displayTransition && <WalletTransactionStatusWidget processingTransaction={displayTransition} renderBackground={false} />}</div>
       </div>
     </div>
   )
+}
+
+interface TransactionProps {
+  transaction: FILTransaction | undefined
 }
 
 const Transaction: FC<TransactionProps> = ({ transaction }) => {
@@ -97,7 +101,7 @@ const Transaction: FC<TransactionProps> = ({ transaction }) => {
               {transaction.outgoing ? 'Sent' : 'Received'}
               <span className='font-bold mx-1'>{transaction.amount} FIL</span>
               {transaction.outgoing && 'to'}
-              {transaction.outgoing && <span className='font-bold mx-1'>{transaction.address}</span>}
+              {transaction.outgoing && <span className='font-bold mx-1'>{transaction.address.slice(0, 6)} &hellip; {transaction.address.slice(-6)}</span>}
             </span>
           </div>
           <div className='flex invisible group-hover:visible'>

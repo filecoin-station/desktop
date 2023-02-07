@@ -29,7 +29,7 @@ describe('Dashboard wallet interactions', () => {
                 {
                   hash: 'bafy2bzacebi5g5t5x77aeuviwfx5np4xo2f6viunt4bjnnecfjbjqzhufxfk2',
                   timestamp: new Date('01/12/2022'),
-                  status: 'sent',
+                  status: 'succeeded',
                   outgoing: true,
                   amount: 4000,
                   address: 'f0123'
@@ -37,7 +37,7 @@ describe('Dashboard wallet interactions', () => {
                 {
                   hash: 'bafy2bzacebi5g5t5x77aeuviwfx5np4xo2f6viunt4bjnnecfjbjqzhufxfk3',
                   timestamp: new Date('01/01/2022'),
-                  status: 'sent',
+                  status: 'succeeded',
                   outgoing: false,
                   amount: 4000,
                   address: ''
