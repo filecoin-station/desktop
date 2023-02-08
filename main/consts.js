@@ -30,7 +30,11 @@ function getCacheHome () {
     case 'darwin': // macOS
       return path.join(app.getPath('home'), 'Library', 'Caches', app.name)
     case 'win32':
-      if (!process.env.LOCALAPPDATA) throw new Error('Unsupported Windows environment: LOCALAPPDATA must be set.')
+      if (!process.env.LOCALAPPDATA) {
+        throw new Error(
+          'Unsupported Windows environment: LOCALAPPDATA must be set.'
+        )
+      }
       return path.join(process.env.LOCALAPPDATA, app.name)
     case 'linux':
       return path.join(

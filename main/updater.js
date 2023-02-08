@@ -39,10 +39,14 @@ function setup (/** @type {import('./typings').Context} */ _ctx) {
 
   // built-in updater != electron-updater
   // https://github.com/electron-userland/electron-builder/pull/6395
-  require('electron').autoUpdater.on('before-quit-for-update', beforeQuitCleanup)
+  require('electron')
+    .autoUpdater
+    .on('before-quit-for-update', beforeQuitCleanup)
 }
 
-module.exports = async function setupUpdater (/** @type {import('./typings').Context} */ ctx) {
+module.exports = async function setupUpdater (
+  /** @type {import('./typings').Context} */ ctx
+) {
   ctx.getUpdaterStatus = function getUpdaterStatus () {
     return { updateAvailable }
   }
@@ -92,7 +96,8 @@ function checkForUpdatesInBackground () {
 
   // TODO: replace this with autoUpdater.checkForUpdatesAndNotify()
   autoUpdater.checkForUpdates()
-    // We are ignoring errors, they are already handled by our `error` event listener
+    // We are ignoring errors, they are already handled by our `error` event
+    // listener
     .finally(() => ipcMain.emit(ipcMainEvents.UPDATE_CHECK_FINISHED))
 }
 
@@ -107,7 +112,8 @@ function onUpdaterError (err) {
 
   showDialogSync({
     title: 'Could not download update',
-    message: 'It was not possible to download the update. Please check your Internet connection and try again.',
+    message: 'It was not possible to download the update. Please check your ' +
+      'Internet connection and try again.',
     type: 'error',
     buttons: ['Close']
   })
@@ -128,12 +134,13 @@ function onUpdateAvailable ({ version /*, releaseNotes */ }) {
   )
 
   if (!checkingManually) { return }
-  // do not toggle checkingManually off here so we can show a dialog once the download
-  // is finished.
+  // do not toggle checkingManually off here so we can show a dialog once the
+  // download is finished.
 
   const buttonIx = showDialogSync({
     title: 'Update available',
-    message: `A new version ${version} of Filecoin Station is available. The download will begin shortly in the background.`,
+    message: `A new version ${version} of Filecoin Station is available. ` +
+      'The download will begin shortly in the background.',
     type: 'info',
     buttons: ['Close', 'Show Release Notes']
   })
@@ -174,7 +181,8 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
   const showUpdateDialog = () => {
     const buttonIx = showDialogSync({
       title: 'Update Filecoin Station',
-      message: `An update to Filecoin Station ${version} is available. Would you like to install it now?`,
+      message: `An update to Filecoin Station ${version} is available. ` +
+        'Would you like to install it now?',
       type: 'info',
       buttons: ['Later', 'Install now']
     })
