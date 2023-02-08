@@ -2,7 +2,6 @@
 
 const { expect, test } = require('@playwright/test')
 const { _electron: electron } = require('playwright')
-const { fetch } = require('undici')
 const path = require('path')
 
 const TIMEOUT_MULTIPLIER = process.env.CI ? 10 : 1
@@ -30,7 +29,8 @@ test.describe.serial('Application launch', async () => {
       env: {
         ...process.env,
         NODE_ENV: 'test',
-        STATION_ROOT: stationRootDir
+        STATION_ROOT: stationRootDir,
+        DISABLE_KEYTAR: 'true'
       },
       timeout: 30000 * TIMEOUT_MULTIPLIER
     })
@@ -59,16 +59,10 @@ test.describe.serial('Application launch', async () => {
     electronApp.close()
   })
 
-  test('navigate to wallet input', async () => {
+  test('navigate to dashboard', async () => {
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Continue")')
     await mainWindow.click('button:has-text("Accept")')
-    expect(new URL(await mainWindow.url()).pathname).toBe('/wallet')
-  })
-
-  test('enter FIL address', async () => {
-    await mainWindow.fill('input.fil-address', 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
-    await mainWindow.click('button.submit-address')
     expect(new URL(await mainWindow.url()).pathname).toBe('/dashboard')
   })
 
@@ -85,15 +79,7 @@ test.describe.serial('Application launch', async () => {
     }, [], { timeout: 2000 * TIMEOUT_MULTIPLIER })
   })
 
-  test('saturn WebUI is available', async () => {
-    const saturnWebUrl = await mainWindow.evaluate(() => window.electron.saturnNode.getWebUrl())
-    console.log('Saturn WebUI URL: %s', saturnWebUrl)
-    const response = await fetch(saturnWebUrl, { redirect: 'manual' })
-    expect(response.status).toBe(303)
-    expect(response.headers.get('location')).toMatch(/address\/f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa$/)
-  })
-
   test('renders Dashboard page', async () => {
-    expect(new URL(await mainWindow.url()).pathname).toBe('/dashboard')
+    expect(new URL(mainWindow.url()).pathname).toBe('/dashboard')
   })
 })

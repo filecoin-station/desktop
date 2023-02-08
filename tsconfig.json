@@ -23,5 +23,6 @@
     "build/**/*.js",
     "test/**/*.js",
     "vite.config.mjs",
+    "renderer/src/typings.ts"
   ]
 }

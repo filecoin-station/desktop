@@ -1,23 +1,44 @@
 'use strict'
 
 const Store = require('electron-store')
+const { randomUUID } = require('crypto')
+
+const log = require('electron-log').scope('config')
 
 const ConfigKeys = {
-  OnboardingCompleted: 'station.onboardingCompleted',
-  TrayOperationExplained: 'station.TrayOperationExplained'
+  OnboardingCompleted: 'station.OnboardingCompleted',
+  TrayOperationExplained: 'station.TrayOperationExplained',
+  StationID: 'station.StationID',
+  FilAddress: 'station.FilAddress',
+  DestinationFilAddress: 'station.DestinationFilAddress'
 }
 
+// Use this to test migrations
+// https://github.com/sindresorhus/electron-store/issues/205
+// require('electron').app.setVersion('9999.9.9')
+
 const configStore = new Store({
-  defaults: {
-    [ConfigKeys.OnboardingCompleted]: false,
-    [ConfigKeys.TrayOperationExplained]: false
+  migrations: {
+    '>=0.9.0': store => {
+      if (store.has('station.onboardingCompleted')) {
+        store.set(ConfigKeys.OnboardingCompleted, store.get('station.onboardingCompleted'))
+      }
+      if (store.has('saturn.filAddress')) {
+        store.set(ConfigKeys.FilAddress, store.get('saturn.filAddress'))
+      }
+    }
+  },
+  beforeEachMigration: (_, context) => {
+    log.info(`Migrating station-config from ${context.fromVersion} → ${context.toVersion}`)
   }
 })
 
-console.log('Loading Station configuration from', configStore.path)
+log.info('Loading Station configuration from', configStore.path)
 
-let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted))
-let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained))
+let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted, false))
+let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained, false))
+let DestinationFilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.DestinationFilAddress))
+const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID, randomUUID()))
 
 /**
  * @returns {boolean}
@@ -49,9 +70,34 @@ function setTrayOperationExplained () {
   configStore.set(ConfigKeys.TrayOperationExplained, TrayOperationExplained)
 }
 
+/**
+ * @returns {string}
+ */
+function getStationID () {
+  return StationID
+}
+
+/**
+ * @returns {string | undefined}
+ */
+function getDestinationWalletAddress () {
+  return DestinationFilAddress
+}
+
+/**
+ * @param {string | undefined} address
+ */
+function setDestinationWalletAddress (address) {
+  DestinationFilAddress = address
+  configStore.set(ConfigKeys.DestinationFilAddress, DestinationFilAddress)
+}
+
 module.exports = {
   getOnboardingCompleted,
   setOnboardingCompleted,
   getTrayOperationExplained,
-  setTrayOperationExplained
+  setTrayOperationExplained,
+  getStationID,
+  getDestinationWalletAddress,
+  setDestinationWalletAddress
 }

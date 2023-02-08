@@ -2,6 +2,8 @@
 
 /** @typedef {import('electron').IpcRendererEvent} IpcRendererEvent */
 /** @typedef {import('./typings').Activity} Activity */
+/** @typedef {import('./typings').FILTransaction} FILTransaction */
+/** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
 
 const { contextBridge, ipcRenderer } = require('electron')
 
@@ -22,14 +24,19 @@ contextBridge.exposeInMainWorld('electron', {
     isReady: () => ipcRenderer.invoke('saturn:isReady'),
     getLog: () => ipcRenderer.invoke('saturn:getLog'),
     getWebUrl: () => ipcRenderer.invoke('saturn:getWebUrl'),
-    getFilAddress: () => ipcRenderer.invoke('saturn:getFilAddress'),
-    setFilAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('saturn:setFilAddress', address)
+    getFilAddress: () => ipcRenderer.invoke('saturn:getFilAddress'), // soon to be removed
+    setFilAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('saturn:setFilAddress', address) // soon to be removed
   },
   stationConfig: {
-    getFilAddress: () => ipcRenderer.invoke('station:getFilAddress'),
-    setFilAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('station:setFilAddress', address),
     getOnboardingCompleted: () => ipcRenderer.invoke('station:getOnboardingCompleted'),
-    setOnboardingCompleted: () => ipcRenderer.invoke('station:setOnboardingCompleted')
+    setOnboardingCompleted: () => ipcRenderer.invoke('station:setOnboardingCompleted'),
+    getStationWalletAddress: () => ipcRenderer.invoke('station:getStationWalletAddress'),
+    getDestinationWalletAddress: () => ipcRenderer.invoke('station:getDestinationWalletAddress'),
+    setDestinationWalletAddress: (/** @type {string | undefined} */ address) => ipcRenderer.invoke('station:setDestinationWalletAddress', address),
+    getStationWalletBalance: () => ipcRenderer.invoke('station:getStationWalletBalance'),
+    getStationWalletTransactionsHistory: () => ipcRenderer.invoke('station:getStationWalletTransactionsHistory'),
+    transferAllFundsToDestinationWallet: () => ipcRenderer.invoke('station:transferAllFundsToDestinationWallet'),
+    browseTransactionTracker: (/** @type {string } */ transactionHash) => ipcRenderer.invoke('station:browseTransactionTracker', transactionHash)
   },
   stationEvents: {
     onActivityLogged: (/** @type {(value: Activity) => void} */ callback) => {
@@ -54,6 +61,18 @@ contextBridge.exposeInMainWorld('electron', {
       const listener = () => callback()
       ipcRenderer.on('station:update-available', listener)
       return () => ipcRenderer.removeListener('station:update-available', listener)
+    },
+    onBalanceUpdate: (/** @type {(value: string) => void} */ callback) => {
+      /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
+      const listener = (_event, balance) => callback(balance)
+      ipcRenderer.on('station:wallet-balance-update', listener)
+      return () => ipcRenderer.removeListener('station:wallet-balance-update', listener)
+    },
+    onTransactionUpdate: (/** @type {(value: (FILTransaction|FILTransactionProcessing)[]) => void} */ callback) => {
+      /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
+      const listener = (_event, transactions) => callback(transactions)
+      ipcRenderer.on('station:transaction-update', listener)
+      return () => ipcRenderer.removeListener('station:transaction-update', listener)
     }
   },
   dialogs: {

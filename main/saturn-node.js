@@ -1,6 +1,5 @@
 'use strict'
 
-const Store = require('electron-store')
 const { app, BrowserWindow, dialog } = require('electron')
 const assert = require('node:assert')
 const consts = require('./consts')
@@ -9,8 +8,8 @@ const { fetch } = require('undici')
 const fs = require('node:fs/promises')
 const path = require('path')
 const { setTimeout } = require('timers/promises')
-
-const configStore = new Store()
+const Sentry = require('@sentry/node')
+const wallet = require('./wallet')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -20,6 +19,8 @@ const saturnBinaryPath = getSaturnBinaryPath()
 let childProcess = null
 
 let ready = false
+/** @type {string | null} */
+let moduleExitReason = null
 
 /** @type {string[]} */
 let childLog = []
@@ -29,12 +30,6 @@ let webUrl
 
 /** @type {string | undefined} */
 let apiUrl
-
-const ConfigKeys = {
-  FilAddress: 'saturn.filAddress'
-}
-
-let filAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
 
 /** @type {ReturnType<setInterval>} */
 let pollStatsInterval
@@ -75,9 +70,8 @@ function getSaturnBinaryPath () {
 }
 
 async function start (/** @type {Context} */ ctx) {
-  if (!filAddress) {
-    console.info('Saturn node requires FIL address. Please configure it in the Station UI.')
-    return
+  if (!wallet.getAddress()) {
+    throw new Error('Saturn node requires FIL address')
   }
 
   console.log('Starting Saturn node...')
@@ -90,7 +84,7 @@ async function start (/** @type {Context} */ ctx) {
   appendToChildLog('Starting Saturn node')
   childProcess = execa(saturnBinaryPath, {
     env: {
-      FIL_WALLET_ADDRESS: filAddress,
+      FIL_WALLET_ADDRESS: wallet.getAddress(),
       ROOT_DIR: path.join(consts.CACHE_HOME, 'saturn')
     }
   })
@@ -117,6 +111,8 @@ async function start (/** @type {Context} */ ctx) {
     })
 
     let output = ''
+    moduleExitReason = null
+
     /**
      * @param {Buffer} data
      */
@@ -151,6 +147,13 @@ async function start (/** @type {Context} */ ctx) {
     childProcess?.stderr?.removeAllListeners()
     childProcess?.stdout?.removeAllListeners()
     childProcess = null
+
+    Sentry.captureException('Saturn node exited', scope => {
+      // Sentry UI can't show the full 100 lines
+      scope.setExtra('logs', childLog.slice(-10).join('\n'))
+      scope.setExtra('reason', moduleExitReason)
+      return scope
+    })
   })
 
   childProcess.on('exit', (code, signal) => {
@@ -161,6 +164,7 @@ async function start (/** @type {Context} */ ctx) {
     ctx.recordActivity({ source: 'Saturn', type: 'info', message: msg })
 
     ready = false
+    moduleExitReason = signal || code ? reason : null
   })
 
   try {
@@ -204,21 +208,6 @@ function getWebUrl () {
 
 function getLog () {
   return childLog.join('\n')
-}
-
-/**
- * @returns {string | undefined}
- */
-function getFilAddress () {
-  return filAddress
-}
-
-/**
- * @param {string | undefined} address
- */
-function setFilAddress (address) {
-  filAddress = address
-  configStore.set(ConfigKeys.FilAddress, address)
 }
 
 /**
@@ -293,7 +282,5 @@ module.exports = {
   isRunning,
   isReady,
   getLog,
-  getWebUrl,
-  getFilAddress,
-  setFilAddress
+  getWebUrl
 }

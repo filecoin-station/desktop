@@ -1,8 +1,11 @@
 'use strict'
 
-const { app, dialog } = require('electron')
-const log = require('electron-log')
+const { app, dialog, shell } = require('electron')
+const electronLog = require('electron-log')
 const path = require('node:path')
+
+console.log('Log file:', electronLog.transports.file.findLogPath())
+const log = electronLog.scope('main')
 
 // Override the place where we look for config files when running the end-to-end test suite.
 // We must call this early on, before any of our modules accesses the config store.
@@ -23,7 +26,9 @@ const { ActivityLog } = require('./activity-log')
 const { BUILD_VERSION } = require('./consts')
 const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
+const os = require('os')
 const saturnNode = require('./saturn-node')
+const wallet = require('./wallet')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
@@ -38,7 +43,12 @@ const { setup: setupDialogs } = require('./dialog')
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
-console.log('Filecoin Station build version:', BUILD_VERSION)
+log.info('Filecoin Station build version: %s %s-%s%s%s', BUILD_VERSION, os.platform(), os.arch(), isDev ? ' [DEV]' : '', inTest ? ' [TEST]' : '')
+log.info('Machine spec: %s version %s', os.type(), os.release())
+// TODO(bajtos) print machine architecture after we upgrade to Electron with Node.js 18
+// log.info('Machine spec: %s %s version %s', os.type(),
+//   os.machine(),
+//   os.release())
 
 // Expose additional metadata for Electron preload script
 process.env.STATION_BUILD_VERSION = BUILD_VERSION
@@ -68,9 +78,15 @@ if (process.platform === 'win32') {
 }
 
 // Only one instance can run at a time
-if (!app.requestSingleInstanceLock() && !inTest) {
+if (!inTest && !app.requestSingleInstanceLock()) {
   app.quit()
 }
+
+// When the user attempts to start the app and didn't notice the Station icon in
+// the tray, help them out by showing the main window
+app.on('second-instance', () => {
+  ctx.showUI()
+})
 
 const jobStats = new JobStats()
 
@@ -102,7 +118,10 @@ const ctx = {
   confirmChangeWalletAddress: () => { throw new Error('never get here') },
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
-  getUpdaterStatus: () => { throw new Error('never get here') }
+  getUpdaterStatus: () => { throw new Error('never get here') },
+  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://explorer.glif.io/tx/${transactionHash}`) },
+  transactionUpdate: (transactions) => { ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions) },
+  balanceUpdate: (balance) => { ipcMain.emit(ipcMainEvents.BALANCE_UPDATE, balance) }
 }
 
 app.on('before-quit', () => {
@@ -141,6 +160,7 @@ async function run () {
 
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
 
+    await wallet.setup(ctx)
     await saturnNode.setup(ctx)
     setupDialogs(ctx)
   } catch (e) {
