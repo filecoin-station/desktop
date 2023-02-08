@@ -50,10 +50,12 @@ const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) 
   }, [transaction])
 
   return (
-    <div className={`pt-8 pb-8 bg-opacity-10 h-[165px] transition-all duration-1000 ease-in-out
+    <div
+      className={`pt-8 pb-8 bg-opacity-10 h-[165px] transition-all duration-1000 ease-in-out
                   ${transaction ? 'mt-0' : '-mt-[165px]'}
                   ${displayTransition?.status === 'succeeded' ? 'bg-green-200' : displayTransition?.status === 'failed' ? 'bg-red-100' : 'bg-orange-100'}`}
-      onTransitionEnd={() => !transaction && setDisplayTransaction(undefined)}>
+      onTransitionEnd={() => !transaction && setDisplayTransaction(undefined)}
+    >
       <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">ONGOING TRANSFER</p>
       <div className='px-8'>
         <div className="flex items-center justify-between py-2 border-b-[1px] border-black border-opacity-5">

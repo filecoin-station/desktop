@@ -85,13 +85,20 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
           className={`btn-primary w-40 submit-address bg-grayscale-250 text-primary ease-[cubic-bezier(0.85,0,0.15,1)] duration-700
         ${internalEditMode && editMode ? 'visible z-20' : 'invisible text-opacity-0 translate-y-[7.8rem]'}`}
           disabled={(!addressIsValid && !internalEditMode) || (inputAddr === destinationAddress)}
-          title="save address" type="submit" value="connect" onClick={handleSubmit}>
+          title="save address"
+          type="submit"
+          value="connect"
+          onClick={handleSubmit}
+        >
           <span className="text-xs px-4">Save</span>
         </button>
-        <button className={`address-edit flex flex-row items-end h-[30px] cursor-pointer group absolute mb-1 ml-4 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
+        <button
+          className={`address-edit flex flex-row items-end h-[30px] cursor-pointer group absolute mb-1 ml-4 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
         ${destinationAddress.length > 5 ? 'left-[168px]' : 'left-[80px]'} ${(!internalEditMode && !transferMode) ? 'visible' : 'opacity-0'}`}
-          tabIndex={0} onClick={() => enableEditMode()}
-          disabled={transferMode}>
+          tabIndex={0}
+          onClick={() => enableEditMode()}
+          disabled={transferMode}
+        >
           <EditIcon className="btn-icon-primary mr-1" />
           <span className='text-white hidden group-hover:block opacity-80 not-italic text-body-m font-body leading-[1.5rem]'>Edit</span>
         </button>
