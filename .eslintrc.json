@@ -2,6 +2,8 @@
   "parser": "@typescript-eslint/parser",
   "extends": [
       "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:react/jsx-runtime",
       "standard"
   ],
   "plugins": [
@@ -53,7 +55,11 @@
       ],
       "rules": {
         "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-        "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
+        "react-hooks/exhaustive-deps": "warn", // Checks effect dependencies
+        "react/jsx-first-prop-new-line": "error",
+        "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
+        "react/jsx-indent-props": ["error", "first"],
+        "react/jsx-closing-bracket-location": "error"
       }
     }
   ]

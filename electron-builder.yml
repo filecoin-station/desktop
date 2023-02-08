@@ -19,8 +19,8 @@ extraResources:
 
 asarUnpack: 'main/**/scripts/**/*'
 
-beforePack: 'build/before-pack.js'
-afterSign: 'build/notarize-macos.js'
+beforePack: './build/before-pack.js'
+afterSign: './build/notarize-macos.js'
 artifactName: '${productName}.${ext}'
 
 mac:
@@ -32,6 +32,8 @@ mac:
   entitlementsInherit: 'build/entitlements.mac.plist'
   target:
     - target: dmg
+      arch: ['x64']
+    - target: zip
       arch: ['x64']
 
 
