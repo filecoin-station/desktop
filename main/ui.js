@@ -4,10 +4,10 @@ const { BrowserWindow, app, screen } = require('electron')
 const { ipcMain } = require('electron/main')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
-const { getFilAddress } = require('./saturn-node')
 const {
   getTrayOperationExplained,
-  setTrayOperationExplained
+  setTrayOperationExplained,
+  getOnboardingCompleted
 } = require('./station-config')
 const { showDialogSync } = require('./dialog')
 
@@ -73,7 +73,7 @@ module.exports = async function (ctx) {
   // We want the Station to start hidden in the tray.
   // However, when the user did not complete the onboarding flow,
   // we need to show the app to ask them to finish the setup process
-  if (!getFilAddress()) {
+  if (!getOnboardingCompleted()) {
     ui.once('ready-to-show', ctx.showUI)
   }
 
@@ -126,9 +126,21 @@ function setupIpcEventForwarding (ui) {
   }
   ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, onUpdateAvailable)
 
+  const onTransactionUpdate = (/** @type {unknown[]} */ ...args) => {
+    ui.webContents.send(ipcMainEvents.TRANSACTION_UPDATE, ...args)
+  }
+  ipcMain.on(ipcMainEvents.TRANSACTION_UPDATE, onTransactionUpdate)
+
+  const onBalanceUpdate = (/** @type {unknown[]} */ ...args) => {
+    ui.webContents.send(ipcMainEvents.BALANCE_UPDATE, ...args)
+  }
+  ipcMain.on(ipcMainEvents.BALANCE_UPDATE, onBalanceUpdate)
+
   return function stopIpcEventForwarding () {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     ipcMain.removeListener(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
     ipcMain.removeListener(ipcMainEvents.UPDATE_AVAILABLE, onUpdateAvailable)
+    ipcMain.removeListener(ipcMainEvents.TRANSACTION_UPDATE, onTransactionUpdate)
+    ipcMain.removeListener(ipcMainEvents.BALANCE_UPDATE, onBalanceUpdate)
   }
 }

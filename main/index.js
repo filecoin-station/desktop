@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, dialog } = require('electron')
+const { app, dialog, shell } = require('electron')
 const electronLog = require('electron-log')
 const path = require('node:path')
 
@@ -28,6 +28,7 @@ const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
 const os = require('os')
 const saturnNode = require('./saturn-node')
+const wallet = require('./wallet')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
@@ -117,7 +118,10 @@ const ctx = {
   confirmChangeWalletAddress: () => { throw new Error('never get here') },
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
-  getUpdaterStatus: () => { throw new Error('never get here') }
+  getUpdaterStatus: () => { throw new Error('never get here') },
+  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://explorer.glif.io/tx/${transactionHash}`) },
+  transactionUpdate: (transactions) => { ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions) },
+  balanceUpdate: (balance) => { ipcMain.emit(ipcMainEvents.BALANCE_UPDATE, balance) }
 }
 
 app.on('before-quit', () => {
@@ -156,6 +160,7 @@ async function run () {
 
     ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
 
+    await wallet.setup(ctx)
     await saturnNode.setup(ctx)
     setupDialogs(ctx)
   } catch (e) {

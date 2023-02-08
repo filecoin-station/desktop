@@ -9,7 +9,8 @@ const ConfigKeys = {
   OnboardingCompleted: 'station.OnboardingCompleted',
   TrayOperationExplained: 'station.TrayOperationExplained',
   StationID: 'station.StationID',
-  FilAddress: 'station.FilAddress'
+  FilAddress: 'station.FilAddress',
+  DestinationFilAddress: 'station.DestinationFilAddress'
 }
 
 // Use this to test migrations
@@ -36,7 +37,7 @@ log.info('Loading Station configuration from', configStore.path)
 
 let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted, false))
 let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained, false))
-let FilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.FilAddress))
+let DestinationFilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.DestinationFilAddress))
 const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID, randomUUID()))
 
 /**
@@ -70,25 +71,25 @@ function setTrayOperationExplained () {
 }
 
 /**
+ * @returns {string}
+ */
+function getStationID () {
+  return StationID
+}
+
+/**
  * @returns {string | undefined}
  */
-function getFilAddress () {
-  return FilAddress
+function getDestinationWalletAddress () {
+  return DestinationFilAddress
 }
 
 /**
  * @param {string | undefined} address
  */
-function setFilAddress (address) {
-  FilAddress = address
-  configStore.set(ConfigKeys.FilAddress, address)
-}
-
-/**
- * @returns {string}
- */
-function getStationID () {
-  return StationID
+function setDestinationWalletAddress (address) {
+  DestinationFilAddress = address
+  configStore.set(ConfigKeys.DestinationFilAddress, DestinationFilAddress)
 }
 
 module.exports = {
@@ -96,7 +97,7 @@ module.exports = {
   setOnboardingCompleted,
   getTrayOperationExplained,
   setTrayOperationExplained,
-  getFilAddress,
-  setFilAddress,
-  getStationID
+  getStationID,
+  getDestinationWalletAddress,
+  setDestinationWalletAddress
 }
