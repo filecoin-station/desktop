@@ -10,8 +10,14 @@ const path = require('path')
 // https://www.electronjs.org/docs/faq#my-apps-tray-disappeared-after-a-few-minutes
 let tray = null
 
+function icon (/** @type {'on' | 'off'} */ state) {
+  const dir = path.resolve(path.join(__dirname, '../assets/tray'))
+  if (IS_MAC) return path.join(dir, `${state}-macos.png`)
+  return path.join(dir, `${state}.png`)
+}
+
 module.exports = function (/** @type {import('./typings').Context} */ ctx) {
-  const image = nativeImage.createFromPath(path.join(__dirname, '../assets/tray/on-macos.png'))
+  const image = nativeImage.createFromPath(icon('off'))
   image.setTemplateImage(true)
   tray = new Tray(image)
   const contextMenu = Menu.buildFromTemplate([
