@@ -11,7 +11,7 @@ const WalletOnboarding = () => {
             </div>
             <div className='py-3 px-6 pr-24'>
               <p className='text-body-s text-primary font-body uppercase'>YOUR STATION WALLET</p>
-              <p className='text-body-2xs mt-1'>Your Station Wallet has a unique address, where all the FIL you earn will be stored. Station will send FIL to this wallet on a regular basis, based on your contributions.</p>
+              <p className='text-body-2xs mt-1'>Your Station Wallet has a unique address, where all the FIL you earn will be stored. Station Modules will send FIL to this wallet on a regular basis, based on your contributions.</p>
             </div>
           </div>
           <div className='flex flex-row align-middle h-[110px] w-full bg-grayscale-100 rounded'>
