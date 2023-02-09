@@ -23,9 +23,6 @@ const backend = new WalletBackend({
   async onTransactionUpdate () {
     walletStore.set('transactions', backend.transactions)
     sendTransactionsToUI()
-  },
-  async onTransactionSucceeded () {
-    await updateBalance()
   }
 })
 backend.transactions = loadStoredEntries()

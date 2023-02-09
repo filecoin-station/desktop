@@ -28,39 +28,18 @@ type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 // A processing transaction can have all statuses, because we're briefly showing
 // succeeded and failed ones in the same place as the processing one.
 export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>;
-export type FILTransactionLoading = PartialBy<FILTransaction, 'status' | 'timestamp'>;
 
-export interface GQLMessage {
+export interface FoxMessage {
   cid: string;
-  to: {
-    robust: string;
-  }
-  from: {
-    robust: string;
-  }
+  to: string;
+  from: string;
   nonce: number;
   height: number;
   method: string;
-  params: string;
   value: string;
-  timestamp: number?;
-  exitCode: number?;
-}
-
-export interface GQLTipset {
-  minHeight: number;
-}
-
-export interface GQLReceipt {
-  return: string;
-  exitCode: number;
-  gasUsed: number;
-}
-
-export interface GQLStateReplay {
-  receipt: GQLReceipt;
-  executionTrace: {
-    executionTrace: string;
+  timestamp: number;
+  receipt: {
+    exitCode: number;
   }
 }
 

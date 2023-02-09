@@ -135,7 +135,7 @@ const ctx = {
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
-  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://explorer.glif.io/tx/${transactionHash}`) },
+  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://filfox.info/en/message/${transactionHash}`) },
   transactionUpdate: (transactions) => {
     ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions)
   },
