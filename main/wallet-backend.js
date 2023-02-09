@@ -10,21 +10,15 @@ const { CoinType } = require('@glif/filecoin-address')
 const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
-const { request, gql } = require('graphql-request')
-const pMap = require('p-map')
+const { default: fetch } = require('node-fetch')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
-/** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
-/** @typedef {import('./typings').GQLReceipt} GQLReceipt */
-/** @typedef {import('./typings').GQLTipset} GQLTipset */
-/** @typedef {import('./typings').GQLMessage} GQLMessage */
+/** @typedef {import('./typings').FoxMessage} FoxMessage */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
+/** @typedef {import('./typings').TransactionStatus} TransactionStatus */
 /** @typedef {
   import('./typings').FILTransactionProcessing
 } FILTransactionProcessing */
-/** @typedef {
-  import('./typings').FILTransactionLoading
-} FILTransactionLoading */
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 
@@ -34,18 +28,15 @@ async function noop () {}
 class WalletBackend {
   constructor ({
     disableKeytar = DISABLE_KEYTAR,
-    onTransactionSucceeded = noop,
     onTransactionUpdate = noop
   } = {}) {
     /** @type {Filecoin | null} */
     this.provider = null
     /** @type {string | null} */
     this.address = null
-    this.url = 'https://graph.glif.link/query'
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
     this.transactions = []
     this.disableKeytar = disableKeytar
-    this.onTransactionSucceeded = onTransactionSucceeded
     this.onTransactionUpdate = onTransactionUpdate
   }
 
@@ -183,97 +174,14 @@ class WalletBackend {
   }
 
   /**
-   * @param {string} cid
-   * @returns {Promise<GQLReceipt>}
-   */
-  async getReceipt (cid) {
-    const query = gql`
-      query Receipt($cid: String!) {
-        receipt(cid: $cid) {
-          return
-          exitCode
-          gasUsed
-        }
-      }
-    `
-    const variables = { cid }
-    /** @type {{receipt: GQLReceipt}} */
-    const { receipt } = await request(this.url, query, variables)
-    return receipt
-  }
-
-  /**
-   * @param {string} cid
-   * @returns {Promise<GQLStateReplay>}
-   */
-  async getStateReplay (cid) {
-    const query = gql`
-      query StateReplay($cid: String!) {
-        stateReplay(cid: $cid) {
-          receipt {
-            return
-            exitCode
-            gasUsed
-          }
-          executionTrace {
-            executionTrace
-          }
-        }
-      }
-    `
-    const variables = { cid }
-    /** @type {{stateReplay: GQLStateReplay}} */
-    const { stateReplay } = await request(this.url, query, variables)
-    return stateReplay
-  }
-
-  /**
-   * @param {number} height
-   * @returns Promise<GQLTipset>
-   */
-  async getTipset (height) {
-    const query = gql`
-      query Tipset($height: Uint64!) {
-        tipset(height: $height) {
-          minTimestamp
-        }
-      }
-    `
-    const variables = { height }
-    const { tipset } = await request(this.url, query, variables)
-    return tipset
-  }
-
-  /**
    * @param {string} address
    * @returns Promise<GQLMessage[]>
    */
   async getMessages (address) {
-    const query = gql`
-      query Messages($address: String!, $limit: Int!, $offset: Int!) {
-        messages(address: $address, limit: $limit, offset: $offset) {
-          cid
-          to {
-            robust
-          }
-          from {
-            robust
-          }
-          nonce
-          height
-          method
-          params
-          value
-        }
-      }
-    `
-    const variables = {
-      address,
-      limit: 100,
-      offset: 0
-    }
-    /** @type {{messages: GQLMessage[] | null}} */
-    const { messages } = await request(this.url, query, variables)
+    const url = `https://filfox.info/api/v1/address/${address}/messages?pageSize=100`
+    const res = await fetch(url)
+    /** @type {{messages: FoxMessage[] | null}} */
+    const { messages } = await res.json()
     return messages || []
   }
 
@@ -286,23 +194,18 @@ class WalletBackend {
     // Load messages
     const messages = await this.getMessages(this.address)
 
-    // Convert messages to transactions (loading)
-    /** @type {FILTransactionLoading[]} */
-    const transactionsLoading = messages.map(message => ({
+    /** @type {(FILTransaction|FILTransactionProcessing)[]} */
+    const transactions = messages.map(message => ({
       height: message.height,
       hash: message.cid,
-      outgoing: message.from.robust === this.address,
+      outgoing: message.from === this.address,
       amount: new FilecoinNumber(message.value, 'attofil').toFil(),
-      address: message.from.robust === this.address
-        ? message.to.robust
-        : message.from.robust
+      address: message.from === this.address
+        ? message.to
+        : message.from,
+      timestamp: message.timestamp,
+      status: message.receipt.exitCode === 0 ? 'succeeded' : 'failed'
     }))
-
-    // Fill in already loaded data
-    const transactions = transactionsLoading.map(transactionLoading =>
-      this.transactions.find(tx => tx.hash === transactionLoading.hash) ||
-      transactionLoading
-    )
 
     // Add locally known transactions not yet returned by the API
     for (const transaction of this.transactions) {
@@ -311,51 +214,8 @@ class WalletBackend {
       }
     }
 
-    // Fetch `.timestamp`
-    await pMap(transactions, async transaction => {
-      if (!transaction.timestamp && transaction.height) {
-        try {
-          transaction.timestamp =
-            (await this.getTipset(transaction.height)).minTimestamp * 1000
-        } catch (err) {
-          transaction.error = 'Failed fetching tipset'
-        }
-      }
-    }, { concurrency: 1 })
-
-    // Fetch `.status`
-    await pMap(transactions, async transaction => {
-      if (
-        transaction.hash &&
-        (!transaction.status || transaction.status === 'processing')
-      ) {
-        const { hash } = transaction
-        transaction.status = 'processing'
-        try {
-          const receipt = await this.getReceipt(hash)
-          console.log({ receipt, hash })
-          if (receipt.exitCode !== 0) {
-            transaction.status = 'failed'
-            return
-          }
-          transaction.status = receipt.exitCode === 0
-            ? 'succeeded'
-            : 'failed'
-          if (transaction.status === 'succeeded') {
-            try {
-              await this.onTransactionSucceeded()
-            } catch {}
-          }
-        } catch (err) {
-          console.error(err)
-          transaction.error = 'Failed fetching status'
-        }
-      }
-    }, { concurrency: 1 })
-
     // Update state
-    this.transactions =
-      /** @type {(FILTransaction|FILTransactionProcessing)[]} */ (transactions)
+    this.transactions = transactions
     this.onTransactionUpdate()
   }
 }
