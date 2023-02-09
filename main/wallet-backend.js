@@ -145,7 +145,9 @@ class WalletBackend {
     try {
       console.log('getting gas limit')
       const gasLimit = await this.getGasLimit(from, to, amount)
-      const amountMinusGas = amount.minus(gasLimit)
+      // Ensure transaction has enough gas to succeed
+      const gasOffset = new FilecoinNumber('100', 'attofil')
+      const amountMinusGas = amount.minus(gasLimit).minus(gasOffset)
       console.log({
         gasLimit: gasLimit.toFil(),
         amountMinusGas: amountMinusGas.toFil()
@@ -172,6 +174,7 @@ class WalletBackend {
 
       return cid
     } catch (err) {
+      console.error(err)
       transaction.status = 'failed'
       this.onTransactionUpdate()
 
