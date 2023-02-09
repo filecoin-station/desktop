@@ -28,25 +28,63 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle('saturn:getLog', saturnNode.getLog)
   ipcMain.handle('saturn:getWebUrl', saturnNode.getWebUrl)
   // Station-wide config
-  ipcMain.handle('station:getOnboardingCompleted', stationConfig.getOnboardingCompleted)
-  ipcMain.handle('station:setOnboardingCompleted', (_event) => stationConfig.setOnboardingCompleted())
+  ipcMain.handle(
+    'station:getOnboardingCompleted',
+    stationConfig.getOnboardingCompleted
+  )
+  ipcMain.handle(
+    'station:setOnboardingCompleted',
+    (_event) => stationConfig.setOnboardingCompleted()
+  )
   // Wallet-wide config
   ipcMain.handle('station:getStationWalletAddress', wallet.getAddress)
-  ipcMain.handle('station:getDestinationWalletAddress', stationConfig.getDestinationWalletAddress)
-  ipcMain.handle('station:setDestinationWalletAddress', (_event, address) => stationConfig.setDestinationWalletAddress(address))
+  ipcMain.handle(
+    'station:getDestinationWalletAddress',
+    stationConfig.getDestinationWalletAddress
+  )
+  ipcMain.handle(
+    'station:setDestinationWalletAddress',
+    (_event, address) => stationConfig.setDestinationWalletAddress(address)
+  )
   ipcMain.handle('station:getStationWalletBalance', wallet.getBalance)
-  ipcMain.handle('station:getStationWalletTransactionsHistory', wallet.listTransactions)
-  ipcMain.handle('station:transferAllFundsToDestinationWallet', (_event, _args) => wallet.transferAllFundsToDestinationWallet())
+  ipcMain.handle(
+    'station:getStationWalletTransactionsHistory',
+    wallet.listTransactions
+  )
+  ipcMain.handle(
+    'station:transferAllFundsToDestinationWallet',
+    (_event, _args) => wallet.transferAllFundsToDestinationWallet())
 
-  ipcMain.handle('station:getAllActivities', (_event, _args) => ctx.getAllActivities())
-  ipcMain.handle('station:getTotalJobsCompleted', (_event, _args) => ctx.getTotalJobsCompleted())
+  ipcMain.handle(
+    'station:getAllActivities',
+    (_event, _args) => ctx.getAllActivities()
+  )
+  ipcMain.handle(
+    'station:getTotalJobsCompleted',
+    (_event, _args) => ctx.getTotalJobsCompleted()
+  )
 
-  ipcMain.handle('dialogs:confirmChangeWalletAddress', (_event, _args) => ctx.confirmChangeWalletAddress())
+  ipcMain.handle(
+    'dialogs:confirmChangeWalletAddress',
+    (_event, _args) => ctx.confirmChangeWalletAddress()
+  )
 
-  ipcMain.handle('station:restartToUpdate', (_event, _args) => ctx.restartToUpdate())
-  ipcMain.handle('station:openReleaseNotes', (_event) => ctx.openReleaseNotes())
-  ipcMain.handle('station:getUpdaterStatus', (_events, _args) => ctx.getUpdaterStatus())
-  ipcMain.handle('station:browseTransactionTracker', (_events, transactionHash) => ctx.browseTransactionTracker(transactionHash))
+  ipcMain.handle(
+    'station:restartToUpdate',
+    (_event, _args) => ctx.restartToUpdate()
+  )
+  ipcMain.handle(
+    'station:openReleaseNotes',
+    (_event) => ctx.openReleaseNotes()
+  )
+  ipcMain.handle(
+    'station:getUpdaterStatus',
+    (_events, _args) => ctx.getUpdaterStatus()
+  )
+  ipcMain.handle(
+    'station:browseTransactionTracker',
+    (_events, transactionHash) => ctx.browseTransactionTracker(transactionHash)
+  )
 }
 
 module.exports = {

@@ -30,7 +30,8 @@ class ActivityLog {
       type,
       message
     }
-    // Freeze the data to prevent ActivityLog users from accidentally changing our store
+    // Freeze the data to prevent ActivityLog users from accidentally changing
+    // our store
     Object.freeze(activity)
 
     this.#entries.push(activity)
@@ -44,7 +45,8 @@ class ActivityLog {
   }
 
   getAllEntries () {
-    // Clone the array to prevent the caller from accidentally changing our store
+    // Clone the array to prevent the caller from accidentally changing our
+    // store
     return [...this.#entries]
   }
 

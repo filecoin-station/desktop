@@ -18,7 +18,9 @@ class JobStats {
   }
 
   getTotalJobsCompleted () {
-    return Object.values(this.#perModuleJobStats).reduce((sum, value) => sum + value, 0)
+    return Object
+      .values(this.#perModuleJobStats)
+      .reduce((sum, value) => sum + value, 0)
   }
 
   /**

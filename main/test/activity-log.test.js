@@ -38,32 +38,42 @@ describe('ActivityLog', function () {
     activityLog.record(givenActivity({ message: 'one' }))
     activityLog.record(givenActivity({ message: 'two' }))
     const [first, second] = activityLog.getAllEntries()
-    assert(first.id !== second.id, `Expected unique ids. Got the same value: ${first.id}`)
+    assert(
+      first.id !== second.id,
+      `Expected unique ids. Got the same value: ${first.id}`
+    )
   })
 
   it('preserves activities across restarts', function () {
     new ActivityLog().record(givenActivity({ message: 'first run' }))
     const activityLog = new ActivityLog()
     activityLog.record(givenActivity({ message: 'second run' }))
-    assert.deepStrictEqual(activityLog.getAllEntries().map(it => pickProps(it, 'message')), [
-      { message: 'first run' },
-      { message: 'second run' }
-    ])
-  })
-
-  it('limits the log to the most recent 50 entries', /** @this {Mocha.Test} */ function () {
-    this.timeout(10000)
-
-    const log = new ActivityLog()
-    for (let i = 0; i < 110; i++) {
-      log.record(givenActivity({ message: `activity ${i}` }))
-    }
-    const entries = log.getAllEntries()
     assert.deepStrictEqual(
-      [entries.at(0)?.message, entries.at(-1)?.message],
-      ['activity 10', 'activity 109']
+      activityLog.getAllEntries().map(it => pickProps(it, 'message')),
+      [
+        { message: 'first run' },
+        { message: 'second run' }
+      ]
     )
   })
+
+  it(
+    'limits the log to the most recent 50 entries',
+    /** @this {Mocha.Test} */
+    function () {
+      this.timeout(10000)
+
+      const log = new ActivityLog()
+      for (let i = 0; i < 110; i++) {
+        log.record(givenActivity({ message: `activity ${i}` }))
+      }
+      const entries = log.getAllEntries()
+      assert.deepStrictEqual(
+        [entries.at(0)?.message, entries.at(-1)?.message],
+        ['activity 10', 'activity 109']
+      )
+    }
+  )
 })
 
 /**

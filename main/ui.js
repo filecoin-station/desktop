@@ -52,7 +52,10 @@ module.exports = async function (ctx) {
     await devServer.listen()
 
     console.log('Installing React developer tools')
-    const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer')
+    const {
+      default: installExtension,
+      REACT_DEVELOPER_TOOLS
+    } = require('electron-devtools-installer')
     await installExtension(REACT_DEVELOPER_TOOLS).then(
       name => console.log('Added extension:', name),
       error => console.error('Cannot install React developer tools:', error)
@@ -140,7 +143,10 @@ function setupIpcEventForwarding (ui) {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     ipcMain.removeListener(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
     ipcMain.removeListener(ipcMainEvents.UPDATE_AVAILABLE, onUpdateAvailable)
-    ipcMain.removeListener(ipcMainEvents.TRANSACTION_UPDATE, onTransactionUpdate)
+    ipcMain.removeListener(
+      ipcMainEvents.TRANSACTION_UPDATE,
+      onTransactionUpdate
+    )
     ipcMain.removeListener(ipcMainEvents.BALANCE_UPDATE, onBalanceUpdate)
   }
 }

@@ -49,7 +49,11 @@ async function setup (/** @type {Context} */ ctx) {
   console.log('Using Saturn L2 Node binary: %s', saturnBinaryPath)
 
   const stat = await fs.stat(saturnBinaryPath)
-  assert(stat, `Invalid configuration or deployment. Saturn L2 Node was not found: ${saturnBinaryPath}`)
+  assert(
+    stat,
+    'Invalid configuration or deployment. Saturn L2 Node was not found: ' +
+    saturnBinaryPath
+  )
 
   app.on('before-quit', () => {
     if (!childProcess) return
@@ -60,13 +64,24 @@ async function setup (/** @type {Context} */ ctx) {
 
 function getSaturnBinaryPath () {
   const name = 'saturn-L2-node' + (process.platform === 'win32' ? '.exe' : '')
-  // Recently built darwin-arm64 binaries cannot be started, they are immediately killed by SIGKILL
+  // Recently built darwin-arm64 binaries cannot be started, they are
+  // immediately killed by SIGKILL
   // Since we don't support Apple Silicon yet, we can use x64 for now.
-  // Note this is affecting only DEV. We are packaging the app for darwin-x64 only.
-  const arch = process.platform === 'darwin' && process.arch === 'arm64' ? 'x64' : process.arch
+  // Note this is affecting only DEV. We are packaging the app for darwin-x64
+  // only.
+  const arch = process.platform === 'darwin' && process.arch === 'arm64'
+    ? 'x64'
+    : process.arch
   return app.isPackaged
     ? path.resolve(process.resourcesPath, 'saturn-l2-node', name)
-    : path.resolve(__dirname, '..', 'build', 'saturn', `l2node-${process.platform}-${arch}`, name)
+    : path.resolve(
+      __dirname,
+      '..',
+      'build',
+      'saturn',
+      `l2node-${process.platform}-${arch}`,
+      name
+    )
 }
 
 async function start (/** @type {Context} */ ctx) {
@@ -90,8 +105,11 @@ async function start (/** @type {Context} */ ctx) {
   })
 
   /** @type {Promise<void>} */
-  const readyPromise = new Promise(function startSaturnNodeChildProcess (resolve, reject) {
-    assert(childProcess, 'Unexpected error: child process is undefined after startup')
+  const readyPromise = new Promise(function startSaturn (resolve, reject) {
+    assert(
+      childProcess,
+      'Unexpected error: child process is undefined after startup'
+    )
 
     const { stdout, stderr } = childProcess
     assert(stderr, 'stderr was not defined on child process')
@@ -129,10 +147,16 @@ async function start (/** @type {Context} */ ctx) {
         ready = true
         stdout.off('data', readyHandler)
 
-        ctx.recordActivity({ source: 'Saturn', type: 'info', message: 'Saturn module started.' })
+        ctx.recordActivity({
+          source: 'Saturn',
+          type: 'info',
+          message: 'Saturn module started.'
+        })
         pollStatsInterval = setInterval(() => {
           pollStats(ctx)
-            .catch(err => console.warn('Cannot fetch Saturn module stats.', err))
+            .catch(err => {
+              console.warn('Cannot fetch Saturn module stats.', err)
+            })
         }, 1000)
         resolve()
       }
@@ -256,7 +280,8 @@ function handleActivityLogs (ctx, text) {
 async function pollStats (/** @type {Context} */ ctx) {
   const res = await fetch(apiUrl + 'stats')
   if (!res.ok) {
-    const msg = `Cannot fetch Saturn node stats: ${res.status}\n${await res.text().catch(noop)}`
+    const msg = 'Cannot fetch Saturn node stats: ' +
+      `${res.status}\n${await res.text().catch(noop)}`
     throw new Error(msg)
   }
 
@@ -265,7 +290,8 @@ async function pollStats (/** @type {Context} */ ctx) {
 
   const jobsCompleted = stats?.NSuccessfulRetrievals
   if (typeof jobsCompleted !== 'number') {
-    const msg = 'Unexpected stats response - NSuccessfulRetrievals is not a number. Stats: ' + JSON.stringify(stats)
+    const msg = 'Unexpected stats response - NSuccessfulRetrievals is not a ' +
+      'number. Stats: ' + JSON.stringify(stats)
     throw new Error(msg)
   }
   ctx.setModuleJobsCompleted('saturn', jobsCompleted)

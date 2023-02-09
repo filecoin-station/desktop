@@ -21,7 +21,10 @@ const configStore = new Store({
   migrations: {
     '>=0.9.0': store => {
       if (store.has('station.onboardingCompleted')) {
-        store.set(ConfigKeys.OnboardingCompleted, store.get('station.onboardingCompleted'))
+        store.set(
+          ConfigKeys.OnboardingCompleted,
+          store.get('station.onboardingCompleted')
+        )
       }
       if (store.has('saturn.filAddress')) {
         store.set(ConfigKeys.FilAddress, store.get('saturn.filAddress'))
@@ -29,16 +32,27 @@ const configStore = new Store({
     }
   },
   beforeEachMigration: (_, context) => {
-    log.info(`Migrating station-config from ${context.fromVersion} → ${context.toVersion}`)
+    log.info(
+      `Migrating station-config from ${context.fromVersion} → ` +
+        context.toVersion
+    )
   }
 })
 
 log.info('Loading Station configuration from', configStore.path)
 
-let OnboardingCompleted = /** @type {boolean} */ (configStore.get(ConfigKeys.OnboardingCompleted, false))
-let TrayOperationExplained = /** @type {boolean} */ (configStore.get(ConfigKeys.TrayOperationExplained, false))
-let DestinationFilAddress = /** @type {string | undefined} */ (configStore.get(ConfigKeys.DestinationFilAddress))
-const StationID = /** @type {string} */ (configStore.get(ConfigKeys.StationID, randomUUID()))
+let OnboardingCompleted =
+  /** @type {boolean} */
+  (configStore.get(ConfigKeys.OnboardingCompleted, false))
+let TrayOperationExplained =
+  /** @type {boolean} */
+  (configStore.get(ConfigKeys.TrayOperationExplained, false))
+let DestinationFilAddress =
+  /** @type {string | undefined} */
+  (configStore.get(ConfigKeys.DestinationFilAddress))
+const StationID =
+  /** @type {string} */
+  (configStore.get(ConfigKeys.StationID, randomUUID()))
 
 /**
  * @returns {boolean}

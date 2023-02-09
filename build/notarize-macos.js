@@ -2,7 +2,8 @@
 
 const { notarize } = require('@electron/notarize')
 
-const isSet = (/** @type {string | undefined} */ value) => value && value !== 'false'
+const isSet = (/** @type {string | undefined} */ value) =>
+  value && value !== 'false'
 
 /**
  * electron-build hook responsible for Apple Notarization of signed DMG

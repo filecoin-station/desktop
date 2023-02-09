@@ -23,7 +23,10 @@ test.describe.serial('Application launch', async () => {
     test.slow()
 
     // Launch Electron app against sandbox fake HOME dir
-    const stationRootDir = tmp.dirSync({ prefix: 'station-', unsafeCleanup: true }).name
+    const stationRootDir = tmp.dirSync({
+      prefix: 'station-',
+      unsafeCleanup: true
+    }).name
     electronApp = await electron.launch({
       args: [path.join(__dirname, '..', '..', 'main', 'index.js')],
       env: {
@@ -44,8 +47,16 @@ test.describe.serial('Application launch', async () => {
       Promise.all(
         msg.args().map(arg => arg.jsonValue())
       ).then(
-        values => console.log(`[WEBUI:${msg.type()}] ${values[0]}`, ...values.slice(1)),
-        error => console.log(`[WEBUI:${msg.type()}] %s -- cannot deserialize args.`, msg.text(), error)
+        values => {
+          console.log(`[WEBUI:${msg.type()}] ${values[0]}`, ...values.slice(1))
+        },
+        error => {
+          console.log(
+            `[WEBUI:${msg.type()}] %s -- cannot deserialize args.`,
+            msg.text(),
+            error
+          )
+        }
       )
     })
 
@@ -69,12 +80,14 @@ test.describe.serial('Application launch', async () => {
   test('wait for Saturn node to get ready', async () => {
     await mainWindow.waitForFunction(() => {
       // waitForFunction does not support promises.
-      // As a workaround, we start the async task in background and store the result on `window`
+      // As a workaround, we start the async task in background and store the
+      // result on `window`
       window.electron.saturnNode
         .isReady()
         .then(ready => Object.assign(window, { __saturnNodeIsReady: ready }))
 
-      // Return the last observed value. It may be undefined if the promise above has not finished yet
+      // Return the last observed value. It may be undefined if the promise
+      // above has not finished yet
       return (/** @type {any} */(window)).__saturnNodeIsReady
     }, [], { timeout: 2000 * TIMEOUT_MULTIPLIER })
   })
