@@ -63,8 +63,16 @@ const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
         <div key={date} className="mb-12">
           <DateSeparator date={date} />
           <div>
-            {activities.map((activity) => <ActivityLogItem key={activity.id} id={activity.id}
-            timestamp={activity.timestamp} type={activity.type} source={activity.source} message={activity.message} />)}
+            {activities.map((activity) => (
+              <ActivityLogItem
+                key={activity.id}
+                id={activity.id}
+                timestamp={activity.timestamp}
+                type={activity.type}
+                source={activity.source}
+                message={activity.message}
+              />
+            ))}
           </div>
         </div>
       ))}
