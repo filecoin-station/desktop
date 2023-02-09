@@ -330,12 +330,12 @@ class WalletBackend {
         transaction.status = 'processing'
         try {
           const receipt = await this.getReceipt(hash)
-          if (receipt.exitCode !== 1) {
+          console.log({ receipt, hash })
+          if (receipt.exitCode !== 0) {
             transaction.status = 'failed'
             return
           }
-          const stateReplay = await this.getStateReplay(hash)
-          transaction.status = stateReplay.receipt.exitCode === 0
+          transaction.status = receipt.exitCode === 0
             ? 'succeeded'
             : 'failed'
           if (transaction.status === 'succeeded') {
@@ -344,6 +344,7 @@ class WalletBackend {
             } catch {}
           }
         } catch (err) {
+          console.error(err)
           transaction.error = 'Failed fetching status'
         }
       }
