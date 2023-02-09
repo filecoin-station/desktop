@@ -17,7 +17,7 @@ function icon (/** @type {'on' | 'off'} */ state) {
 }
 
 module.exports = function (/** @type {import('./typings').Context} */ ctx) {
-  const image = nativeImage.createFromPath(icon('off'))
+  const image = nativeImage.createFromPath(icon('on'))
   image.setTemplateImage(true)
   tray = new Tray(image)
   const contextMenu = Menu.buildFromTemplate([
