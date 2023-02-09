@@ -14,6 +14,7 @@ const { request, gql } = require('graphql-request')
 const pMap = require('p-map')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
+/** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
 /** @typedef {import('./typings').GQLReceipt} GQLReceipt */
 /** @typedef {import('./typings').GQLTipset} GQLTipset */
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
@@ -142,12 +143,18 @@ class WalletBackend {
     this.onTransactionUpdate()
 
     try {
+      console.log('getting gas limit')
       const gasLimit = await this.getGasLimit(from, to, amount)
+      const amountMinusGas = amount.minus(gasLimit)
+      console.log({
+        gasLimit: gasLimit.toFil(),
+        amountMinusGas: amountMinusGas.toFil()
+      })
       const message = new Message({
         to,
         from,
         nonce: await this.provider.getNonce(from),
-        value: amount.minus(gasLimit).toAttoFil(),
+        value: amountMinusGas.toAttoFil(),
         method: 0,
         params: ''
       })
@@ -190,6 +197,31 @@ class WalletBackend {
     /** @type {{receipt: GQLReceipt}} */
     const { receipt } = await request(this.url, query, variables)
     return receipt
+  }
+
+  /**
+   * @param {string} cid
+   * @returns {Promise<GQLStateReplay>}
+   */
+  async getStateReplay (cid) {
+    const query = gql`
+      query StateReplay($cid: String!) {
+        stateReplay(cid: $cid) {
+          receipt {
+            return
+            exitCode
+            gasUsed
+          }
+          executionTrace {
+            executionTrace
+          }
+        }
+      }
+    `
+    const variables = { cid }
+    /** @type {{stateReplay: GQLStateReplay}} */
+    const { stateReplay } = await request(this.url, query, variables)
+    return stateReplay
   }
 
   /**
@@ -299,8 +331,12 @@ class WalletBackend {
         transaction.status = 'processing'
         try {
           const receipt = await this.getReceipt(hash)
-          console.log(receipt)
-          transaction.status = receipt.exitCode === 0
+          if (receipt.exitCode !== 1) {
+            transaction.status = 'failed'
+            return
+          }
+          const stateReplay = await this.getStateReplay(hash)
+          transaction.status = stateReplay.receipt.exitCode === 0
             ? 'succeeded'
             : 'failed'
           if (transaction.status === 'succeeded') {
@@ -309,8 +345,7 @@ class WalletBackend {
             } catch {}
           }
         } catch (err) {
-          console.error(err)
-          transaction.error = 'Failed fetching state replay'
+          transaction.error = 'Failed fetching status'
         }
       }
     }, { concurrency: 1 })

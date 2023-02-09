@@ -57,6 +57,13 @@ export interface GQLReceipt {
   gasUsed: number;
 }
 
+export interface GQLStateReplay {
+  receipt: GQLReceipt;
+  executionTrace: {
+    executionTrace: string;
+  }
+}
+
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
 
 export type ModuleJobStatsMap = Record<string, number>;
