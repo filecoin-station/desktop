@@ -165,8 +165,11 @@ async function transferAllFundsToDestinationWallet () {
   assert(backend.address)
   const to = getDestinationWalletAddress()
   assert(to)
-  await transferFunds(backend.address, to, balance)
-  await updateBalance()
+  try {
+    await transferFunds(backend.address, to, balance)
+  } finally {
+    await updateBalance()
+  }
 }
 
 /**
