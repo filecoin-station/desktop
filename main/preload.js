@@ -3,8 +3,9 @@
 /** @typedef {import('electron').IpcRendererEvent} IpcRendererEvent */
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
-// eslint-disable-next-line max-len
-/** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
+/** @typedef {
+  import('./typings').FILTransactionProcessing
+} FILTransactionProcessing */
 
 const { contextBridge, ipcRenderer } = require('electron')
 
@@ -89,8 +90,9 @@ contextBridge.exposeInMainWorld('electron', {
         ipcRenderer.removeListener('station:wallet-balance-update', listener)
     },
     onTransactionUpdate: (
-      // eslint-disable-next-line max-len
-      /** @type {(value: (FILTransaction|FILTransactionProcessing)[]) => void} */
+      /** @type {
+        (value: (FILTransaction|FILTransactionProcessing)[]) => void
+      } */
       callback
     ) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */

@@ -18,10 +18,12 @@ const pMap = require('p-map')
 /** @typedef {import('./typings').GQLTipset} GQLTipset */
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
-// eslint-disable-next-line max-len
-/** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
-// eslint-disable-next-line max-len
-/** @typedef {import('./typings').FILTransactionLoading} FILTransactionLoading */
+/** @typedef {
+  import('./typings').FILTransactionProcessing
+} FILTransactionProcessing */
+/** @typedef {
+  import('./typings').FILTransactionLoading
+} FILTransactionLoading */
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 

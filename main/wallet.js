@@ -10,8 +10,9 @@ const { WalletBackend } = require('./wallet-backend')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
-// eslint-disable-next-line max-len
-/** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
+/** @typedef {
+  import('./typings').FILTransactionProcessing
+} FILTransactionProcessing */
 
 const log = electronLog.scope('wallet')
 const walletStore = new Store({
