@@ -305,7 +305,6 @@ class WalletBackend {
     for (const transaction of this.transactions) {
       if (!transactions.find(tx => tx.hash === transaction.hash)) {
         transactions.push(transaction)
-        break
       }
     }
 
