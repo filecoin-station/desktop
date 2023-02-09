@@ -10,8 +10,10 @@ const Sentry = require('@sentry/node')
 
 const client = new InfluxDB({
   url: 'https://eu-central-1-1.aws.cloud2.influxdata.com',
-  // station-anonymous-write
-  token: '0fZyu9zjDvYlaNfOeuwgnQoUI0VcSzeYDpnOLjQyr30mz-Plqels5JHEwgKRbtCcDJbQmv62VnOV_FsZVxgoow=='
+  token:
+    // station-anonymous-write
+    // eslint-disable-next-line max-len
+    '0fZyu9zjDvYlaNfOeuwgnQoUI0VcSzeYDpnOLjQyr30mz-Plqels5JHEwgKRbtCcDJbQmv62VnOV_FsZVxgoow=='
 })
 
 const writeClient = client.getWriteApi(

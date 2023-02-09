@@ -2,7 +2,10 @@
 
 const keytar = require('keytar')
 const { generateMnemonic } = require('@zondax/filecoin-signing-tools')
-const { default: Filecoin, HDWalletProvider } = require('@glif/filecoin-wallet-provider')
+const {
+  default: Filecoin,
+  HDWalletProvider
+} = require('@glif/filecoin-wallet-provider')
 const { CoinType } = require('@glif/filecoin-address')
 const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
@@ -15,8 +18,12 @@ const pMap = require('p-map')
 /** @typedef {import('./typings').GQLTipset} GQLTipset */
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
-/** @typedef {import('./typings').FILTransactionProcessing} FILTransactionProcessing */
-/** @typedef {import('./typings').FILTransactionLoading} FILTransactionLoading */
+/** @typedef {
+  import('./typings').FILTransactionProcessing
+} FILTransactionProcessing */
+/** @typedef {
+  import('./typings').FILTransactionLoading
+} FILTransactionLoading */
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 

@@ -7,8 +7,10 @@ const path = require('node:path')
 console.log('Log file:', electronLog.transports.file.findLogPath())
 const log = electronLog.scope('main')
 
-// Override the place where we look for config files when running the end-to-end test suite.
-// We must call this early on, before any of our modules accesses the config store.
+// Override the place where we look for config files when running the end-to-end
+// test suite.
+// We must call this early on, before any of our modules accesses the config
+// store.
 // https://www.npmjs.com/package/electron-store
 // https://www.electronjs.org/docs/latest/api/app#appgetpathname
 if (process.env.STATION_ROOT) {
@@ -43,9 +45,17 @@ const { setup: setupDialogs } = require('./dialog')
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
-log.info('Filecoin Station build version: %s %s-%s%s%s', BUILD_VERSION, os.platform(), os.arch(), isDev ? ' [DEV]' : '', inTest ? ' [TEST]' : '')
+log.info(
+  'Filecoin Station build version: %s %s-%s%s%s',
+  BUILD_VERSION,
+  os.platform(),
+  os.arch(),
+  isDev ? ' [DEV]' : '',
+  inTest ? ' [TEST]' : ''
+)
 log.info('Machine spec: %s version %s', os.type(), os.release())
-// TODO(bajtos) print machine architecture after we upgrade to Electron with Node.js 18
+// TODO(bajtos) print machine architecture after we upgrade to Electron with
+// Node.js 18
 // log.info('Machine spec: %s %s version %s', os.type(),
 //   os.machine(),
 //   os.release())
@@ -71,7 +81,8 @@ process.on('uncaughtException', handleError)
 process.on('unhandledRejection', handleError)
 
 // Sets User Model Id so notifications work on Windows 10
-// To show notifications properly on Windows, we must manually set the appUserModelID
+// To show notifications properly on Windows, we must manually set the
+// appUserModelID
 // See https://www.electronjs.org/docs/tutorial/notifications#windows
 if (process.platform === 'win32') {
   app.setAppUserModelId('io.filecoin.station')
@@ -108,20 +119,29 @@ const ctx = {
   getTotalJobsCompleted: () => jobStats.getTotalJobsCompleted(),
   setModuleJobsCompleted: (moduleName, count) => {
     jobStats.setModuleJobsCompleted(moduleName, count)
-    ipcMain.emit(ipcMainEvents.JOB_STATS_UPDATED, jobStats.getTotalJobsCompleted())
+    ipcMain.emit(
+      ipcMainEvents.JOB_STATS_UPDATED,
+      jobStats.getTotalJobsCompleted()
+    )
   },
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
   saveSaturnModuleLogAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
-  loadWebUIFromDist: serve({ directory: path.resolve(__dirname, '../renderer/dist') }),
+  loadWebUIFromDist: serve({
+    directory: path.resolve(__dirname, '../renderer/dist')
+  }),
   confirmChangeWalletAddress: () => { throw new Error('never get here') },
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
   browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://explorer.glif.io/tx/${transactionHash}`) },
-  transactionUpdate: (transactions) => { ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions) },
-  balanceUpdate: (balance) => { ipcMain.emit(ipcMainEvents.BALANCE_UPDATE, balance) }
+  transactionUpdate: (transactions) => {
+    ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions)
+  },
+  balanceUpdate: (balance) => {
+    ipcMain.emit(ipcMainEvents.BALANCE_UPDATE, balance)
+  }
 }
 
 app.on('before-quit', () => {
@@ -137,7 +157,11 @@ process.on('uncaughtException', err => {
 })
 
 process.on('exit', () => {
-  ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station stopped.' })
+  ctx.recordActivity({
+    source: 'Station',
+    type: 'info',
+    message: 'Station stopped.'
+  })
 })
 
 async function run () {
@@ -158,7 +182,11 @@ async function run () {
     await setupUpdater(ctx)
     await setupIpcMain(ctx)
 
-    ctx.recordActivity({ source: 'Station', type: 'info', message: 'Station started.' })
+    ctx.recordActivity({
+      source: 'Station',
+      type: 'info',
+      message: 'Station started.'
+    })
 
     await wallet.setup(ctx)
     await saturnNode.setup(ctx)
