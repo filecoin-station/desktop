@@ -14,7 +14,7 @@ const { request, gql } = require('graphql-request')
 const pMap = require('p-map')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
-/** @typedef {import('./typings').GQLStateReplay} GQLStateReplay */
+/** @typedef {import('./typings').GQLReceipt} GQLReceipt */
 /** @typedef {import('./typings').GQLTipset} GQLTipset */
 /** @typedef {import('./typings').GQLMessage} GQLMessage */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
@@ -174,27 +174,22 @@ class WalletBackend {
 
   /**
    * @param {string} cid
-   * @returns {Promise<GQLStateReplay>}
+   * @returns {Promise<GQLReceipt>}
    */
-  async getStateReplay (cid) {
+  async getReceipt (cid) {
     const query = gql`
-      query StateReplay($cid: String!) {
-        stateReplay(cid: $cid) {
-          receipt {
-            return
-            exitCode
-            gasUsed
-          }
-          executionTrace {
-            executionTrace
-          }
+      query Receipt($cid: String!) {
+        receipt(cid: $cid) {
+          return
+          exitCode
+          gasUsed
         }
       }
     `
     const variables = { cid }
-    /** @type {{stateReplay: GQLStateReplay}} */
-    const { stateReplay } = await request(this.url, query, variables)
-    return stateReplay
+    /** @type {{receipt: GQLReceipt}} */
+    const { receipt } = await request(this.url, query, variables)
+    return receipt
   }
 
   /**
@@ -274,6 +269,14 @@ class WalletBackend {
       transactionLoading
     )
 
+    // Add locally known transactions not yet returned by the API
+    for (const transaction of this.transactions) {
+      if (!transactions.find(tx => tx.hash === transaction.hash)) {
+        transactions.push(transaction)
+        break
+      }
+    }
+
     // Fetch `.timestamp`
     await pMap(transactions, async transaction => {
       if (!transaction.timestamp && transaction.height) {
@@ -295,9 +298,9 @@ class WalletBackend {
         const { hash } = transaction
         transaction.status = 'processing'
         try {
-          const stateReplay = await this.getStateReplay(hash)
-          console.log(stateReplay)
-          transaction.status = stateReplay.receipt.exitCode === 0
+          const receipt = await this.getReceipt(hash)
+          console.log(receipt)
+          transaction.status = receipt.exitCode === 0
             ? 'succeeded'
             : 'failed'
           if (transaction.status === 'succeeded') {
@@ -306,18 +309,11 @@ class WalletBackend {
             } catch {}
           }
         } catch (err) {
+          console.error(err)
           transaction.error = 'Failed fetching state replay'
         }
       }
     }, { concurrency: 1 })
-
-    // Add locally known transactions not yet returned by the API
-    for (const transaction of this.transactions) {
-      if (!transactions.find(tx => tx.hash === transaction.hash)) {
-        transactions.push(transaction)
-        break
-      }
-    }
 
     // Update state
     this.transactions =

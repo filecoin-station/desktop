@@ -51,15 +51,10 @@ export interface GQLTipset {
   minHeight: number;
 }
 
-export interface GQLStateReplay {
-  receipt: {
-    return: string;
-    exitCode: number;
-    gasUsed: number;
-  }
-  executionTrace: {
-    executionTrace: string;
-  }
+export interface GQLReceipt {
+  return: string;
+  exitCode: number;
+  gasUsed: number;
 }
 
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
