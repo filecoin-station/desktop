@@ -53,8 +53,11 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
       <div className='h-8 bg-primary-dark flex items-center px-8'>
         <p className='text text-body-3xs text-white opacity-80 mr-3'>STATION ADDRESS</p>
         <p className='station-address text text-body-3xs text-white'> {`${stationAddress.slice(0, 6)} . . . ${stationAddress.slice(stationAddress.length - 6, stationAddress.length)}`}</p>
-        <button className={'h-full w-auto flex flex-row items-center justify-start group ml-2 cursor-pointer'}
-          tabIndex={0} onClick={() => navigator.clipboard.writeText(stationAddress) }>
+        <button
+          className={'h-full w-auto flex flex-row items-center justify-start group ml-2 cursor-pointer'}
+          tabIndex={0}
+          onClick={() => navigator.clipboard.writeText(stationAddress) }
+        >
           <CopyIcon className="btn-icon-primary mr-1 h-[12px] opacity-80 group-hover:opacity-100" />
           <span className='text text-body-3xs text-white hidden group-hover:block opacity-80'>Copy</span>
         </button>
@@ -63,8 +66,13 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
         <div className="flex flex-col justify-between h-full px-6 pt-6 pb-8">
           <div className="flex flex-row justify-between align-baseline" onClick={() => setTransferMode(false)}>
             <div className='w-full'>
-              <FilAddressForm destinationAddress={destinationFilAddress} saveDestinationAddress={saveAddress}
-                editMode={editMode} transferMode={transferMode} enableEditMode={enableEditMode} />
+              <FilAddressForm
+                destinationAddress={destinationFilAddress}
+                saveDestinationAddress={saveAddress}
+                editMode={editMode}
+                transferMode={transferMode}
+                enableEditMode={enableEditMode}
+              />
             </div>
           </div>
           <div className="flex flex-row justify-between align-baseline" onClick={() => setEditMode(false)}>
