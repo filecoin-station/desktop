@@ -96,8 +96,9 @@ function checkForUpdatesInBackground () {
 
   // TODO: replace this with autoUpdater.checkForUpdatesAndNotify()
   autoUpdater.checkForUpdates()
-    // We are ignoring errors, they are already handled by our `error` event
-    // listener
+    .catch(err => {
+      log.error('error', err)
+    })
     .finally(() => ipcMain.emit(ipcMainEvents.UPDATE_CHECK_FINISHED))
 }
 
