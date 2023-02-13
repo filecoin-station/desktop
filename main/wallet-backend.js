@@ -173,7 +173,7 @@ class WalletBackend {
    * @returns Promise<GQLMessage[]>
    */
   async getMessages (address) {
-    const url = `https://filfox.info/api/v1/address/${address}/messages?pageSize=100`
+    const url = `https://filfox.info/api/v1/address/${address}/messages?pageSize=1000000`
     const res = await fetch(url)
     /** @type {{messages: FoxMessage[] | null}} */
     const { messages } = await res.json()
