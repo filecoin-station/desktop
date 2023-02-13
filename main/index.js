@@ -175,6 +175,7 @@ async function run () {
   try {
     // Interface
     await setupTray(ctx)
+    setupDialogs(ctx)
     if (process.platform === 'darwin') {
       await setupAppMenu(ctx)
     }
@@ -190,7 +191,6 @@ async function run () {
 
     await wallet.setup(ctx)
     await saturnNode.setup(ctx)
-    setupDialogs(ctx)
   } catch (e) {
     handleError(e)
   }
