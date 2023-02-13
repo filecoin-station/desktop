@@ -10,7 +10,7 @@ const { CoinType } = require('@glif/filecoin-address')
 const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
-const { default: fetch } = require('node-fetch')
+const { fetch } = require('undici')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
@@ -176,7 +176,7 @@ class WalletBackend {
     const url = `https://filfox.info/api/v1/address/${address}/messages?pageSize=1000000`
     const res = await fetch(url)
     /** @type {{messages: FoxMessage[] | null}} */
-    const { messages } = await res.json()
+    const { messages } = /** @type {any} */ (await res.json())
     return messages || []
   }
 
