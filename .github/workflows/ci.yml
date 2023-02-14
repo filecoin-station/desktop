@@ -26,17 +26,17 @@ jobs:
         run: git config --global core.autocrlf false
 
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Install Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
 
       - name: Cache bigger downloads
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
@@ -88,11 +88,12 @@ jobs:
       - name: Test frontend
         run: npm run test:ui
 
-      - name: Test end-to-end
-        uses: GabrielBB/xvfb-action@86d97bde4a65fe9b290c0b3fb92c2c4ed0e5302d # v1.6
-        with:
-          working-directory: ${{ github.workspace }}
-          run: npm run test:e2e
+      - name: Test end-to-end (Linux)
+        run: xvfb-run -a npm run test:e2e
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+      - name: Test end-to-end (Windows / macOS)
+        run: npm run test:e2e
+        if: ${{ matrix.os != 'ubuntu-latest' }}
 
       - name: Lint
         run: npm run lint
@@ -107,22 +108,22 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Install Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
 
       - name: Cache webui
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: webui-cache
         with:
           path: assets/webui
           key: ${{ hashFiles('package.json') }}
 
       - name: Cache bigger downloads
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         id: cache
         with:
           path: ${{ github.workspace }}/.cache
