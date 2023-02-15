@@ -1,7 +1,6 @@
 'use strict'
 
 const Store = require('electron-store')
-const { randomUUID } = require('crypto')
 
 const log = require('electron-log').scope('config')
 
@@ -50,9 +49,6 @@ let TrayOperationExplained =
 let DestinationFilAddress =
   /** @type {string | undefined} */
   (configStore.get(ConfigKeys.DestinationFilAddress))
-const StationID =
-  /** @type {string} */
-  (configStore.get(ConfigKeys.StationID, randomUUID()))
 
 /**
  * @returns {boolean}
@@ -85,13 +81,6 @@ function setTrayOperationExplained () {
 }
 
 /**
- * @returns {string}
- */
-function getStationID () {
-  return StationID
-}
-
-/**
  * @returns {string | undefined}
  */
 function getDestinationWalletAddress () {
@@ -111,7 +100,6 @@ module.exports = {
   setOnboardingCompleted,
   getTrayOperationExplained,
   setTrayOperationExplained,
-  getStationID,
   getDestinationWalletAddress,
   setDestinationWalletAddress
 }
