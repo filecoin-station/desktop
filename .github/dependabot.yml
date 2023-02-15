@@ -22,3 +22,14 @@ updates:
       # https://github.com/electron/electron/issues/21457
       - dependency-name: "execa"
         versions: [">=6"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "09:00"
+      timezone: "Europe/Berlin"
+    commit-message:
+      prefix: "ci"
+    reviewers:
+      - "bajtos"
+      - "juliangruber"
