@@ -143,20 +143,43 @@ jobs:
         uses: dawidd6/action-get-tag@12319896edaa290b27558e34a177804e9b8d077b # v1
         continue-on-error: true # empty steps.tag.outputs.tag will inform the next step
 
-      - name: Build binaries with electron-builder
+      - name: Build binaries with electron-builder (Linux)
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           npm run build
           npm exec -- electron-builder --publish onTag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_BUILD_TAG: ${{ steps.tag.outputs.tag }} # used by --publish onTag
+          DEBUG: electron-builder
+      
+      - name: Build binaries with electron-builder (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          npm run build
+          npm exec -- electron-builder --publish onTag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
+          DEBUG: electron-builder
+          CSC_LINK: ${{ secrets.windows_certs }}
+          CSC_KEY_PASSWORD: ${{ secrets.windows_certs_password }}        
+  
+      - name: Build binaries with electron-builder (macOS)
+        run: |
+          npm run build
+          npm exec -- electron-builder --publish onTag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
+          DEBUG: electron-builder
           CSC_LINK: ${{ secrets.mac_certs }}
           CSC_KEY_PASSWORD: ${{ secrets.mac_certs_password }}
-          CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
-          # Apple notarization
           APPLEID: ${{ secrets.apple_id }}
           APPLEIDPASS: ${{ secrets.apple_id_pass }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEBUG: electron-builder
 
       - name: Show dist/
         run: du -sh dist/ && ls -l dist/
