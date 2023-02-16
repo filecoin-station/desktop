@@ -16,7 +16,8 @@
   },
   "ignorePatterns": [
     "assets/",
-    "dist/"
+    "dist/",
+    "@types/"
   ],
   "overrides": [
     {
