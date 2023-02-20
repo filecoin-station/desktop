@@ -25,7 +25,6 @@ module.exports = function (/** @type {Context} */ ctx) {
   const image = nativeImage.createFromPath(icon('off'))
   image.setTemplateImage(true)
   tray = new Tray(image)
-
   const contextMenu = Menu.buildFromTemplate([
     {
       label: `Filecoin Station v${STATION_VERSION}`,
