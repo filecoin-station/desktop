@@ -15,7 +15,9 @@ interface PropsWallet {
 const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [transferMode, setTransferMode] = useState<boolean>(false)
-  const { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, processingTransaction, dismissCurrentTransaction, transferAllFundsToDestinationWallet } = useWallet()
+  const {
+    stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, processingTransaction, dismissCurrentTransaction, transferAllFundsToDestinationWallet
+  } = useWallet()
 
   useEffect(() => {
     dismissCurrentTransaction()
