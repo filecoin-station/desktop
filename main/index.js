@@ -174,7 +174,7 @@ async function run () {
 
   try {
     // Interface
-    await setupTray(ctx)
+    setupTray(ctx)
     setupDialogs(ctx)
     if (process.platform === 'darwin') {
       await setupAppMenu(ctx)
