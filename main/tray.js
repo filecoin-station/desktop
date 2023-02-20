@@ -95,9 +95,8 @@ function setupIpcEventListeners (contextMenu, ctx) {
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, () => {
     assert(tray)
 
-    const entries = ctx.getAllActivities()
     let connected = false
-    for (const entry of entries.reverse()) {
+    for (const entry of ctx.getAllActivities().reverse()) {
       if (
         entry.source === 'Saturn' &&
         entry.type === 'info' &&
