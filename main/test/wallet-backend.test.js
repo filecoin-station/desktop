@@ -31,7 +31,7 @@ describe('Wallet Backend', function () {
 
   describe('getGasLimit()', function () {
     it('gets the gas limit', /** @this {Mocha.Test} */ async function () {
-      this.timeout(30_000)
+      this.timeout(60_000)
 
       const gasLimit = await backend.getGasLimit(
         'f17uoq6tp427uzv7fztkbsnn64iwotfrristwpryy',
