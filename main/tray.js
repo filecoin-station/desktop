@@ -4,13 +4,15 @@ const { IS_MAC, STATION_VERSION } = require('./consts')
 const { Menu, Tray, app, ipcMain, nativeImage } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
-const timers = require('node:timers/promises')
+const assert = require('node:assert')
 
 /** @typedef {import('./typings').Context} Context */
+/** @typedef {import('./typings').Activity} Activity */
 
 // Be warned, this one is pretty ridiculous:
 // Tray must be global or it will break due to.. GC.
 // https://www.electronjs.org/docs/faq#my-apps-tray-disappeared-after-a-few-minutes
+/** @type {Tray | null} */
 let tray = null
 
 function icon (/** @type {'on' | 'off'} */ state) {
@@ -20,49 +22,9 @@ function icon (/** @type {'on' | 'off'} */ state) {
 }
 
 module.exports = function (/** @type {Context} */ ctx) {
-  const image = nativeImage.createFromPath(
-    icon(Math.random() > 0.5 ? 'on' : 'off')
-  )
+  const image = nativeImage.createFromPath(icon('off'))
   image.setTemplateImage(true)
   tray = new Tray(image)
-
-  ;(async () => {
-    while (true) {
-      await timers.setTimeout(1000)
-
-      // Check if connected to Saturn network
-      const entries = ctx.getAllActivities()
-      let connected = false
-      for (const entry of entries.reverse()) {
-        if (
-          entry.source === 'Saturn' &&
-          entry.type === 'info' &&
-          entry.message.includes('Saturn Node is online')
-        ) {
-          connected = true
-          break
-        } else if (
-          entry.source === 'Saturn' &&
-          (
-            entry.type === 'error' ||
-            (
-              entry.message === 'Saturn Node started.' ||
-              entry.message.includes('was able to connect') ||
-              entry.message.includes('will try to connect')
-            )
-          )
-        ) {
-          connected = false
-          break
-        }
-      }
-
-      const state = connected ? 'on' : 'off'
-      const image = nativeImage.createFromPath(icon(state))
-      image.setTemplateImage(true)
-      tray.setImage(image)
-    }
-  })()
 
   const contextMenu = Menu.buildFromTemplate([
     {
@@ -112,13 +74,14 @@ module.exports = function (/** @type {Context} */ ctx) {
   tray.setToolTip('Filecoin Station')
   tray.setContextMenu(contextMenu)
 
-  setupIpcEventListeners(contextMenu)
+  setupIpcEventListeners(contextMenu, ctx)
 }
 
 /**
  * @param {Electron.Menu} contextMenu
+ * @param {Context} ctx
  */
-function setupIpcEventListeners (contextMenu) {
+function setupIpcEventListeners (contextMenu, ctx) {
   ipcMain.on(ipcMainEvents.UPDATE_CHECK_STARTED, () => {
     getItemById('checkForUpdates').visible = false
     getItemById('checkingForUpdates').visible = true
@@ -127,6 +90,41 @@ function setupIpcEventListeners (contextMenu) {
   ipcMain.on(ipcMainEvents.UPDATE_CHECK_FINISHED, () => {
     getItemById('checkForUpdates').visible = true
     getItemById('checkingForUpdates').visible = false
+  })
+
+  ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, () => {
+    assert(tray)
+
+    const entries = ctx.getAllActivities()
+    let connected = false
+    for (const entry of entries.reverse()) {
+      if (
+        entry.source === 'Saturn' &&
+        entry.type === 'info' &&
+        entry.message.includes('Saturn Node is online')
+      ) {
+        connected = true
+        break
+      } else if (
+        entry.source === 'Saturn' &&
+        (
+          entry.type === 'error' ||
+          (
+            entry.message === 'Saturn Node started.' ||
+            entry.message.includes('was able to connect') ||
+            entry.message.includes('will try to connect')
+          )
+        )
+      ) {
+        connected = false
+        break
+      }
+    }
+
+    const state = connected ? 'on' : 'off'
+    const image = nativeImage.createFromPath(icon(state))
+    image.setTemplateImage(true)
+    tray.setImage(image)
   })
 
   /**
