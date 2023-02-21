@@ -18,7 +18,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
     hasCurrentTransaction ||
     Number(balance) < 0.001
   return (
-    <div className={`relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-300 ${(!editMode) ? 'visible' : 'z-0 -translate-y-[7.8rem] text-opacity-0'} ${(editMode && disabled) && 'invisible opacity-0'}`}>
+    <div className={`relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${(!editMode) ? 'visible' : 'z-0 -translate-y-[7.8rem] text-opacity-0 opacity-0'} ${(editMode && disabled) && 'invisible opacity-0'}`}>
       <div className={`absolute w-fit right-0 flex items-center ease-[cubic-bezier(0.85,0,0.15,1) duration-500 z-10 ${(transferMode && !disabled) ? '-translate-x-[8rem] opacity-0' : ''}`}>
         <button
           className="wallet-transfer-start btn-primary w-40 bg-grayscale-250 border-0"
