@@ -81,7 +81,7 @@
     "@types/tmp": "^0.2.3",
     "@types/unzip-stream": "^0.3.1",
     "@typescript-eslint/eslint-plugin": "^5.53.0",
-    "@typescript-eslint/experimental-utils": "^5.52.0",
+    "@typescript-eslint/experimental-utils": "^5.53.0",
     "@typescript-eslint/parser": "^5.52.0",
     "@vitejs/plugin-react": "^3.1.0",
     "@vitest/ui": "^0.28.5",
