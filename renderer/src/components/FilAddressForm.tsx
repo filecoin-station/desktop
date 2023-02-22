@@ -86,7 +86,7 @@ const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', save
     return (
       <>
         <button
-          className={`btn-primary w-40 submit-address bg-grayscale-250 text-primary ease-[cubic-bezier(0.85,0,0.15,1)] duration-700
+          className={`btn-primary w-40 submit-address bg-grayscale-250 text-primary ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
         ${internalEditMode && editMode ? 'visible z-20' : 'invisible text-opacity-0 translate-y-[7.8rem]'}`}
           disabled={(!addressIsValid && !internalEditMode) || (inputAddr === destinationAddress)}
           title="save address"

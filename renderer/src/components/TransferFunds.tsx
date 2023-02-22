@@ -20,8 +20,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({ transferMode, bal
   return (
     <div
       className={
-        'relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-300 ' +
-        (!editMode ? 'visible' : 'z-0 -translate-y-[7.8rem] text-opacity-0') + ' ' +
+        `relative flex items-end w-full ease-[cubic-bezier(0.85,0,0.15,1)] duration-500 ${(!editMode) ? 'visible' : 'z-0 -translate-y-[7.8rem] text-opacity-0 opacity-0'} ` +
         ((editMode && disabled) && 'invisible opacity-0')
       }
     >
