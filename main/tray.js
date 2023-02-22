@@ -5,6 +5,7 @@ const { Menu, Tray, app, ipcMain, nativeImage } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const assert = require('node:assert')
+const saturn = require('./saturn-node')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').Activity} Activity */
@@ -73,14 +74,13 @@ module.exports = function (/** @type {Context} */ ctx) {
   tray.setToolTip('Filecoin Station')
   tray.setContextMenu(contextMenu)
 
-  setupIpcEventListeners(contextMenu, ctx)
+  setupIpcEventListeners(contextMenu)
 }
 
 /**
  * @param {Electron.Menu} contextMenu
- * @param {Context} ctx
  */
-function setupIpcEventListeners (contextMenu, ctx) {
+function setupIpcEventListeners (contextMenu) {
   ipcMain.on(ipcMainEvents.UPDATE_CHECK_STARTED, () => {
     getItemById('checkForUpdates').visible = false
     getItemById('checkingForUpdates').visible = true
@@ -94,32 +94,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, () => {
     assert(tray)
 
-    let connected = false
-    for (const entry of ctx.getAllActivities().reverse()) {
-      if (
-        entry.source === 'Saturn' &&
-        entry.type === 'info' &&
-        entry.message.includes('Saturn Node is online')
-      ) {
-        connected = true
-        break
-      } else if (
-        entry.source === 'Saturn' &&
-        (
-          entry.type === 'error' ||
-          (
-            entry.message === 'Saturn Node started.' ||
-            entry.message.includes('was able to connect') ||
-            entry.message.includes('will try to connect')
-          )
-        )
-      ) {
-        connected = false
-        break
-      }
-    }
-
-    const state = connected ? 'on' : 'off'
+    const state = saturn.isOnline() ? 'on' : 'off'
     const image = nativeImage.createFromPath(icon(state))
     image.setTemplateImage(true)
     tray.setImage(image)
