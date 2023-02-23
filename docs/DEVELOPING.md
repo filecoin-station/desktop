@@ -6,7 +6,7 @@
 
 ```mermaid
 graph
-  fil-stat-repo(github.com/filecoin-project/filecoin-station) --> fil-stat-main(Station main process)
+  fil-stat-repo(github.com/filecoin-station/desktop) --> fil-stat-main(Station main process)
   fil-stat-repo --> fil-stat-webui(Station WebUI)
 
   saturn-l2-repo(https://github.com/filecoin-project/saturn-l2)
@@ -23,17 +23,17 @@ graph
 
 Repositories:
 
-- https://github.com/filecoin-project/filecoin-station
-- https://github.com/filecoin-project/saturn-l2
+- https://github.com/filecoin-station/desktop
+- https://github.com/filecoin-saturn/L2-node
 - https://github.com/filecoin-project/saturn-webui
 
 ### End-to-end release workflow
 
-1. `saturn-webui` publishes a new release with WebUI assets
-2. `saturn-l2` is updated to use the new `saturn-webui` version
-3. `saturn-l2` publishes a new release
-4. `filecoin-station` is updated to use the new `saturn-l2 `version
-5. `filecoin-station` publishes a new release
+1. `filecoin-project/saturn-webui` publishes a new release with WebUI assets
+2. `filecoin-saturn/L2-node` is updated to use the new `saturn-webui` version
+3. `filecoin-saturn/L2-node` publishes a new release
+4. `filecoin-station/desktop` is updated to use the new `L2-node` version
+5. `filecoin-station/desktop` publishes a new release
 
 ## Development workflow
 

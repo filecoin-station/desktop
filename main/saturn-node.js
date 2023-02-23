@@ -19,6 +19,7 @@ const saturnBinaryPath = getSaturnBinaryPath()
 let childProcess = null
 
 let ready = false
+let online = false
 /** @type {string | null} */
 let moduleExitReason = null
 
@@ -226,6 +227,10 @@ function isReady () {
   return ready
 }
 
+function isOnline () {
+  return online
+}
+
 function getWebUrl () {
   return webUrl
 }
@@ -269,10 +274,26 @@ function handleActivityLogs (ctx, text) {
       const m = line.match(/^(INFO|ERROR): (.*)$/)
       if (!m) return
 
+      const type = /** @type {any} */(m[1].toLowerCase())
+      const message = m[2]
+
+      if (type === 'info' && message.includes('Saturn Node is online')) {
+        online = true
+      } else if (
+        type === 'error' ||
+        (
+          message === 'Saturn Node started.' ||
+          message.includes('was able to connect') ||
+          message.includes('will try to connect')
+        )
+      ) {
+        online = false
+      }
+
       ctx.recordActivity({
         source: 'Saturn',
-        type: /** @type {any} */(m[1].toLowerCase()),
-        message: m[2]
+        type,
+        message
       })
     })
 }
@@ -307,6 +328,7 @@ module.exports = {
   stop,
   isRunning,
   isReady,
+  isOnline,
   getLog,
   getWebUrl
 }

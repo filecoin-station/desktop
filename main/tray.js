@@ -4,22 +4,33 @@ const { IS_MAC, STATION_VERSION } = require('./consts')
 const { Menu, Tray, app, ipcMain, nativeImage } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
+const assert = require('node:assert')
+const saturn = require('./saturn-node')
+
+/** @typedef {import('./typings').Context} Context */
+/** @typedef {import('./typings').Activity} Activity */
 
 // Be warned, this one is pretty ridiculous:
 // Tray must be global or it will break due to.. GC.
 // https://www.electronjs.org/docs/faq#my-apps-tray-disappeared-after-a-few-minutes
+/** @type {Tray | null} */
 let tray = null
+
+const icons = {
+  on: icon('on'),
+  off: icon('off')
+}
 
 function icon (/** @type {'on' | 'off'} */ state) {
   const dir = path.resolve(path.join(__dirname, '../assets/tray'))
-  if (IS_MAC) return path.join(dir, `${state}-macos.png`)
-  return path.join(dir, `${state}.png`)
+  const file = IS_MAC ? `${state}-macos.png` : `${state}.png`
+  const image = nativeImage.createFromPath(path.join(dir, file))
+  image.setTemplateImage(true)
+  return image
 }
 
-module.exports = function (/** @type {import('./typings').Context} */ ctx) {
-  const image = nativeImage.createFromPath(icon('on'))
-  image.setTemplateImage(true)
-  tray = new Tray(image)
+module.exports = function (/** @type {Context} */ ctx) {
+  tray = new Tray(icons.off)
   const contextMenu = Menu.buildFromTemplate([
     {
       label: `Filecoin Station v${STATION_VERSION}`,
@@ -83,6 +94,13 @@ function setupIpcEventListeners (contextMenu) {
   ipcMain.on(ipcMainEvents.UPDATE_CHECK_FINISHED, () => {
     getItemById('checkForUpdates').visible = true
     getItemById('checkingForUpdates').visible = false
+  })
+
+  ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, () => {
+    assert(tray)
+
+    const state = saturn.isOnline() ? 'on' : 'off'
+    tray.setImage(icons[state])
   })
 
   /**
