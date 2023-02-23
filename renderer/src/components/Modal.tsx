@@ -2,8 +2,8 @@ import { FC } from 'react'
 import WalletModule from '../components/WalletModule'
 
 interface ModalProps {
-  isOpen: boolean
-  setIsOpen: () => void
+  isOpen: boolean;
+  setIsOpen: () => void;
 }
 const Modal : FC<ModalProps> = ({ isOpen, setIsOpen }) => {
   return (

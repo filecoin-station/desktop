@@ -6,8 +6,8 @@ import { FILTransaction, FILTransactionProcessing } from '../typings'
 import { browseTransactionTracker } from '../lib/station-config'
 
 interface WalletTransactionStatusWidgetProps {
-  processingTransaction: FILTransactionProcessing | FILTransaction,
-  renderBackground: boolean
+  processingTransaction: FILTransactionProcessing | FILTransaction;
+  renderBackground: boolean;
 }
 
 const WalletTransactionStatusWidget: FC<WalletTransactionStatusWidgetProps> = ({ processingTransaction, renderBackground = true }) => {
