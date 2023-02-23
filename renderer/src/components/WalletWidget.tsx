@@ -7,7 +7,7 @@ import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
 import { FILTransactionProcessing } from '../typings'
 
 interface WalletWidgetProps {
-  onClick: () => void
+  onClick: () => void;
 }
 
 const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {

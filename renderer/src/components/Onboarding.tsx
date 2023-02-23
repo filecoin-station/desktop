@@ -4,10 +4,10 @@ import { ReactComponent as Page } from './../assets/img/icons/paginator-page.svg
 import { ReactComponent as CurrentPage } from './../assets/img/icons/paginator-current.svg'
 
 interface FooterProps {
-  page: number,
-  pages: number,
-  next: () => void,
-  prev: () => void
+  page: number;
+  pages: number;
+  next: () => void;
+  prev: () => void;
 }
 
 const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
@@ -38,7 +38,7 @@ const Footer: FC<FooterProps> = ({ page, pages, next, prev }) => {
 }
 
 interface OnboardingProps {
-  onFinish: () => void
+  onFinish: () => void;
 }
 
 const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {

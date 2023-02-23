@@ -30,7 +30,7 @@ const ActivityLogItem: FC<ActivityEventMessage> = (activity) => {
 }
 
 interface DateSeparatorProps {
-  date: string,
+  date: string;
 }
 
 const DateSeparator: FC<DateSeparatorProps> = ({ date }) => {

@@ -9,7 +9,7 @@ import TransferFundsButtons from './TransferFunds'
 import { ReactComponent as CopyIcon } from '../assets/img/icons/copy.svg'
 
 interface PropsWallet {
-  isOpen: boolean,
+  isOpen: boolean;
 }
 
 const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {

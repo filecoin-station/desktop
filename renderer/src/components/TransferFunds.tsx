@@ -3,14 +3,14 @@ import { ReactComponent as InfoIcon } from '../assets/img/icons/info.svg'
 import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 
 interface TransferFundsButtonsProps {
-  transferMode: boolean,
-  balance: string | undefined,
-  enableTransferMode: () => void,
-  transferAllFunds: () => void,
-  reset: () => void,
-  destinationFilAddress: string | undefined,
-  editMode: boolean,
-  hasCurrentTransaction: boolean
+  transferMode: boolean;
+  balance: string | undefined;
+  enableTransferMode: () => void;
+  transferAllFunds: () => void;
+  reset: () => void;
+  destinationFilAddress: string | undefined;
+  editMode: boolean;
+  hasCurrentTransaction: boolean;
 }
 
 const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({

@@ -9,8 +9,8 @@ import { browseTransactionTracker } from '../lib/station-config'
 import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
-  allTransactions: FILTransaction[] | [],
-  processingTransaction: FILTransactionProcessing | undefined
+  allTransactions: FILTransaction[] | [];
+  processingTransaction: FILTransactionProcessing | undefined;
 }
 
 const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({
@@ -57,7 +57,7 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({
 }
 
 interface ProcessingTransactionProps {
-  transaction: FILTransactionProcessing | undefined
+  transaction: FILTransactionProcessing | undefined;
 }
 
 const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) => {
@@ -123,7 +123,7 @@ const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) 
 }
 
 interface TransactionProps {
-  transaction: FILTransaction | undefined
+  transaction: FILTransaction | undefined;
 }
 
 const Transaction: FC<TransactionProps> = ({ transaction }) => {
