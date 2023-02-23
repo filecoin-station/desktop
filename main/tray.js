@@ -16,16 +16,33 @@ const saturn = require('./saturn-node')
 /** @type {Tray | null} */
 let tray = null
 
-function icon (/** @type {'on' | 'off'} */ state) {
+function icon (/** @type {'on' | 'off' | 'update-on' | 'update-off'} */ state) {
   const dir = path.resolve(path.join(__dirname, '../assets/tray'))
   if (IS_MAC) return path.join(dir, `${state}-macos.png`)
   return path.join(dir, `${state}.png`)
 }
 
-module.exports = function (/** @type {Context} */ ctx) {
-  const image = nativeImage.createFromPath(icon('off'))
+/**
+ * @param {boolean} isUpdateAvailable
+ * @param {boolean} isOnline
+ */
+function getTrayImage (isUpdateAvailable, isOnline) {
+  const state = isUpdateAvailable
+    ? isOnline
+      ? 'update-on'
+      : 'update-off'
+    : isOnline
+      ? 'on'
+      : 'off'
+  const image = nativeImage.createFromPath(icon(state))
   image.setTemplateImage(true)
-  tray = new Tray(image)
+  return image
+}
+
+module.exports = function (/** @type {Context} */ ctx) {
+  tray = new Tray(
+    getTrayImage(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
+  )
   const contextMenu = Menu.buildFromTemplate([
     {
       label: `Filecoin Station v${STATION_VERSION}`,
@@ -74,13 +91,14 @@ module.exports = function (/** @type {Context} */ ctx) {
   tray.setToolTip('Filecoin Station')
   tray.setContextMenu(contextMenu)
 
-  setupIpcEventListeners(contextMenu)
+  setupIpcEventListeners(contextMenu, ctx)
 }
 
 /**
  * @param {Electron.Menu} contextMenu
+ * @param {Context} ctx
  */
-function setupIpcEventListeners (contextMenu) {
+function setupIpcEventListeners (contextMenu, ctx) {
   ipcMain.on(ipcMainEvents.UPDATE_CHECK_STARTED, () => {
     getItemById('checkForUpdates').visible = false
     getItemById('checkingForUpdates').visible = true
@@ -93,12 +111,12 @@ function setupIpcEventListeners (contextMenu) {
 
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, () => {
     assert(tray)
-
-    const state = saturn.isOnline() ? 'on' : 'off'
-    const image = nativeImage.createFromPath(icon(state))
-    image.setTemplateImage(true)
-    tray.setImage(image)
+    tray.setImage(
+      getTrayImage(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
+    )
   })
+
+  // TODO: Listen for update available
 
   /**
    * Get an item from the Tray menu or fail with a useful error message.
