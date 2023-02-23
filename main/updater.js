@@ -153,7 +153,7 @@ function onUpdateAvailable ({ version /*, releaseNotes */ }) {
 
 function openReleaseNotes () {
   const version = nextVersion ? `v${nextVersion}` : 'latest'
-  shell.openExternal(`https://github.com/filecoin-station/filecoin-station/releases/${version}`)
+  shell.openExternal(`https://github.com/filecoin-station/desktop/releases/${version}`)
 }
 
 /**

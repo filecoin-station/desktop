@@ -27,7 +27,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/filecoin-project/filecoin-station.git"
+    "url": "git+https://github.com/filecoin-station/desktop.git"
   },
   "keywords": [
     "filecoin"
@@ -35,9 +35,9 @@
   "author": "Protocol Labs",
   "license": "(Apache-2.0 AND MIT)",
   "bugs": {
-    "url": "https://github.com/filecoin-project/filecoin-station/issues"
+    "url": "https://github.com/filecoin-station/desktop/issues"
   },
-  "homepage": "https://github.com/filecoin-project/filecoin-station#readme",
+  "homepage": "https://github.com/filecoin-station/desktop#readme",
   "dependencies": {
     "@glif/filecoin-address": "2.0.1",
     "@glif/filecoin-message": "^2.0.27",
