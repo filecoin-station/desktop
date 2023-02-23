@@ -13,7 +13,9 @@
     "@typescript-eslint/no-unused-vars": ["error", {
       "argsIgnorePattern": "^_"
     }],
-    "@typescript-eslint/member-delimiter-style": "error"
+    "@typescript-eslint/member-delimiter-style": "error",
+    "semi": "off",
+    "@typescript-eslint/semi": ["error", "never"]
   },
   "ignorePatterns": [
     "assets/",

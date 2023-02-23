@@ -1,5 +1,5 @@
-export type ActivitySource = 'Station' | 'Saturn';
-export type ActivityType = 'info' | 'error';
+export type ActivitySource = 'Station' | 'Saturn'
+export type ActivityType = 'info' | 'error'
 export type TransactionStatus = 'succeeded' | 'processing' | 'failed'
 
 export interface Activity {
@@ -22,12 +22,12 @@ export type FILTransaction = {
 }
 
 // helper
-type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 // FILTransaction with certain properties changed to optional
 // A processing transaction can have all statuses, because we're briefly showing
 // succeeded and failed ones in the same place as the processing one.
-export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>;
+export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
 
 export interface FoxMessage {
   cid: string;
@@ -43,9 +43,9 @@ export interface FoxMessage {
   };
 }
 
-export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
+export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>
 
-export type ModuleJobStatsMap = Record<string, number>;
+export type ModuleJobStatsMap = Record<string, number>
 
 export interface Context {
   recordActivity(activity: RecordActivityArgs): void;
