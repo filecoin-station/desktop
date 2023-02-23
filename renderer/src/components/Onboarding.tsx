@@ -57,7 +57,8 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
           <div className='min-h-[372px]'>
             <div className='pb-20 px-20 pt-16 min-h-[250px]'>
               <p className="text-body-s my-3">
-                Station securely connects your computer to Filecoin&apos;s global peer-to-peer network, which rewards you for your participation. Once you&apos;ve connected, you will begin completing network jobs.
+                Station securely connects your computer to Filecoin&apos;s global peer-to-peer network, which rewards you for your participation. Once you&apos;ve connected, you will begin completing
+                network jobs.
               </p>
             </div>
             <div className='pb-20 bottom-0 px-20'>
@@ -97,7 +98,8 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
             <div className='pb-8 px-20 pt-8 min-h-[250px]'>
               <p className="text-body-s my-3">
                 Station asks for your consent to use your personal data to store and/or access information on a device.
-                Your personal data will be processed and information from your device (cookies, unique identifiers, and other device data) may be stored by, accessed by and shared with third party vendors, or used specifically by this app.
+                Your personal data will be processed and information from your device (cookies, unique identifiers, and other device data) may be stored by, accessed by and shared with third party
+                vendors, or used specifically by this app.
               </p>
               <p className="text-body-s my-3">
                 By clicking on the “Accept” button or otherwise continuing to use this service, you agree, you have read, understand and accept Station&apos;s Terms & Conditions.
