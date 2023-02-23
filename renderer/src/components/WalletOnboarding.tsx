@@ -12,7 +12,8 @@ const WalletOnboarding = () => {
             <div className='py-3 px-6 pr-24'>
               <p className='text-body-s text-primary font-body uppercase'>YOUR STATION WALLET</p>
               <p className='text-body-2xs mt-1'>
-                Your Station Wallet has a unique address, where all the FIL you earn will be stored. Station Modules will send FIL to this wallet on a regular basis, based on your contributions.
+                Your Station Wallet has a unique address, where all the FIL you earn will be stored. Station
+                Modules will send FIL to this wallet on a regular basis, based on your contributions.
               </p>
             </div>
           </div>
@@ -23,8 +24,9 @@ const WalletOnboarding = () => {
             <div className='py-3 px-6 pr-24'>
               <p className='text-body-s text-primary font-body uppercase'>TRANSFERRING YOUR FIL</p>
               <p className='text-body-2xs mt-1'>
-                In order to transfer FIL out of your Station Wallet, you need to set a destination FIL address to which to send your FIL. We recommend you regularly transfer the FIL in your Station
-                Wallet to a more secure wallet.
+                In order to transfer FIL out of your Station Wallet, you need to set a destination FIL address to
+                which to send your FIL. We recommend you regularly transfer the FIL in your Station  Wallet to a
+                more secure wallet.
               </p>
             </div>
           </div>
@@ -35,7 +37,8 @@ const WalletOnboarding = () => {
             <div className='py-3 px-6 pr-24'>
               <p className='text-body-s text-primary font-body uppercase'>GAS FEES</p>
               <p className='text-body-2xs mt-1'>
-                All transactions on the blockchain incur a small gas fee, which can vary depending on network activity. This is deducted from the total amount you are transferring.
+                All transactions on the blockchain incur a small gas fee, which can vary depending on network
+                activity. This is deducted from the total amount you are transferring.
               </p>
             </div>
           </div>

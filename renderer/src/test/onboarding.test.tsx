@@ -44,7 +44,10 @@ describe('Welcome page test', () => {
 
     test('Redirects to dashboard directly if user is onboarded', async () => {
       await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }), { timeout: 3000 })
+      await waitFor(
+        () => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }),
+        { timeout: 3000 }
+      )
     })
   })
 
@@ -68,11 +71,17 @@ describe('Welcome page test', () => {
     })
 
     test('loads and show onboarding modal on startup', async () => {
-      await waitFor(() => { expect(document.getElementsByClassName('onboarding')).toHaveLength(1) }, { timeout: 3000 })
+      await waitFor(
+        () => { expect(document.getElementsByClassName('onboarding')).toHaveLength(1) },
+        { timeout: 3000 }
+      )
     })
 
     test('interact with onboarding slides', async () => {
-      await waitFor(() => { expect(screen.getByText(/Back/i).closest('button')).toBeDisabled() }, { timeout: 3000 })
+      await waitFor(
+        () => { expect(screen.getByText(/Back/i).closest('button')).toBeDisabled() },
+        { timeout: 3000 }
+      )
       await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1))
       act(() => { fireEvent.click(screen.getByText(/Continue/i)) })
       await waitFor(() => expect(document.getElementsByClassName('onboarding-1')).toHaveLength(1))
@@ -85,7 +94,10 @@ describe('Welcome page test', () => {
     })
 
     test('redirects to dashboard on accept', async () => {
-      await waitFor(() => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1), { timeout: 3000 })
+      await waitFor(
+        () => expect(document.getElementsByClassName('onboarding-0')).toHaveLength(1),
+        { timeout: 3000 }
+      )
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/Accept/i)) }))

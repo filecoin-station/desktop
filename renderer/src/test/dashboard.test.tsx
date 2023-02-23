@@ -216,7 +216,10 @@ describe('Dashboard page', () => {
     test('subscribes and listens the earnings counter', () => {
       onEarningsChanged(setTotalEarnings)
       waitFor(() => { expect(onEarningsChanged).toBeCalledTimes(1) }, { timeout: 10 })
-      waitFor(() => { expect((screen.getByTitle('total earnings')).textContent).toBe('200FIL') }, { timeout: 1000 })
+      waitFor(
+        () => { expect((screen.getByTitle('total earnings')).textContent).toBe('200FIL') },
+        { timeout: 1000 }
+      )
     })
   })
 })

@@ -12,6 +12,10 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": ["error", {
       "argsIgnorePattern": "^_"
+    }],
+    "max-len": ["error", {
+      "code": 115,
+      "ignoreUrls": true
     }]
   },
   "ignorePatterns": [
@@ -64,10 +68,7 @@
         "react/jsx-first-prop-new-line": "error",
         "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
         "react/jsx-indent-props": ["error", "first"],
-        "react/jsx-closing-bracket-location": "error",
-        "max-len": ["error", {
-          "code": 200
-        }]
+        "react/jsx-closing-bracket-location": "error"
       }
     }
   ]

@@ -34,7 +34,9 @@ const Dashboard = (): JSX.Element => {
             </div>
             <div className="mb-6">
               <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Jobs Completed</p>
-              <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">{totalJobs.toLocaleString()}</p>
+              <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">
+                {totalJobs.toLocaleString()}
+              </p>
             </div>
             <div className="mb-6">
               <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (coming soon)</p>

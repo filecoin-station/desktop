@@ -38,10 +38,14 @@ const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
         </button>
       </div>
       <div
-        className={`transition duration-1000 ease-in-out opacity-0 ${processingTransaction ? 'opacity-100' : 'opacity-0'}`}
+        className={`
+          transition duration-1000 ease-in-out opacity-0 ${processingTransaction ? 'opacity-100' : 'opacity-0'}
+        `}
         onTransitionEnd={() => !processingTransaction && setDisplayTransaction(undefined)}
       >
-        {displayTransition && <WalletTransactionStatusWidget processingTransaction={displayTransition} renderBackground={true} />}
+        {displayTransition && (
+          <WalletTransactionStatusWidget processingTransaction={displayTransition} renderBackground={true} />
+        )}
       </div>
     </div>
   )

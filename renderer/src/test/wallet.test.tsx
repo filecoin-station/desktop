@@ -120,8 +120,13 @@ describe('Dashboard wallet display', () => {
     test('Wallet setup destination address', () => {
       act(() => fireEvent.click(document.getElementsByClassName('address-edit')[0]))
       waitFor(() => expect(document.getElementsByClassName('submit-address')[0]).toBeDisabled())
-      act(() => fireEvent.change(document.getElementsByClassName('destination-address')[0], { target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg' } }))
-      expect(document.getElementsByClassName('destination-address')[0]).toHaveValue('f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg')
+      act(() =>
+        fireEvent.change(document.getElementsByClassName('destination-address')[0], {
+          target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg' }
+        }))
+      expect(
+        document.getElementsByClassName('destination-address')[0]
+      ).toHaveValue('f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg')
       expect(document.getElementsByClassName('submit-address')[0]).not.toBeDisabled()
       act(() => fireEvent.click(document.getElementsByClassName('submit-address')[0]))
       waitFor(() => { expect(mockedSetDestinationWalletAddress).toHaveBeenCalledOnce() })

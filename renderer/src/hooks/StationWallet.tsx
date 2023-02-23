@@ -112,7 +112,9 @@ const useWallet = (): Wallet => {
       setTransactions(processing, confirmed)
     }
 
-    const unsubscribeOnTransactionUpdate = window.electron.stationEvents.onTransactionUpdate(updateWalletTransactionsArray)
+    const unsubscribeOnTransactionUpdate = window.electron.stationEvents.onTransactionUpdate(
+      updateWalletTransactionsArray
+    )
     return () => {
       unsubscribeOnTransactionUpdate()
     }
@@ -130,13 +132,24 @@ const useWallet = (): Wallet => {
   }, [])
 
   useEffect(() => {
-    const unsubscribeOnBalanceUpdate = window.electron.stationEvents.onBalanceUpdate(balance => setWalletBalance(balance))
+    const unsubscribeOnBalanceUpdate = window.electron.stationEvents.onBalanceUpdate(balance => {
+      setWalletBalance(balance)
+    })
     return () => {
       unsubscribeOnBalanceUpdate()
     }
   }, [walletBalance])
 
-  return { stationAddress, destinationFilAddress, walletBalance, walletTransactions, editDestinationAddress, processingTransaction, dismissCurrentTransaction, transferAllFundsToDestinationWallet }
+  return {
+    stationAddress,
+    destinationFilAddress,
+    walletBalance,
+    walletTransactions,
+    editDestinationAddress,
+    processingTransaction,
+    dismissCurrentTransaction,
+    transferAllFundsToDestinationWallet
+  }
 }
 
 interface SplitTransactions {
