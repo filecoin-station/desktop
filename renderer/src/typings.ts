@@ -40,7 +40,8 @@ declare global {
         onJobProcessed: (callback: (value: number) => void) => () => void;
         onEarningsChanged: (callback: (value: number) => void) => () => void;
         onUpdateAvailable: (callback: () => void) => () => void;
-        onTransactionUpdate: (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void) => () => void;
+        onTransactionUpdate:
+          (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void) => () => void;
         onBalanceUpdate: (callback: (balance: string) => void) => () => void;
       };
       dialogs: {
@@ -78,7 +79,9 @@ type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 // succeeded and failed ones in the same place as the processing one.
 export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
 
-export function isFILTransactionProcessing (tx: FILTransaction | FILTransactionProcessing): tx is FILTransactionProcessing {
+export function isFILTransactionProcessing (
+  tx: FILTransaction | FILTransactionProcessing
+): tx is FILTransactionProcessing {
   return tx.status === 'processing'
 }
 

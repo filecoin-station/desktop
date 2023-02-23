@@ -69,9 +69,12 @@ export async function getStationWalletBalance (): Promise<string> {
   return await window.electron.stationConfig.getStationWalletBalance()
 }
 
-export const getStationWalletTransactionsHistory = pDebounce(async function (): Promise<(FILTransaction|FILTransactionProcessing)[]> {
-  return await window.electron.stationConfig.getStationWalletTransactionsHistory()
-}, 0)
+export const getStationWalletTransactionsHistory = pDebounce(
+  async function (): Promise<(FILTransaction|FILTransactionProcessing)[]> {
+    return await window.electron.stationConfig.getStationWalletTransactionsHistory()
+  },
+  0
+)
 
 export async function transferAllFundsToDestinationWallet (): Promise<void> {
   return await window.electron.stationConfig.transferAllFundsToDestinationWallet()
