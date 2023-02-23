@@ -40,7 +40,7 @@ export interface FoxMessage {
   timestamp: number;
   receipt: {
     exitCode: number;
-  }
+  };
 }
 
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>;
@@ -54,19 +54,19 @@ export interface Context {
   setModuleJobsCompleted(moduleName: string, count: number): void;
   getTotalJobsCompleted(): number;
 
-  showUI: () => void
-  loadWebUIFromDist: import('electron-serve').loadURL
-  manualCheckForUpdates: () => void,
-  saveSaturnModuleLogAs: () => Promise<void>,
-  confirmChangeWalletAddress: () => boolean,
+  showUI: () => void;
+  loadWebUIFromDist: import('electron-serve').loadURL;
+  manualCheckForUpdates: () => void;
+  saveSaturnModuleLogAs: () => Promise<void>;
+  confirmChangeWalletAddress: () => boolean;
 
-  openReleaseNotes: () => void,
-  restartToUpdate: () => void,
-  getUpdaterStatus: () => {updateAvailable: boolean},
-  browseTransactionTracker: (transactionHash: string) => void,
+  openReleaseNotes: () => void;
+  restartToUpdate: () => void;
+  getUpdaterStatus: () => {updateAvailable: boolean};
+  browseTransactionTracker: (transactionHash: string) => void;
 
-  transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void,
-  balanceUpdate: (balance:string) => void
+  transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void;
+  balanceUpdate: (balance:string) => void;
 }
 
 export interface WalletSeed {

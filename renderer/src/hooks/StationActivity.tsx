@@ -3,9 +3,9 @@ import { getTotalJobsCompleted, getAllActivities, getTotalEarnings } from '../li
 import { ActivityEventMessage } from '../typings'
 
 interface StationActivity {
-  totalJobs: number,
-  totalEarnings: number,
-  activities: ActivityEventMessage[] | []
+  totalJobs: number;
+  totalEarnings: number;
+  activities: ActivityEventMessage[] | [];
 }
 const useStationActivity = (): StationActivity => {
   const [totalJobs, setTotalJobs] = useState<number>(0)

@@ -16,14 +16,14 @@ import {
 } from '../typings'
 
 interface Wallet {
-  stationAddress: string,
-  destinationFilAddress: string | undefined,
-  walletBalance: string | undefined,
-  walletTransactions: FILTransaction[] | undefined,
-  editDestinationAddress: (address: string|undefined) => void,
-  processingTransaction: FILTransactionProcessing | undefined,
-  dismissCurrentTransaction: () => void,
-  transferAllFundsToDestinationWallet: () => Promise<void>
+  stationAddress: string;
+  destinationFilAddress: string | undefined;
+  walletBalance: string | undefined;
+  walletTransactions: FILTransaction[] | undefined;
+  editDestinationAddress: (address: string|undefined) => void;
+  processingTransaction: FILTransactionProcessing | undefined;
+  dismissCurrentTransaction: () => void;
+  transferAllFundsToDestinationWallet: () => Promise<void>;
 }
 
 const useWallet = (): Wallet => {
@@ -140,8 +140,8 @@ const useWallet = (): Wallet => {
 }
 
 interface SplitTransactions {
-  processing: FILTransactionProcessing | undefined,
-  confirmed: FILTransaction[]
+  processing: FILTransactionProcessing | undefined;
+  confirmed: FILTransaction[];
 }
 
 const splitWalletTransactions = (transactions: (FILTransaction|FILTransactionProcessing)[]): SplitTransactions => {

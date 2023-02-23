@@ -4,11 +4,11 @@ import { ReactComponent as Warning } from '../assets/img/icons/error.svg'
 import { ReactComponent as EditIcon } from '../assets/img/icons/edit.svg'
 
 interface FilAddressFormProps {
-  destinationAddress: string | undefined,
-  saveDestinationAddress: (address: string | undefined) => void,
-  editMode: boolean,
-  transferMode: boolean,
-  enableEditMode: () => void
+  destinationAddress: string | undefined;
+  saveDestinationAddress: (address: string | undefined) => void;
+  editMode: boolean;
+  transferMode: boolean;
+  enableEditMode: () => void;
 }
 
 const FilAddressForm: FC<FilAddressFormProps> = ({ destinationAddress = '', saveDestinationAddress, editMode, transferMode, enableEditMode }) => {
