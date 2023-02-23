@@ -4,9 +4,7 @@
 [![](https://img.shields.io/badge/project-Filecoin-blue.svg?style=flat-square)](https://filecoin.io/)
 [![ci](https://github.com/filecoin-station/desktop/actions/workflows/ci.yml/badge.svg)](https://github.com/filecoin-station/desktop/actions/workflows/ci.yml)
 
-> A short repo tagline goes here
-
-A longer description goes here.
+[filstation.app](https://filstation.app)
 
 ## Install
 
