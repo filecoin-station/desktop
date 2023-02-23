@@ -16,33 +16,37 @@ const saturn = require('./saturn-node')
 /** @type {Tray | null} */
 let tray = null
 
+const icons = {
+  on: icon('on'),
+  off: icon('off'),
+  updateOn: icon('update-on'),
+  updateOff: icon('update-off')
+}
+
 function icon (/** @type {'on' | 'off' | 'update-on' | 'update-off'} */ state) {
   const dir = path.resolve(path.join(__dirname, '../assets/tray'))
-  if (IS_MAC) return path.join(dir, `${state}-macos.png`)
-  return path.join(dir, `${state}.png`)
+  const file = IS_MAC ? `${state}-macos.png` : `${state}.png`
+  const image = nativeImage.createFromPath(path.join(dir, file))
+  image.setTemplateImage(true)
+  return image
 }
 
 /**
  * @param {boolean} isUpdateAvailable
  * @param {boolean} isOnline
  */
-function getTrayImage (isUpdateAvailable, isOnline) {
-  const state = isUpdateAvailable
+function getTrayIcon (isUpdateAvailable, isOnline) {
+  return isUpdateAvailable
     ? isOnline
-      ? 'update-on'
-      : 'update-off'
+      ? icons.updateOn
+      : icons.updateOff
     : isOnline
-      ? 'on'
-      : 'off'
-  const image = nativeImage.createFromPath(icon(state))
-  image.setTemplateImage(true)
-  return image
+      ? icons.on
+      : icons.off
 }
 
 module.exports = function (/** @type {Context} */ ctx) {
-  tray = new Tray(
-    getTrayImage(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
-  )
+  tray = new Tray(icons.off)
   const contextMenu = Menu.buildFromTemplate([
     {
       label: `Filecoin Station v${STATION_VERSION}`,
@@ -112,7 +116,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, () => {
     assert(tray)
     tray.setImage(
-      getTrayImage(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
+      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
     )
   })
 
