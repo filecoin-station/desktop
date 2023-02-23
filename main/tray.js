@@ -18,15 +18,31 @@ let tray = null
 
 const icons = {
   on: icon('on'),
-  off: icon('off')
+  off: icon('off'),
+  updateOn: icon('update-on'),
+  updateOff: icon('update-off')
 }
 
-function icon (/** @type {'on' | 'off'} */ state) {
+function icon (/** @type {'on' | 'off' | 'update-on' | 'update-off'} */ state) {
   const dir = path.resolve(path.join(__dirname, '../assets/tray'))
   const file = IS_MAC ? `${state}-macos.png` : `${state}.png`
   const image = nativeImage.createFromPath(path.join(dir, file))
   image.setTemplateImage(true)
   return image
+}
+
+/**
+ * @param {boolean} isUpdateAvailable
+ * @param {boolean} isOnline
+ */
+function getTrayIcon (isUpdateAvailable, isOnline) {
+  return isUpdateAvailable
+    ? isOnline
+      ? icons.updateOn
+      : icons.updateOff
+    : isOnline
+      ? icons.on
+      : icons.off
 }
 
 module.exports = function (/** @type {Context} */ ctx) {
@@ -79,13 +95,14 @@ module.exports = function (/** @type {Context} */ ctx) {
   tray.setToolTip('Filecoin Station')
   tray.setContextMenu(contextMenu)
 
-  setupIpcEventListeners(contextMenu)
+  setupIpcEventListeners(contextMenu, ctx)
 }
 
 /**
  * @param {Electron.Menu} contextMenu
+ * @param {Context} ctx
  */
-function setupIpcEventListeners (contextMenu) {
+function setupIpcEventListeners (contextMenu, ctx) {
   ipcMain.on(ipcMainEvents.UPDATE_CHECK_STARTED, () => {
     getItemById('checkForUpdates').visible = false
     getItemById('checkingForUpdates').visible = true
@@ -96,12 +113,8 @@ function setupIpcEventListeners (contextMenu) {
     getItemById('checkingForUpdates').visible = false
   })
 
-  ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, () => {
-    assert(tray)
-
-    const state = saturn.isOnline() ? 'on' : 'off'
-    tray.setImage(icons[state])
-  })
+  ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, updateTray)
+  ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, updateTray)
 
   /**
    * Get an item from the Tray menu or fail with a useful error message.
@@ -112,5 +125,12 @@ function setupIpcEventListeners (contextMenu) {
     const item = contextMenu.getMenuItemById(id)
     if (!item) throw new Error(`Unknown tray menu item id: ${id}`)
     return item
+  }
+
+  function updateTray () {
+    assert(tray)
+    tray.setImage(
+      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
+    )
   }
 }
