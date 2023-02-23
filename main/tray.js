@@ -16,16 +16,21 @@ const saturn = require('./saturn-node')
 /** @type {Tray | null} */
 let tray = null
 
+const icons = {
+  on: icon('on'),
+  off: icon('off')
+}
+
 function icon (/** @type {'on' | 'off'} */ state) {
   const dir = path.resolve(path.join(__dirname, '../assets/tray'))
-  if (IS_MAC) return path.join(dir, `${state}-macos.png`)
-  return path.join(dir, `${state}.png`)
+  const file = IS_MAC ? `${state}-macos.png` : `${state}.png`
+  const image = nativeImage.createFromPath(path.join(dir, file))
+  image.setTemplateImage(true)
+  return image
 }
 
 module.exports = function (/** @type {Context} */ ctx) {
-  const image = nativeImage.createFromPath(icon('off'))
-  image.setTemplateImage(true)
-  tray = new Tray(image)
+  tray = new Tray(icons.off)
   const contextMenu = Menu.buildFromTemplate([
     {
       label: `Filecoin Station v${STATION_VERSION}`,
@@ -95,9 +100,7 @@ function setupIpcEventListeners (contextMenu) {
     assert(tray)
 
     const state = saturn.isOnline() ? 'on' : 'off'
-    const image = nativeImage.createFromPath(icon(state))
-    image.setTemplateImage(true)
-    tray.setImage(image)
+    tray.setImage(icons[state])
   })
 
   /**
