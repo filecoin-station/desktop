@@ -113,14 +113,8 @@ function setupIpcEventListeners (contextMenu, ctx) {
     getItemById('checkingForUpdates').visible = false
   })
 
-  ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, () => {
-    assert(tray)
-    tray.setImage(
-      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
-    )
-  })
-
-  // TODO: Listen for update available
+  ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, updateTray)
+  ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, updateTray)
 
   /**
    * Get an item from the Tray menu or fail with a useful error message.
@@ -131,5 +125,12 @@ function setupIpcEventListeners (contextMenu, ctx) {
     const item = contextMenu.getMenuItemById(id)
     if (!item) throw new Error(`Unknown tray menu item id: ${id}`)
     return item
+  }
+
+  function updateTray () {
+    assert(tray)
+    tray.setImage(
+      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
+    )
   }
 }
