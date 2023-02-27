@@ -168,6 +168,7 @@ jobs:
           CSC_KEY_PASSWORD: ${{ secrets.windows_certs_password }}        
   
       - name: Build binaries with electron-builder (macOS)
+        if: ${{ matrix.os == 'macos-latest' }}
         run: |
           npm run build
           npm exec -- electron-builder --publish onTag
