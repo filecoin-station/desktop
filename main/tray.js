@@ -19,11 +19,11 @@ let tray = null
 const icons = {
   on: icon('on'),
   off: icon('off'),
-  updateOn: icon('update-on'),
+  updateOn: icon('update'),
   updateOff: icon('update-off')
 }
 
-function icon (/** @type {'on' | 'off' | 'update-on' | 'update-off'} */ state) {
+function icon (/** @type {'on' | 'off' | 'update' | 'update-off'} */ state) {
   const dir = path.resolve(path.join(__dirname, '../assets/tray'))
   const file = IS_MAC ? `${state}-macos.png` : `${state}.png`
   const image = nativeImage.createFromPath(path.join(dir, file))
