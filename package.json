@@ -46,7 +46,7 @@
     "@influxdata/influxdb-client": "^1.33.2",
     "@sentry/node": "^7.40.0",
     "@sentry/react": "^7.40.0",
-    "@sentry/tracing": "^7.39.0",
+    "@sentry/tracing": "^7.40.0",
     "@zondax/filecoin-signing-tools": "^2.1.1",
     "dayjs": "^1.11.7",
     "electron-log": "^4.4.7",
