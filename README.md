@@ -17,6 +17,11 @@ Each release has packages for desktop platforms:
 - macOS: `.dmg`
 - Linux: `.AppImage`
 
+  Currently this application uses `libsecret`. Depending on your distribution, you will need to run the following command:
+  - Debian/Ubuntu: `sudo apt-get install libsecret-1-dev`
+  - Red Hat-based: `sudo yum install libsecret-devel`
+  - Arch Linux: `sudo pacman -S libsecret`
+
 ## Documentation
 
 See [`/docs`](./docs)
