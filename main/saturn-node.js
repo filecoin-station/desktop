@@ -140,7 +140,7 @@ async function start (/** @type {Context} */ ctx) {
 
       const apiMatch = output.match(/^API: (http.*)$/m)
       if (apiMatch) {
-        apiUrl = apiMatch[1]
+        apiUrl = apiMatch[1].replace('localhost', '127.0.0.1')
 
         appendToChildLog('Saturn node is up and ready')
         console.log('Saturn node is up and ready (API URL: %s)', apiUrl)
