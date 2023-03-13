@@ -42,6 +42,7 @@ const writePoint = point => {
     'wallet',
     createHash('sha256').update(wallet.getAddress()).digest('hex')
   )
+  point.tag('station', 'desktop')
 
   const destinationWalletAddress = getDestinationWalletAddress()
   if (destinationWalletAddress) {
