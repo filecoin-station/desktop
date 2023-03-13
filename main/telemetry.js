@@ -25,12 +25,11 @@ const writeClient = client.getWriteApi(
 setInterval(() => {
   writeClient.flush().catch(err => {
     // Ignore unactionable InfluxDB errors
-    if (
-      /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET/i.test(String(err))
-    ) {
-      return
+    // eslint-disable-next-line max-len
+    const reg = /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET|CERT_NOT_YET_VALID/i
+    if (!reg.test(String(err))) {
+      Sentry.captureException(err)
     }
-    Sentry.captureException(err)
   })
 }, 5000).unref()
 
