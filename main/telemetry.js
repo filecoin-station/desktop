@@ -5,6 +5,7 @@ const { createHash } = require('node:crypto')
 const { getDestinationWalletAddress } = require('./station-config')
 const wallet = require('./wallet')
 const Sentry = require('@sentry/node')
+const { platform } = require('node:os')
 
 /** @typedef {import('@influxdata/influxdb-client').Point} Point */
 
@@ -42,6 +43,7 @@ const writePoint = point => {
     createHash('sha256').update(wallet.getAddress()).digest('hex')
   )
   point.tag('station', 'desktop')
+  point.tag('platform', platform())
 
   const destinationWalletAddress = getDestinationWalletAddress()
   if (destinationWalletAddress) {
