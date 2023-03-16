@@ -6,6 +6,7 @@ const { getDestinationWalletAddress } = require('./station-config')
 const wallet = require('./wallet')
 const Sentry = require('@sentry/node')
 const { platform } = require('node:os')
+const pkg = require('../package.json')
 
 /** @typedef {import('@influxdata/influxdb-client').Point} Point */
 
@@ -42,6 +43,7 @@ const writePoint = point => {
     'wallet',
     createHash('sha256').update(wallet.getAddress()).digest('hex')
   )
+  point.stringField('version', pkg.version)
   point.tag('station', 'desktop')
   point.tag('platform', platform())
 
