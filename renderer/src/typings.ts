@@ -1,5 +1,6 @@
-import { Activity } from '../../main/typings'
-import { FILTransaction, FILTransactionProcessing, FILTransactionStatus } from '../../shared/typings'
+import { Activity, FILTransaction, FILTransactionProcessing } from '../../shared/typings'
+export type { FILTransactionStatus } from '../../shared/typings'
+export type { Activity, FILTransaction, FILTransactionProcessing }
 
 declare global {
   interface Window {
@@ -51,16 +52,6 @@ declare global {
     };
   }
 }
-
-export type ActivityEventMessage = {
-  id: string;
-  timestamp: number;
-  type: string;
-  source: string;
-  message: string;
-}
-
-export type { FILTransaction, FILTransactionProcessing, FILTransactionStatus }
 
 export function isFILTransactionProcessing (
   tx: FILTransaction | FILTransactionProcessing

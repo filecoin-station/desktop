@@ -1,17 +1,6 @@
-import { FILTransaction, FILTransactionProcessing, FILTransactionStatus } from '../shared/typings'
-
-export type ActivitySource = 'Station' | 'Saturn'
-export type ActivityType = 'info' | 'error'
-
-export type { FILTransaction, FILTransactionStatus, FILTransactionProcessing }
-
-export interface Activity {
-  id: string;
-  timestamp: number;
-  type: ActivityType;
-  source: ActivitySource;
-  message: string;
-}
+import { Activity, FILTransaction, FILTransactionProcessing } from '../shared/typings'
+export type { ActivitySource, ActivityType, FILTransactionStatus } from '../shared/typings'
+export type { Activity, FILTransaction, FILTransactionProcessing }
 
 export interface FoxMessage {
   cid: string;
