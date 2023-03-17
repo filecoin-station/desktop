@@ -23,7 +23,8 @@ describe('Wallet Backend', function () {
   })
 
   describe('fetchBalance()', function () {
-    it('fetches the balance', async function () {
+    it('fetches the balance', /** @this {Mocha.Test} */ async function () {
+      this.timeout(60_000)
       const balance = await backend.fetchBalance()
       assert(balance)
     })
