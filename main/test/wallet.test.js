@@ -3,10 +3,10 @@
 const { getTransactionsForUI } = require('../wallet')
 const assert = require('assert').strict
 
-/** @typedef {import('../typings').TransactionStatus} TransactionStatus */
+/** @typedef {import('../typings').FILTransactionStatus} FILTransactionStatus */
 
 const processingOutgoing = {
-  status: /** @type {TransactionStatus} */ ('processing'),
+  status: /** @type {FILTransactionStatus} */ ('processing'),
   outgoing: true,
   timestamp: Date.now(),
   amount: '0',
@@ -14,7 +14,7 @@ const processingOutgoing = {
 }
 
 const processingOutgoing2 = {
-  status: /** @type {TransactionStatus} */ ('processing'),
+  status: /** @type {FILTransactionStatus} */ ('processing'),
   outgoing: true,
   timestamp: Date.now(),
   amount: '0',
@@ -22,7 +22,7 @@ const processingOutgoing2 = {
 }
 
 const processingIncoming = {
-  status: /** @type {TransactionStatus} */ ('processing'),
+  status: /** @type {FILTransactionStatus} */ ('processing'),
   outgoing: false,
   timestamp: Date.now(),
   amount: '0',
@@ -30,7 +30,7 @@ const processingIncoming = {
 }
 
 const succeeded = {
-  status: /** @type {TransactionStatus} */ ('succeeded'),
+  status: /** @type {FILTransactionStatus} */ ('succeeded'),
   outgoing: true,
   timestamp: Date.now(),
   amount: '0',
@@ -38,7 +38,7 @@ const succeeded = {
 }
 
 const succeeded2 = {
-  status: /** @type {TransactionStatus} */ ('succeeded'),
+  status: /** @type {FILTransactionStatus} */ ('succeeded'),
   outgoing: true,
   timestamp: Date.now(),
   amount: '0',
@@ -46,7 +46,7 @@ const succeeded2 = {
 }
 
 const failed = {
-  status: /** @type {TransactionStatus} */ ('failed'),
+  status: /** @type {FILTransactionStatus} */ ('failed'),
   outgoing: true,
   timestamp: Date.now(),
   amount: '0',
