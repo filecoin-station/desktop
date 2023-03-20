@@ -1,33 +1,6 @@
-export type ActivitySource = 'Station' | 'Saturn'
-export type ActivityType = 'info' | 'error'
-export type TransactionStatus = 'succeeded' | 'processing' | 'failed'
-
-export interface Activity {
-  id: string;
-  timestamp: number;
-  type: ActivityType;
-  source: ActivitySource;
-  message: string;
-}
-
-export type FILTransaction = {
-  hash: string;
-  height: number;
-  timestamp: number;
-  status: TransactionStatus;
-  outgoing: boolean;
-  amount: string;
-  address: string;
-  error?: string;
-}
-
-// helper
-type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
-
-// FILTransaction with certain properties changed to optional
-// A processing transaction can have all statuses, because we're briefly showing
-// succeeded and failed ones in the same place as the processing one.
-export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
+import { Activity, FILTransaction, FILTransactionProcessing } from '../shared/typings'
+export type { ActivitySource, ActivityType, FILTransactionStatus } from '../shared/typings'
+export type { Activity, FILTransaction, FILTransactionProcessing }
 
 export interface FoxMessage {
   cid: string;

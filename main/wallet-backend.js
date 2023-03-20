@@ -15,7 +15,6 @@ const { fetch } = require('undici')
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
-/** @typedef {import('./typings').TransactionStatus} TransactionStatus */
 /** @typedef {
   import('./typings').FILTransactionProcessing
 } FILTransactionProcessing */

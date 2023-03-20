@@ -1,5 +1,5 @@
 import {
-  ActivityEventMessage,
+  Activity,
   FILTransaction,
   FILTransactionProcessing
 } from '../typings'
@@ -33,7 +33,7 @@ export async function startSaturnNode (): Promise<void> {
   return await window.electron.saturnNode.start()
 }
 
-export async function getAllActivities (): Promise<ActivityEventMessage[]> {
+export async function getAllActivities (): Promise<Activity[]> {
   return await window.electron.getAllActivities()
 }
 
