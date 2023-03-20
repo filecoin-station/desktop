@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import { getTotalJobsCompleted, getAllActivities, getTotalEarnings } from '../lib/station-config'
-import { ActivityEventMessage } from '../typings'
+import { Activity } from '../typings'
 
 interface StationActivity {
   totalJobs: number;
   totalEarnings: number;
-  activities: ActivityEventMessage[] | [];
+  activities: Activity[] | [];
 }
 const useStationActivity = (): StationActivity => {
   const [totalJobs, setTotalJobs] = useState<number>(0)
-  const [activities, setActivities] = useState<ActivityEventMessage[]>([])
+  const [activities, setActivities] = useState<Activity[]>([])
   const [totalEarnings, setTotalEarnigs] = useState<number>(0)
 
   useEffect(() => {
