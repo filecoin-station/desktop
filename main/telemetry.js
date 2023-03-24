@@ -1,14 +1,12 @@
 'use strict'
 
-const { InfluxDB } = require('@influxdata/influxdb-client')
+const { InfluxDB, Point } = require('@influxdata/influxdb-client')
 const { createHash } = require('node:crypto')
 const { getDestinationWalletAddress } = require('./station-config')
 const wallet = require('./wallet')
 const Sentry = require('@sentry/node')
 const { platform, arch } = require('node:os')
 const pkg = require('../package.json')
-
-/** @typedef {import('@influxdata/influxdb-client').Point} Point */
 
 const client = new InfluxDB({
   url: 'https://eu-central-1-1.aws.cloud2.influxdata.com',
@@ -18,11 +16,31 @@ const client = new InfluxDB({
     '0fZyu9zjDvYlaNfOeuwgnQoUI0VcSzeYDpnOLjQyr30mz-Plqels5JHEwgKRbtCcDJbQmv62VnOV_FsZVxgoow=='
 })
 
-const writeClient = client.getWriteApi(
+export const writeClient = client.getWriteApi(
   'Filecoin Station', // org
   'station', // bucket
   'ns' // precision
 )
+
+setInterval(() => {
+  const point = new Point('ping')
+  point.stringField(
+    'wallet',
+    createHash('sha256').update(wallet.getAddress()).digest('hex')
+  )
+  const destinationWalletAddress = getDestinationWalletAddress()
+  if (destinationWalletAddress) {
+    point.stringField(
+      'destination_wallet',
+      createHash('sha256').update(destinationWalletAddress).digest('hex')
+    )
+  }
+  point.stringField('version', pkg.version)
+  point.tag('station', 'desktop')
+  point.tag('platform', platform())
+  point.tag('arch', arch())
+  writeClient.writePoint(point)
+}, 10_000).unref()
 
 setInterval(() => {
   writeClient.flush().catch(err => {
@@ -33,33 +51,8 @@ setInterval(() => {
       Sentry.captureException(err)
     }
   })
-}, 5000).unref()
-
-/**
- * @param {Point} point
- */
-const writePoint = point => {
-  point.stringField(
-    'wallet',
-    createHash('sha256').update(wallet.getAddress()).digest('hex')
-  )
-  point.stringField('version', pkg.version)
-  point.tag('station', 'desktop')
-  point.tag('platform', platform())
-  point.tag('arch', arch())
-
-  const destinationWalletAddress = getDestinationWalletAddress()
-  if (destinationWalletAddress) {
-    point.stringField(
-      'destination_wallet',
-      createHash('sha256').update(destinationWalletAddress).digest('hex')
-    )
-  }
-
-  writeClient.writePoint(point)
-}
+}, 5_000).unref()
 
 module.exports = {
-  writeClient,
-  writePoint
+  writeClient
 }
