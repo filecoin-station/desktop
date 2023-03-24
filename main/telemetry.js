@@ -16,7 +16,7 @@ const client = new InfluxDB({
     '0fZyu9zjDvYlaNfOeuwgnQoUI0VcSzeYDpnOLjQyr30mz-Plqels5JHEwgKRbtCcDJbQmv62VnOV_FsZVxgoow=='
 })
 
-export const writeClient = client.getWriteApi(
+const writeClient = client.getWriteApi(
   'Filecoin Station', // org
   'station', // bucket
   'ns' // precision
