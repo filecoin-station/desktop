@@ -23,6 +23,17 @@ const writeClient = client.getWriteApi(
 )
 
 setInterval(() => {
+  writeClient.flush().catch(err => {
+    // Ignore unactionable InfluxDB errors
+    // eslint-disable-next-line max-len
+    const reg = /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET|CERT_NOT_YET_VALID/i
+    if (!reg.test(String(err))) {
+      Sentry.captureException(err)
+    }
+  })
+}, 5_000).unref()
+
+setInterval(() => {
   const point = new Point('ping')
   point.stringField(
     'wallet',
@@ -41,17 +52,6 @@ setInterval(() => {
   point.tag('arch', arch())
   writeClient.writePoint(point)
 }, 10_000).unref()
-
-setInterval(() => {
-  writeClient.flush().catch(err => {
-    // Ignore unactionable InfluxDB errors
-    // eslint-disable-next-line max-len
-    const reg = /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET|CERT_NOT_YET_VALID/i
-    if (!reg.test(String(err))) {
-      Sentry.captureException(err)
-    }
-  })
-}, 5_000).unref()
 
 module.exports = {
   writeClient
