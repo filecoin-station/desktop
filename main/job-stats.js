@@ -2,7 +2,7 @@
 
 const Store = require('electron-store')
 const { Point } = require('@influxdata/influxdb-client')
-const { writePoint } = require('./telemetry')
+const { writeClient } = require('./telemetry')
 
 /** @typedef {import('./typings').ModuleJobStatsMap} ModuleJobStatsMap */
 
@@ -31,7 +31,7 @@ class JobStats {
     if (moduleName in this.#perModuleJobStats) {
       const diff = count - this.#perModuleJobStats[moduleName]
       if (diff > 0) {
-        writePoint(
+        writeClient.writePoint(
           new Point('jobs-completed')
             .stringField('module', moduleName)
             .intField('value', diff)

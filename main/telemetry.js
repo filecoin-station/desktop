@@ -1,14 +1,12 @@
 'use strict'
 
-const { InfluxDB } = require('@influxdata/influxdb-client')
+const { InfluxDB, Point } = require('@influxdata/influxdb-client')
 const { createHash } = require('node:crypto')
 const { getDestinationWalletAddress } = require('./station-config')
 const wallet = require('./wallet')
 const Sentry = require('@sentry/node')
 const { platform, arch } = require('node:os')
 const pkg = require('../package.json')
-
-/** @typedef {import('@influxdata/influxdb-client').Point} Point */
 
 const client = new InfluxDB({
   url: 'https://eu-central-1-1.aws.cloud2.influxdata.com',
@@ -33,21 +31,14 @@ setInterval(() => {
       Sentry.captureException(err)
     }
   })
-}, 5000).unref()
+}, 5_000).unref()
 
-/**
- * @param {Point} point
- */
-const writePoint = point => {
+setInterval(() => {
+  const point = new Point('ping')
   point.stringField(
     'wallet',
     createHash('sha256').update(wallet.getAddress()).digest('hex')
   )
-  point.stringField('version', pkg.version)
-  point.tag('station', 'desktop')
-  point.tag('platform', platform())
-  point.tag('arch', arch())
-
   const destinationWalletAddress = getDestinationWalletAddress()
   if (destinationWalletAddress) {
     point.stringField(
@@ -55,11 +46,13 @@ const writePoint = point => {
       createHash('sha256').update(destinationWalletAddress).digest('hex')
     )
   }
-
+  point.stringField('version', pkg.version)
+  point.tag('station', 'desktop')
+  point.tag('platform', platform())
+  point.tag('arch', arch())
   writeClient.writePoint(point)
-}
+}, 10_000).unref()
 
 module.exports = {
-  writeClient,
-  writePoint
+  writeClient
 }
