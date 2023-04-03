@@ -24,13 +24,16 @@
 
 3. A module's executable gets passed the following environment variables:
     - `FIL_WALLET_ADDRESS` The user's Filecoin wallet address
-    - `ROOT_DIR` The long-lived working directory on disk. The module must store
-      all of its files inside (subdirectories of) this directory. The directory
+    - `STATE_ROOT` The long-lived working directory on disk. The module must store
+      all of its permanent files inside (subdirectories of) this directory. The directory
+      isn't expected to be backed up or shared across machines in any way.
+    - `CACHE_ROOT` The temporary working directory on disk. The module must store
+      all of its caches inside (subdirectories of) this directory. The directory
       isn't expected to be backed up or shared across machines in any way.
 
     Example:
     ```bash
-    $ FIL_WALLET_ADDRESS=f1... ROOT_DIR=/var/bacalhau bacalhau
+    $ FIL_WALLET_ADDRESS=f1... STATE_ROOT=~/.local/state/bacalhau CACHE_ROOT=~/.cache/bacalhau bacalhau
     ```
 
 4. A module communicates activity by writing to its `stdout` stream:
