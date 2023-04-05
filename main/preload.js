@@ -20,19 +20,12 @@ contextBridge.exposeInMainWorld('electron', {
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
 
-  saturnNode: {
-    start: () => ipcRenderer.invoke('saturn:start'),
-    stop: () => ipcRenderer.invoke('saturn:stop'),
-    isRunning: () => ipcRenderer.invoke('saturn:isRunning'),
-    isReady: () => ipcRenderer.invoke('saturn:isReady'),
-    getLog: () => ipcRenderer.invoke('saturn:getLog'),
-    getWebUrl: () => ipcRenderer.invoke('saturn:getWebUrl'),
-    getFilAddress: () =>
-      // soon to be removed
-      ipcRenderer.invoke('saturn:getFilAddress'),
-    setFilAddress: (/** @type {string | undefined} */ address) =>
-      // soon to be removed
-      ipcRenderer.invoke('saturn:setFilAddress', address)
+  core: {
+    start: () => ipcRenderer.invoke('core:start'),
+    stop: () => ipcRenderer.invoke('core:stop'),
+    isRunning: () => ipcRenderer.invoke('core:isRunning'),
+    getLog: () => ipcRenderer.invoke('core:getLog'),
+    getWebUrl: () => ipcRenderer.invoke('core:getWebUrl')
   },
   stationConfig: {
     getOnboardingCompleted: () =>

@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Sentry from './components/Sentry'
 import Plausible from './components/Plausible'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
-import Saturn from './components/Saturn'
+import Core from './components/Core'
 
 const App = ():JSX.Element => {
   return (
@@ -13,7 +13,7 @@ const App = ():JSX.Element => {
       <Helmet>
         <title>Filecoin Station</title>
       </Helmet>
-      <Saturn />
+      <Core />
       <Router>
         <Routes>
           <Route path="/" element={<Onboarding />} />

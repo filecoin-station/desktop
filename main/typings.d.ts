@@ -46,3 +46,20 @@ export interface WalletSeed {
   seed: string;
   isNew: boolean;
 }
+
+interface CoreEventJobsCompleted {
+  type: 'jobs-completed';
+  total: number;
+}
+
+interface CoreEventActivityInfo {
+  type: 'activity:info';
+  message: string;
+}
+
+interface CoreEventActivityError {
+  type: 'activity:error';
+  message: string;
+}
+
+export type CoreEvent = CoreEventJobsCompleted | CoreEventActivityInfo | CoreEventActivityError

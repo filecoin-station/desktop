@@ -13,24 +13,20 @@ export async function setOnboardingCompleted (): Promise<void> {
   return await window.electron.stationConfig.setOnboardingCompleted()
 }
 
-export async function isSaturnNodeRunning (): Promise<boolean> {
-  return await window.electron.saturnNode.isRunning()
+export async function isCoreRunning (): Promise<boolean> {
+  return await window.electron.core.isRunning()
 }
 
-export async function getSaturnNodeWebUrl (): Promise<string> {
-  return await window.electron.saturnNode.getWebUrl()
+export async function getCoreLog (): Promise<string> {
+  return await window.electron.core.getLog()
 }
 
-export async function getSaturnNodeLog (): Promise<string> {
-  return await window.electron.saturnNode.getLog()
+export async function stopCore (): Promise<void> {
+  return await window.electron.core.stop()
 }
 
-export async function stopSaturnNode (): Promise<void> {
-  return await window.electron.saturnNode.stop()
-}
-
-export async function startSaturnNode (): Promise<void> {
-  return await window.electron.saturnNode.start()
+export async function startCore (): Promise<void> {
+  return await window.electron.core.start()
 }
 
 export async function getAllActivities (): Promise<Activity[]> {

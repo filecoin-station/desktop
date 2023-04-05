@@ -29,7 +29,7 @@ const { BUILD_VERSION } = require('./consts')
 const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
 const os = require('os')
-const saturnNode = require('./saturn-node')
+const core = require('./core')
 const wallet = require('./wallet')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
@@ -190,7 +190,7 @@ async function run () {
     })
 
     await wallet.setup(ctx)
-    await saturnNode.setup(ctx)
+    await core.setup(ctx)
   } catch (e) {
     handleError(e)
   }

@@ -2,7 +2,7 @@
 
 const { ipcMain } = require('electron')
 
-const saturnNode = require('./saturn-node')
+const core = require('./core')
 const stationConfig = require('./station-config')
 const wallet = require('./wallet')
 
@@ -21,12 +21,10 @@ const ipcMainEvents = Object.freeze({
 })
 
 function setupIpcMain (/** @type {Context} */ ctx) {
-  ipcMain.handle('saturn:isRunning', saturnNode.isRunning)
-  ipcMain.handle('saturn:isReady', saturnNode.isReady)
-  ipcMain.handle('saturn:start', _event => saturnNode.start(ctx))
-  ipcMain.handle('saturn:stop', saturnNode.stop)
-  ipcMain.handle('saturn:getLog', saturnNode.getLog)
-  ipcMain.handle('saturn:getWebUrl', saturnNode.getWebUrl)
+  ipcMain.handle('core:isRunning', core.isRunning)
+  ipcMain.handle('core:start', _event => core.start(ctx))
+  ipcMain.handle('core:stop', core.stop)
+  ipcMain.handle('core:getLog', core.getLog)
   // Station-wide config
   ipcMain.handle(
     'station:getOnboardingCompleted',

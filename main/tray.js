@@ -5,7 +5,7 @@ const { Menu, Tray, app, ipcMain, nativeImage } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const assert = require('node:assert')
-const saturn = require('./saturn-node')
+const core = require('./core')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').Activity} Activity */
@@ -130,7 +130,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
   function updateTray () {
     assert(tray)
     tray.setImage(
-      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
+      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, core.isOnline())
     )
   }
 }
