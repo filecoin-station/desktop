@@ -126,7 +126,7 @@ function startEventsProcess (/** @type {Context} */ ctx) {
   eventsChildProcess.on('exit', (code, signal) => {
     if (code !== 0) {
       console.log(`Events process exited with code=${code} signal=${signal}`)
-      startEventsProcess(ctx)
+      setTimeout(() => startEventsProcess(ctx), 1000)
     }
   })
 }
