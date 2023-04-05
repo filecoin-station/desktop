@@ -17,10 +17,6 @@ export async function getCoreLog (): Promise<string> {
   return await window.electron.core.getLog()
 }
 
-export async function startCore (): Promise<void> {
-  return await window.electron.core.start()
-}
-
 export async function getAllActivities (): Promise<Activity[]> {
   return await window.electron.getAllActivities()
 }
