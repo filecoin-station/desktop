@@ -11,6 +11,7 @@ const Sentry = require('@sentry/node')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').CoreEvent} CoreEvent */
+/** @typedef {import('./typings').Activity} Activity */
 
 const corePath = join(
   __dirname,
@@ -97,7 +98,8 @@ function startEventsProcess (/** @type {Context} */ ctx) {
           ctx.recordActivity({
             source: event.module,
             type: 'info',
-            message: event.message
+            message: event.message,
+            date: new Date(event.date).getTime()
           })
           if (event.message.includes('Saturn Node is online')) {
             online = true
@@ -108,7 +110,8 @@ function startEventsProcess (/** @type {Context} */ ctx) {
           ctx.recordActivity({
             source: event.module,
             type: 'error',
-            message: event.message
+            message: event.message,
+            date: new Date(event.date).getTime()
           })
           if (
             event.message === 'Saturn Node started.' ||
@@ -135,6 +138,17 @@ function isOnline () {
   return online
 }
 
+/**
+ * @returns {Promise<Activity[]>}
+ */
+async function getActivity () {
+  const { stdout: activity } = await execa(
+    corePath,
+    ['activity', '--json']
+  )
+  return JSON.parse(activity)
+}
+
 async function getLog () {
   const { stdout: log } = await execa(
     corePath,
@@ -153,6 +167,7 @@ async function getMetrics () {
 }
 
 module.exports = {
+  getActivity,
   getLog,
   getMetrics,
   setup,

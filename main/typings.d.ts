@@ -16,11 +16,9 @@ export interface FoxMessage {
   };
 }
 
-export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>
-
 export interface Context {
-  recordActivity(activity: RecordActivityArgs): void;
-  getAllActivities(): Activity[];
+  recordActivity(activity: Activity): void;
+  getAllActivities(): Promise<Activity[]>;
 
   setTotalJobsCompleted(count: number): void;
   getTotalJobsCompleted(): Promise<number>;
@@ -54,12 +52,15 @@ interface CoreEventActivityInfo {
   type: 'activity:info';
   message: string;
   module: string;
+  date: string;
 }
 
 interface CoreEventActivityError {
   type: 'activity:error';
   message: string;
   module: string;
+  date: string;
+
 }
 
 export type CoreEvent = CoreEventJobsCompleted | CoreEventActivityInfo | CoreEventActivityError

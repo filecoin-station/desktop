@@ -23,8 +23,7 @@ export type ActivitySource = string
 export type ActivityType = 'info' | 'error'
 
 export interface Activity {
-  id: string;
-  timestamp: number;
+  date: number;
   type: ActivityType;
   source: ActivitySource;
   message: string;

@@ -24,7 +24,6 @@ if (process.env.STATION_ROOT) {
 require('./setup-sentry')
 
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
-const { ActivityLog } = require('./activity-log')
 const { BUILD_VERSION } = require('./consts')
 const { ipcMain } = require('electron/main')
 const os = require('os')
@@ -40,7 +39,6 @@ const { setup: setupDialogs } = require('./dialog')
 const telemetry = require('./telemetry')
 
 /** @typedef {import('./typings').Activity} Activity */
-/** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -65,12 +63,6 @@ process.env.STATION_BUILD_VERSION = BUILD_VERSION
 
 function handleError (/** @type {any} */ err) {
   Sentry.captureException(err)
-
-  ctx.recordActivity({
-    source: 'Station',
-    type: 'error',
-    message: `Station failed to start: ${err.message || err}`
-  })
 
   log.error(err)
   dialog.showErrorBox('Error occured', err.stack ?? err.message ?? err)
@@ -99,19 +91,12 @@ app.on('second-instance', () => {
   ctx.showUI()
 })
 
-const activityLog = new ActivityLog()
-if (isDev) {
-  // Do not preserve old Activity entries in development mode
-  activityLog.reset()
-}
-
 /** @type {import('./typings').Context} */
 const ctx = {
-  getAllActivities: () => activityLog.getAllEntries(),
+  getAllActivities: () => core.getActivity(),
 
-  recordActivity: (args) => {
-    activityLog.record(args)
-    ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activityLog.getAllEntries())
+  recordActivity: activity => {
+    ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
   },
 
   getTotalJobsCompleted: async () => {
@@ -156,14 +141,6 @@ process.on('uncaughtException', err => {
   process.exitCode = 1
 })
 
-process.on('exit', () => {
-  ctx.recordActivity({
-    source: 'Station',
-    type: 'info',
-    message: 'Station stopped.'
-  })
-})
-
 async function run () {
   try {
     await app.whenReady()
@@ -182,12 +159,6 @@ async function run () {
     await setupUI(ctx)
     await setupUpdater(ctx)
     await setupIpcMain(ctx)
-
-    ctx.recordActivity({
-      source: 'Station',
-      type: 'info',
-      message: 'Station started.'
-    })
 
     await wallet.setup(ctx)
     await core.setup(ctx)

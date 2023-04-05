@@ -33,7 +33,7 @@ declare global {
         browseTransactionTracker: (transactionHash: string) => void;
       };
       stationEvents: {
-        onActivityLogged: (callback: (allActivities: Activity[]) => void) => () => void;
+        onActivityLogged: (callback: (activity: Activity) => void) => () => void;
         onJobProcessed: (callback: (value: number) => void) => () => void;
         onEarningsChanged: (callback: (value: number) => void) => () => void;
         onUpdateAvailable: (callback: () => void) => () => void;
