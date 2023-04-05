@@ -44,7 +44,7 @@ async function setup (/** @type {Context} */ ctx) {
 }
 
 const startEventsProcess = (/** @type {Context} */ ctx) => {
-  // TODO: Restart on failure
+  console.log('Starting Core Events...')
   const eventsChildProcess = execa(corePath, ['events'])
   assert(eventsChildProcess.stdout, 'Events child process has no stdout')
   eventsChildProcess.stdout
@@ -84,6 +84,12 @@ const startEventsProcess = (/** @type {Context} */ ctx) => {
     })
   app.on('before-quit', () => {
     eventsChildProcess.kill()
+  })
+  eventsChildProcess.on('exit', (code, signal) => {
+    if (code !== 0) {
+      console.log(`Events process exited with code=${code} signal=${signal}`)
+      startEventsProcess(ctx)
+    }
   })
 }
 
