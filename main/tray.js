@@ -69,9 +69,9 @@ module.exports = function (/** @type {Context} */ ctx) {
       visible: false
     },
     {
-      label: 'Save Saturn Module Log As…',
+      label: 'Save Module Logs As…',
       click: function () {
-        ctx.saveSaturnModuleLogAs()
+        ctx.saveModuleLogsAs()
       }
     },
     { type: 'separator' },

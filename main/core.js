@@ -27,8 +27,8 @@ let online = false
 let isRunning = false
 
 async function setup (/** @type {Context} */ ctx) {
-  ctx.saveSaturnModuleLogAs = async () => {
-    const opts = { defaultPath: 'saturn.txt' }
+  ctx.saveModuleLogsAs = async () => {
+    const opts = { defaultPath: 'station.txt' }
     const win = BrowserWindow.getFocusedWindow()
     const { filePath } = win
       ? await dialog.showSaveDialog(win, opts)
@@ -36,7 +36,7 @@ async function setup (/** @type {Context} */ ctx) {
     if (filePath) {
       await fs.writeFile(
         filePath,
-        (await execa(corePath, ['logs', 'saturn-l2-node'])).stdout
+        (await execa(corePath, ['logs'])).stdout
       )
     }
   }
