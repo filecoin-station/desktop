@@ -43,16 +43,7 @@ async function setup (/** @type {Context} */ ctx) {
   await start(ctx)
 }
 
-async function start (/** @type {Context} */ ctx) {
-  assert(wallet.getAddress(), 'Core requires FIL address')
-  console.log('Starting Core...')
-
-  if (isRunning) {
-    console.log('Core is already running.')
-    return
-  }
-  isRunning = true
-
+const startEventsProcess = (/** @type {Context} */ ctx) => {
   // TODO: Restart on failure
   const eventsChildProcess = execa(corePath, ['events'])
   assert(eventsChildProcess.stdout, 'Events child process has no stdout')
@@ -94,6 +85,19 @@ async function start (/** @type {Context} */ ctx) {
   app.on('before-quit', () => {
     eventsChildProcess.kill()
   })
+}
+
+async function start (/** @type {Context} */ ctx) {
+  assert(wallet.getAddress(), 'Core requires FIL address')
+  console.log('Starting Core...')
+
+  if (isRunning) {
+    console.log('Core is already running.')
+    return
+  }
+  isRunning = true
+
+  startEventsProcess(ctx)
 
   const coreChildProcess = execa(corePath, [], {
     env: {
