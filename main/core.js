@@ -48,7 +48,6 @@ async function start (/** @type {Context} */ ctx) {
 
   startEventsProcess(ctx)
 
-  // TODO: Fix CACHE_ROOT & STATE_ROOT
   const coreChildProcess = execa(corePath, [], {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress()
