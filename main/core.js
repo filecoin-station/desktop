@@ -21,12 +21,10 @@ const corePath = join(
   'bin',
   'station.js'
 )
+console.log('Using Core binary: %s', corePath)
 
-/** @type {import('execa').ExecaChildProcess | null} */
-let coreChildProcess = null
-/** @type {string | null} */
-let moduleExitReason = null
 let online = false
+let isRunning = false
 
 async function setup (/** @type {Context} */ ctx) {
   ctx.saveSaturnModuleLogAs = async () => {
@@ -42,18 +40,18 @@ async function setup (/** @type {Context} */ ctx) {
       )
     }
   }
-
-  console.log('Using Core binary: %s', corePath)
   await start(ctx)
 }
 
 async function start (/** @type {Context} */ ctx) {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
-  if (coreChildProcess) {
+
+  if (isRunning) {
     console.log('Core is already running.')
     return
   }
+  isRunning = true
 
   // TODO: Restart on failure
   const eventsChildProcess = execa(corePath, ['events'])
@@ -97,26 +95,28 @@ async function start (/** @type {Context} */ ctx) {
     eventsChildProcess.kill()
   })
 
-  coreChildProcess = execa(corePath, [], {
+  const coreChildProcess = execa(corePath, [], {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress()
     }
   })
 
   app.on('before-quit', () => {
-    coreChildProcess?.kill()
+    coreChildProcess.kill()
   })
+
+  /** @type {string | null} */
+  let coreExitReason = null
 
   coreChildProcess.on('close', code => {
     console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
-    coreChildProcess = null
 
     ;(async () => {
       const log = await getLog()
       Sentry.captureException('Core exited', scope => {
         // Sentry UI can't show the full 100 lines
         scope.setExtra('logs', log.split('\n').slice(-10).join('\n'))
-        scope.setExtra('reason', moduleExitReason)
+        scope.setExtra('reason', coreExitReason)
         return scope
       })
     })()
@@ -126,7 +126,7 @@ async function start (/** @type {Context} */ ctx) {
     const reason = signal ? `via signal ${signal}` : `with code: ${code}`
     const msg = `Saturn node exited ${reason}`
     console.log(msg)
-    moduleExitReason = signal || code ? reason : null
+    coreExitReason = signal || code ? reason : null
   })
 }
 
