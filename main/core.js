@@ -21,10 +21,9 @@ const corePath = join(
   'bin',
   'station.js'
 )
-console.log('Using Core binary: %s', corePath)
+console.log('Core binary: %s', corePath)
 
 let online = false
-let isRunning = false
 
 async function setup (/** @type {Context} */ ctx) {
   ctx.saveModuleLogsAs = async () => {
@@ -43,7 +42,46 @@ async function setup (/** @type {Context} */ ctx) {
   await start(ctx)
 }
 
-const startEventsProcess = (/** @type {Context} */ ctx) => {
+async function start (/** @type {Context} */ ctx) {
+  assert(wallet.getAddress(), 'Core requires FIL address')
+  console.log('Starting Core...')
+
+  startEventsProcess(ctx)
+
+  const coreChildProcess = execa(corePath, [], {
+    env: {
+      FIL_WALLET_ADDRESS: wallet.getAddress()
+    }
+  })
+
+  app.on('before-quit', () => coreChildProcess.kill())
+
+  /** @type {string | null} */
+  let coreExitReason = null
+
+  coreChildProcess.on('close', code => {
+    console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
+
+    ;(async () => {
+      const log = await getLog()
+      Sentry.captureException('Core exited', scope => {
+        // Sentry UI can't show the full 100 lines
+        scope.setExtra('logs', log.split('\n').slice(-10).join('\n'))
+        scope.setExtra('reason', coreExitReason)
+        return scope
+      })
+    })()
+  })
+
+  coreChildProcess.on('exit', (code, signal) => {
+    const reason = signal ? `via signal ${signal}` : `with code: ${code}`
+    const msg = `Saturn node exited ${reason}`
+    console.log(msg)
+    coreExitReason = signal || code ? reason : null
+  })
+}
+
+function startEventsProcess (/** @type {Context} */ ctx) {
   console.log('Starting Core Events...')
   const eventsChildProcess = execa(corePath, ['events'])
   assert(eventsChildProcess.stdout, 'Events child process has no stdout')
@@ -90,53 +128,6 @@ const startEventsProcess = (/** @type {Context} */ ctx) => {
       console.log(`Events process exited with code=${code} signal=${signal}`)
       startEventsProcess(ctx)
     }
-  })
-}
-
-async function start (/** @type {Context} */ ctx) {
-  assert(wallet.getAddress(), 'Core requires FIL address')
-  console.log('Starting Core...')
-
-  if (isRunning) {
-    console.log('Core is already running.')
-    return
-  }
-  isRunning = true
-
-  startEventsProcess(ctx)
-
-  const coreChildProcess = execa(corePath, [], {
-    env: {
-      FIL_WALLET_ADDRESS: wallet.getAddress()
-    }
-  })
-
-  app.on('before-quit', () => {
-    coreChildProcess.kill()
-  })
-
-  /** @type {string | null} */
-  let coreExitReason = null
-
-  coreChildProcess.on('close', code => {
-    console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
-
-    ;(async () => {
-      const log = await getLog()
-      Sentry.captureException('Core exited', scope => {
-        // Sentry UI can't show the full 100 lines
-        scope.setExtra('logs', log.split('\n').slice(-10).join('\n'))
-        scope.setExtra('reason', coreExitReason)
-        return scope
-      })
-    })()
-  })
-
-  coreChildProcess.on('exit', (code, signal) => {
-    const reason = signal ? `via signal ${signal}` : `with code: ${code}`
-    const msg = `Saturn node exited ${reason}`
-    console.log(msg)
-    coreExitReason = signal || code ? reason : null
   })
 }
 
