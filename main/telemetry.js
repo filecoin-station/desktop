@@ -3,7 +3,6 @@
 const { InfluxDB, Point } = require('@influxdata/influxdb-client')
 const { createHash } = require('node:crypto')
 const { getDestinationWalletAddress } = require('./station-config')
-const wallet = require('./wallet')
 const Sentry = require('@sentry/node')
 const { platform, arch } = require('node:os')
 const pkg = require('../package.json')
@@ -22,37 +21,33 @@ const writeClient = client.getWriteApi(
   'ns' // precision
 )
 
-setInterval(() => {
-  writeClient.flush().catch(err => {
-    // Ignore unactionable InfluxDB errors
-    // eslint-disable-next-line max-len
-    const reg = /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET|CERT_NOT_YET_VALID/i
-    if (!reg.test(String(err))) {
-      Sentry.captureException(err)
+function setup () {
+  setInterval(() => {
+    const point = new Point('ping')
+    const destinationWalletAddress = getDestinationWalletAddress()
+    if (destinationWalletAddress) {
+      point.stringField(
+        'destination_wallet',
+        createHash('sha256').update(destinationWalletAddress).digest('hex')
+      )
     }
-  })
-}, 5_000).unref()
+    point.stringField('version', pkg.version)
+    point.tag('station', 'desktop')
+    point.tag('platform', platform())
+    point.tag('arch', arch())
+    writeClient.writePoint(point)
 
-setInterval(() => {
-  const point = new Point('ping')
-  point.stringField(
-    'wallet',
-    createHash('sha256').update(wallet.getAddress()).digest('hex')
-  )
-  const destinationWalletAddress = getDestinationWalletAddress()
-  if (destinationWalletAddress) {
-    point.stringField(
-      'destination_wallet',
-      createHash('sha256').update(destinationWalletAddress).digest('hex')
-    )
-  }
-  point.stringField('version', pkg.version)
-  point.tag('station', 'desktop')
-  point.tag('platform', platform())
-  point.tag('arch', arch())
-  writeClient.writePoint(point)
-}, 10_000).unref()
+    writeClient.flush().catch(err => {
+      // Ignore unactionable InfluxDB errors
+      // eslint-disable-next-line max-len
+      const reg = /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET|CERT_NOT_YET_VALID/i
+      if (!reg.test(String(err))) {
+        Sentry.captureException(err)
+      }
+    })
+  }, 10_000).unref()
+}
 
 module.exports = {
-  writeClient
+  setup
 }

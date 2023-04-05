@@ -38,6 +38,7 @@ const setupUI = require('./ui')
 const setupUpdater = require('./updater')
 const Sentry = require('@sentry/node')
 const { setup: setupDialogs } = require('./dialog')
+const telemetry = require('./telemetry')
 
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
@@ -173,7 +174,7 @@ async function run () {
   }
 
   try {
-    // Interface
+    telemetry.setup()
     setupTray(ctx)
     setupDialogs(ctx)
     if (process.platform === 'darwin') {
