@@ -55,8 +55,6 @@ async function start (/** @type {Context} */ ctx) {
     }
   })
 
-  app.on('before-quit', () => coreChildProcess.kill())
-
   /** @type {string | null} */
   let coreExitReason = null
 
