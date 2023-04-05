@@ -21,10 +21,6 @@ export async function getCoreLog (): Promise<string> {
   return await window.electron.core.getLog()
 }
 
-export async function stopCore (): Promise<void> {
-  return await window.electron.core.stop()
-}
-
 export async function startCore (): Promise<void> {
   return await window.electron.core.start()
 }

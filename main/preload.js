@@ -22,7 +22,6 @@ contextBridge.exposeInMainWorld('electron', {
 
   core: {
     start: () => ipcRenderer.invoke('core:start'),
-    stop: () => ipcRenderer.invoke('core:stop'),
     isRunning: () => ipcRenderer.invoke('core:isRunning'),
     getLog: () => ipcRenderer.invoke('core:getLog'),
     getWebUrl: () => ipcRenderer.invoke('core:getWebUrl')

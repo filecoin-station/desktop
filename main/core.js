@@ -44,11 +44,6 @@ async function setup (/** @type {Context} */ ctx) {
   }
 
   console.log('Using Core binary: %s', corePath)
-
-  app.on('before-quit', () => {
-    if (!coreChildProcess) return
-    stop()
-  })
   await start(ctx)
 }
 
@@ -98,11 +93,18 @@ async function start (/** @type {Context} */ ctx) {
         }
       }
     })
+  app.on('before-quit', () => {
+    eventsChildProcess.kill()
+  })
 
   coreChildProcess = execa(corePath, [], {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress()
     }
+  })
+
+  app.on('before-quit', () => {
+    coreChildProcess?.kill()
   })
 
   coreChildProcess.on('close', code => {
@@ -128,17 +130,6 @@ async function start (/** @type {Context} */ ctx) {
   })
 }
 
-function stop () {
-  console.log('Stopping Core')
-  if (!coreChildProcess) {
-    console.log('Core was not running')
-    return
-  }
-
-  coreChildProcess.kill()
-  coreChildProcess = null
-}
-
 function isOnline () {
   return online
 }
@@ -160,7 +151,6 @@ module.exports = {
   getLog,
   setup,
   start,
-  stop,
   isOnline,
   isRunning
 }
