@@ -93,7 +93,10 @@ app.on('second-instance', () => {
 
 /** @type {import('./typings').Context} */
 const ctx = {
-  getAllActivities: () => core.getActivity(),
+  getAllActivities: async () => {
+    const activity = await core.getActivity()
+    return activity.reverse()
+  },
 
   recordActivity: activity => {
     ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
