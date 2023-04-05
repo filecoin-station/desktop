@@ -49,8 +49,6 @@ interface ActivityLogProps {
 }
 
 const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
-  console.log({ activities })
-
   const activitiesByDate: ActivitiesByDate =
     activities
       .sort((x, y) => y.date - x.date)
