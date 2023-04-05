@@ -18,14 +18,12 @@ export interface FoxMessage {
 
 export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>
 
-export type ModuleJobStatsMap = Record<string, number>
-
 export interface Context {
   recordActivity(activity: RecordActivityArgs): void;
   getAllActivities(): Activity[];
 
-  setModuleJobsCompleted(moduleName: string, count: number): void;
-  getTotalJobsCompleted(): number;
+  setTotalJobsCompleted(count: number): void;
+  getTotalJobsCompleted(): Promise<number>;
 
   showUI: () => void;
   loadWebUIFromDist: import('electron-serve').loadURL;

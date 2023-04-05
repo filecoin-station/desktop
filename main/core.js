@@ -48,6 +48,7 @@ async function start (/** @type {Context} */ ctx) {
 
   startEventsProcess(ctx)
 
+  // TODO: Fix CACHE_ROOT & STATE_ROOT
   const coreChildProcess = execa(corePath, [], {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress()
@@ -90,7 +91,7 @@ function startEventsProcess (/** @type {Context} */ ctx) {
     .on('data', (/** @type {CoreEvent} */ event) => {
       switch (event.type) {
         case 'jobs-completed': {
-          ctx.setModuleJobsCompleted('saturn', event.total)
+          ctx.setTotalJobsCompleted(event.total)
           break
         }
         case 'activity:info': {
@@ -144,8 +145,17 @@ async function getLog () {
   return log
 }
 
+async function getMetrics () {
+  const { stdout: json } = await execa(
+    corePath,
+    ['metrics']
+  )
+  return JSON.parse(json)
+}
+
 module.exports = {
   getLog,
+  getMetrics,
   setup,
   start,
   isOnline

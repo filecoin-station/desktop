@@ -26,7 +26,6 @@ require('./setup-sentry')
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
 const { ActivityLog } = require('./activity-log')
 const { BUILD_VERSION } = require('./consts')
-const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
 const os = require('os')
 const core = require('./core')
@@ -100,8 +99,6 @@ app.on('second-instance', () => {
   ctx.showUI()
 })
 
-const jobStats = new JobStats()
-
 const activityLog = new ActivityLog()
 if (isDev) {
   // Do not preserve old Activity entries in development mode
@@ -117,12 +114,14 @@ const ctx = {
     ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activityLog.getAllEntries())
   },
 
-  getTotalJobsCompleted: () => jobStats.getTotalJobsCompleted(),
-  setModuleJobsCompleted: (moduleName, count) => {
-    jobStats.setModuleJobsCompleted(moduleName, count)
+  getTotalJobsCompleted: async () => {
+    const { totalJobsCompleted } = await core.getMetrics()
+    return totalJobsCompleted
+  },
+  setTotalJobsCompleted: (count) => {
     ipcMain.emit(
       ipcMainEvents.JOB_STATS_UPDATED,
-      jobStats.getTotalJobsCompleted()
+      count
     )
   },
 
