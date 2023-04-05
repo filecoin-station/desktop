@@ -83,9 +83,9 @@ async function start (/** @type {Context} */ ctx) {
 
 function startEventsProcess (/** @type {Context} */ ctx) {
   console.log('Starting Core Events...')
-  const eventsChildProcess = execa(corePath, ['events'])
-  assert(eventsChildProcess.stdout, 'Events child process has no stdout')
-  eventsChildProcess.stdout
+  const events = execa(corePath, ['events'])
+  assert(events.stdout, 'Events child process has no stdout')
+  events.stdout
     .pipe(JSONStream.parse(true))
     .on('data', (/** @type {CoreEvent} */ event) => {
       switch (event.type) {
@@ -121,9 +121,9 @@ function startEventsProcess (/** @type {Context} */ ctx) {
       }
     })
   app.on('before-quit', () => {
-    eventsChildProcess.kill()
+    events.kill()
   })
-  eventsChildProcess.on('exit', (code, signal) => {
+  events.on('exit', (code, signal) => {
     if (code !== 0) {
       console.log(`Events process exited with code=${code} signal=${signal}`)
       setTimeout(() => startEventsProcess(ctx), 1000)
