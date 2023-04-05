@@ -13,10 +13,6 @@ export async function setOnboardingCompleted (): Promise<void> {
   return await window.electron.stationConfig.setOnboardingCompleted()
 }
 
-export async function isCoreRunning (): Promise<boolean> {
-  return await window.electron.core.isRunning()
-}
-
 export async function getCoreLog (): Promise<string> {
   return await window.electron.core.getLog()
 }

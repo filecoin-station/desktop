@@ -134,10 +134,6 @@ function isOnline () {
   return online
 }
 
-function isRunning () {
-  return !!coreChildProcess
-}
-
 async function getLog () {
   const { stdout: log } = await execa(
     corePath,
@@ -151,6 +147,5 @@ module.exports = {
   getLog,
   setup,
   start,
-  isOnline,
-  isRunning
+  isOnline
 }

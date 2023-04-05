@@ -19,7 +19,6 @@ declare global {
       core: {
         start: () => Promise<void>;
         stop: () => Promise<void>;
-        isRunning: () => Promise<boolean>;
         getLog: () => Promise<string>;
       };
       stationConfig: {
