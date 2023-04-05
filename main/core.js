@@ -75,7 +75,7 @@ async function start (/** @type {Context} */ ctx) {
 
   coreChildProcess.on('exit', (code, signal) => {
     const reason = signal ? `via signal ${signal}` : `with code: ${code}`
-    const msg = `Saturn node exited ${reason}`
+    const msg = `Core exited ${reason}`
     console.log(msg)
     coreExitReason = signal || code ? reason : null
   })
@@ -95,7 +95,7 @@ function startEventsProcess (/** @type {Context} */ ctx) {
         }
         case 'activity:info': {
           ctx.recordActivity({
-            source: 'Saturn',
+            source: event.module,
             type: 'info',
             message: event.message
           })
@@ -106,7 +106,7 @@ function startEventsProcess (/** @type {Context} */ ctx) {
         }
         case 'activity:error': {
           ctx.recordActivity({
-            source: 'Saturn',
+            source: event.module,
             type: 'error',
             message: event.message
           })

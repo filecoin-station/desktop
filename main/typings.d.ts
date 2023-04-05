@@ -55,11 +55,13 @@ interface CoreEventJobsCompleted {
 interface CoreEventActivityInfo {
   type: 'activity:info';
   message: string;
+  module: string;
 }
 
 interface CoreEventActivityError {
   type: 'activity:error';
   message: string;
+  module: string;
 }
 
 export type CoreEvent = CoreEventJobsCompleted | CoreEventActivityInfo | CoreEventActivityError
