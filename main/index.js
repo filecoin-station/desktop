@@ -95,7 +95,9 @@ app.on('second-instance', () => {
 const ctx = {
   getAllActivities: async () => {
     const activity = await core.getActivity()
-    return activity.reverse()
+    activity.reverse()
+    activity.length = 100
+    return activity
   },
 
   recordActivity: activity => {
