@@ -21,9 +21,7 @@ contextBridge.exposeInMainWorld('electron', {
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
 
   core: {
-    start: () => ipcRenderer.invoke('core:start'),
-    getLog: () => ipcRenderer.invoke('core:getLog'),
-    getWebUrl: () => ipcRenderer.invoke('core:getWebUrl')
+    getLog: () => ipcRenderer.invoke('core:getLog')
   },
   stationConfig: {
     getOnboardingCompleted: () =>

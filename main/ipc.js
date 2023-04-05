@@ -21,7 +21,6 @@ const ipcMainEvents = Object.freeze({
 })
 
 function setupIpcMain (/** @type {Context} */ ctx) {
-  ipcMain.handle('core:start', _event => core.start(ctx))
   ipcMain.handle('core:getLog', core.getLog)
   // Station-wide config
   ipcMain.handle(
