@@ -28,7 +28,9 @@ let online = false
 
 async function setup (/** @type {Context} */ ctx) {
   ctx.saveModuleLogsAs = async () => {
-    const opts = { defaultPath: 'station.txt' }
+    const opts = {
+      defaultPath: `station-modules-${(new Date()).getTime()}.log`
+    }
     const win = BrowserWindow.getFocusedWindow()
     const { filePath } = win
       ? await dialog.showSaveDialog(win, opts)
