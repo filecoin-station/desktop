@@ -8,6 +8,7 @@ const assert = require('node:assert')
 const fs = require('node:fs/promises')
 const JSONStream = require('jsonstream')
 const Sentry = require('@sentry/node')
+const consts = require('./consts')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').CoreEvent} CoreEvent */
@@ -53,7 +54,9 @@ async function start (/** @type {Context} */ ctx) {
 
   const coreChildProcess = execa(corePath, [], {
     env: {
-      FIL_WALLET_ADDRESS: wallet.getAddress()
+      FIL_WALLET_ADDRESS: wallet.getAddress(),
+      CACHE_ROOT: consts.CACHE_ROOT,
+      STATE_ROOT: consts.STATE_ROOT
     }
   })
 
