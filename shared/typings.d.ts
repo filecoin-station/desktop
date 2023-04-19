@@ -27,4 +27,5 @@ export interface Activity {
   type: ActivityType;
   source: ActivitySource;
   message: string;
+  id: string;
 }

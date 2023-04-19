@@ -53,6 +53,7 @@ interface CoreEventActivityInfo {
   message: string;
   module: string;
   timestamp: string;
+  id: string;
 }
 
 interface CoreEventActivityError {
@@ -60,7 +61,7 @@ interface CoreEventActivityError {
   message: string;
   module: string;
   timestamp: string;
-
+  id: string;
 }
 
 export type CoreEvent = CoreEventJobsCompleted | CoreEventActivityInfo | CoreEventActivityError

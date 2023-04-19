@@ -100,6 +100,7 @@ function startEventsProcess (/** @type {Context} */ ctx) {
         }
         case 'activity:info': {
           ctx.recordActivity({
+            id: event.id,
             source: event.module,
             type: 'info',
             message: event.message,
@@ -112,6 +113,7 @@ function startEventsProcess (/** @type {Context} */ ctx) {
         }
         case 'activity:error': {
           ctx.recordActivity({
+            id: event.id,
             source: event.module,
             type: 'error',
             message: event.message,
