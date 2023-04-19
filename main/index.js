@@ -59,6 +59,12 @@ log.info('Machine spec: %s version %s', os.type(), os.release())
 // log.info('Machine spec: %s %s version %s', os.type(),
 //   os.machine(),
 //   os.release())
+if (app.runningUnderARM64Translation) {
+  log.warn(
+    'Warning: we are running under ARM64 translation' +
+      ' (macOS Rosetta or Windows WOW).'
+  )
+}
 
 // Expose additional metadata for Electron preload script
 process.env.STATION_BUILD_VERSION = BUILD_VERSION
