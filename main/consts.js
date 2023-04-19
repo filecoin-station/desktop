@@ -11,6 +11,7 @@ const { getBuildVersion } = require('./build-version')
 module.exports = Object.freeze({
   CACHE_ROOT: getCacheRoot(),
   STATE_ROOT: getStateRoot(),
+  LEGACY_CACHE_HOME: getLegacyCacheHome(),
   IS_MAC: os.platform() === 'darwin',
   IS_WIN: os.platform() === 'win32',
   IS_APPIMAGE: typeof process.env.APPIMAGE !== 'undefined',
@@ -77,6 +78,33 @@ function getStateRoot () {
         process.env.XDG_STATE_HOME ||
           path.join(app.getPath('home'), '.local', 'state'),
         'filecoin-station-desktop'
+      )
+    default:
+      throw new Error(`Unsupported platform: ${platform}`)
+  }
+}
+
+// Used for migrations
+function getLegacyCacheHome () {
+  if (process.env.STATION_ROOT) {
+    return path.join(process.env.STATION_ROOT, 'cache')
+  }
+
+  const platform = os.platform()
+  switch (platform) {
+    case 'darwin': // macOS
+      return path.join(app.getPath('home'), 'Library', 'Caches', app.name)
+    case 'win32':
+      if (!process.env.LOCALAPPDATA) {
+        throw new Error(
+          'Unsupported Windows environment: LOCALAPPDATA must be set.'
+        )
+      }
+      return path.join(process.env.LOCALAPPDATA, app.name)
+    case 'linux':
+      return path.join(
+        process.env.XDG_CACHE_HOME || path.join(app.getPath('home'), '.cache'),
+        app.name
       )
     default:
       throw new Error(`Unsupported platform: ${platform}`)

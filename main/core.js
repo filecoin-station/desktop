@@ -43,6 +43,7 @@ async function setup (/** @type {Context} */ ctx) {
       )
     }
   }
+  await maybeMigrateFiles()
   await start(ctx)
 }
 
@@ -167,6 +168,10 @@ async function getMetrics () {
     ['metrics']
   )
   return JSON.parse(json)
+}
+
+async function maybeMigrateFiles () {
+  // TODO
 }
 
 module.exports = {
