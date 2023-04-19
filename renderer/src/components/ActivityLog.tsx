@@ -9,7 +9,7 @@ const dateTimeFormat = new Intl.DateTimeFormat(window.navigator.language, {
 })
 
 const ActivityLogItem: FC<Activity> = (activity) => {
-  const time = dateTimeFormat.format(new Date(activity.date))
+  const time = dateTimeFormat.format(new Date(activity.timestamp))
 
   return (
     <div className="flex py-4 border-b border-grayscale-300 activity-item">
@@ -51,9 +51,9 @@ interface ActivityLogProps {
 const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
   const activitiesByDate: ActivitiesByDate =
     activities
-      .sort((x, y) => y.date - x.date)
+      .sort((x, y) => y.timestamp - x.timestamp)
       .reduce((groups: ActivitiesByDate, activity: Activity) => {
-        const date = dayjs(activity.date).format('YYYY-MM-DD')
+        const date = dayjs(activity.timestamp).format('YYYY-MM-DD')
         return { ...groups, [date]: groups[date] ? groups[date].concat(activity) : [activity] }
       }, {})
 
@@ -65,8 +65,8 @@ const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
           <div>
             {activities.map((activity) => (
               <ActivityLogItem
-                key={`${activity.date}${activity.type}${activity.source}${activity.message}`}
-                date={activity.date}
+                key={`${activity.timestamp}${activity.type}${activity.source}${activity.message}`}
+                timestamp={activity.timestamp}
                 type={activity.type}
                 source={activity.source}
                 message={activity.message}

@@ -103,7 +103,7 @@ function startEventsProcess (/** @type {Context} */ ctx) {
             source: event.module,
             type: 'info',
             message: event.message,
-            date: new Date(event.date).getTime()
+            timestamp: new Date(event.timestamp).getTime()
           })
           if (event.message.includes('Saturn Node is online')) {
             online = true
@@ -115,7 +115,7 @@ function startEventsProcess (/** @type {Context} */ ctx) {
             source: event.module,
             type: 'error',
             message: event.message,
-            date: new Date(event.date).getTime()
+            timestamp: new Date(event.timestamp).getTime()
           })
           if (
             event.message === 'Saturn Node started.' ||

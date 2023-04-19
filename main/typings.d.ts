@@ -52,14 +52,14 @@ interface CoreEventActivityInfo {
   type: 'activity:info';
   message: string;
   module: string;
-  date: string;
+  timestamp: string;
 }
 
 interface CoreEventActivityError {
   type: 'activity:error';
   message: string;
   module: string;
-  date: string;
+  timestamp: string;
 
 }
 
