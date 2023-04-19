@@ -173,7 +173,24 @@ async function getMetrics () {
 }
 
 async function maybeMigrateFiles () {
-  // TODO
+  const oldSaturnDir = join(consts.LEGACY_CACHE_HOME, 'saturn')
+  const newSaturnDir = join(consts.CACHE_ROOT, 'modules', 'saturn-l2-node')
+  try {
+    await fs.stat(newSaturnDir)
+    return
+  } catch {}
+  try {
+    await fs.stat(oldSaturnDir)
+  } catch {
+    return
+  }
+  console.log(
+    'Migrating files from %s to %s',
+    oldSaturnDir,
+    newSaturnDir
+  )
+  await fs.rename(oldSaturnDir, newSaturnDir)
+  console.log('Migration complete')
 }
 
 module.exports = {
