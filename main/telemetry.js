@@ -1,5 +1,6 @@
 'use strict'
 
+const { app } = require('electron')
 const { InfluxDB, Point } = require('@influxdata/influxdb-client')
 const { createHash } = require('node:crypto')
 const { getDestinationWalletAddress } = require('./station-config')
@@ -39,7 +40,12 @@ function setup () {
     point.stringField('version', pkg.version)
     point.tag('station', 'desktop')
     point.tag('platform', platform())
-    point.tag('arch', arch())
+    // `os.arch()` returns `x64` when running in a translated environment on
+    // ARM64 machine, e.g. via macOS Rosetta. We don't provide Apple `arm64`
+    // builds yet. As a result, Stations running on Apple Silicon were reporting
+    // `x64` arch. To fix the problem, we detect `arm64` translation and report
+    // a different architecture.
+    point.tag('arch', app.runningUnderARM64Translation ? 'arm64' : arch())
     writeClient.writePoint(point)
 
     writeClient.flush().catch(err => {
