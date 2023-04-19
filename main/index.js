@@ -3,6 +3,7 @@
 const { app, dialog, shell } = require('electron')
 const electronLog = require('electron-log')
 const path = require('node:path')
+const fs = require('node:fs/promises')
 
 console.log('Log file:', electronLog.transports.file.findLogPath())
 const log = electronLog.scope('main')
@@ -24,7 +25,7 @@ if (process.env.STATION_ROOT) {
 require('./setup-sentry')
 
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
-const { BUILD_VERSION } = require('./consts')
+const { BUILD_VERSION, STATE_ROOT } = require('./consts')
 const { ipcMain } = require('electron/main')
 const os = require('os')
 const core = require('./core')
@@ -90,6 +91,12 @@ if (!inTest && !app.requestSingleInstanceLock()) {
 app.on('second-instance', () => {
   ctx.showUI()
 })
+
+if (isDev) {
+  // Do not preserve old Activity entries in development mode
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  fs.unlink(path.join(STATE_ROOT, 'logs', 'activity.json')).catch(() => {})
+}
 
 /** @type {import('./typings').Context} */
 const ctx = {
