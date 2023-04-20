@@ -55,7 +55,7 @@ setInterval(() => {
   // As a result, Stations running on Apple Silicon were reporting `x64` arch.
   // To fix the problem, we detect `arm64` translation and report a different
   // architecture.
-  point.tag('arch', app.runningUnderARM64Translation ? 'arm64' : arch())
+  point.tag('arch', app?.runningUnderARM64Translation ? 'arm64' : arch())
   writeClient.writePoint(point)
 }, 10_000).unref()
 
