@@ -2,7 +2,6 @@
 
 const { ipcMain } = require('electron')
 
-const core = require('./core')
 const stationConfig = require('./station-config')
 const wallet = require('./wallet')
 
@@ -21,7 +20,6 @@ const ipcMainEvents = Object.freeze({
 })
 
 function setupIpcMain (/** @type {Context} */ ctx) {
-  ipcMain.handle('core:getLog', core.getLog)
   // Station-wide config
   ipcMain.handle(
     'station:getOnboardingCompleted',

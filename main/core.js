@@ -9,6 +9,9 @@ const fs = require('node:fs/promises')
 const JSONStream = require('jsonstream')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
+const { getLatestLogs } = require('@filecoin-station/core/lib/log')
+const { getActivity } = require('@filecoin-station/core/lib/activity')
+const { getMetrics } = require('@filecoin-station/core/lib/metrics')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').CoreEvent} CoreEvent */
@@ -37,10 +40,7 @@ async function setup (/** @type {Context} */ ctx) {
       ? await dialog.showSaveDialog(win, opts)
       : await dialog.showSaveDialog(opts)
     if (filePath) {
-      await fs.writeFile(
-        filePath,
-        (await execa(corePath, ['logs'])).stdout
-      )
+      await fs.writeFile(filePath, await getLatestLogs())
     }
   }
   await maybeMigrateFiles()
@@ -68,7 +68,7 @@ async function start (/** @type {Context} */ ctx) {
     console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
 
     ;(async () => {
-      const log = await getLog()
+      const log = await getLatestLogs()
       Sentry.captureException('Core exited', scope => {
         // Sentry UI can't show the full 100 lines
         scope.setExtra('logs', log.split('\n').slice(-10).join('\n'))
@@ -144,34 +144,6 @@ function isOnline () {
   return online
 }
 
-/**
- * @returns {Promise<Activity[]>}
- */
-async function getActivity () {
-  const { stdout: activity } = await execa(
-    corePath,
-    ['activity', '--json']
-  )
-  return JSON.parse(activity)
-}
-
-async function getLog () {
-  const { stdout: log } = await execa(
-    corePath,
-    ['logs'],
-    { encoding: 'utf8' }
-  )
-  return log
-}
-
-async function getMetrics () {
-  const { stdout: json } = await execa(
-    corePath,
-    ['metrics']
-  )
-  return JSON.parse(json)
-}
-
 async function maybeMigrateFiles () {
   const oldSaturnDir = join(consts.LEGACY_CACHE_HOME, 'saturn')
   const newSaturnDir = join(consts.CACHE_ROOT, 'modules', 'saturn-l2-node')
@@ -195,7 +167,6 @@ async function maybeMigrateFiles () {
 
 module.exports = {
   getActivity,
-  getLog,
   getMetrics,
   setup,
   start,

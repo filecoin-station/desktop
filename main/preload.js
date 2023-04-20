@@ -20,9 +20,6 @@ contextBridge.exposeInMainWorld('electron', {
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
 
-  core: {
-    getLog: () => ipcRenderer.invoke('core:getLog')
-  },
   stationConfig: {
     getOnboardingCompleted: () =>
       ipcRenderer.invoke('station:getOnboardingCompleted'),

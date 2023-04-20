@@ -19,7 +19,6 @@ declare global {
       core: {
         start: () => Promise<void>;
         stop: () => Promise<void>;
-        getLog: () => Promise<string>;
       };
       stationConfig: {
         getOnboardingCompleted: () => Promise<boolean>;
