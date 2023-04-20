@@ -38,7 +38,6 @@
   },
   "homepage": "https://github.com/filecoin-station/desktop#readme",
   "dependencies": {
-    "@filecoin-station/core": "^6.0.1",
     "@glif/filecoin-address": "2.0.43",
     "@glif/filecoin-message": "^2.0.44",
     "@glif/filecoin-number": "^2.0.57",
@@ -69,6 +68,7 @@
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",
+    "@filecoin-station/core": "github:filecoin-station/core#add/api",
     "@playwright/test": "^1.31.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",

@@ -9,9 +9,7 @@ const fs = require('node:fs/promises')
 const JSONStream = require('jsonstream')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
-const { getLatestLogs } = require('@filecoin-station/core/lib/log')
-const { getActivity } = require('@filecoin-station/core/lib/activity')
-const { getMetrics } = require('@filecoin-station/core/lib/metrics')
+const { core } = require('@filecoin-station/core')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').CoreEvent} CoreEvent */
@@ -40,7 +38,7 @@ async function setup (/** @type {Context} */ ctx) {
       ? await dialog.showSaveDialog(win, opts)
       : await dialog.showSaveDialog(opts)
     if (filePath) {
-      await fs.writeFile(filePath, await getLatestLogs())
+      await fs.writeFile(filePath, await core.logs.get())
     }
   }
   await maybeMigrateFiles()
@@ -68,7 +66,7 @@ async function start (/** @type {Context} */ ctx) {
     console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
 
     ;(async () => {
-      const log = await getLatestLogs()
+      const log = await core.logs.get()
       Sentry.captureException('Core exited', scope => {
         // Sentry UI can't show the full 100 lines
         scope.setExtra('logs', log.split('\n').slice(-10).join('\n'))
@@ -166,8 +164,8 @@ async function maybeMigrateFiles () {
 }
 
 module.exports = {
-  getActivity,
-  getMetrics,
+  getActivity: () => core.activity.get(),
+  getMetrics: () => core.metrics.getLatest(),
   setup,
   start,
   isOnline
