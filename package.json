@@ -75,7 +75,7 @@
     "@types/gunzip-maybe": "^1.4.0",
     "@types/mocha": "^10.0.1",
     "@types/node-fetch": "^2.6.3",
-    "@types/react": "^18.0.35",
+    "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@types/tar-fs": "^2.0.1",
     "@types/tmp": "^0.2.3",
