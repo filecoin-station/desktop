@@ -1,7 +1,7 @@
 'use strict'
 
 const { app, BrowserWindow, dialog } = require('electron')
-const { join } = require('node:path')
+const { join, dirname } = require('node:path')
 const execa = require('execa')
 const wallet = require('./wallet')
 const assert = require('node:assert')
@@ -162,6 +162,7 @@ async function maybeMigrateFiles () {
     oldSaturnDir,
     newSaturnDir
   )
+  await fs.mkdir(dirname(newSaturnDir), { recursive: true })
   await fs.rename(oldSaturnDir, newSaturnDir)
   console.log('Migration complete')
 }
