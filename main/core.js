@@ -52,9 +52,7 @@ async function start (/** @type {Context} */ ctx) {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
-  startEventsProcess(ctx)
-
-  const coreChildProcess = execa(corePath, [], {
+  const childProcess = execa(corePath, ['--json'], {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
@@ -63,35 +61,10 @@ async function start (/** @type {Context} */ ctx) {
   })
 
   /** @type {string | null} */
-  let coreExitReason = null
+  let exitReason = null
 
-  coreChildProcess.on('close', code => {
-    console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
-
-    ;(async () => {
-      const log = await core.logs.get()
-      Sentry.captureException('Core exited', scope => {
-        // Sentry UI can't show the full 100 lines
-        scope.setExtra('logs', log.split('\n').slice(-10).join('\n'))
-        scope.setExtra('reason', coreExitReason)
-        return scope
-      })
-    })()
-  })
-
-  coreChildProcess.on('exit', (code, signal) => {
-    const reason = signal ? `via signal ${signal}` : `with code: ${code}`
-    const msg = `Core exited ${reason}`
-    console.log(msg)
-    coreExitReason = signal || code ? reason : null
-  })
-}
-
-function startEventsProcess (/** @type {Context} */ ctx) {
-  console.log('Starting Core Events...')
-  const events = execa(corePath, ['events'])
-  assert(events.stdout, 'Events child process has no stdout')
-  events.stdout
+  assert(childProcess.stdout, 'Child process has no stdout')
+  childProcess.stdout
     .pipe(JSONStream.parse(true))
     .on('data', (/** @type {CoreEvent} */ event) => {
       switch (event.type) {
@@ -130,14 +103,30 @@ function startEventsProcess (/** @type {Context} */ ctx) {
         }
       }
     })
+
   app.on('before-quit', () => {
-    events.kill()
+    childProcess.kill()
   })
-  events.on('exit', (code, signal) => {
-    if (code !== 0) {
-      console.log(`Events process exited with code=${code} signal=${signal}`)
-      setTimeout(() => startEventsProcess(ctx), 1000)
-    }
+
+  childProcess.on('close', code => {
+    console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
+
+    ;(async () => {
+      const log = await core.logs.get()
+      Sentry.captureException('Core exited', scope => {
+        // Sentry UI can't show the full 100 lines
+        scope.setExtra('logs', log.split('\n').slice(-10).join('\n'))
+        scope.setExtra('reason', exitReason)
+        return scope
+      })
+    })()
+  })
+
+  childProcess.on('exit', (code, signal) => {
+    const reason = signal ? `via signal ${signal}` : `with code: ${code}`
+    const msg = `Core exited ${reason}`
+    console.log(msg)
+    exitReason = signal || code ? reason : null
   })
 }
 
