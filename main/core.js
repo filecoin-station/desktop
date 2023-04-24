@@ -9,7 +9,6 @@ const fs = require('node:fs/promises')
 const JSONStream = require('jsonstream')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
-const { core } = require('@filecoin-station/core')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').CoreEvent} CoreEvent */
@@ -27,8 +26,12 @@ const corePath = join(
 console.log('Core binary: %s', corePath)
 
 let online = false
+/** @type {import('@filecoin-station/core').core} */
+let core
 
 async function setup (/** @type {Context} */ ctx) {
+  ({ core } = await import('@filecoin-station/core'))
+
   ctx.saveModuleLogsAs = async () => {
     const opts = {
       defaultPath: `station-modules-${(new Date()).getTime()}.log`
