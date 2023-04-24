@@ -45,7 +45,7 @@ describe('Wallet Backend', function () {
 
   describe('fetchAllTransactions()', function () {
     it('fetches all transactions', /** @this {Mocha.Test} */ async function () {
-      this.timeout(10_000)
+      this.timeout(20_000)
 
       await backend.fetchAllTransactions()
       assert(backend.transactions)
