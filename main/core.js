@@ -31,7 +31,10 @@ let core
 
 async function setup (/** @type {Context} */ ctx) {
   const { Core } = await import('@filecoin-station/core')
-  core = new Core(consts.CACHE_ROOT, consts.STATE_ROOT)
+  core = new Core({
+    cacheRoot: consts.CACHE_ROOT,
+    stateRoot: consts.STATE_ROOT
+  })
 
   ctx.saveModuleLogsAs = async () => {
     const opts = {
