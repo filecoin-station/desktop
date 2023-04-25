@@ -109,7 +109,7 @@ const ctx = {
   getAllActivities: async () => {
     const activity = await core.getActivity()
     activity.reverse()
-    activity.length = 100
+    activity.length = Math.min(activity.length, 100)
     return activity
   },
 
