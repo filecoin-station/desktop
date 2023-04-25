@@ -26,11 +26,12 @@ const corePath = join(
 console.log('Core binary: %s', corePath)
 
 let online = false
-/** @type {import('@filecoin-station/core').core} */
+/** @type {import('@filecoin-station/core').Core} */
 let core
 
 async function setup (/** @type {Context} */ ctx) {
-  ({ core } = await import('@filecoin-station/core'))
+  const { Core } = await import('@filecoin-station/core')
+  core = new Core(consts.CACHE_ROOT, consts.STATE_ROOT)
 
   ctx.saveModuleLogsAs = async () => {
     const opts = {
