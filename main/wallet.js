@@ -35,6 +35,7 @@ let balance = loadBalance()
  * @param {Context} _ctx
  */
 async function setup (_ctx) {
+  try{
   ctx = _ctx
 
   const { seedIsNew } = await backend.setup()
@@ -45,6 +46,9 @@ async function setup (_ctx) {
   }
 
   log.info('Address: %s', backend.address)
+  }catch(err){
+      throw new Error('Failed to set up the wallet')
+  }
 
   ;(async () => {
     while (true) {

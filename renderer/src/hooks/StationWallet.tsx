@@ -23,6 +23,7 @@ interface Wallet {
   editDestinationAddress: (address: string|undefined) => void;
   processingTransaction: FILTransactionProcessing | undefined;
   dismissCurrentTransaction: () => void;
+  checkStationAddress: () => void;
   transferAllFundsToDestinationWallet: () => Promise<void>;
 }
 
@@ -72,6 +73,12 @@ const useWallet = (): Wallet => {
   const dismissCurrentTransaction = () => {
     if (processingTransaction && processingTransaction.status !== 'processing') {
       setCurrentTransaction(undefined)
+    }
+  }
+
+  const checkStationAddress = async () => {
+    if(stationAddress === ''){
+      setStationAddress(await getStationWalletAddress())
     }
   }
 
@@ -148,6 +155,7 @@ const useWallet = (): Wallet => {
     editDestinationAddress,
     processingTransaction,
     dismissCurrentTransaction,
+    checkStationAddress,
     transferAllFundsToDestinationWallet
   }
 }

@@ -15,6 +15,7 @@ interface PropsWallet {
 const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   const [editMode, setEditMode] = useState<boolean>(false)
   const [transferMode, setTransferMode] = useState<boolean>(false)
+
   const {
     stationAddress,
     destinationFilAddress,
@@ -23,12 +24,16 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
     editDestinationAddress,
     processingTransaction,
     dismissCurrentTransaction,
+    checkStationAddress,
     transferAllFundsToDestinationWallet
   } = useWallet()
 
   useEffect(() => {
+
     dismissCurrentTransaction()
+    checkStationAddress()
     reset()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen])
 
