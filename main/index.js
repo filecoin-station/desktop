@@ -40,7 +40,6 @@ const { setup: setupDialogs } = require('./dialog')
 const telemetry = require('./telemetry')
 
 /** @typedef {import('./typings').Activity} Activity */
-/** @typedef {import('./typings').ActivityType} ActivityType */
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest

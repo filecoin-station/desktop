@@ -1,5 +1,5 @@
 import { Activity, FILTransaction, FILTransactionProcessing } from '../shared/typings'
-export type { ActivitySource, ActivityType, FILTransactionStatus } from '../shared/typings'
+export type { FILTransactionStatus } from '../shared/typings'
 export type { Activity, FILTransaction, FILTransactionProcessing }
 
 export interface FoxMessage {
