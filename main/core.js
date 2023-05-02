@@ -8,6 +8,7 @@ const assert = require('node:assert')
 const fs = require('node:fs/promises')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
+const timers = require('node:timers/promises')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -46,19 +47,36 @@ async function setup (/** @type {Context} */ ctx) {
     }
   }
   await maybeMigrateFiles()
-  subscribe(ctx).catch(console.error)
+  subscribeWithRetry(ctx).catch(console.error)
   await start()
 }
 
-async function subscribe (/** @type {Context} */ ctx) {
+async function subscribeWithRetry (/** @type {Context} */ ctx) {
+  while (true) {
+    const controller = new AbortController()
+    try {
+      await subscribe(ctx, controller.signal)
+    } catch (err) {
+      controller.abort()
+      console.error(err)
+      await timers.setTimeout(1000)
+    }
+  }
+}
+
+async function subscribe (
+  /** @type {Context} */ ctx,
+  /** @type {AbortSignal} */ signal
+) {
   await Promise.all([
     (async () => {
-      for await (const metrics of core.metrics.follow()) {
+      for await (const metrics of core.metrics.follow(undefined, { signal })) {
         ctx.setTotalJobsCompleted(metrics.totalJobsCompleted)
       }
     })(),
     (async () => {
-      for await (const activity of core.activity.follow({ nLines: 0 })) {
+      const it = core.activity.follow({ nLines: 0, signal })
+      for await (const activity of it) {
         ctx.recordActivity(activity)
         if (
           activity.type === 'info' &&
