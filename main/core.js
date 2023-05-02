@@ -82,7 +82,7 @@ async function start (/** @type {Context} */ ctx) {
             source: event.module,
             type: 'info',
             message: event.message,
-            timestamp: new Date(event.timestamp).getTime()
+            timestamp: new Date(event.timestamp)
           })
           if (event.message.includes('Saturn Node is online')) {
             online = true
@@ -95,7 +95,7 @@ async function start (/** @type {Context} */ ctx) {
             source: event.module,
             type: 'error',
             message: event.message,
-            timestamp: new Date(event.timestamp).getTime()
+            timestamp: new Date(event.timestamp)
           })
           if (
             event.message === 'Saturn Node started.' ||

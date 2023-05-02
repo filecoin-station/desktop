@@ -113,7 +113,6 @@ const ctx = {
     activity.length = Math.min(activity.length, 100)
     return activity.map(activityEvent => ({
       ...activityEvent,
-      timestamp: activityEvent.timestamp.getTime(),
       type: /** @type {ActivityType} */ (activityEvent.type)
     }))
   },

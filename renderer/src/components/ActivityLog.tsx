@@ -51,7 +51,7 @@ interface ActivityLogProps {
 const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
   const activitiesByDate: ActivitiesByDate =
     activities
-      .sort((x, y) => y.timestamp - x.timestamp)
+      .sort((x, y) => y.timestamp.getTime() - x.timestamp.getTime())
       .reduce((groups: ActivitiesByDate, activity: Activity) => {
         const date = dayjs(activity.timestamp).format('YYYY-MM-DD')
         return { ...groups, [date]: groups[date] ? groups[date].concat(activity) : [activity] }
