@@ -10,7 +10,6 @@ const Sentry = require('@sentry/node')
 const consts = require('./consts')
 
 /** @typedef {import('./typings').Context} Context */
-/** @typedef {import('./typings').Activity} Activity */
 
 const corePath = join(
   __dirname,
