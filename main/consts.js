@@ -21,6 +21,12 @@ module.exports = Object.freeze({
   ELECTRON_VERSION: process.versions.electron
 })
 
+const appIDs = {
+  darwin: 'app.filstation.desktop',
+  win32: 'Filecoin Station Desktop',
+  linux: 'filecoin-station-desktop'
+}
+
 // Replace with `app.get('localUserData')` after this PR is landed & released:
 // https://github.com/electron/electron/pull/34337
 function getCacheRoot () {
@@ -31,22 +37,17 @@ function getCacheRoot () {
   const platform = os.platform()
   switch (platform) {
     case 'darwin':
-      return path.join(
-        app.getPath('home'),
-        'Library',
-        'Caches',
-        'app.filstation.desktop'
-      )
+      return path.join(app.getPath('home'), 'Library', 'Caches', appIDs.darwin)
     case 'win32':
       assert(
         process.env.TEMP,
         'Unsupported Windows environment: TEMP must be set.'
       )
-      return path.join(process.env.TEMP, 'Filecoin Station Desktop')
+      return path.join(process.env.TEMP, appIDs.win32)
     case 'linux':
       return path.join(
         process.env.XDG_CACHE_HOME || path.join(app.getPath('home'), '.cache'),
-        'filecoin-station-desktop'
+        appIDs.linux
       )
     default:
       throw new Error(`Unsupported platform: ${platform}`)
@@ -65,19 +66,19 @@ function getStateRoot () {
         app.getPath('home'),
         'Library',
         'Application Support',
-        'app.filstation.desktop'
+        appIDs.darwin
       )
     case 'win32':
       assert(
         process.env.LOCALAPPDATA,
         'Unsupported Windows environment: LOCALAPPDATA must be set.'
       )
-      return path.join(process.env.LOCALAPPDATA, 'Filecoin Station Desktop')
+      return path.join(process.env.LOCALAPPDATA, appIDs.win32)
     case 'linux':
       return path.join(
         process.env.XDG_STATE_HOME ||
           path.join(app.getPath('home'), '.local', 'state'),
-        'filecoin-station-desktop'
+        appIDs.linux
       )
     default:
       throw new Error(`Unsupported platform: ${platform}`)
