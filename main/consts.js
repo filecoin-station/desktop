@@ -8,6 +8,12 @@ const assert = require('assert')
 
 const { getBuildVersion } = require('./build-version')
 
+const appIDs = {
+  darwin: 'app.filstation.desktop',
+  win32: 'Filecoin Station Desktop',
+  linux: 'filecoin-station-desktop'
+}
+
 module.exports = Object.freeze({
   CACHE_ROOT: getCacheRoot(),
   STATE_ROOT: getStateRoot(),
@@ -20,12 +26,6 @@ module.exports = Object.freeze({
 
   ELECTRON_VERSION: process.versions.electron
 })
-
-const appIDs = {
-  darwin: 'app.filstation.desktop',
-  win32: 'Filecoin Station Desktop',
-  linux: 'filecoin-station-desktop'
-}
 
 // Replace with `app.get('localUserData')` after this PR is landed & released:
 // https://github.com/electron/electron/pull/34337
