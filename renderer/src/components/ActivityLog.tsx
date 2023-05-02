@@ -65,12 +65,12 @@ const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
           <div>
             {activities.map((activity) => (
               <ActivityLogItem
-                key={`${activity.id}`}
+                key={activity.id}
+                id={activity.id}
                 timestamp={activity.timestamp}
                 type={activity.type}
                 source={activity.source}
                 message={activity.message}
-                id={activity.id}
               />
             ))}
           </div>
