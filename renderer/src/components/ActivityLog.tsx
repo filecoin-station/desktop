@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Activity } from '../typings'
+import { ActivityEvent } from '../typings'
 import dayjs from 'dayjs'
 import { ReactComponent as WarningIcon } from '../assets/img/icons/warning.svg'
 import { ReactComponent as JobIcon } from '../assets/img/icons/job.svg'
@@ -8,7 +8,7 @@ const dateTimeFormat = new Intl.DateTimeFormat(window.navigator.language, {
   hour: 'numeric', minute: 'numeric', second: 'numeric'
 })
 
-const ActivityLogItem: FC<Activity> = (activity) => {
+const ActivityLogItem: FC<ActivityEvent> = (activity) => {
   const time = dateTimeFormat.format(new Date(activity.timestamp))
 
   return (
@@ -42,17 +42,17 @@ const DateSeparator: FC<DateSeparatorProps> = ({ date }) => {
 }
 
 interface ActivitiesByDate {
-  [date: string]: Activity[];
+  [date: string]: ActivityEvent[];
 }
 interface ActivityLogProps {
-  activities: Activity[];
+  activities: ActivityEvent[];
 }
 
 const ActivityLog: FC<ActivityLogProps> = ({ activities = [] }) => {
   const activitiesByDate: ActivitiesByDate =
     activities
       .sort((x, y) => y.timestamp.getTime() - x.timestamp.getTime())
-      .reduce((groups: ActivitiesByDate, activity: Activity) => {
+      .reduce((groups: ActivitiesByDate, activity: ActivityEvent) => {
         const date = dayjs(activity.timestamp).format('YYYY-MM-DD')
         return { ...groups, [date]: groups[date] ? groups[date].concat(activity) : [activity] }
       }, {})

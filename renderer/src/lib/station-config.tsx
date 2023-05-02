@@ -1,5 +1,5 @@
 import {
-  Activity,
+  ActivityEvent,
   FILTransaction,
   FILTransactionProcessing
 } from '../typings'
@@ -13,7 +13,7 @@ export async function setOnboardingCompleted (): Promise<void> {
   return await window.electron.stationConfig.setOnboardingCompleted()
 }
 
-export async function getAllActivities (): Promise<Activity[]> {
+export async function getAllActivities (): Promise<ActivityEvent[]> {
   return await window.electron.getAllActivities()
 }
 
