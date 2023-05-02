@@ -111,10 +111,7 @@ const ctx = {
     const activity = await core.getActivity()
     activity.reverse()
     activity.length = Math.min(activity.length, 100)
-    return activity.map(activityEvent => ({
-      ...activityEvent,
-      type: /** @type {ActivityType} */ (activityEvent.type)
-    }))
+    return activity
   },
 
   recordActivity: activity => {
