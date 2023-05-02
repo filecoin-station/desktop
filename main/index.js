@@ -40,6 +40,7 @@ const { setup: setupDialogs } = require('./dialog')
 const telemetry = require('./telemetry')
 
 /** @typedef {import('./typings').Activity} Activity */
+/** @typedef {import('./typings').ActivityType} ActivityType */
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -110,7 +111,11 @@ const ctx = {
     const activity = await core.getActivity()
     activity.reverse()
     activity.length = Math.min(activity.length, 100)
-    return activity
+    return activity.map(activityEvent => ({
+      ...activityEvent,
+      timestamp: activityEvent.timestamp.getTime(),
+      type: /** @type {ActivityType} */ (activityEvent.type)
+    }))
   },
 
   recordActivity: activity => {
