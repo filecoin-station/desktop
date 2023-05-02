@@ -6,12 +6,10 @@ const execa = require('execa')
 const wallet = require('./wallet')
 const assert = require('node:assert')
 const fs = require('node:fs/promises')
-const JSONStream = require('jsonstream')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
 
 /** @typedef {import('./typings').Context} Context */
-/** @typedef {import('./typings').CoreEvent} CoreEvent */
 /** @typedef {import('./typings').Activity} Activity */
 
 const corePath = join(
@@ -49,14 +47,42 @@ async function setup (/** @type {Context} */ ctx) {
     }
   }
   await maybeMigrateFiles()
-  await start(ctx)
+  subscribe(ctx).catch(console.error)
+  await start()
 }
 
-async function start (/** @type {Context} */ ctx) {
+async function subscribe (/** @type {Context} */ ctx) {
+  await Promise.all([
+    (async () => {
+      for await (const metrics of core.metrics.follow()) {
+        ctx.setTotalJobsCompleted(metrics.totalJobsCompleted)
+      }
+    })(),
+    (async () => {
+      for await (const activity of core.activity.follow({ nLines: 0 })) {
+        ctx.recordActivity(activity)
+        if (
+          activity.type === 'info' &&
+          activity.message.includes('Saturn Node is online')
+        ) {
+          online = true
+        } else if (
+          activity.message === 'Saturn Node started.' ||
+          activity.message.includes('was able to connect') ||
+          activity.message.includes('will try to connect')
+        ) {
+          online = false
+        }
+      }
+    })()
+  ])
+}
+
+async function start () {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
-  const childProcess = execa(corePath, ['--json'], {
+  const childProcess = execa(corePath, {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
@@ -66,47 +92,6 @@ async function start (/** @type {Context} */ ctx) {
 
   /** @type {string | null} */
   let exitReason = null
-
-  assert(childProcess.stdout, 'Child process has no stdout')
-  childProcess.stdout
-    .pipe(JSONStream.parse(true))
-    .on('data', (/** @type {CoreEvent} */ event) => {
-      switch (event.type) {
-        case 'jobs-completed': {
-          ctx.setTotalJobsCompleted(event.total)
-          break
-        }
-        case 'activity:info': {
-          ctx.recordActivity({
-            id: event.id,
-            source: event.module,
-            type: 'info',
-            message: event.message,
-            timestamp: new Date(event.timestamp)
-          })
-          if (event.message.includes('Saturn Node is online')) {
-            online = true
-          }
-          break
-        }
-        case 'activity:error': {
-          ctx.recordActivity({
-            id: event.id,
-            source: event.module,
-            type: 'error',
-            message: event.message,
-            timestamp: new Date(event.timestamp)
-          })
-          if (
-            event.message === 'Saturn Node started.' ||
-            event.message.includes('was able to connect') ||
-            event.message.includes('will try to connect')
-          ) {
-            online = false
-          }
-        }
-      }
-    })
 
   app.on('before-quit', () => {
     childProcess.kill()

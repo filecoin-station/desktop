@@ -42,26 +42,3 @@ export interface WalletSeed {
   seed: string;
   isNew: boolean;
 }
-
-interface CoreEventJobsCompleted {
-  type: 'jobs-completed';
-  total: number;
-}
-
-interface CoreEventActivityInfo {
-  type: 'activity:info';
-  message: string;
-  module: string;
-  timestamp: string;
-  id: string;
-}
-
-interface CoreEventActivityError {
-  type: 'activity:error';
-  message: string;
-  module: string;
-  timestamp: string;
-  id: string;
-}
-
-export type CoreEvent = CoreEventJobsCompleted | CoreEventActivityInfo | CoreEventActivityError
