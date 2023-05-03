@@ -17,10 +17,6 @@ declare global {
       openReleaseNotes(): void;
       restartToUpdate(): void;
 
-      core: {
-        start: () => Promise<void>;
-        stop: () => Promise<void>;
-      };
       stationConfig: {
         getOnboardingCompleted: () => Promise<boolean>;
         setOnboardingCompleted: () => Promise<void>;
