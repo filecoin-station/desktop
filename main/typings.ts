@@ -1,6 +1,7 @@
-import { Activity, FILTransaction, FILTransactionProcessing } from '../shared/typings'
+import { FILTransaction, FILTransactionProcessing } from '../shared/typings'
+import { ActivityEvent } from '@filecoin-station/core'
 export type { FILTransactionStatus } from '../shared/typings'
-export type { Activity, FILTransaction, FILTransactionProcessing }
+export type { FILTransaction, FILTransactionProcessing }
 
 export interface FoxMessage {
   cid: string;
@@ -17,8 +18,8 @@ export interface FoxMessage {
 }
 
 export interface Context {
-  recordActivity(activity: Activity): void;
-  getAllActivities(): Promise<Activity[]>;
+  recordActivity(activity: ActivityEvent): void;
+  getAllActivities(): Promise<ActivityEvent[]>;
 
   setTotalJobsCompleted(count: number): void;
   getTotalJobsCompleted(): Promise<number>;

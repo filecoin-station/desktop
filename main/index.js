@@ -39,8 +39,6 @@ const Sentry = require('@sentry/node')
 const { setup: setupDialogs } = require('./dialog')
 const telemetry = require('./telemetry')
 
-/** @typedef {import('./typings').Activity} Activity */
-
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 

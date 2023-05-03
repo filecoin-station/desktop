@@ -8,7 +8,6 @@ const assert = require('node:assert')
 const core = require('./core')
 
 /** @typedef {import('./typings').Context} Context */
-/** @typedef {import('./typings').Activity} Activity */
 
 // Be warned, this one is pretty ridiculous:
 // Tray must be global or it will break due to.. GC.

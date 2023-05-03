@@ -1,7 +1,7 @@
 'use strict'
 
 /** @typedef {import('electron').IpcRendererEvent} IpcRendererEvent */
-/** @typedef {import('./typings').Activity} Activity */
+/** @typedef {import('@filecoin-station/core').ActivityEvent} ActivityEvent */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {
   import('./typings').FILTransactionProcessing
@@ -41,7 +41,9 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.invoke('station:browseTransactionTracker', transactionHash)
   },
   stationEvents: {
-    onActivityLogged: (/** @type {(value: Activity) => void} */ callback) => {
+    onActivityLogged: (
+      /** @type {(value: ActivityEvent) => void} */ callback
+    ) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, activities) => callback(activities)
       ipcRenderer.on('station:activity-logged', listener)
