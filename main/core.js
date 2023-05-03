@@ -175,5 +175,6 @@ module.exports = {
   getMetrics: () => core.metrics.getLatest(),
   setup,
   start,
-  isOnline
+  isOnline,
+  getActivityFilePath: () => core.paths.activity
 }

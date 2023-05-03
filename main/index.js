@@ -25,7 +25,7 @@ if (process.env.STATION_ROOT) {
 require('./setup-sentry')
 
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
-const { BUILD_VERSION, STATE_ROOT } = require('./consts')
+const { BUILD_VERSION } = require('./consts')
 const { ipcMain } = require('electron/main')
 const os = require('os')
 const core = require('./core')
@@ -38,6 +38,7 @@ const setupUpdater = require('./updater')
 const Sentry = require('@sentry/node')
 const { setup: setupDialogs } = require('./dialog')
 const telemetry = require('./telemetry')
+const { getActivityFilePath } = require('./core')
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -99,7 +100,7 @@ app.on('second-instance', () => {
 if (isDev) {
   // Do not preserve old Activity entries in development mode
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  fs.unlink(path.join(STATE_ROOT, 'logs', 'activity.json')).catch(() => {})
+  fs.unlink(getActivityFilePath()).catch(() => {})
 }
 
 /** @type {import('./typings').Context} */
