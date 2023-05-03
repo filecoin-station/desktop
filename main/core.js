@@ -11,6 +11,7 @@ const consts = require('./consts')
 const timers = require('node:timers/promises')
 
 /** @typedef {import('./typings').Context} Context */
+/** @typedef {import('@filecoin-station/core').ActivityEvent} ActivityEvent */
 
 const corePath = join(
   __dirname,
@@ -78,21 +79,28 @@ async function subscribe (
       const it = core.activity.follow({ nLines: 0, signal })
       for await (const activity of it) {
         ctx.recordActivity(activity)
-        if (
-          activity.type === 'info' &&
-          activity.message.includes('Saturn Node is online')
-        ) {
-          online = true
-        } else if (
-          activity.message === 'Saturn Node started.' ||
-          activity.message.includes('was able to connect') ||
-          activity.message.includes('will try to connect')
-        ) {
-          online = false
-        }
+        detectChangeInOnlineStatus(activity)
       }
     })()
   ])
+}
+
+/**
+ * @param {ActivityEvent} activity
+ */
+function detectChangeInOnlineStatus (activity) {
+  if (
+    activity.type === 'info' &&
+    activity.message.includes('Saturn Node is online')
+  ) {
+    online = true
+  } else if (
+    activity.message === 'Saturn Node started.' ||
+    activity.message.includes('was able to connect') ||
+    activity.message.includes('will try to connect')
+  ) {
+    online = false
+  }
 }
 
 async function start () {
