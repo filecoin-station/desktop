@@ -1,4 +1,4 @@
-export { ActivityEvent } from '@filecoin-station/core'
+export { ActivityEvent as Activity } from '@filecoin-station/core'
 
 export type FILTransactionStatus = 'succeeded' | 'processing' | 'failed'
 

@@ -1,7 +1,7 @@
 'use strict'
 
 /** @typedef {import('electron').IpcRendererEvent} IpcRendererEvent */
-/** @typedef {import('./typings').ActivityEvent} ActivityEvent */
+/** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {
   import('./typings').FILTransactionProcessing
@@ -42,7 +42,7 @@ contextBridge.exposeInMainWorld('electron', {
   },
   stationEvents: {
     onActivityLogged: (
-      /** @type {(value: ActivityEvent) => void} */ callback
+      /** @type {(value: Activity) => void} */ callback
     ) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, activities) => callback(activities)

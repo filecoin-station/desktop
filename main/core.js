@@ -13,7 +13,7 @@ const pDefer = require('p-defer')
 
 /** @typedef {import('@filecoin-station/core').Core} Core */
 /** @typedef {import('./typings').Context} Context */
-/** @typedef {import('./typings').ActivityEvent} ActivityEvent */
+/** @typedef {import('./typings').Activity} Activity */
 
 const corePath = join(
   __dirname,
@@ -95,7 +95,7 @@ async function subscribe (
 }
 
 /**
- * @param {ActivityEvent} activity
+ * @param {Activity} activity
  */
 function detectChangeInOnlineStatus (activity) {
   if (

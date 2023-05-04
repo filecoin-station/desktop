@@ -1,13 +1,13 @@
-import { ActivityEvent, FILTransaction, FILTransactionProcessing } from '../../shared/typings'
+import { Activity, FILTransaction, FILTransactionProcessing } from '../../shared/typings'
 export type { FILTransactionStatus } from '../../shared/typings'
-export type { ActivityEvent, FILTransaction, FILTransactionProcessing }
+export type { Activity, FILTransaction, FILTransactionProcessing }
 
 declare global {
   interface Window {
     electron: {
       stationBuildVersion: string;
 
-      getAllActivities(): Promise<ActivityEvent[]>;
+      getAllActivities(): Promise<Activity[]>;
 
       getTotalJobsCompleted(): Promise<number>;
       onJobStatsUpdated (callback: (totalJobCount: number) => void): () => void;
@@ -28,7 +28,7 @@ declare global {
         browseTransactionTracker: (transactionHash: string) => void;
       };
       stationEvents: {
-        onActivityLogged: (callback: (activity: ActivityEvent) => void) => () => void;
+        onActivityLogged: (callback: (activity: Activity) => void) => () => void;
         onJobProcessed: (callback: (value: number) => void) => () => void;
         onEarningsChanged: (callback: (value: number) => void) => () => void;
         onUpdateAvailable: (callback: () => void) => () => void;
