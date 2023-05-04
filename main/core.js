@@ -9,8 +9,10 @@ const fs = require('node:fs/promises')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
 const timers = require('node:timers/promises')
+const pDefer = require('p-defer')
 
 /** @typedef {import('./typings').Context} Context */
+/** @typedef {import('@filecoin-station/core').Core} Core */
 /** @typedef {import('@filecoin-station/core').ActivityEvent} ActivityEvent */
 
 const corePath = join(
@@ -25,16 +27,19 @@ const corePath = join(
 console.log('Core binary: %s', corePath)
 
 let online = false
-/** @type {import('@filecoin-station/core').Core} */
-let core
 
-async function setup (/** @type {Context} */ ctx) {
+const coreDeferred = pDefer()
+;(async () => {
   const { Core } = await import('@filecoin-station/core')
-  core = new Core({
+  const core = new Core({
     cacheRoot: consts.CACHE_ROOT,
     stateRoot: consts.STATE_ROOT
   })
+  coreDeferred.resolve(core)
+})().catch(coreDeferred.reject)
 
+async function setup (/** @type {Context} */ ctx) {
+  const core = await coreDeferred.promise
   ctx.saveModuleLogsAs = async () => {
     const opts = {
       defaultPath: `station-modules-${(new Date()).getTime()}.log`
@@ -48,15 +53,18 @@ async function setup (/** @type {Context} */ ctx) {
     }
   }
   await maybeMigrateFiles()
-  subscribeWithRetry(ctx).catch(console.error)
-  await start()
+  subscribeWithRetry(ctx, core).catch(console.error)
+  await start(core)
 }
 
-async function subscribeWithRetry (/** @type {Context} */ ctx) {
+async function subscribeWithRetry (
+  /** @type {Context} */ ctx,
+  /** @type {Core} */ core
+) {
   while (true) {
     const controller = new AbortController()
     try {
-      await subscribe(ctx, controller.signal)
+      await subscribe(ctx, core, controller.signal)
     } catch (err) {
       controller.abort()
       console.error(err)
@@ -67,6 +75,7 @@ async function subscribeWithRetry (/** @type {Context} */ ctx) {
 
 async function subscribe (
   /** @type {Context} */ ctx,
+  /** @type {Core} */ core,
   /** @type {AbortSignal} */ signal
 ) {
   await Promise.all([
@@ -103,7 +112,10 @@ function detectChangeInOnlineStatus (activity) {
   }
 }
 
-async function start () {
+/**
+ * @param {Core} core
+ */
+async function start (core) {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
@@ -171,10 +183,19 @@ async function maybeMigrateFiles () {
 }
 
 module.exports = {
-  getActivity: () => core.activity.get(),
-  getMetrics: () => core.metrics.getLatest(),
+  getActivity: async () => {
+    const core = await coreDeferred.promise
+    return core.activity.get()
+  },
+  getMetrics: async () => {
+    const core = await coreDeferred.promise
+    return core.metrics.getLatest()
+  },
   setup,
   start,
   isOnline,
-  getActivityFilePath: () => core.paths.activity
+  getActivityFilePath: async () => {
+    const core = await coreDeferred.promise
+    return core.paths.activity
+  }
 }
