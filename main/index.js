@@ -109,8 +109,8 @@ if (isDev) {
 const ctx = {
   getAllActivities: async () => {
     const activity = await core.getActivity()
+    activity.splice(0, activity.length - 100)
     activity.reverse()
-    activity.length = Math.min(activity.length, 100)
     return activity
   },
 
