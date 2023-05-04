@@ -117,5 +117,8 @@
     ]
   },
   "buildTag": null,
-  "buildNumber": null
+  "buildNumber": null,
+  "build": {
+    "asar": false
+  }
 }
