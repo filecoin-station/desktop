@@ -1,7 +1,7 @@
 'use strict'
 
 /** @typedef {import('electron').IpcRendererEvent} IpcRendererEvent */
-/** @typedef {import('@filecoin-station/core').ActivityEvent} ActivityEvent */
+/** @typedef {import('./typings').ActivityEvent} ActivityEvent */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {
   import('./typings').FILTransactionProcessing

@@ -1,7 +1,6 @@
-import { FILTransaction, FILTransactionProcessing } from '../shared/typings'
-import { ActivityEvent } from '@filecoin-station/core'
+import { ActivityEvent, FILTransaction, FILTransactionProcessing } from '../shared/typings'
 export type { FILTransactionStatus } from '../shared/typings'
-export type { FILTransaction, FILTransactionProcessing }
+export type { ActivityEvent, FILTransaction, FILTransactionProcessing }
 
 export interface FoxMessage {
   cid: string;

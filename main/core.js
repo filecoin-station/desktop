@@ -11,9 +11,9 @@ const consts = require('./consts')
 const timers = require('node:timers/promises')
 const pDefer = require('p-defer')
 
-/** @typedef {import('./typings').Context} Context */
 /** @typedef {import('@filecoin-station/core').Core} Core */
-/** @typedef {import('@filecoin-station/core').ActivityEvent} ActivityEvent */
+/** @typedef {import('./typings').Context} Context */
+/** @typedef {import('./typings').ActivityEvent} ActivityEvent */
 
 const corePath = join(
   __dirname,
