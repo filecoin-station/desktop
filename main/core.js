@@ -9,7 +9,6 @@ const fs = require('node:fs/promises')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
 const timers = require('node:timers/promises')
-const pDefer = require('p-defer')
 
 /** @typedef {import('@filecoin-station/core').Core} Core */
 /** @typedef {import('./typings').Context} Context */
@@ -28,18 +27,17 @@ console.log('Core binary: %s', corePath)
 
 let online = false
 
-const coreDeferred = pDefer()
-;(async () => {
+const corePromise = (async () => {
   const { Core } = await import('@filecoin-station/core')
   const core = await Core.create({
     cacheRoot: consts.CACHE_ROOT,
     stateRoot: consts.STATE_ROOT
   })
-  coreDeferred.resolve(core)
-})().catch(coreDeferred.reject)
+  return core
+})()
 
 async function setup (/** @type {Context} */ ctx) {
-  const core = await coreDeferred.promise
+  const core = await corePromise
   ctx.saveModuleLogsAs = async () => {
     const opts = {
       defaultPath: `station-modules-${(new Date()).getTime()}.log`
@@ -184,18 +182,18 @@ async function maybeMigrateFiles () {
 
 module.exports = {
   getActivity: async () => {
-    const core = await coreDeferred.promise
+    const core = await corePromise
     return core.activity.get()
   },
   getMetrics: async () => {
-    const core = await coreDeferred.promise
+    const core = await corePromise
     return core.metrics.getLatest()
   },
   setup,
   start,
   isOnline,
   getActivityFilePath: async () => {
-    const core = await coreDeferred.promise
+    const core = await corePromise
     return core.paths.activity
   }
 }
