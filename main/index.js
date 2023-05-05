@@ -100,9 +100,10 @@ app.on('second-instance', () => {
 if (isDev) {
   // Do not preserve old Activity entries in development mode
   (async () => {
-    await fs.unlink(await getActivityFilePath())
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-  })().catch(() => {})
+    try {
+      await fs.writeFile(await getActivityFilePath(), '')
+    } catch {}
+  })()
 }
 
 /** @type {import('./typings').Context} */
