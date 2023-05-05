@@ -31,7 +31,7 @@ let online = false
 const coreDeferred = pDefer()
 ;(async () => {
   const { Core } = await import('@filecoin-station/core')
-  const core = new Core({
+  const core = await Core.create({
     cacheRoot: consts.CACHE_ROOT,
     stateRoot: consts.STATE_ROOT
   })
@@ -80,7 +80,7 @@ async function subscribe (
 ) {
   await Promise.all([
     (async () => {
-      for await (const metrics of core.metrics.follow(undefined, { signal })) {
+      for await (const metrics of core.metrics.follow({ signal })) {
         ctx.setTotalJobsCompleted(metrics.totalJobsCompleted)
       }
     })(),
