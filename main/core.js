@@ -29,11 +29,10 @@ let online = false
 
 async function createCore () {
   const { Core } = await import('@filecoin-station/core')
-  const core = await Core.create({
+  return Core.create({
     cacheRoot: consts.CACHE_ROOT,
     stateRoot: consts.STATE_ROOT
   })
-  return core
 }
 
 const corePromise = createCore()
