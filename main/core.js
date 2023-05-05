@@ -27,14 +27,16 @@ console.log('Core binary: %s', corePath)
 
 let online = false
 
-const corePromise = (async () => {
+async function createCore () {
   const { Core } = await import('@filecoin-station/core')
   const core = await Core.create({
     cacheRoot: consts.CACHE_ROOT,
     stateRoot: consts.STATE_ROOT
   })
   return core
-})()
+}
+
+const corePromise = createCore()
 
 async function setup (/** @type {Context} */ ctx) {
   const core = await corePromise
