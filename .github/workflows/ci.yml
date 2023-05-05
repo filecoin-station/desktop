@@ -146,6 +146,7 @@ jobs:
       - name: Build binaries with electron-builder (Linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
+          sudo snap install snapcraft --classic
           npm run build
           npm exec -- electron-builder --publish onTag
         env:
