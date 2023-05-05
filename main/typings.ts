@@ -1,5 +1,5 @@
 import { Activity, FILTransaction, FILTransactionProcessing } from '../shared/typings'
-export type { ActivitySource, ActivityType, FILTransactionStatus } from '../shared/typings'
+export type { FILTransactionStatus } from '../shared/typings'
 export type { Activity, FILTransaction, FILTransactionProcessing }
 
 export interface FoxMessage {
@@ -16,21 +16,17 @@ export interface FoxMessage {
   };
 }
 
-export type RecordActivityArgs = Omit<Activity, 'id' | 'timestamp'>
-
-export type ModuleJobStatsMap = Record<string, number>
-
 export interface Context {
-  recordActivity(activity: RecordActivityArgs): void;
-  getAllActivities(): Activity[];
+  recordActivity(activity: Activity): void;
+  getAllActivities(): Promise<Activity[]>;
 
-  setModuleJobsCompleted(moduleName: string, count: number): void;
-  getTotalJobsCompleted(): number;
+  setTotalJobsCompleted(count: number): void;
+  getTotalJobsCompleted(): Promise<number>;
 
   showUI: () => void;
   loadWebUIFromDist: import('electron-serve').loadURL;
   manualCheckForUpdates: () => void;
-  saveSaturnModuleLogAs: () => Promise<void>;
+  saveModuleLogsAs: () => Promise<void>;
   confirmChangeWalletAddress: () => boolean;
 
   openReleaseNotes: () => void;

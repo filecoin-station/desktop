@@ -3,6 +3,7 @@
 const { app, dialog, shell } = require('electron')
 const electronLog = require('electron-log')
 const path = require('node:path')
+const fs = require('node:fs/promises')
 
 console.log('Log file:', electronLog.transports.file.findLogPath())
 const log = electronLog.scope('main')
@@ -24,12 +25,10 @@ if (process.env.STATION_ROOT) {
 require('./setup-sentry')
 
 const { ipcMainEvents, setupIpcMain } = require('./ipc')
-const { ActivityLog } = require('./activity-log')
 const { BUILD_VERSION } = require('./consts')
-const { JobStats } = require('./job-stats')
 const { ipcMain } = require('electron/main')
 const os = require('os')
-const saturnNode = require('./saturn-node')
+const core = require('./core')
 const wallet = require('./wallet')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
@@ -38,9 +37,8 @@ const setupUI = require('./ui')
 const setupUpdater = require('./updater')
 const Sentry = require('@sentry/node')
 const { setup: setupDialogs } = require('./dialog')
-
-/** @typedef {import('./typings').Activity} Activity */
-/** @typedef {import('./typings').RecordActivityArgs} RecordActivityOptions */
+const telemetry = require('./telemetry')
+const { getActivityFilePath } = require('./core')
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -72,12 +70,6 @@ process.env.STATION_BUILD_VERSION = BUILD_VERSION
 function handleError (/** @type {any} */ err) {
   Sentry.captureException(err)
 
-  ctx.recordActivity({
-    source: 'Station',
-    type: 'error',
-    message: `Station failed to start: ${err.message || err}`
-  })
-
   log.error(err)
   dialog.showErrorBox('Error occured', err.stack ?? err.message ?? err)
 }
@@ -105,34 +97,41 @@ app.on('second-instance', () => {
   ctx.showUI()
 })
 
-const jobStats = new JobStats()
-
-const activityLog = new ActivityLog()
 if (isDev) {
   // Do not preserve old Activity entries in development mode
-  activityLog.reset()
+  (async () => {
+    try {
+      await fs.writeFile(await getActivityFilePath(), '')
+    } catch {}
+  })()
 }
 
 /** @type {import('./typings').Context} */
 const ctx = {
-  getAllActivities: () => activityLog.getAllEntries(),
-
-  recordActivity: (args) => {
-    activityLog.record(args)
-    ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activityLog.getAllEntries())
+  getAllActivities: async () => {
+    const activity = await core.getActivity()
+    activity.splice(0, activity.length - 100)
+    activity.reverse()
+    return activity
   },
 
-  getTotalJobsCompleted: () => jobStats.getTotalJobsCompleted(),
-  setModuleJobsCompleted: (moduleName, count) => {
-    jobStats.setModuleJobsCompleted(moduleName, count)
+  recordActivity: activity => {
+    ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
+  },
+
+  getTotalJobsCompleted: async () => {
+    const { totalJobsCompleted } = await core.getMetrics()
+    return totalJobsCompleted
+  },
+  setTotalJobsCompleted: (count) => {
     ipcMain.emit(
       ipcMainEvents.JOB_STATS_UPDATED,
-      jobStats.getTotalJobsCompleted()
+      count
     )
   },
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
-  saveSaturnModuleLogAs: () => { throw new Error('never get here') },
+  saveModuleLogsAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   loadWebUIFromDist: serve({
     directory: path.resolve(__dirname, '../renderer/dist')
@@ -162,14 +161,6 @@ process.on('uncaughtException', err => {
   process.exitCode = 1
 })
 
-process.on('exit', () => {
-  ctx.recordActivity({
-    source: 'Station',
-    type: 'info',
-    message: 'Station stopped.'
-  })
-})
-
 async function run () {
   try {
     await app.whenReady()
@@ -179,7 +170,7 @@ async function run () {
   }
 
   try {
-    // Interface
+    telemetry.setup()
     setupTray(ctx)
     setupDialogs(ctx)
     if (process.platform === 'darwin') {
@@ -189,14 +180,8 @@ async function run () {
     await setupUpdater(ctx)
     await setupIpcMain(ctx)
 
-    ctx.recordActivity({
-      source: 'Station',
-      type: 'info',
-      message: 'Station started.'
-    })
-
     await wallet.setup(ctx)
-    await saturnNode.setup(ctx)
+    await core.setup(ctx)
   } catch (e) {
     handleError(e)
   }

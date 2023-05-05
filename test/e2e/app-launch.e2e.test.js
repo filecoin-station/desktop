@@ -77,21 +77,6 @@ test.describe.serial('Application launch', async () => {
     expect(new URL(await mainWindow.url()).pathname).toBe('/dashboard')
   })
 
-  test('wait for Saturn node to get ready', async () => {
-    await mainWindow.waitForFunction(() => {
-      // waitForFunction does not support promises.
-      // As a workaround, we start the async task in background and store the
-      // result on `window`
-      window.electron.saturnNode
-        .isReady()
-        .then(ready => Object.assign(window, { __saturnNodeIsReady: ready }))
-
-      // Return the last observed value. It may be undefined if the promise
-      // above has not finished yet
-      return (/** @type {any} */(window)).__saturnNodeIsReady
-    }, [], { timeout: 2000 * TIMEOUT_MULTIPLIER })
-  })
-
   test('renders Dashboard page', async () => {
     expect(new URL(mainWindow.url()).pathname).toBe('/dashboard')
   })

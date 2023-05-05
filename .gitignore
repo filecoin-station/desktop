@@ -32,5 +32,3 @@ dev-app-update.yml
 *.sln
 *.sw?
 .tool-versions
-
-build/saturn
