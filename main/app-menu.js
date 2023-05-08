@@ -11,8 +11,8 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
 
   // File menu
   menu.items[1].submenu?.insert(0, new MenuItem({
-    label: 'Save Module Logs As…',
-    click: () => { ctx.saveModuleLogsAs() }
+    label: 'Save Saturn Module Log As…',
+    click: () => { ctx.saveSaturnModuleLogAs() }
   }))
 
   Menu.setApplicationMenu(menu)

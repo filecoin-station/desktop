@@ -35,13 +35,7 @@ const useStationActivity = (): StationActivity => {
   }, [])
 
   useEffect(() => {
-    const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(activity => {
-      setActivities(activities => {
-        const updatedActivities = [activity, ...activities]
-        updatedActivities.length = Math.min(updatedActivities.length, 100)
-        return updatedActivities
-      })
-    })
+    const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(setActivities)
     return () => {
       unsubscribeOnActivityLogged()
     }

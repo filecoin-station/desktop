@@ -1,5 +1,3 @@
-export { ActivityEvent as Activity } from '@filecoin-station/core'
-
 export type FILTransactionStatus = 'succeeded' | 'processing' | 'failed'
 
 export type FILTransaction = {
@@ -20,3 +18,14 @@ type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 // A processing transaction can have all statuses, because we're briefly showing
 // succeeded and failed ones in the same place as the processing one.
 export type FILTransactionProcessing = PartialBy<FILTransaction, 'hash' | 'height'>
+
+export type ActivitySource = 'Station' | 'Saturn'
+export type ActivityType = 'info' | 'error'
+
+export interface Activity {
+  id: string;
+  timestamp: number;
+  type: ActivityType;
+  source: ActivitySource;
+  message: string;
+}

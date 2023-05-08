@@ -5,9 +5,10 @@ const { Menu, Tray, app, ipcMain, nativeImage } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const assert = require('node:assert')
-const core = require('./core')
+const saturn = require('./saturn-node')
 
 /** @typedef {import('./typings').Context} Context */
+/** @typedef {import('./typings').Activity} Activity */
 
 // Be warned, this one is pretty ridiculous:
 // Tray must be global or it will break due to.. GC.
@@ -68,9 +69,9 @@ module.exports = function (/** @type {Context} */ ctx) {
       visible: false
     },
     {
-      label: 'Save Module Logs As…',
+      label: 'Save Saturn Module Log As…',
       click: function () {
-        ctx.saveModuleLogsAs()
+        ctx.saveSaturnModuleLogAs()
       }
     },
     { type: 'separator' },
@@ -129,7 +130,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
   function updateTray () {
     assert(tray)
     tray.setImage(
-      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, core.isOnline())
+      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, saturn.isOnline())
     )
   }
 }
