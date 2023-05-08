@@ -119,6 +119,9 @@
   "buildTag": null,
   "buildNumber": null,
   "build": {
-    "asar": true
+    "asar": true,
+    "linux": {
+      "target": ["AppImage"]
+    }
   }
 }
