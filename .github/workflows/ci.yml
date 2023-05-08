@@ -115,13 +115,6 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Cache webui
-        uses: actions/cache@v3
-        id: webui-cache
-        with:
-          path: assets/webui
-          key: ${{ hashFiles('package.json') }}
-
       - name: Cache bigger downloads
         uses: actions/cache@v3
         id: cache
