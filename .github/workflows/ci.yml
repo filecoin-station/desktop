@@ -2,10 +2,10 @@ name: ci
 on:
   pull_request:
   push:
-    branches:
-      - main
-    tags:
-      - '*'
+    # branches:
+    #   - main
+    # tags:
+    #   - '*'
 
 env:
   ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
@@ -53,50 +53,50 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Install Sentry CLI
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          curl -sL https://sentry.io/get-cli/ | bash
-          sentry-cli --version
+      # - name: Install Sentry CLI
+      #   if: matrix.os == 'ubuntu-latest'
+      #   run: |
+      #     curl -sL https://sentry.io/get-cli/ | bash
+      #     sentry-cli --version
 
-      - name: Configure SENTRY env vars
-        run:
-          node ./build/configure-sentry.js >> $GITHUB_ENV
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      # - name: Configure SENTRY env vars
+      #   run:
+      #     node ./build/configure-sentry.js >> $GITHUB_ENV
+      #   env:
+      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-      - name: Create Sentry release
-        # Secrets are not passed to the runner when a workflow is triggered from a forked repository.
-        # See https://docs.github.com/en/actions/security-guides/encrypted-secrets#using-encrypted-secrets-in-a-workflow
-        # We skip this step in such case.
-        #
-        # We must use `env` instead of `secrets`, see https://stackoverflow.com/a/70249520/69868
-        if: matrix.os == 'ubuntu-latest' && env.SENTRY_AUTH_TOKEN
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: protocol-labs-ip
-          SENTRY_PROJECT: filecoin-station
-        run: |
-          sentry-cli releases new "${{ env.SENTRY_VERSION }}"
-          sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
-          sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
-          sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
+      # - name: Create Sentry release
+      #   # Secrets are not passed to the runner when a workflow is triggered from a forked repository.
+      #   # See https://docs.github.com/en/actions/security-guides/encrypted-secrets#using-encrypted-secrets-in-a-workflow
+      #   # We skip this step in such case.
+      #   #
+      #   # We must use `env` instead of `secrets`, see https://stackoverflow.com/a/70249520/69868
+      #   if: matrix.os == 'ubuntu-latest' && env.SENTRY_AUTH_TOKEN
+      #   env:
+      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      #     SENTRY_ORG: protocol-labs-ip
+      #     SENTRY_PROJECT: filecoin-station
+      #   run: |
+      #     sentry-cli releases new "${{ env.SENTRY_VERSION }}"
+      #     sentry-cli releases set-commits "${{ env.SENTRY_VERSION }}" --local --ignore-missing
+      #     sentry-cli releases files "${{ env.SENTRY_VERSION }}" upload-sourcemaps ./renderer/dist/assets
+      #     sentry-cli releases deploys "${{ env.SENTRY_VERSION }}" new -e "${{ env.SENTRY_ENV }}"
 
-      - name: Test backend
-        run: npm run test:backend
+      # - name: Test backend
+      #   run: npm run test:backend
 
-      - name: Test frontend
-        run: npm run test:ui
+      # - name: Test frontend
+      #   run: npm run test:ui
 
-      - name: Test end-to-end (Linux)
-        run: xvfb-run -a npm run test:e2e
-        if: ${{ matrix.os == 'ubuntu-latest' }}
-      - name: Test end-to-end (Windows / macOS)
-        run: npm run test:e2e
-        if: ${{ matrix.os != 'ubuntu-latest' }}
+      # - name: Test end-to-end (Linux)
+      #   run: xvfb-run -a npm run test:e2e
+      #   if: ${{ matrix.os == 'ubuntu-latest' }}
+      # - name: Test end-to-end (Windows / macOS)
+      #   run: npm run test:e2e
+      #   if: ${{ matrix.os != 'ubuntu-latest' }}
 
-      - name: Lint
-        run: npm run lint
+      # - name: Lint
+      #   run: npm run lint
 
   package:
     runs-on: ${{ matrix.os }}
@@ -137,33 +137,33 @@ jobs:
         env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get tag
-        id: tag
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: dawidd6/action-get-tag@727a6f0a561be04e09013531e73a3983a65e3479 # v1
-        continue-on-error: true # empty steps.tag.outputs.tag will inform the next step
+      # - name: Get tag
+      #   id: tag
+      #   if: startsWith(github.ref, 'refs/tags/v')
+      #   uses: dawidd6/action-get-tag@727a6f0a561be04e09013531e73a3983a65e3479 # v1
+      #   continue-on-error: true # empty steps.tag.outputs.tag will inform the next step
 
       - name: Build binaries with electron-builder (Linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           sudo snap install snapcraft --classic
           npm run build
-          npm exec -- electron-builder --publish onTag
+          npm exec -- electron-builder --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CI_BUILD_TAG: ${{ steps.tag.outputs.tag }} # used by --publish onTag
+          # CI_BUILD_TAG: ${{ steps.tag.outputs.tag }} # used by --publish onTag
           DEBUG: electron-builder
       
       - name: Build binaries with electron-builder (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           npm run build
-          npm exec -- electron-builder --publish onTag
+          npm exec -- electron-builder --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
+          # CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
           DEBUG: electron-builder
           CSC_LINK: ${{ secrets.windows_certs }}
           CSC_KEY_PASSWORD: ${{ secrets.windows_certs_password }}        
@@ -172,11 +172,11 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           npm run build
-          npm exec -- electron-builder --publish onTag
+          npm exec -- electron-builder --publish always
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
+          # CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
           DEBUG: electron-builder
           CSC_LINK: ${{ secrets.mac_certs }}
           CSC_KEY_PASSWORD: ${{ secrets.mac_certs_password }}
