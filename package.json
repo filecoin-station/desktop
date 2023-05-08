@@ -119,6 +119,6 @@
   "buildTag": null,
   "buildNumber": null,
   "build": {
-    "asar": false
+    "asar": true
   }
 }
