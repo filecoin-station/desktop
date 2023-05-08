@@ -16,16 +16,6 @@ declare global {
       openReleaseNotes(): void;
       restartToUpdate(): void;
 
-      saturnNode: {
-        start: () => Promise<void>;
-        stop: () => Promise<void>;
-        isRunning: () => Promise<boolean>;
-        isReady: () => Promise<boolean>;
-        getLog: () => Promise<string>;
-        getWebUrl: () => Promise<string>;
-        getFilAddress: () => Promise<string | undefined>;
-        setFilAddress: (address: string | undefined) => Promise<void>;
-      };
       stationConfig: {
         getOnboardingCompleted: () => Promise<boolean>;
         setOnboardingCompleted: () => Promise<void>;
@@ -38,7 +28,7 @@ declare global {
         browseTransactionTracker: (transactionHash: string) => void;
       };
       stationEvents: {
-        onActivityLogged: (callback: (allActivities: Activity[]) => void) => () => void;
+        onActivityLogged: (callback: (activity: Activity) => void) => () => void;
         onJobProcessed: (callback: (value: number) => void) => () => void;
         onEarningsChanged: (callback: (value: number) => void) => () => void;
         onUpdateAvailable: (callback: () => void) => () => void;
