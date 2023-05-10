@@ -148,22 +148,22 @@ jobs:
         run: |
           sudo snap install snapcraft --classic
           npm run build
-          npm exec -- electron-builder --publish always
+          npm exec -- electron-builder --publish onTag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # CI_BUILD_TAG: ${{ steps.tag.outputs.tag }} # used by --publish onTag
+          CI_BUILD_TAG: ${{ steps.tag.outputs.tag }} # used by --publish onTag
           DEBUG: electron-builder
       
       - name: Build binaries with electron-builder (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           npm run build
-          npm exec -- electron-builder --publish always
+          npm exec -- electron-builder --publish onTag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
+          CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
           DEBUG: electron-builder
           CSC_LINK: ${{ secrets.windows_certs }}
           CSC_KEY_PASSWORD: ${{ secrets.windows_certs_password }}        
@@ -172,11 +172,11 @@ jobs:
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           npm run build
-          npm exec -- electron-builder --publish always
+          npm exec -- electron-builder --publish onTag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
+          CI_BUILD_TAG: ${{steps.tag.outputs.tag}} # used by --publish onTag
           DEBUG: electron-builder
           CSC_LINK: ${{ secrets.mac_certs }}
           CSC_KEY_PASSWORD: ${{ secrets.mac_certs_password }}
