@@ -117,12 +117,5 @@
     ]
   },
   "buildTag": null,
-  "buildNumber": null,
-  "build": {
-    "linux": {
-      "target": [
-        "AppImage"
-      ]
-    }
-  }
+  "buildNumber": null
 }
