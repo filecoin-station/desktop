@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/filecoin-station/desktop#readme",
   "dependencies": {
-    "@filecoin-station/core": "^9.0.0",
+    "@filecoin-station/core": "^10.0.0",
     "@glif/filecoin-address": "2.0.43",
     "@glif/filecoin-message": "^2.0.44",
     "@glif/filecoin-number": "^2.0.60",
@@ -117,8 +117,5 @@
     ]
   },
   "buildTag": null,
-  "buildNumber": null,
-  "build": {
-    "asar": false
-  }
+  "buildNumber": null
 }
