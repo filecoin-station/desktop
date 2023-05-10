@@ -9,6 +9,7 @@ const fs = require('node:fs/promises')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
 const timers = require('node:timers/promises')
+const { Core } = require('@filecoin-station/core')
 
 /** @typedef {import('@filecoin-station/core').Core} Core */
 /** @typedef {import('./typings').Context} Context */
@@ -27,15 +28,10 @@ console.log('Core binary: %s', corePath)
 
 let online = false
 
-async function createCore () {
-  const { Core } = await import('@filecoin-station/core')
-  return Core.create({
-    cacheRoot: consts.CACHE_ROOT,
-    stateRoot: consts.STATE_ROOT
-  })
-}
-
-const corePromise = createCore()
+const corePromise = Core.create({
+  cacheRoot: consts.CACHE_ROOT,
+  stateRoot: consts.STATE_ROOT
+})
 
 async function setup (/** @type {Context} */ ctx) {
   const core = await corePromise
@@ -118,7 +114,7 @@ async function start (core) {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
-  const childProcess = execa(corePath, {
+  const childProcess = execa.node(corePath, {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
