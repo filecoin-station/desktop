@@ -11,7 +11,6 @@ const consts = require('./consts')
 const timers = require('node:timers/promises')
 const { Core } = require('@filecoin-station/core')
 
-/** @typedef {import('@filecoin-station/core').Core} Core */
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').Activity} Activity */
 
