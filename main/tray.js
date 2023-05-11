@@ -45,7 +45,7 @@ function getTrayIcon (isUpdateAvailable, isOnline) {
 }
 
 module.exports = function (/** @type {Context} */ ctx) {
-  tray = new Tray(icons.off)
+  tray = new Tray(getTrayIcon(false, core.isOnline()))
   const contextMenu = Menu.buildFromTemplate([
     {
       label: `Filecoin Station v${STATION_VERSION}`,
