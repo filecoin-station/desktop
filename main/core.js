@@ -114,6 +114,7 @@ async function start (core) {
 
   const childProcess = fork(corePath, {
     env: {
+      ...process.env,
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
       STATE_ROOT: consts.STATE_ROOT
