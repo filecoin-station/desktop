@@ -2,7 +2,7 @@
 
 const { app, BrowserWindow, dialog } = require('electron')
 const { join, dirname } = require('node:path')
-const execa = require('execa')
+const { fork } = require('node:child_process')
 const wallet = require('./wallet')
 const assert = require('node:assert')
 const fs = require('node:fs/promises')
@@ -113,7 +113,7 @@ async function start (core) {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
-  const childProcess = execa.node(corePath, {
+  const childProcess = fork(corePath, {
     env: {
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
