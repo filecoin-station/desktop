@@ -114,7 +114,6 @@ function setupIpcEventListeners (contextMenu, ctx) {
 
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, updateTray)
   ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, updateTray)
-  setInterval(updateTray, 1000)
 
   /**
    * Get an item from the Tray menu or fail with a useful error message.
