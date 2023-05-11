@@ -15,14 +15,13 @@ const { Core } = require('@filecoin-station/core')
 /** @typedef {import('./typings').Activity} Activity */
 
 const corePath = join(
-  __dirname,
-  '..',
+  app.getAppPath(),
   'node_modules',
   '@filecoin-station',
   'core',
   'bin',
   'station.js'
-)
+).replace('app.asar', 'app.asar.unpacked')
 console.log('Core binary: %s', corePath)
 
 let online = false
