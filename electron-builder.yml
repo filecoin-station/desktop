@@ -12,11 +12,6 @@ files:
     - node_modules/**/*
     - package.json
 
-extraResources:
-  - from: 'node_modules/@filecoin-station/core/modules'
-    to: 'node_modules/@filecoin-station/core/modules'
-    filter: ['*']
-
 asarUnpack: 'main/**/scripts/**/*'
 
 beforePack: './build/before-pack.js'
