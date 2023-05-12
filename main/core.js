@@ -2,7 +2,7 @@
 
 const { app, BrowserWindow, dialog } = require('electron')
 const { join, dirname } = require('node:path')
-const execa = require('execa')
+const { fork } = require('node:child_process')
 const wallet = require('./wallet')
 const assert = require('node:assert')
 const fs = require('node:fs/promises')
@@ -14,15 +14,18 @@ const { Core } = require('@filecoin-station/core')
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').Activity} Activity */
 
+// When packaged, `app.getAppPath()` points to the ASAR archive. We need to
+// rewrite that path to the unpacked ASAR directory, where `electron-builder`
+// automatically extracted Core for us. Otherwise, Core wouldn't be able to
+// execute its binaries.
 const corePath = join(
-  __dirname,
-  '..',
+  app.getAppPath(),
   'node_modules',
   '@filecoin-station',
   'core',
   'bin',
   'station.js'
-)
+).replace('app.asar', 'app.asar.unpacked')
 console.log('Core binary: %s', corePath)
 
 let online = false
@@ -113,8 +116,9 @@ async function start (core) {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
-  const childProcess = execa.node(corePath, {
+  const childProcess = fork(corePath, {
     env: {
+      ...process.env,
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
       STATE_ROOT: consts.STATE_ROOT
