@@ -17,8 +17,8 @@ const { Core } = require('@filecoin-station/core')
 // Core is installed separately from `node_modules`, since it needs its own
 // independent dependency tree outside an asar archive.
 const corePath = app.isPackaged
-  ? join(app.getAppPath(), '..', 'core', 'bin', 'station.js')
-  : join(app.getAppPath(), 'core', 'bin', 'station.js')
+  ? join(process.resourcesPath, 'core', 'bin', 'station.js')
+  : join(__dirname, '..', 'core', 'bin', 'station.js')
 console.log('Core binary: %s', corePath)
 
 let online = false
