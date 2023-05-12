@@ -14,8 +14,8 @@ const { Core } = require('@filecoin-station/core')
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').Activity} Activity */
 
-// Core is installed separately from `node_modules`, since it needs its own
-// independent dependency tree outside an asar archive.
+// Core is installed separately from `node_modules`, since it needs a
+// self-contained dependency tree outside the asar archive.
 const corePath = app.isPackaged
   ? join(process.resourcesPath, 'core', 'bin', 'station.js')
   : join(__dirname, '..', 'core', 'bin', 'station.js')
