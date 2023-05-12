@@ -14,18 +14,11 @@ const { Core } = require('@filecoin-station/core')
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').Activity} Activity */
 
-// When packaged, `app.getAppPath()` points to the ASAR archive. We need to
-// rewrite that path to the unpacked ASAR directory, where `electron-builder`
-// automatically extracted Core for us. Otherwise, Core wouldn't be able to
-// execute its binaries.
-const corePath = join(
-  app.getAppPath(),
-  'node_modules',
-  '@filecoin-station',
-  'core',
-  'bin',
-  'station.js'
-).replace('app.asar', 'app.asar.unpacked')
+// Core is installed separately from `node_modules`, since it needs its own
+// independent dependency tree outside an asar archive.
+const corePath = app.isPackaged
+  ? join(app.getAppPath(), '..', 'core', 'bin', 'station.js')
+  : join(app.getAppPath(), 'core', 'bin', 'station.js')
 console.log('Core binary: %s', corePath)
 
 let online = false

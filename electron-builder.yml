@@ -12,7 +12,8 @@ files:
     - node_modules/**/*
     - package.json
 
-asarUnpack: 'main/**/scripts/**/*'
+extraResources:
+  - 'core/**'
 
 beforePack: './build/before-pack.js'
 afterSign: './build/notarize-macos.js'
