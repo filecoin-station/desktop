@@ -19,6 +19,7 @@
     "vitest:ui": "vitest --ui",
     "postinstall": "run-s install-*",
     "install-app-deps": "electron-builder install-app-deps",
+    "install-core": "shx cp -R node_modules/@filecoin-station/core core && cd core && npm install --omit=dev",
     "clean": "shx rm -rf dist/",
     "build": "run-s clean build:*",
     "build:webui": "vite build",
