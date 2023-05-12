@@ -15,7 +15,6 @@ files:
 asarUnpack: 'main/**/scripts/**/*'
 
 beforePack: './build/before-pack.js'
-afterPack: './build/after-pack.js'
 afterSign: './build/notarize-macos.js'
 artifactName: '${productName}.${ext}'
 
