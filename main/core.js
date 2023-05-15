@@ -2,7 +2,7 @@
 
 const { app, BrowserWindow, dialog } = require('electron')
 const { join, dirname } = require('node:path')
-const execa = require('execa')
+const { fork } = require('node:child_process')
 const wallet = require('./wallet')
 const assert = require('node:assert')
 const fs = require('node:fs/promises')
@@ -14,15 +14,11 @@ const { Core } = require('@filecoin-station/core')
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').Activity} Activity */
 
-const corePath = join(
-  __dirname,
-  '..',
-  'node_modules',
-  '@filecoin-station',
-  'core',
-  'bin',
-  'station.js'
-)
+// Core is installed separately from `node_modules`, since it needs a
+// self-contained dependency tree outside the asar archive.
+const corePath = app.isPackaged
+  ? join(process.resourcesPath, 'core', 'bin', 'station.js')
+  : join(__dirname, '..', 'core', 'bin', 'station.js')
 console.log('Core binary: %s', corePath)
 
 let online = false
@@ -113,8 +109,9 @@ async function start (core) {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
-  const childProcess = execa.node(corePath, {
+  const childProcess = fork(corePath, {
     env: {
+      ...process.env,
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
       STATE_ROOT: consts.STATE_ROOT

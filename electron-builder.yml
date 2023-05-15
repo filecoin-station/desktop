@@ -12,6 +12,9 @@ files:
     - node_modules/**/*
     - package.json
 
+extraResources:
+  - 'core/**'
+
 beforePack: './build/before-pack.js'
 afterSign: './build/notarize-macos.js'
 artifactName: '${productName}.${ext}'
