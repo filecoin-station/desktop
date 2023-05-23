@@ -183,7 +183,6 @@ module.exports = {
     return core.metrics.getLatest()
   },
   setup,
-  start,
   isOnline,
   getActivityFilePath: async () => {
     const core = await corePromise
