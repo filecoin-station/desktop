@@ -8,8 +8,7 @@ const assert = require('node:assert')
 const fs = require('node:fs/promises')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
-const timers = require('node:timers/promises')
-const { Core } = require('@filecoin-station/core')
+const { randomUUID } = require('node:crypto')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').Activity} Activity */
@@ -23,13 +22,27 @@ console.log('Core binary: %s', corePath)
 
 let online = false
 
-const corePromise = Core.create({
-  cacheRoot: consts.CACHE_ROOT,
-  stateRoot: consts.STATE_ROOT
-})
+class Logs {
+  /**  @type {string[]} */
+  #logs = []
+
+  /**
+   * Keep last 100 lines of logs for inspection
+   * @param {string} lines
+   */
+  push (lines) {
+    this.#logs.push(...lines.split('\n').filter(Boolean))
+    this.#logs.splice(0, this.#logs.length - 100)
+  }
+
+  get () {
+    return this.#logs.join('\n')
+  }
+}
+
+const logs = new Logs()
 
 async function setup (/** @type {Context} */ ctx) {
-  const core = await corePromise
   ctx.saveModuleLogsAs = async () => {
     const opts = {
       defaultPath: `station-modules-${(new Date()).getTime()}.log`
@@ -39,49 +52,11 @@ async function setup (/** @type {Context} */ ctx) {
       ? await dialog.showSaveDialog(win, opts)
       : await dialog.showSaveDialog(opts)
     if (filePath) {
-      await fs.writeFile(filePath, await core.logs.get())
+      await fs.writeFile(filePath, logs.get())
     }
   }
   await maybeMigrateFiles()
-  subscribeWithRetry(ctx, core).catch(console.error)
-  await start(core)
-}
-
-async function subscribeWithRetry (
-  /** @type {Context} */ ctx,
-  /** @type {Core} */ core
-) {
-  while (true) {
-    const controller = new AbortController()
-    try {
-      await subscribe(ctx, core, controller.signal)
-    } catch (err) {
-      controller.abort()
-      console.error(err)
-      await timers.setTimeout(1000)
-    }
-  }
-}
-
-async function subscribe (
-  /** @type {Context} */ ctx,
-  /** @type {Core} */ core,
-  /** @type {AbortSignal} */ signal
-) {
-  await Promise.all([
-    (async () => {
-      for await (const metrics of core.metrics.follow({ signal })) {
-        ctx.setTotalJobsCompleted(metrics.totalJobsCompleted)
-      }
-    })(),
-    (async () => {
-      const it = core.activity.follow({ nLines: 0, signal })
-      for await (const activity of it) {
-        ctx.recordActivity(activity)
-        detectChangeInOnlineStatus(activity)
-      }
-    })()
-  ])
+  await start(ctx)
 }
 
 /**
@@ -103,20 +78,52 @@ function detectChangeInOnlineStatus (activity) {
 }
 
 /**
- * @param {Core} core
+ * @param {Context} ctx
  */
-async function start (core) {
+async function start (ctx) {
   assert(wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
-  const childProcess = fork(corePath, {
+  const childProcess = fork(corePath, ['--json'], {
     env: {
       ...process.env,
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
       STATE_ROOT: consts.STATE_ROOT
+    },
+    stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+  })
+
+  assert(childProcess.stdout)
+  childProcess.stdout.setEncoding('utf8')
+  childProcess.stdout.on('data', chunk => {
+    logs.push(chunk)
+    for (const line of chunk.split('\n').filter(Boolean)) {
+      const event = JSON.parse(line)
+      switch (event.type) {
+        case 'jobs-completed':
+          ctx.setTotalJobsCompleted(event.total)
+          break
+        case 'activity:info':
+        case 'activity:error': {
+          const activity = {
+            ...event,
+            timestamp: new Date(),
+            id: randomUUID()
+          }
+          ctx.recordActivity(activity)
+          detectChangeInOnlineStatus(activity)
+          break
+        }
+        default:
+          throw new Error(`Unknown event type: ${event.type}`)
+      }
     }
   })
+
+  assert(childProcess.stderr)
+  childProcess.stderr.setEncoding('utf8')
+  childProcess.stderr.on('data', chunk => logs.push(chunk))
 
   /** @type {string | null} */
   let exitReason = null
@@ -129,10 +136,9 @@ async function start (core) {
     console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
 
     ;(async () => {
-      const log = await core.logs.get()
       Sentry.captureException('Core exited', scope => {
         // Sentry UI can't show the full 100 lines
-        scope.setExtra('logs', log.split('\n').slice(-10).join('\n'))
+        scope.setExtra('logs', logs.get())
         scope.setExtra('reason', exitReason)
         return scope
       })
@@ -174,18 +180,6 @@ async function maybeMigrateFiles () {
 }
 
 module.exports = {
-  getActivity: async () => {
-    const core = await corePromise
-    return core.activity.get()
-  },
-  getMetrics: async () => {
-    const core = await corePromise
-    return core.metrics.getLatest()
-  },
   setup,
-  isOnline,
-  getActivityFilePath: async () => {
-    const core = await corePromise
-    return core.paths.activity
-  }
+  isOnline
 }
