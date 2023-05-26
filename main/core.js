@@ -76,6 +76,7 @@ async function start (ctx) {
         case 'activity:error': {
           const activity = {
             ...event,
+            type: event.type.replace('activity:', ''),
             timestamp: new Date(),
             id: randomUUID()
           }
