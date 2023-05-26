@@ -3,7 +3,6 @@
 const { app, dialog, shell } = require('electron')
 const electronLog = require('electron-log')
 const path = require('node:path')
-const fs = require('node:fs/promises')
 
 console.log('Log file:', electronLog.transports.file.findLogPath())
 const log = electronLog.scope('main')
@@ -38,7 +37,6 @@ const setupUpdater = require('./updater')
 const Sentry = require('@sentry/node')
 const { setup: setupDialogs } = require('./dialog')
 const telemetry = require('./telemetry')
-const { getActivityFilePath } = require('./core')
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -97,32 +95,14 @@ app.on('second-instance', () => {
   ctx.showUI()
 })
 
-if (isDev) {
-  // Do not preserve old Activity entries in development mode
-  (async () => {
-    try {
-      await fs.writeFile(await getActivityFilePath(), '')
-    } catch {}
-  })()
-}
-
 /** @type {import('./typings').Context} */
 const ctx = {
-  getAllActivities: async () => {
-    const activity = await core.getActivity()
-    activity.splice(0, activity.length - 100)
-    activity.reverse()
-    return activity
-  },
+  getActivities: () => core.getActivities(),
 
   recordActivity: activity => {
     ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
   },
 
-  getTotalJobsCompleted: async () => {
-    const { totalJobsCompleted } = await core.getMetrics()
-    return totalJobsCompleted
-  },
   setTotalJobsCompleted: (count) => {
     ipcMain.emit(
       ipcMainEvents.JOB_STATS_UPDATED,

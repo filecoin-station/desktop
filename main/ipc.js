@@ -47,15 +47,9 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle(
     'station:transferAllFundsToDestinationWallet',
     (_event, _args) => wallet.transferAllFundsToDestinationWallet())
-
   ipcMain.handle(
-    'station:getAllActivities',
-    (_event, _args) => ctx.getAllActivities()
-  )
-  ipcMain.handle(
-    'station:getTotalJobsCompleted',
-    (_event, _args) => ctx.getTotalJobsCompleted()
-  )
+    'station:getActivities',
+    (_event, _args) => ctx.getActivities())
 
   ipcMain.handle(
     'dialogs:confirmChangeWalletAddress',

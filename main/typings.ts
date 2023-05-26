@@ -18,10 +18,8 @@ export interface FoxMessage {
 
 export interface Context {
   recordActivity(activity: Activity): void;
-  getAllActivities(): Promise<Activity[]>;
-
+  getActivities(): Activity[];
   setTotalJobsCompleted(count: number): void;
-  getTotalJobsCompleted(): Promise<number>;
 
   showUI: () => void;
   loadWebUIFromDist: import('electron-serve').loadURL;

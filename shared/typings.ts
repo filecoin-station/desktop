@@ -1,4 +1,4 @@
-export { ActivityEvent as Activity } from '@filecoin-station/core'
+import { ActivityEvent } from '@filecoin-station/core'
 
 export type FILTransactionStatus = 'succeeded' | 'processing' | 'failed'
 
@@ -11,6 +11,11 @@ export type FILTransaction = {
   amount: string;
   address: string;
   error?: string;
+}
+
+export type Activity = ActivityEvent & {
+  timestamp: Date;
+  id: string;
 }
 
 // helper

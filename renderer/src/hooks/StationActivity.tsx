@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getTotalJobsCompleted, getAllActivities, getTotalEarnings } from '../lib/station-config'
+import { getTotalEarnings, getActivities } from '../lib/station-config'
 import { Activity } from '../typings'
 
 interface StationActivity {
@@ -13,12 +13,7 @@ const useStationActivity = (): StationActivity => {
   const [totalEarnings, setTotalEarnigs] = useState<number>(0)
 
   useEffect(() => {
-    const loadStoredInfo = async () => setTotalJobs(await getTotalJobsCompleted())
-    loadStoredInfo()
-  }, [])
-
-  useEffect(() => {
-    const loadStoredInfo = async () => setActivities(await getAllActivities())
+    const loadStoredInfo = async () => setActivities(await getActivities())
     loadStoredInfo()
   }, [])
 

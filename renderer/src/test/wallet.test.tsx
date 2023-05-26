@@ -13,9 +13,8 @@ vi.mock('../lib/station-config', () => ({
   getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
   getDestinationWalletAddress: () => Promise.resolve(''),
   setDestinationWalletAddress: () => mockedSetDestinationWalletAddress,
-  getTotalJobsCompleted: () => Promise.resolve(0),
   getTotalEarnings: () => Promise.resolve(0),
-  getAllActivities: () => Promise.resolve([])
+  getActivities: () => Promise.resolve([])
 }))
 
 describe('Dashboard wallet display', () => {
