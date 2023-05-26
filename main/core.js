@@ -9,9 +9,10 @@ const fs = require('node:fs/promises')
 const Sentry = require('@sentry/node')
 const consts = require('./consts')
 const { randomUUID } = require('node:crypto')
+const { Activities } = require('./activities')
+const { Logs } = require('./logs')
 
 /** @typedef {import('./typings').Context} Context */
-/** @typedef {import('./typings').Activity} Activity */
 
 // Core is installed separately from `node_modules`, since it needs a
 // self-contained dependency tree outside the asar archive.
@@ -19,77 +20,6 @@ const corePath = app.isPackaged
   ? join(process.resourcesPath, 'core', 'bin', 'station.js')
   : join(__dirname, '..', 'core', 'bin', 'station.js')
 console.log('Core binary: %s', corePath)
-
-class Logs {
-  /**  @type {string[]} */
-  #logs = []
-
-  /**
-   * Keep last 100 lines of logs for inspection
-   * @param {string} lines
-   */
-  push (lines) {
-    this.#logs.push(...lines.split('\n').filter(Boolean))
-    this.#logs.splice(0, this.#logs.length - 100)
-  }
-
-  get () {
-    return this.#logs.join('\n')
-  }
-}
-
-class Activities {
-  /** @type {Activity[]} */
-  #activities = []
-  /** @type {Context?} */
-  #ctx = null
-  #online = false
-
-  /**
-   * @param {Context} ctx
-   */
-  constructor (ctx) {
-    this.#ctx = ctx
-  }
-
-  /**
-   * Display last 100 activities
-   * @param {Activity} activity
-   */
-  push (activity) {
-    assert(this.#ctx)
-    this.#activities.push(activity)
-    this.#activities.splice(0, this.#activities.length - 100)
-    this.#ctx.recordActivity(activity)
-    this.#detectChangeInOnlineStatus(activity)
-  }
-
-  /**
-   * @param {Activity} activity
-   */
-  #detectChangeInOnlineStatus (activity) {
-    if (
-      activity.type === 'info' &&
-      activity.message.includes('Saturn Node is online')
-    ) {
-      this.#online = true
-    } else if (
-      activity.message === 'Saturn Node started.' ||
-      activity.message.includes('was able to connect') ||
-      activity.message.includes('will try to connect')
-    ) {
-      this.#online = false
-    }
-  }
-
-  get () {
-    return [...this.#activities]
-  }
-
-  isOnline () {
-    return this.#online
-  }
-}
 
 const logs = new Logs()
 /** @type {Activities?} */
