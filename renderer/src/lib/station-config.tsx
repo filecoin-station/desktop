@@ -1,4 +1,4 @@
-import { FILTransaction, FILTransactionProcessing } from '../typings'
+import { Activity, FILTransaction, FILTransactionProcessing } from '../typings'
 import pDebounce from 'p-debounce'
 
 export async function getOnboardingCompleted (): Promise<boolean> {
@@ -7,6 +7,10 @@ export async function getOnboardingCompleted (): Promise<boolean> {
 
 export async function setOnboardingCompleted (): Promise<void> {
   return await window.electron.stationConfig.setOnboardingCompleted()
+}
+
+export async function getActivities (): Promise<Activity[]> {
+  return await window.electron.getActivities()
 }
 
 export async function getTotalEarnings (): Promise<number> {

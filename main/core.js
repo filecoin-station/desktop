@@ -20,8 +20,6 @@ const corePath = app.isPackaged
   : join(__dirname, '..', 'core', 'bin', 'station.js')
 console.log('Core binary: %s', corePath)
 
-let online = false
-
 class Logs {
   /**  @type {string[]} */
   #logs = []
@@ -40,9 +38,68 @@ class Logs {
   }
 }
 
-const logs = new Logs()
+class Activities {
+  /** @type {Activity[]} */
+  #activities = []
+  /** @type {Context?} */
+  #ctx = null
+  #online = false
 
-async function setup (/** @type {Context} */ ctx) {
+  /**
+   * @param {Context} ctx
+   */
+  constructor (ctx) {
+    this.#ctx = ctx
+  }
+
+  /**
+   * Display last 100 activities
+   * @param {Activity} activity
+   */
+  push (activity) {
+    assert(this.#ctx)
+    this.#activities.push(activity)
+    this.#activities.splice(0, this.#activities.length - 100)
+    this.#ctx.recordActivity(activity)
+    this.#detectChangeInOnlineStatus(activity)
+  }
+
+  /**
+   * @param {Activity} activity
+   */
+  #detectChangeInOnlineStatus (activity) {
+    if (
+      activity.type === 'info' &&
+      activity.message.includes('Saturn Node is online')
+    ) {
+      this.#online = true
+    } else if (
+      activity.message === 'Saturn Node started.' ||
+      activity.message.includes('was able to connect') ||
+      activity.message.includes('will try to connect')
+    ) {
+      this.#online = false
+    }
+  }
+
+  get () {
+    return [...this.#activities]
+  }
+
+  isOnline () {
+    return this.#online
+  }
+}
+
+const logs = new Logs()
+/** @type {Activities?} */
+let activities
+
+/**
+ * @param {Context} ctx
+ */
+async function setup (ctx) {
+  activities = new Activities(ctx)
   ctx.saveModuleLogsAs = async () => {
     const opts = {
       defaultPath: `station-modules-${(new Date()).getTime()}.log`
@@ -57,24 +114,6 @@ async function setup (/** @type {Context} */ ctx) {
   }
   await maybeMigrateFiles()
   await start(ctx)
-}
-
-/**
- * @param {Activity} activity
- */
-function detectChangeInOnlineStatus (activity) {
-  if (
-    activity.type === 'info' &&
-    activity.message.includes('Saturn Node is online')
-  ) {
-    online = true
-  } else if (
-    activity.message === 'Saturn Node started.' ||
-    activity.message.includes('was able to connect') ||
-    activity.message.includes('will try to connect')
-  ) {
-    online = false
-  }
 }
 
 /**
@@ -112,8 +151,8 @@ async function start (ctx) {
             timestamp: new Date(),
             id: randomUUID()
           }
-          ctx.recordActivity(activity)
-          detectChangeInOnlineStatus(activity)
+          assert(activities)
+          activities.push(activity)
           break
         }
         default:
@@ -154,10 +193,6 @@ async function start (ctx) {
   })
 }
 
-function isOnline () {
-  return online
-}
-
 async function maybeMigrateFiles () {
   const oldSaturnDir = join(consts.LEGACY_CACHE_HOME, 'saturn')
   const newSaturnDir = join(consts.CACHE_ROOT, 'modules', 'saturn-l2-node')
@@ -182,5 +217,9 @@ async function maybeMigrateFiles () {
 
 module.exports = {
   setup,
-  isOnline
+  isOnline: () => activities?.isOnline() ?? false,
+  getActivities: () => {
+    assert(activities)
+    return activities.get()
+  }
 }

@@ -97,6 +97,8 @@ app.on('second-instance', () => {
 
 /** @type {import('./typings').Context} */
 const ctx = {
+  getActivities: () => core.getActivities(),
+
   recordActivity: activity => {
     ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
   },

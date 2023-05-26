@@ -12,6 +12,7 @@ const { contextBridge, ipcRenderer } = require('electron')
 contextBridge.exposeInMainWorld('electron', {
   stationBuildVersion: process.env.STATION_BUILD_VERSION,
 
+  getActivities: () => ipcRenderer.invoke('station:getActivities'),
   getUpdaterStatus: () => ipcRenderer.invoke('station:getUpdaterStatus'),
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),

@@ -18,6 +18,7 @@ export interface FoxMessage {
 
 export interface Context {
   recordActivity(activity: Activity): void;
+  getActivities(): Activity[];
   setTotalJobsCompleted(count: number): void;
 
   showUI: () => void;

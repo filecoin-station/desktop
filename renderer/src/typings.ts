@@ -7,6 +7,7 @@ declare global {
     electron: {
       stationBuildVersion: string;
 
+      getActivities(): Promise<Activity[]>;
       onJobStatsUpdated (callback: (totalJobCount: number) => void): () => void;
       getUpdaterStatus(): Promise<{updateAvailable: boolean}>;
       openReleaseNotes(): void;
