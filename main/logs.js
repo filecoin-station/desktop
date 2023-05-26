@@ -14,7 +14,15 @@ class Logs {
   }
 
   get () {
-    return this.#logs.join('\n')
+    return this.getLast(Infinity)
+  }
+
+  /**
+   * @param {number} n
+   * @returns string
+   */
+  getLast (n) {
+    return this.#logs.slice(-n).join('\n')
   }
 }
 

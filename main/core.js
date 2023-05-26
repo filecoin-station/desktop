@@ -105,7 +105,7 @@ async function start (ctx) {
     ;(async () => {
       Sentry.captureException('Core exited', scope => {
         // Sentry UI can't show the full 100 lines
-        scope.setExtra('logs', logs.get())
+        scope.setExtra('logs', logs.getLast(10))
         scope.setExtra('reason', exitReason)
         return scope
       })
