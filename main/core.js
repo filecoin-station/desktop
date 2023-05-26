@@ -89,7 +89,8 @@ async function start (ctx) {
       ...process.env,
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
-      STATE_ROOT: consts.STATE_ROOT
+      STATE_ROOT: consts.STATE_ROOT,
+      DEPLOYMENT_TYPE: 'station-desktop'
     },
     stdio: ['pipe', 'pipe', 'pipe', 'ipc']
   })
