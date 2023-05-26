@@ -1,33 +1,22 @@
 'use strict'
 
-const assert = require('node:assert')
-
 /** @typedef {import('./typings').Activity} Activity */
 /** @typedef {import('./typings').Context} Context */
 
 class Activities {
   /** @type {Activity[]} */
   #activities = []
-  /** @type {Context?} */
-  #ctx = null
   #online = false
 
   /**
-   * @param {Context} ctx
-   */
-  constructor (ctx) {
-    this.#ctx = ctx
-  }
-
-  /**
    * Display last 100 activities
+   * @param {Context} ctx
    * @param {Activity} activity
    */
-  push (activity) {
-    assert(this.#ctx)
+  push (ctx, activity) {
     this.#activities.push(activity)
     this.#activities.splice(0, this.#activities.length - 100)
-    this.#ctx.recordActivity(activity)
+    ctx.recordActivity(activity)
     this.#detectChangeInOnlineStatus(activity)
   }
 

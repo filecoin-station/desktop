@@ -22,14 +22,12 @@ const corePath = app.isPackaged
 console.log('Core binary: %s', corePath)
 
 const logs = new Logs()
-/** @type {Activities?} */
-let activities
+const activities = new Activities()
 
 /**
  * @param {Context} ctx
  */
 async function setup (ctx) {
-  activities = new Activities(ctx)
   ctx.saveModuleLogsAs = async () => {
     const opts = {
       defaultPath: `station-modules-${(new Date()).getTime()}.log`
@@ -81,8 +79,7 @@ async function start (ctx) {
             timestamp: new Date(),
             id: randomUUID()
           }
-          assert(activities)
-          activities.push(activity)
+          activities.push(ctx, activity)
           break
         }
         default:
@@ -147,9 +144,6 @@ async function maybeMigrateFiles () {
 
 module.exports = {
   setup,
-  isOnline: () => activities?.isOnline() ?? false,
-  getActivities: () => {
-    assert(activities)
-    return activities.get()
-  }
+  isOnline: () => activities.isOnline(),
+  getActivities: () => activities.get()
 }
