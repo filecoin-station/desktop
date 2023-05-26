@@ -115,7 +115,7 @@ async function start (core) {
       FIL_WALLET_ADDRESS: wallet.getAddress(),
       CACHE_ROOT: consts.CACHE_ROOT,
       STATE_ROOT: consts.STATE_ROOT,
-      RUNNING_IN_STATION_DESKTOP: 'true'
+      DEPLOYMENT_TYPE: 'station-desktop'
     }
   })
 
