@@ -6,10 +6,10 @@ class Logs {
 
   /**
    * Keep last 100 lines of logs for inspection
-   * @param {string} lines
+   * @param {string} line
    */
-  push (lines) {
-    this.#logs.push(...lines.split('\n').filter(Boolean))
+  push (line) {
+    this.#logs.push(line)
     this.#logs.splice(0, this.#logs.length - 100)
   }
 
