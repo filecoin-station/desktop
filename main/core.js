@@ -67,7 +67,13 @@ async function start (ctx) {
   childProcess.stdout.on('data', chunk => {
     logs.push(chunk)
     for (const line of chunk.split('\n').filter(Boolean)) {
-      const event = JSON.parse(line)
+      let event
+      try {
+        event = JSON.parse(line)
+      } catch (err) {
+        console.error(err)
+        Sentry.captureException(err)
+      }
       switch (event.type) {
         case 'jobs-completed':
           ctx.setTotalJobsCompleted(event.total)
@@ -83,8 +89,11 @@ async function start (ctx) {
           activities.push(ctx, activity)
           break
         }
-        default:
-          throw new Error(`Unknown event type: ${event.type}`)
+        default: {
+          const err = new Error(`Unknown event type: ${event.type}`)
+          console.error(err)
+          Sentry.captureException(err)
+        }
       }
     }
   })
