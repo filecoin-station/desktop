@@ -69,7 +69,15 @@ async function start (ctx) {
     .pipe(split2())
     .on('data', line => {
       logs.push(line)
-      const event = JSON.parse(line)
+      let event
+      try {
+        event = JSON.parse(line)
+      } catch {
+        const err = new Error(`Failed to parse core event: ${line}`)
+        Sentry.captureException(err)
+        console.error(err)
+        return
+      }
       switch (event.type) {
         case 'jobs-completed':
           ctx.setTotalJobsCompleted(event.total)
