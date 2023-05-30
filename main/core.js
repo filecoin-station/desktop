@@ -91,7 +91,9 @@ async function start (ctx) {
           break
         }
         default: {
-          const err = new Error(`Unknown event type: ${event.type}`)
+          const err = new Error(
+            `Unknown Station Core event type "${event.type}": ${line}`
+          )
           console.error(err)
           Sentry.captureException(err)
         }
