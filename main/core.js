@@ -11,6 +11,7 @@ const consts = require('./consts')
 const { randomUUID } = require('node:crypto')
 const { Activities } = require('./activities')
 const { Logs } = require('./logs')
+const split2 = require('split2')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -64,10 +65,19 @@ async function start (ctx) {
 
   assert(childProcess.stdout)
   childProcess.stdout.setEncoding('utf8')
-  childProcess.stdout.on('data', chunk => {
-    logs.push(chunk)
-    for (const line of chunk.split('\n').filter(Boolean)) {
-      const event = JSON.parse(line)
+  childProcess.stdout
+    .pipe(split2())
+    .on('data', line => {
+      logs.push(line)
+      let event
+      try {
+        event = JSON.parse(line)
+      } catch {
+        const err = new Error(`Failed to parse core event: ${line}`)
+        Sentry.captureException(err)
+        console.error(err)
+        return
+      }
       switch (event.type) {
         case 'jobs-completed':
           ctx.setTotalJobsCompleted(event.total)
@@ -86,8 +96,7 @@ async function start (ctx) {
         default:
           throw new Error(`Unknown event type: ${event.type}`)
       }
-    }
-  })
+    })
 
   assert(childProcess.stderr)
   childProcess.stderr.setEncoding('utf8')
