@@ -73,6 +73,7 @@ async function start (ctx) {
       } catch (err) {
         console.error(err)
         Sentry.captureException(err)
+        continue
       }
       switch (event.type) {
         case 'jobs-completed':
