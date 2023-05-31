@@ -70,7 +70,9 @@ async function start (ctx) {
       let event
       try {
         event = JSON.parse(line)
-      } catch (err) {
+      } catch (/** @type {any} */ err) {
+        err.message =
+          `Cannot parse line from Station Core stdout: ${err.message}`
         console.error(err)
         Sentry.captureException(err)
         continue
