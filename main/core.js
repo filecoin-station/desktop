@@ -72,8 +72,9 @@ async function start (ctx) {
       let event
       try {
         event = JSON.parse(line)
-      } catch {
+      } catch (_err) {
         const err = new Error(`Failed to parse core event: ${line}`)
+        err.cause = _err
         Sentry.captureException(err)
         console.error(err)
         return
