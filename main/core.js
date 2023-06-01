@@ -11,6 +11,7 @@ const consts = require('./consts')
 const { randomUUID } = require('node:crypto')
 const { Activities } = require('./activities')
 const { Logs } = require('./logs')
+const split2 = require('split2')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -64,18 +65,19 @@ async function start (ctx) {
 
   assert(childProcess.stdout)
   childProcess.stdout.setEncoding('utf8')
-  childProcess.stdout.on('data', chunk => {
-    logs.push(chunk)
-    for (const line of chunk.split('\n').filter(Boolean)) {
+  childProcess.stdout
+    .pipe(split2())
+    .on('data', line => {
+      logs.push(line)
       let event
       try {
         event = JSON.parse(line)
-      } catch (/** @type {any} */ err) {
-        err.message =
-          `Cannot parse line from Station Core stdout: ${err.message}`
-        console.error(err)
+      } catch (_err) {
+        const err = new Error(`Failed to parse core event: ${line}`)
+        err.cause = _err
         Sentry.captureException(err)
-        continue
+        console.error(err)
+        return
       }
       switch (event.type) {
         case 'jobs-completed':
@@ -100,8 +102,7 @@ async function start (ctx) {
           Sentry.captureException(err)
         }
       }
-    }
-  })
+    })
 
   assert(childProcess.stderr)
   childProcess.stderr.setEncoding('utf8')
