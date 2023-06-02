@@ -46,7 +46,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
+        run: npm ci --prefer-offline --no-audit --progress=false
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -126,7 +126,7 @@ jobs:
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm ci --prefer-offline --no-audit --progress=false --cache ${{ github.workspace }}/.cache/npm
+        run: npm ci --prefer-offline --no-audit --progress=false
         env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
