@@ -16,8 +16,8 @@ class Activities {
   push (ctx, activity) {
     this.#activities.push(activity)
     this.#activities.splice(0, this.#activities.length - 100)
-    ctx.recordActivity(activity)
     this.#detectChangeInOnlineStatus(activity)
+    ctx.recordActivity(activity)
   }
 
   /**
@@ -26,14 +26,13 @@ class Activities {
   #detectChangeInOnlineStatus (activity) {
     if (
       activity.type === 'info' &&
-      activity.message.includes('Saturn Node is online')
+      (activity.message === 'SPARK started reporting retrievals' ||
+      activity.message === 'SPARK retrieval reporting resumed')
     ) {
+      console.log('XXX went online')
       this.#online = true
-    } else if (
-      activity.message === 'Saturn Node started.' ||
-      activity.message.includes('was able to connect') ||
-      activity.message.includes('will try to connect')
-    ) {
+    } else if (activity.message === 'SPARK failed reporting retrieval') {
+      console.log('XXX went offline')
       this.#online = false
     }
   }
