@@ -29,10 +29,8 @@ class Activities {
       (activity.message === 'SPARK started reporting retrievals' ||
       activity.message === 'SPARK retrieval reporting resumed')
     ) {
-      console.log('XXX went online')
       this.#online = true
     } else if (activity.message === 'SPARK failed reporting retrieval') {
-      console.log('XXX went offline')
       this.#online = false
     }
   }
