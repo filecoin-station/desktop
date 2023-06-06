@@ -94,8 +94,13 @@ async function start (ctx) {
           activities.push(ctx, activity)
           break
         }
-        default:
-          throw new Error(`Unknown event type: ${event.type}`)
+        default: {
+          const err = new Error(
+            `Unknown Station Core event type "${event.type}": ${line}`
+          )
+          console.error(err)
+          Sentry.captureException(err)
+        }
       }
     })
 
