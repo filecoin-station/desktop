@@ -17,7 +17,7 @@ extraResources:
 
 beforePack: './build/before-pack.js'
 afterSign: './build/notarize-macos.js'
-artifactName: '${productName}.${ext}'
+artifactName: '${productName}-${arch}.${ext}'
 
 mac:
   category: public.app-category.utilities
