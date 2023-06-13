@@ -103,6 +103,7 @@ const ctx = {
     ipcMain.emit(ipcMainEvents.ACTIVITY_LOGGED, activity)
   },
 
+  getTotalJobsCompleted: () => core.getTotalJobsCompleted(),
   setTotalJobsCompleted: (count) => {
     ipcMain.emit(
       ipcMainEvents.JOB_STATS_UPDATED,

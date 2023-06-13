@@ -53,7 +53,8 @@ describe('Dashboard page', () => {
           getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
           getDestinationWalletAddress: () => Promise.resolve(''),
           getTotalEarnings: () => Promise.resolve(0),
-          getActivities: () => Promise.resolve([])
+          getActivities: () => Promise.resolve([]),
+          getTotalJobsCompleted: () => Promise.resolve(0)
         }
       })
     })

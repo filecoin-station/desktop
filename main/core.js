@@ -24,6 +24,7 @@ console.log('Core binary: %s', corePath)
 
 const logs = new Logs()
 const activities = new Activities()
+let totalJobsCompleted = 0
 
 /**
  * @param {Context} ctx
@@ -81,6 +82,7 @@ async function start (ctx) {
       }
       switch (event.type) {
         case 'jobs-completed':
+          totalJobsCompleted = event.total
           ctx.setTotalJobsCompleted(event.total)
           break
         case 'activity:info':
@@ -161,5 +163,6 @@ async function maybeMigrateFiles () {
 module.exports = {
   setup,
   isOnline: () => activities.isOnline(),
-  getActivities: () => activities.get()
+  getActivities: () => activities.get(),
+  getTotalJobsCompleted: () => totalJobsCompleted
 }

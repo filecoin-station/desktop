@@ -20,6 +20,7 @@ export interface Context {
   recordActivity(activity: Activity): void;
   getActivities(): Activity[];
   setTotalJobsCompleted(count: number): void;
+  getTotalJobsCompleted(): number;
 
   showUI: () => void;
   loadWebUIFromDist: import('electron-serve').loadURL;

@@ -8,6 +8,7 @@ declare global {
       stationBuildVersion: string;
 
       getActivities(): Promise<Activity[]>;
+      getTotalJobsCompleted(): Promise<number>;
       onJobStatsUpdated (callback: (totalJobCount: number) => void): () => void;
       getUpdaterStatus(): Promise<{updateAvailable: boolean}>;
       openReleaseNotes(): void;
