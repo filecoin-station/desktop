@@ -50,7 +50,9 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   ipcMain.handle(
     'station:getActivities',
     (_event, _args) => ctx.getActivities())
-
+  ipcMain.handle(
+    'station:getTotalJobsCompleted',
+    (_event, _args) => ctx.getTotalJobsCompleted())
   ipcMain.handle(
     'dialogs:confirmChangeWalletAddress',
     (_event, _args) => ctx.confirmChangeWalletAddress()

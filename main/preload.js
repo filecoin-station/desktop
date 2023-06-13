@@ -13,6 +13,8 @@ contextBridge.exposeInMainWorld('electron', {
   stationBuildVersion: process.env.STATION_BUILD_VERSION,
 
   getActivities: () => ipcRenderer.invoke('station:getActivities'),
+  getTotalJobsCompleted: () =>
+    ipcRenderer.invoke('station:getTotalJobsCompleted'),
   getUpdaterStatus: () => ipcRenderer.invoke('station:getUpdaterStatus'),
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
