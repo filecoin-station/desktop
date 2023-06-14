@@ -8,12 +8,12 @@
 /**
  * @param {BeforePackContext} context
  */
-exports.default = async function (context) {
+exports.default = async function ({ packager }) {
   // The config option `extraMetadata` allows us to write additional fields to
   // the packaged version of `package.json`.
   // Learn more in the docs:
   // https://www.electron.build/configuration/configuration.html#Configuration-extraMetadata
-  Object.assign(context.packager.config.extraMetadata, getGitHubBuildMetadata())
+  Object.assign(packager.config.extraMetadata, getGitHubBuildMetadata())
 }
 
 function getGitHubBuildMetadata () {
