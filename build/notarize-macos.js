@@ -14,7 +14,11 @@ exports.default = async function notarizing (context) {
   const { electronPlatformName, appOutDir } = context
   if (electronPlatformName !== 'darwin') return
   // skip notarization if secrets are not present in env
-  if (!process.env.APPLEID || !process.env.APPLEIDPASS) return
+  if (
+    !process.env.APPLEID || !process.env.APPLEIDPASS || !process.env.APPLETEAMID
+  ) {
+    return
+  }
   // skip notarization when signing is disabled in PRs
   // https://github.com/electron-userland/electron-builder/blob/ece7f889f93921894cbbcb02b924dc90d793be7c/packages/builder-util/src/util.ts#L322-L336
   if (
@@ -28,9 +32,10 @@ exports.default = async function notarizing (context) {
   const appName = context.packager.appInfo.productFilename
 
   return notarize({
-    appBundleId: 'io.filecoin.station',
+    tool: 'notarytool',
     appPath: `${appOutDir}/${appName}.app`,
     appleId: process.env.APPLEID,
-    appleIdPassword: process.env.APPLEIDPASS
+    appleIdPassword: process.env.APPLEIDPASS,
+    teamId: process.env.APPLETEAMID
   })
 }

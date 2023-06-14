@@ -13,6 +13,10 @@ export async function getActivities (): Promise<Activity[]> {
   return await window.electron.getActivities()
 }
 
+export async function getTotalJobsCompleted (): Promise<number> {
+  return await window.electron.getTotalJobsCompleted()
+}
+
 export async function getTotalEarnings (): Promise<number> {
   return 0
 }

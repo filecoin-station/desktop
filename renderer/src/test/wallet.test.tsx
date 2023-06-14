@@ -14,7 +14,8 @@ vi.mock('../lib/station-config', () => ({
   getDestinationWalletAddress: () => Promise.resolve(''),
   setDestinationWalletAddress: () => mockedSetDestinationWalletAddress,
   getTotalEarnings: () => Promise.resolve(0),
-  getActivities: () => Promise.resolve([])
+  getActivities: () => Promise.resolve([]),
+  getTotalJobsCompleted: () => Promise.resolve(0)
 }))
 
 describe('Dashboard wallet display', () => {
