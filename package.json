@@ -82,7 +82,7 @@
     "@typescript-eslint/experimental-utils": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.9",
     "@vitejs/plugin-react": "^4.0.0",
-    "@vitest/ui": "^0.31.4",
+    "@vitest/ui": "^0.32.0",
     "autoprefixer": "^10.4.13",
     "cross-env": "^7.0.3",
     "electron": "^22.2.0",
