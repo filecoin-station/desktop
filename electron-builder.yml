@@ -17,8 +17,6 @@ extraResources:
 
 beforePack: './build/before-pack.js'
 afterPack: './build/after-pack.js'
-afterAllArtifactBuild: './build/after-all-artifact-build.js'
-onNodeModuleFile: './build/on-node-module-file.js'
 afterSign: './build/notarize-macos.js'
 artifactName: '${productName}-${arch}.${ext}'
 
