@@ -17,7 +17,10 @@ exports.default = async function (context) {
     ? 'x64'
     : context.arch === 3
       ? 'arm64'
-      : null
+      : context.arch === 4
+        ? 'universal'
+        : null
+  if (arch === 'universal') return
   assert(arch, `Unknown architecture id: ${context.arch}`)
   console.log(`Rebuild Station Core for arch=${arch}`)
   const ps = spawn(
