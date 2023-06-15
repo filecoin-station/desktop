@@ -176,6 +176,7 @@ jobs:
           APPLEID: ${{ secrets.apple_id }}
           APPLEIDPASS: ${{ secrets.apple_id_pass }}
           APPLETEAMID: ${{ secrets.apple_team_id }}
+          USE_HARD_LINKS: false
 
       - name: Show dist/
         run: du -sh dist/ && ls -l dist/
