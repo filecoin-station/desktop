@@ -32,7 +32,7 @@ mac:
       arch: ['universal']
     - target: zip
       arch: ['universal']
-
+  x64ArchFiles: 'core/modules/bacalhau/bacalhau'
 
 dmg:
   iconSize: 160
