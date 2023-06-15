@@ -46,7 +46,7 @@
     "@glif/filecoin-wallet-provider": "^2.0.67",
     "@influxdata/influxdb-client": "^1.33.2",
     "@sentry/node": "^7.55.2",
-    "@sentry/react": "^7.55.0",
+    "@sentry/react": "^7.55.2",
     "@sentry/tracing": "^7.54.0",
     "@zondax/filecoin-signing-tools": "^2.4.1",
     "dayjs": "^1.11.8",
