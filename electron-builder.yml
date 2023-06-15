@@ -16,6 +16,7 @@ extraResources:
   - 'core/**'
 
 beforePack: './build/before-pack.js'
+afterPack: './build/after-pack.js'
 afterSign: './build/notarize-macos.js'
 artifactName: '${productName}.${ext}'
 
@@ -28,9 +29,9 @@ mac:
   entitlementsInherit: 'build/entitlements.mac.plist'
   target:
     - target: dmg
-      arch: ['x64']
+      arch: ['universal']
     - target: zip
-      arch: ['x64']
+      arch: ['universal']
 
 
 dmg:
