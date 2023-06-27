@@ -9,7 +9,7 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
-      time: "09:00"
+      time: "03:00"
       timezone: "Europe/Berlin"
     commit-message:
       prefix: "deps"
