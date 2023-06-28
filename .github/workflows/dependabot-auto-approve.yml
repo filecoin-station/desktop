@@ -10,9 +10,10 @@ jobs:
     if: ${{ github.actor == 'dependabot[bot]' }}
     strategy:
       matrix:
-        dependency:
+        dependencyStartsWith:
           - eslint
-          - '@types'
+          - '@typescript-eslint/'
+          - '@types/'
     steps:
       - name: Dependabot metadata
         id: metadata
@@ -22,7 +23,7 @@ jobs:
       - name: Approve a PR
         if: >
           ${{(
-            contains(steps.metadata.outputs.dependency-names, matrix.dependency)
+            startsWith(steps.metadata.outputs.dependency-names, matrix.dependencyStartsWith)
           ) && (
             steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
             steps.metadata.outputs.update-type == 'version-update:semver-minor'
