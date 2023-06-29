@@ -15,6 +15,7 @@ jobs:
           - '@typescript-eslint/'
           - '@types/'
           - '@sentry/'
+          - typescript
     steps:
       - name: Dependabot metadata
         id: metadata
