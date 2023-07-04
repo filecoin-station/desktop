@@ -16,6 +16,7 @@ jobs:
           - '@types/'
           - '@sentry/'
           - typescript
+          - '@vitest/ui'
     steps:
       - name: Dependabot metadata
         id: metadata
