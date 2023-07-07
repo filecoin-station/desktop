@@ -18,6 +18,7 @@ jobs:
           - typescript
           - '@vitest/ui'
           - prettier
+          - postcss
     steps:
       - name: Dependabot metadata
         id: metadata
