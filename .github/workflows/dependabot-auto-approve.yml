@@ -19,6 +19,7 @@ jobs:
           - '@vitest/ui'
           - prettier
           - postcss
+          - vite
     steps:
       - name: Dependabot metadata
         id: metadata
