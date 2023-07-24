@@ -23,6 +23,10 @@ const writeClient = client.getWriteApi(
   'ns' // precision
 )
 
+const unactionableErrors =
+  // eslint-disable-next-line max-len
+  /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET|CERT_NOT_YET_VALID|ERR_TLS_CERT_ALTNAME_INVALID/i
+
 function setup () {
   setInterval(() => {
     const point = new Point('ping')
@@ -49,12 +53,13 @@ function setup () {
     writeClient.writePoint(point)
 
     writeClient.flush().catch(err => {
-      // Ignore unactionable InfluxDB errors
-      // eslint-disable-next-line max-len
-      const reg = /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET|CERT_NOT_YET_VALID/i
-      if (!reg.test(String(err))) {
-        Sentry.captureException(err)
+      if (unactionableErrors.test(String(err))) {
+        return
       }
+      if (typeof err?.code === 'string' && unactionableErrors.test(err.code)) {
+        return
+      }
+      Sentry.captureException(err)
     })
   }, 10_000).unref()
 }
