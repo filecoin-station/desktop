@@ -20,7 +20,8 @@ jobs:
           - prettier
           - postcss
           - vite
-          - "@testing-library/"
+          - '@testing-library/'
+          - '@playwright/'
     steps:
       - name: Dependabot metadata
         id: metadata
