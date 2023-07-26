@@ -22,6 +22,7 @@ jobs:
           - vite
           - '@testing-library/'
           - '@playwright/'
+          - playwright
     steps:
       - name: Dependabot metadata
         id: metadata
