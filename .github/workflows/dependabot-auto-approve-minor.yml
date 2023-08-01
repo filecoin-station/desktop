@@ -23,6 +23,7 @@ jobs:
           - '@testing-library/'
           - '@playwright/'
           - playwright
+          - '@vitejs/plugin-react'
     steps:
       - name: Dependabot metadata
         id: metadata
