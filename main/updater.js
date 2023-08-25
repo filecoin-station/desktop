@@ -108,6 +108,13 @@ function checkForUpdatesInBackground () {
  */
 function onUpdaterError (err) {
   log.error('error', err)
+  // Auto-updater gives us the error message, not a real Error object.
+  // As a result, Sentry is not able to link the error to this source code line
+  // As a workaround, we are wrapping the error message in a new Error object.
+  if (typeof err === 'string') {
+    err = new Error(err)
+    err.name = 'MacUpdater.onUpdaterError'
+  }
   Sentry.captureException(err)
 
   if (!checkingManually) { return }
