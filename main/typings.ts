@@ -23,6 +23,7 @@ export interface Context {
   getTotalJobsCompleted(): number;
 
   showUI: () => void;
+  isShowingUI: boolean;
   loadWebUIFromDist: import('electron-serve').loadURL;
   manualCheckForUpdates: () => void;
   saveModuleLogsAs: () => Promise<void>;

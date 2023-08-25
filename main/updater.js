@@ -19,6 +19,7 @@ let updateAvailable = false
 let nextVersion
 
 function quitAndInstall () {
+  log.info('Restarting Station to install the new version')
   beforeQuitCleanup()
   autoUpdater.quitAndInstall()
 }
@@ -28,14 +29,14 @@ function beforeQuitCleanup () {
   app.removeAllListeners('window-all-closed')
 }
 
-function setup (/** @type {import('./typings').Context} */ _ctx) {
+function setup (/** @type {import('./typings').Context} */ ctx) {
   autoUpdater.logger = log
   autoUpdater.autoDownload = false // we download manually in 'update-available'
 
   autoUpdater.on('error', onUpdaterError)
   autoUpdater.on('update-available', onUpdateAvailable)
   autoUpdater.on('update-not-available', onUpdateNotAvailable)
-  autoUpdater.on('update-downloaded', onUpdateDownloaded)
+  autoUpdater.on('update-downloaded', (event) => onUpdateDownloaded(ctx, event))
 
   // built-in updater != electron-updater
   // https://github.com/electron-userland/electron-builder/pull/6395
@@ -174,9 +175,10 @@ function onUpdateNotAvailable ({ version }) {
 }
 
 /**
+ * @param {import('./typings').Context} ctx
  * @param {import('electron-updater').UpdateDownloadedEvent} event
  */
-function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
+function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
   log.info(`update to ${version} downloaded`)
 
   const showUpdateDialog = () => {
@@ -195,7 +197,9 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
   if (checkingManually) {
     // when checking manually, show the dialog immediately
     showUpdateDialog()
-  } else {
+    // also don't trigger the automatic Station restart
+    // showUpdateDialog() offers the user to restart
+  } else if (ctx.isShowingUI) {
     // show unobtrusive notification + dialog on click
     updateNotification = new Notification({
       title: 'Filecoin Station Update',
@@ -203,5 +207,14 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
     })
     updateNotification.on('click', showUpdateDialog)
     updateNotification.show()
+  } else {
+    // We are running in tray, the user is not interacting with the app
+    // Let's go ahead and restart the app to update
+    updateNotification = new Notification({
+      title: 'Restarting Filecoin Station',
+      body: `Updating to version ${version}.`
+    })
+    updateNotification.show()
+    setImmediate(quitAndInstall)
   }
 }

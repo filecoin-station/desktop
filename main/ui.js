@@ -35,6 +35,9 @@ module.exports = async function (ctx) {
     }
   })
 
+  ui.on('show', () => { ctx.isShowingUI = true })
+  ui.on('hide', () => { ctx.isShowingUI = false })
+
   /** @type {import('vite').ViteDevServer} */
   let devServer
 

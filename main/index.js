@@ -114,6 +114,7 @@ const ctx = {
   manualCheckForUpdates: () => { throw new Error('never get here') },
   saveModuleLogsAs: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
+  isShowingUI: false,
   loadWebUIFromDist: serve({
     directory: path.resolve(__dirname, '../renderer/dist')
   }),
