@@ -108,7 +108,7 @@ function checkForUpdatesInBackground () {
  */
 function onUpdaterError (err) {
   log.error('error', err)
-  Sentry.captureException('Auto-updater error', err)
+  Sentry.captureException(err)
 
   if (!checkingManually) { return }
   checkingManually = false
