@@ -8,6 +8,7 @@ const { ipcMainEvents } = require('./ipc')
 const ms = require('ms')
 const log = require('electron-log').scope('updater')
 const { showDialogSync } = require('./dialog')
+const Store = require('electron-store')
 
 // must be global to avoid gc
 let updateNotification = null
@@ -19,8 +20,12 @@ let updateAvailable = false
 /** @type {string | undefined} */
 let nextVersion
 
+const store = new Store({ name: 'updater' })
+
 function quitAndInstall () {
+  log.info('Restarting Station to install the new version')
   beforeQuitCleanup()
+  store.set('upgradeToVersion', nextVersion)
   autoUpdater.quitAndInstall()
 }
 
@@ -29,14 +34,14 @@ function beforeQuitCleanup () {
   app.removeAllListeners('window-all-closed')
 }
 
-function setup (/** @type {import('./typings').Context} */ _ctx) {
+function setup (/** @type {import('./typings').Context} */ ctx) {
   autoUpdater.logger = log
   autoUpdater.autoDownload = false // we download manually in 'update-available'
 
   autoUpdater.on('error', onUpdaterError)
   autoUpdater.on('update-available', onUpdateAvailable)
   autoUpdater.on('update-not-available', onUpdateNotAvailable)
-  autoUpdater.on('update-downloaded', onUpdateDownloaded)
+  autoUpdater.on('update-downloaded', (event) => onUpdateDownloaded(ctx, event))
 
   // built-in updater != electron-updater
   // https://github.com/electron-userland/electron-builder/pull/6395
@@ -176,9 +181,10 @@ function onUpdateNotAvailable ({ version }) {
 }
 
 /**
+ * @param {import('./typings').Context} ctx
  * @param {import('electron-updater').UpdateDownloadedEvent} event
  */
-function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
+function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
   log.info(`update to ${version} downloaded`)
 
   const showUpdateDialog = () => {
@@ -197,7 +203,9 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
   if (checkingManually) {
     // when checking manually, show the dialog immediately
     showUpdateDialog()
-  } else {
+    // also don't trigger the automatic Station restart
+    // showUpdateDialog() offers the user to restart
+  } else if (ctx.isShowingUI) {
     // show unobtrusive notification + dialog on click
     updateNotification = new Notification({
       title: 'Filecoin Station Update',
@@ -205,5 +213,15 @@ function onUpdateDownloaded ({ version /*, releaseNotes */ }) {
     })
     updateNotification.on('click', showUpdateDialog)
     updateNotification.show()
+  } else if (version !== store.get('upgradeToVersion')) {
+    // We are running in tray, the user is not interacting with the app
+    // We have a new version that we did not tried to install previously
+    // Let's go ahead and restart the app to update
+    updateNotification = new Notification({
+      title: 'Restarting Filecoin Station',
+      body: `Updating to version ${version}.`
+    })
+    updateNotification.show()
+    setImmediate(quitAndInstall)
   }
 }
