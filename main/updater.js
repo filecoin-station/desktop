@@ -8,6 +8,7 @@ const { ipcMainEvents } = require('./ipc')
 const ms = require('ms')
 const log = require('electron-log').scope('updater')
 const { showDialogSync } = require('./dialog')
+const Store = require('electron-store')
 
 // must be global to avoid gc
 let updateNotification = null
@@ -19,9 +20,12 @@ let updateAvailable = false
 /** @type {string | undefined} */
 let nextVersion
 
+const store = new Store({ name: 'updater' })
+
 function quitAndInstall () {
   log.info('Restarting Station to install the new version')
   beforeQuitCleanup()
+  store.set('upgradeToVersion', nextVersion)
   autoUpdater.quitAndInstall()
 }
 
@@ -209,8 +213,9 @@ function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
     })
     updateNotification.on('click', showUpdateDialog)
     updateNotification.show()
-  } else {
+  } else if (version !== store.get('upgradeToVersion')) {
     // We are running in tray, the user is not interacting with the app
+    // We have a new version that we did not tried to install previously
     // Let's go ahead and restart the app to update
     updateNotification = new Notification({
       title: 'Restarting Filecoin Station',
