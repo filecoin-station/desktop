@@ -48,7 +48,7 @@
     "@sentry/node": "^7.68.0",
     "@sentry/react": "^7.68.0",
     "@sentry/tracing": "^7.68.0",
-    "@zondax/filecoin-signing-tools": "^2.4.2",
+    "@zondax/filecoin-signing-tools": "^2.4.3",
     "dayjs": "^1.11.9",
     "electron-log": "^4.4.7",
     "electron-serve": "^1.1.0",
