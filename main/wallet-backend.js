@@ -10,7 +10,6 @@ const { CoinType } = require('@glif/filecoin-address')
 const { strict: assert } = require('node:assert')
 const { Message } = require('@glif/filecoin-message')
 const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
-const { fetch } = require('undici')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
