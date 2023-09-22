@@ -13,6 +13,7 @@ jobs:
         dependencyStartsWith:
           - react-router-dom
           - graphql
+          - dayjs
     steps:
       - name: Dependabot metadata
         id: metadata
