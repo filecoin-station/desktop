@@ -14,6 +14,7 @@ jobs:
           - react-router-dom
           - graphql
           - dayjs
+          - autoprefixer
     steps:
       - name: Dependabot metadata
         id: metadata
