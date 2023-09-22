@@ -12,6 +12,7 @@ jobs:
       matrix:
         dependencyStartsWith:
           - react-router-dom
+          - graphql
     steps:
       - name: Dependabot metadata
         id: metadata
