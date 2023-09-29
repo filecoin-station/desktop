@@ -2,11 +2,11 @@
 
 const electronLog = require('electron-log')
 const assert = require('assert')
-const { FilecoinNumber } = require('@glif/filecoin-number')
 const { getDestinationWalletAddress } = require('./station-config')
 const timers = require('node:timers/promises')
 const Store = require('electron-store')
 const { WalletBackend } = require('./wallet-backend')
+const { ethers } = require('ethers')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
@@ -21,7 +21,7 @@ const walletStore = new Store({
 
 const backend = new WalletBackend({
   async onTransactionUpdate () {
-    walletStore.set('transactions', backend.transactions)
+    walletStore.set('transactions_0x', backend.transactions)
     sendTransactionsToUI()
   }
 })
@@ -71,7 +71,7 @@ async function refreshState () {
  * @returns {string}
  */
 function getBalance () {
-  return balance.toFil()
+  return ethers.utils.formatUnits(balance, 18)
 }
 
 // Inline `p-debounce.promise` from
@@ -97,8 +97,8 @@ async function updateBalance () {
 async function _updateBalance () {
   assert(ctx)
   balance = await backend.fetchBalance()
-  walletStore.set('balance', balance.toFil())
-  ctx.balanceUpdate(balance.toFil())
+  walletStore.set('balance_0x', balance.toHexString())
+  ctx.balanceUpdate(ethers.utils.formatUnits(balance, 18))
 }
 
 function listTransactions () {
@@ -140,7 +140,7 @@ function sendTransactionsToUI () {
 /**
  * @param {string} from
  * @param {string} to
- * @param {FilecoinNumber} amount
+ * @param {ethers.BigNumber} amount
  * @returns {Promise<void>}
  */
 async function transferFunds (from, to, amount) {
@@ -181,17 +181,16 @@ function getAddress () {
  */
 function loadStoredEntries () {
   // A workaround to fix false TypeScript errors
-  return /** @type {any} */ (walletStore.get('transactions', []))
+  return /** @type {any} */ (walletStore.get('transactions_0x', []))
 }
 
 /**
- * @returns {FilecoinNumber}
+ * @returns {ethers.BigNumber}
  */
 function loadBalance () {
-  // A workaround to fix false TypeScript errors
-  return new FilecoinNumber(
-    /** @type {string} */ (walletStore.get('balance', '0')),
-    'fil'
+  return ethers.BigNumber.from(
+    // A workaround to fix false TypeScript errors
+    /** @type {string} */ (walletStore.get('balance_0x', '0x0'))
   )
 }
 

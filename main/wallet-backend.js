@@ -1,15 +1,10 @@
 'use strict'
 
 const keytar = require('keytar')
+// TODO: Replace with ethers tooling
 const { generateMnemonic } = require('@zondax/filecoin-signing-tools')
-const {
-  default: Filecoin,
-  HDWalletProvider
-} = require('@glif/filecoin-wallet-provider')
-const { CoinType } = require('@glif/filecoin-address')
 const { strict: assert } = require('node:assert')
-const { Message } = require('@glif/filecoin-message')
-const { FilecoinNumber, BigNumber } = require('@glif/filecoin-number')
+const { ethers } = require('ethers')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
@@ -28,8 +23,10 @@ class WalletBackend {
     disableKeytar = DISABLE_KEYTAR,
     onTransactionUpdate = noop
   } = {}) {
-    /** @type {Filecoin | null} */
+    /** @type {ethers.providers.JsonRpcProvider | null} */
     this.provider = null
+    /** @type {ethers.Wallet | null} */
+    this.signer = null
     /** @type {string | null} */
     this.address = null
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
@@ -40,10 +37,10 @@ class WalletBackend {
 
   async setup () {
     const { seed, isNew } = await this.getSeedPhrase()
-    this.provider = new Filecoin(new HDWalletProvider(seed), {
-      apiAddress: 'https://api.node.glif.io/rpc/v0'
-    })
-    this.address = await this.getAddress()
+    // TODO: Do all those values need to be stored?
+    this.provider = new ethers.providers.JsonRpcProvider('https://api.node.glif.io/rpc/v0')
+    this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
+    this.address = this.signer.address
     return { seedIsNew: isNew }
   }
 
@@ -51,7 +48,7 @@ class WalletBackend {
    * @returns {Promise<WalletSeed>}
    */
   async getSeedPhrase () {
-    const service = 'filecoin-station-wallet'
+    const service = 'filecoin-station-wallet-0x'
     let seed
     if (!this.disableKeytar) {
       seed = await keytar.getPassword(service, 'seed')
@@ -67,103 +64,94 @@ class WalletBackend {
     return { seed, isNew: true }
   }
 
-  async getAddress () {
-    assert(this.provider)
-    const [address] = await this.provider.wallet.getAccounts(
-      0,
-      1,
-      CoinType.MAIN
-    )
-    return address
-  }
-
   async fetchBalance () {
-    assert(this.provider)
-    assert(this.address)
-    return await this.provider.getBalance(this.address)
+    assert(this.signer)
+    return await this.signer.getBalance()
   }
 
   /**
    * @param {string} from
    * @param {string} to
-   * @param {FilecoinNumber} amount
+   * @param {ethers.BigNumber} amount
    * @returns Promise<FilecoinNumber>
    */
   async getGasLimit (from, to, amount) {
-    assert(this.provider)
-    const message = new Message({
-      to,
-      from,
-      nonce: 0,
-      value: amount.toAttoFil(),
-      method: 0,
-      params: '',
-      gasPremium: 0,
-      gasFeeCap: 0,
-      gasLimit: 0
-    })
-    const messageWithGas = await this.provider.gasEstimateMessageGas(
-      message.toLotusType()
-    )
-    const feeCapStr = messageWithGas.gasFeeCap.toFixed(0, BigNumber.ROUND_CEIL)
-    const feeCap = new FilecoinNumber(feeCapStr, 'attofil')
-    const gas = feeCap.times(messageWithGas.gasLimit)
-    return gas
+    // assert(this.provider)
+    // const message = new Message({
+    //   to,
+    //   from,
+    //   nonce: 0,
+    //   value: amount.toAttoFil(),
+    //   method: 0,
+    //   params: '',
+    //   gasPremium: 0,
+    //   gasFeeCap: 0,
+    //   gasLimit: 0
+    // })
+    // const messageWithGas = await this.provider.gasEstimateMessageGas(
+    //   message.toLotusType()
+    // )
+    // const feeCapStr = messageWithGas.gasFeeCap.toFixed(0, BigNumber.ROUND_CEIL)
+    // const feeCap = new FilecoinNumber(feeCapStr, 'attofil')
+    // const gas = feeCap.times(messageWithGas.gasLimit)
+    // return gas
+    return 0
   }
 
   /**
    * @param {string} from
    * @param {string} to
-   * @param {FilecoinNumber} amount
+   * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
   async transferFunds (from, to, amount) {
-    assert(this.provider)
+    // assert(this.provider)
 
-    /** @type {FILTransactionProcessing} */
-    const transaction = {
-      timestamp: new Date().getTime(),
-      status: 'processing',
-      outgoing: true,
-      amount: amount.toString(),
-      address: to
-    }
-    this.transactions.push(transaction)
-    this.onTransactionUpdate()
+    // /** @type {FILTransactionProcessing} */
+    // const transaction = {
+    //   timestamp: new Date().getTime(),
+    //   status: 'processing',
+    //   outgoing: true,
+    //   amount: amount.toString(),
+    //   address: to
+    // }
+    // this.transactions.push(transaction)
+    // this.onTransactionUpdate()
 
-    try {
-      const gasLimit = await this.getGasLimit(from, to, amount)
-      // Ensure transaction has enough gas to succeed
-      const gasOffset = new FilecoinNumber('100', 'attofil')
-      const amountMinusGas = amount.minus(gasLimit).minus(gasOffset)
-      const message = new Message({
-        to,
-        from,
-        nonce: await this.provider.getNonce(from),
-        value: amountMinusGas.toAttoFil(),
-        method: 0,
-        params: ''
-      })
-      const messageWithGas = await this.provider.gasEstimateMessageGas(
-        message.toLotusType()
-      )
-      const lotusMessage = messageWithGas.toLotusType()
-      const msgValid = await this.provider.simulateMessage(lotusMessage)
-      assert(msgValid, 'Message is invalid')
-      const signedMessage = await this.provider.wallet.sign(from, lotusMessage)
-      const { '/': cid } = await this.provider.sendMessage(signedMessage)
+    // try {
+    //   const gasLimit = await this.getGasLimit(from, to, amount)
+    //   // Ensure transaction has enough gas to succeed
+    //   const gasOffset = new FilecoinNumber('100', 'attofil')
+    //   const amountMinusGas = amount.minus(gasLimit).minus(gasOffset)
+    //   const message = new Message({
+    //     to,
+    //     from,
+    //     nonce: await this.provider.getNonce(from),
+    //     value: amountMinusGas.toAttoFil(),
+    //     method: 0,
+    //     params: ''
+    //   })
+    //   const messageWithGas = await this.provider.gasEstimateMessageGas(
+    //     message.toLotusType()
+    //   )
+    //   const lotusMessage = messageWithGas.toLotusType()
+    //   const msgValid = await this.provider.simulateMessage(lotusMessage)
+    //   assert(msgValid, 'Message is invalid')
+    //   const signedMessage = await this.provider.wallet.sign(from, lotusMessage)
+    //   const { '/': cid } = await this.provider.sendMessage(signedMessage)
 
-      transaction.hash = cid
-      this.onTransactionUpdate()
+    //   transaction.hash = cid
+    //   this.onTransactionUpdate()
 
-      return cid
-    } catch (err) {
-      console.error(err)
-      transaction.status = 'failed'
-      this.onTransactionUpdate()
+    //   return cid
+    // } catch (err) {
+    //   console.error(err)
+    //   transaction.status = 'failed'
+    //   this.onTransactionUpdate()
 
-      throw err
-    }
+    //   throw err
+    // }
+    return 'TODO'
   }
 
   /**
@@ -192,7 +180,7 @@ class WalletBackend {
       height: message.height,
       hash: message.cid,
       outgoing: message.from === this.address,
-      amount: new FilecoinNumber(message.value, 'attofil').toFil(),
+      amount: ethers.utils.formatUnits(message.value, 18),
       address: message.from === this.address
         ? message.to
         : message.from,
