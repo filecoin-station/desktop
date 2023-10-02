@@ -1,5 +1,5 @@
 import { FC, useState, useEffect, useRef } from 'react'
-import { checkAddressString } from '@glif/filecoin-address'
+import { delegatedFromEthAddress, ethAddressFromDelegated } from '@glif/filecoin-address'
 import { ReactComponent as Warning } from '../assets/img/icons/error.svg'
 import { ReactComponent as EditIcon } from '../assets/img/icons/edit.svg'
 
@@ -9,6 +9,14 @@ interface FilAddressFormProps {
   editMode: boolean;
   transferMode: boolean;
   enableEditMode: () => void;
+}
+
+const checkAddressString = (address: string) => {
+  if (address.startsWith('0x')) {
+    delegatedFromEthAddress(address)
+  } else {
+    ethAddressFromDelegated(address)
+  }
 }
 
 const FilAddressForm: FC<FilAddressFormProps> = ({
