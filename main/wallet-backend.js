@@ -92,12 +92,11 @@ class WalletBackend {
 
   /**
    * @param {string} to
+   * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
-  async transferAllFunds (to) {
+  async transferAllFunds (to, amount) {
     assert(this.signer)
-    const amount = await this.fetchBalance()
-    console.log('balance', amount)
 
     /** @type {FILTransactionProcessing} */
     const transaction = {
