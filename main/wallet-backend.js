@@ -5,6 +5,7 @@ const keytar = require('keytar')
 const { generateMnemonic } = require('@zondax/filecoin-signing-tools')
 const { strict: assert } = require('node:assert')
 const { ethers } = require('ethers')
+const { delegatedFromEthAddress, CoinType } = require('@glif/filecoin-address')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
@@ -41,6 +42,7 @@ class WalletBackend {
     this.provider = new ethers.providers.JsonRpcProvider('https://api.node.glif.io/rpc/v0')
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
     this.address = this.signer.address
+    this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
     return { seedIsNew: isNew }
   }
 
@@ -70,88 +72,103 @@ class WalletBackend {
   }
 
   /**
-   * @param {string} from
    * @param {string} to
    * @param {ethers.BigNumber} amount
-   * @returns Promise<FilecoinNumber>
+   * @returns Promise<ethers.BigNumber>
    */
-  async getGasLimit (from, to, amount) {
-    // assert(this.provider)
-    // const message = new Message({
-    //   to,
-    //   from,
-    //   nonce: 0,
-    //   value: amount.toAttoFil(),
-    //   method: 0,
-    //   params: '',
-    //   gasPremium: 0,
-    //   gasFeeCap: 0,
-    //   gasLimit: 0
-    // })
-    // const messageWithGas = await this.provider.gasEstimateMessageGas(
-    //   message.toLotusType()
-    // )
-    // const feeCapStr = messageWithGas.gasFeeCap.toFixed(0, BigNumber.ROUND_CEIL)
-    // const feeCap = new FilecoinNumber(feeCapStr, 'attofil')
-    // const gas = feeCap.times(messageWithGas.gasLimit)
-    // return gas
-    return 0
+  async getGasLimit (to, amount) {
+    console.log('getGasLimit()', { to, amount })
+    assert(this.provider)
+    const [gasLimit, feeData] = await Promise.all([
+      this.provider.estimateGas({
+        to,
+        value: amount
+      }),
+      this.provider.getFeeData()
+    ])
+    assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
+    return gasLimit.mul(feeData.maxFeePerGas)
   }
 
   /**
    * @param {string} from
    * @param {string} to
-   * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
-  async transferFunds (from, to, amount) {
-    // assert(this.provider)
+  async transferAllFunds (from, to) {
+    assert(this.signer)
+    const amount = await this.fetchBalance()
+    console.log('balance', amount)
 
-    // /** @type {FILTransactionProcessing} */
-    // const transaction = {
-    //   timestamp: new Date().getTime(),
-    //   status: 'processing',
-    //   outgoing: true,
-    //   amount: amount.toString(),
-    //   address: to
-    // }
-    // this.transactions.push(transaction)
-    // this.onTransactionUpdate()
+    /** @type {FILTransactionProcessing} */
+    const transaction = {
+      timestamp: new Date().getTime(),
+      status: 'processing',
+      outgoing: true,
+      amount: ethers.utils.formatUnits(amount, 18),
+      address: delegatedFromEthAddress(to, CoinType.MAIN)
+    }
+    this.transactions.push(transaction)
+    this.onTransactionUpdate()
 
-    // try {
-    //   const gasLimit = await this.getGasLimit(from, to, amount)
-    //   // Ensure transaction has enough gas to succeed
-    //   const gasOffset = new FilecoinNumber('100', 'attofil')
-    //   const amountMinusGas = amount.minus(gasLimit).minus(gasOffset)
-    //   const message = new Message({
-    //     to,
-    //     from,
-    //     nonce: await this.provider.getNonce(from),
-    //     value: amountMinusGas.toAttoFil(),
-    //     method: 0,
-    //     params: ''
-    //   })
-    //   const messageWithGas = await this.provider.gasEstimateMessageGas(
-    //     message.toLotusType()
-    //   )
-    //   const lotusMessage = messageWithGas.toLotusType()
-    //   const msgValid = await this.provider.simulateMessage(lotusMessage)
-    //   assert(msgValid, 'Message is invalid')
-    //   const signedMessage = await this.provider.wallet.sign(from, lotusMessage)
-    //   const { '/': cid } = await this.provider.sendMessage(signedMessage)
+    try {
+      const gasLimit = await this.getGasLimit(to, amount)
+      console.log({ gasLimit })
+      // Ensure transaction has enough gas to succeed
+      const gasOffset = ethers.BigNumber.from('100')
+      const amountMinusGas = amount.sub(gasLimit).sub(gasOffset)
+      const tx = await this.signer.sendTransaction({
+        to,
+        value: amountMinusGas
+      })
+      console.log({ tx })
+      const hash = tx.hash
+      assert(hash, 'Transaction hash not found')
+      const cid = await this.convertEthTxHashToCid(hash)
+      console.log({ hash, cid })
+      transaction.hash = cid
+      this.onTransactionUpdate()
 
-    //   transaction.hash = cid
-    //   this.onTransactionUpdate()
+      return cid
+    } catch (err) {
+      console.error(err)
+      transaction.status = 'failed'
+      this.onTransactionUpdate()
 
-    //   return cid
-    // } catch (err) {
-    //   console.error(err)
-    //   transaction.status = 'failed'
-    //   this.onTransactionUpdate()
+      throw err
+    }
+  }
 
-    //   throw err
-    // }
-    return 'TODO'
+  /**
+   * @param {string} hash
+   * @returns {Promise<string>}
+   */
+  async convertEthTxHashToCid (hash) {
+    console.log('convertEthTxHashToCid', { hash })
+    for (let i = 0; i < 10; i++) {
+      const res = await fetch('https://graph.glif.link/query', {
+        headers: {
+          accept: '*/*',
+          'accept-language': 'en-US,en;q=0.9,de;q=0.8',
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          operationName: 'Message',
+          variables: {
+            cid: hash
+          },
+          query: 'query Message($cid: String!) {message(cid: $cid) {cid}}'
+        }),
+        method: 'POST'
+      })
+      const body = await res.json()
+      if (body.data.message) {
+        return body.data.message.cid
+      }
+      console.log(body.errors)
+      await new Promise(resolve => setTimeout(resolve, 10_000))
+    }
+    throw new Error('Could not convert ETH tx hash to CID')
   }
 
   /**
@@ -176,17 +193,20 @@ class WalletBackend {
     const messages = await this.getMessages(this.address)
 
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
-    const transactions = messages.map(message => ({
-      height: message.height,
-      hash: message.cid,
-      outgoing: message.from === this.address,
-      amount: ethers.utils.formatUnits(message.value, 18),
-      address: message.from === this.address
-        ? message.to
-        : message.from,
-      timestamp: message.timestamp,
-      status: message.receipt.exitCode === 0 ? 'succeeded' : 'failed'
-    }))
+    const transactions = messages.map(message => {
+      assert(this.addressDelegated)
+      return {
+        height: message.height,
+        hash: message.cid,
+        outgoing: message.from === this.addressDelegated,
+        amount: ethers.utils.formatUnits(message.value, 18),
+        address: message.from === this.addressDelegated
+          ? message.to
+          : message.from,
+        timestamp: message.timestamp,
+        status: message.receipt.exitCode === 0 ? 'succeeded' : 'failed'
+      }
+    })
 
     // Add locally known transactions not yet returned by the API
     for (const transaction of this.transactions) {
