@@ -138,15 +138,14 @@ function sendTransactionsToUI () {
 }
 
 /**
- * @param {string} from
  * @param {string} to
  * @returns {Promise<void>}
  */
-async function transferAllFunds (from, to) {
+async function transferAllFunds (to) {
   assert(ctx)
 
   try {
-    const cid = await backend.transferAllFunds(from, to)
+    const cid = await backend.transferAllFunds(to)
     console.log({ cid })
   } catch (err) {
     log.error('Transferring funds', err)
@@ -157,11 +156,10 @@ async function transferAllFunds (from, to) {
  * @returns {Promise<void>}
  */
 async function transferAllFundsToDestinationWallet () {
-  assert(backend.address)
   const to = getDestinationWalletAddress()
   assert(to)
   try {
-    await transferAllFunds(backend.address, to)
+    await transferAllFunds(to)
   } finally {
     await updateBalance()
   }

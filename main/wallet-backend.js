@@ -91,11 +91,10 @@ class WalletBackend {
   }
 
   /**
-   * @param {string} from
    * @param {string} to
    * @returns {Promise<string>}
    */
-  async transferAllFunds (from, to) {
+  async transferAllFunds (to) {
     assert(this.signer)
     const amount = await this.fetchBalance()
     console.log('balance', amount)
