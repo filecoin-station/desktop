@@ -50,7 +50,6 @@ async function setup (ctx) {
  * @param {Context} ctx
  */
 async function start (ctx) {
-  assert(await wallet.getAddress(), 'Core requires FIL address')
   console.log('Starting Core...')
 
   const childProcess = fork(corePath, ['--json'], {
