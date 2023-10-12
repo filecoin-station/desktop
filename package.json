@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",
-    "@playwright/test": "^1.38.1",
+    "@playwright/test": "^1.39.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@types/mocha": "^10.0.2",
