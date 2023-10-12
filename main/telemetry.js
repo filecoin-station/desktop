@@ -27,12 +27,13 @@ const unactionableErrors =
   // eslint-disable-next-line max-len
   /HttpError|getAddrInfo|RequestTimedOutError|ECONNRESET|CERT_NOT_YET_VALID|ERR_TLS_CERT_ALTNAME_INVALID/i
 
-function setup () {
+async function setup () {
+  const walletAddress = await wallet.getAddress()
   setInterval(() => {
     const point = new Point('ping')
     point.stringField(
       'wallet',
-      createHash('sha256').update(wallet.getAddress()).digest('hex')
+      createHash('sha256').update(walletAddress).digest('hex')
     )
     const destinationWalletAddress = getDestinationWalletAddress()
     if (destinationWalletAddress) {
