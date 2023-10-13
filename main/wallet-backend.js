@@ -5,7 +5,11 @@ const keytar = require('keytar')
 const { generateMnemonic } = require('@zondax/filecoin-signing-tools')
 const { strict: assert } = require('node:assert')
 const { ethers } = require('ethers')
-const { delegatedFromEthAddress, CoinType } = require('@glif/filecoin-address')
+const {
+  delegatedFromEthAddress,
+  ethAddressFromDelegated,
+  CoinType
+} = require('@glif/filecoin-address')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
@@ -96,6 +100,9 @@ class WalletBackend {
    * @returns {Promise<string>}
    */
   async transferFunds (to, amount) {
+    if (to.startsWith('f4')) {
+      to = ethAddressFromDelegated(to)
+    }
     assert(this.signer)
 
     /** @type {FILTransactionProcessing} */
