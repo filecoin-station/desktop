@@ -152,7 +152,6 @@ async function run () {
   }
 
   try {
-    telemetry.setup()
     setupTray(ctx)
     setupDialogs(ctx)
     if (process.platform === 'darwin') {
@@ -163,6 +162,7 @@ async function run () {
     await setupIpcMain(ctx)
 
     await wallet.setup(ctx)
+    await telemetry.setup()
     await core.setup(ctx)
   } catch (e) {
     handleError(e)

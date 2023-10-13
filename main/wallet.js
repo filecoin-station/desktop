@@ -166,10 +166,13 @@ async function transferAllFundsToDestinationWallet () {
 }
 
 /**
- * @returns {string}
+ * @returns {Promise<string>}
  */
-function getAddress () {
-  return backend.addressDelegated || ''
+asunc function getAddress () {
+  while (!backend.addressDelegated) {
+    await timers.setTimeout(100)
+  }
+  return backend.addressDelegated
 }
 
 /**
