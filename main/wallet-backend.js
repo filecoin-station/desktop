@@ -34,6 +34,8 @@ class WalletBackend {
     this.signer = null
     /** @type {string | null} */
     this.address = null
+    /** @type {string | null} */
+    this.addressDelegated = null
     /** @type {(FILTransaction|FILTransactionProcessing)[]} */
     this.transactions = []
     this.disableKeytar = disableKeytar
@@ -42,7 +44,6 @@ class WalletBackend {
 
   async setup () {
     const { seed, isNew } = await this.getSeedPhrase()
-    // TODO: Do all those values need to be stored?
     this.provider = new ethers.providers.JsonRpcProvider('https://api.node.glif.io/rpc/v0')
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
     this.address = this.signer.address
