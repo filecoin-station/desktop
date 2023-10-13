@@ -201,7 +201,7 @@ class WalletBackend {
         address: message.from === this.addressDelegated
           ? message.to
           : message.from,
-        timestamp: message.timestamp,
+        timestamp: message.timestamp * 1000,
         status: message.receipt.exitCode === 0 ? 'succeeded' : 'failed'
       }
     })
