@@ -169,7 +169,7 @@ async function transferAllFundsToDestinationWallet () {
  * @returns {string}
  */
 function getAddress () {
-  return backend.address || ''
+  return backend.addressDelegated || ''
 }
 
 /**
