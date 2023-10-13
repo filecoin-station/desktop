@@ -10,6 +10,9 @@ const {
   ethAddressFromDelegated,
   CoinType
 } = require('@glif/filecoin-address')
+const fs = require('node:fs/promises')
+const { join } = require('node:path')
+const { decode } = require('@glif/filecoin-address')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
@@ -44,10 +47,17 @@ class WalletBackend {
 
   async setup () {
     const { seed, isNew } = await this.getSeedPhrase()
-    this.provider = new ethers.providers.JsonRpcProvider('https://api.node.glif.io/rpc/v0')
+    this.provider = new ethers.providers.JsonRpcProvider(
+      'https://api.node.glif.io/rpc/v0'
+    )
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
     this.address = this.signer.address
     this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
+    this.filForwarder = new ethers.Contract(
+      '0x2b3ef6906429b580b7b2080de5ca893bc282c225',
+      await fs.readFile(join(__dirname, 'filforwarder-abi.json'), 'utf8'),
+      this.provider
+    ).connect(this.signer)
     return { seedIsNew: isNew }
   }
 
@@ -81,8 +91,8 @@ class WalletBackend {
    * @param {ethers.BigNumber} amount
    * @returns Promise<ethers.BigNumber>
    */
-  async getGasLimit (to, amount) {
-    console.log('getGasLimit()', { to, amount })
+  async getGas (to, amount) {
+    console.log('getGas()', { to, amount })
     assert(this.provider)
     const [gasLimit, feeData] = await Promise.all([
       this.provider.estimateGas({
@@ -101,9 +111,84 @@ class WalletBackend {
    * @returns {Promise<string>}
    */
   async transferFunds (to, amount) {
-    if (to.startsWith('f4')) {
-      to = ethAddressFromDelegated(to)
+    if (to.startsWith('0x')) {
+      return this.transferFundsEthAddress(to, amount)
+    } else if (to.startsWith('f4')) {
+      return this.transferFundsEthAddress(ethAddressFromDelegated(to), amount)
+    } else if (to.startsWith('f1')) {
+      return this.transferFundsF1Address(to, amount)
+    } else {
+      throw new Error('Unknown address type')
     }
+  }
+
+  /**
+   * @param {string} to
+   * @param {ethers.BigNumber} amount
+   * @returns {Promise<ethers.BigNumber>}
+   */
+  async getFilForwarderGas (to, amount) {
+    console.log('getFilForwarderGas()', { to, amount })
+
+    assert(this.filForwarder)
+    assert(this.provider)
+
+    // Ensure transaction has enough gas to succeed
+    const [gasLimit, feeData] = await Promise.all([
+      this.filForwarder.estimateGas.forward(
+        decode(to).bytes,
+        { value: amount }
+      ),
+      this.provider.getFeeData()
+    ])
+    assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
+    return gasLimit.mul(feeData.maxFeePerGas)
+  }
+
+  /**
+   * @param {string} to
+   * @param {ethers.BigNumber} amount
+   * @returns {Promise<string>}
+   */
+  async transferFundsF1Address (to, amount) {
+    return await this.runTransaction(to, amount, async () => {
+      assert(this.signer)
+      assert(this.filForwarder)
+
+      const gas = await this.getFilForwarderGas(to, amount)
+      const amountMinusGas = amount.sub(gas).sub(ethers.BigNumber.from('100'))
+      return await this.filForwarder.forward(
+        decode(to).bytes,
+        { value: amountMinusGas }
+      )
+    })
+  }
+
+  /**
+   * @param {string} to
+   * @param {ethers.BigNumber} amount
+   * @returns {Promise<string>}
+   */
+  async transferFundsEthAddress (to, amount) {
+    return await this.runTransaction(to, amount, async () => {
+      assert(this.signer)
+
+      const gas = await this.getGas(to, amount)
+      const amountMinusGas = amount.sub(gas).sub(ethers.BigNumber.from('100'))
+      return await this.signer.sendTransaction({
+        to,
+        value: amountMinusGas
+      })
+    })
+  }
+
+  /**
+   * @param {string} to
+   * @param {ethers.BigNumber} amount
+   * @param {function} fn
+   * @returns {Promise<string>}
+   */
+  async runTransaction (to, amount, fn) {
     assert(this.signer)
 
     /** @type {FILTransactionProcessing} */
@@ -112,35 +197,26 @@ class WalletBackend {
       status: 'processing',
       outgoing: true,
       amount: ethers.utils.formatUnits(amount, 18),
-      address: delegatedFromEthAddress(to, CoinType.MAIN)
+      address: to.startsWith('f1')
+        ? to
+        : delegatedFromEthAddress(to, CoinType.MAIN)
     }
     this.transactions.push(transaction)
     this.onTransactionUpdate()
 
     try {
-      const gasLimit = await this.getGasLimit(to, amount)
-      console.log({ gasLimit })
-      // Ensure transaction has enough gas to succeed
-      const gasOffset = ethers.BigNumber.from('100')
-      const amountMinusGas = amount.sub(gasLimit).sub(gasOffset)
-      const tx = await this.signer.sendTransaction({
-        to,
-        value: amountMinusGas
-      })
+      const tx = await fn()
       console.log({ tx })
-      const hash = tx.hash
-      assert(hash, 'Transaction hash not found')
-      const cid = await this.convertEthTxHashToCid(hash)
-      console.log({ hash, cid })
+      assert(tx.hash, 'Transaction hash not found')
+      const cid = await this.convertEthTxHashToCid(tx.hash)
+      console.log({ cid })
       transaction.hash = cid
       this.onTransactionUpdate()
-
       return cid
     } catch (err) {
       console.error(err)
       transaction.status = 'failed'
       this.onTransactionUpdate()
-
       throw err
     }
   }
