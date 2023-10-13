@@ -145,7 +145,7 @@ async function transferAllFunds (to) {
   assert(ctx)
 
   try {
-    const cid = await backend.transferAllFunds(to, balance)
+    const cid = await backend.transferFunds(to, balance)
     console.log({ cid })
   } catch (err) {
     log.error('Transferring funds', err)

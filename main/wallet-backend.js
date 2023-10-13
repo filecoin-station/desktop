@@ -95,7 +95,7 @@ class WalletBackend {
    * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
-  async transferAllFunds (to, amount) {
+  async transferFunds (to, amount) {
     assert(this.signer)
 
     /** @type {FILTransactionProcessing} */
