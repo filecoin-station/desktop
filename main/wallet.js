@@ -168,7 +168,7 @@ async function transferAllFundsToDestinationWallet () {
 /**
  * @returns {Promise<string>}
  */
-asunc function getAddress () {
+async function getAddress () {
   while (!backend.addressDelegated) {
     await timers.setTimeout(100)
   }
