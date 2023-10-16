@@ -115,11 +115,11 @@ class WalletBackend {
     console.log('transferFunds()', { to, amount: amount.toString() })
 
     if (to.startsWith('0x')) {
-      return this.transferFundsEthAddress(to, amount)
+      return this.transferFundsToEthAddress(to, amount)
     } else if (to.startsWith('f4')) {
-      return this.transferFundsEthAddress(ethAddressFromDelegated(to), amount)
+      return this.transferFundsToEthAddress(ethAddressFromDelegated(to), amount)
     } else if (to.startsWith('f1')) {
-      return this.transferFundsF1Address(to, amount)
+      return this.transferFundsToF1Address(to, amount)
     } else {
       throw new Error('Unknown address type')
     }
@@ -153,7 +153,7 @@ class WalletBackend {
    * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
-  async transferFundsF1Address (to, amount) {
+  async transferFundsToF1Address (to, amount) {
     return await this.runTransaction(to, amount, async () => {
       assert(this.signer)
       assert(this.filForwarder)
@@ -173,7 +173,7 @@ class WalletBackend {
    * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
-  async transferFundsEthAddress (to, amount) {
+  async transferFundsToEthAddress (to, amount) {
     return await this.runTransaction(to, amount, async () => {
       assert(this.signer)
 
