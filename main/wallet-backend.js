@@ -50,6 +50,7 @@ class WalletBackend {
     this.provider = new ethers.providers.JsonRpcProvider(
       'https://api.node.glif.io/rpc/v0'
     )
+    // this.provider.on('debug', d => console.log(JSON.stringify(d, null, 2)))
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
     this.address = this.signer.address
     this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
@@ -111,6 +112,8 @@ class WalletBackend {
    * @returns {Promise<string>}
    */
   async transferFunds (to, amount) {
+    console.log('transferFunds()', { to, amount: amount.toString() })
+
     if (to.startsWith('0x')) {
       return this.transferFundsEthAddress(to, amount)
     } else if (to.startsWith('f4')) {
@@ -128,7 +131,7 @@ class WalletBackend {
    * @returns {Promise<ethers.BigNumber>}
    */
   async getFilForwarderGas (to, amount) {
-    console.log('getFilForwarderGas()', { to, amount })
+    console.log('getFilForwarderGas()', { to, amount: amount.toString() })
 
     assert(this.filForwarder)
     assert(this.provider)
@@ -157,6 +160,7 @@ class WalletBackend {
 
       const gas = await this.getFilForwarderGas(to, amount)
       const amountMinusGas = amount.sub(gas).sub(ethers.BigNumber.from('100'))
+      console.log('filForwarder.forward()', { to, amountMinusGas })
       return await this.filForwarder.forward(
         decode(to).bytes,
         { value: amountMinusGas }
