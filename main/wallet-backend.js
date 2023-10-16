@@ -140,7 +140,7 @@ class WalletBackend {
     const [gasLimit, feeData] = await Promise.all([
       this.filForwarder.estimateGas.forward(
         decode(to).bytes,
-        { value: amount }
+        { value: 0 }
       ),
       this.provider.getFeeData()
     ])
