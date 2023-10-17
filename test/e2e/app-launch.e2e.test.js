@@ -38,6 +38,9 @@ test.describe.serial('Application launch', async () => {
       timeout: 30000 * TIMEOUT_MULTIPLIER
     })
 
+    electronApp.process().stdout?.pipe(process.stdout)
+    electronApp.process().stderr?.pipe(process.stderr)
+
     // Get the first window that the app opens, wait if necessary.
     mainWindow = await electronApp.firstWindow()
     console.log('WebUI location', await mainWindow.url())
@@ -79,5 +82,12 @@ test.describe.serial('Application launch', async () => {
 
   test('renders Dashboard page', async () => {
     expect(new URL(mainWindow.url()).pathname).toBe('/dashboard')
+  })
+
+  test('wait for "Zinnia started." activity log', async () => {
+    await mainWindow.waitForSelector(
+      'div.activity-log p:has-text("Zinnia started.")',
+      { timeout: 1000 * TIMEOUT_MULTIPLIER }
+    )
   })
 })
