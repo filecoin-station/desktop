@@ -38,6 +38,9 @@ test.describe.serial('Application launch', async () => {
       timeout: 30000 * TIMEOUT_MULTIPLIER
     })
 
+    electronApp.process().stdout?.pipe(process.stdout)
+    electronApp.process().stderr?.pipe(process.stderr)
+
     // Get the first window that the app opens, wait if necessary.
     mainWindow = await electronApp.firstWindow()
     console.log('WebUI location', await mainWindow.url())
