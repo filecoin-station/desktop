@@ -108,7 +108,21 @@ const FilAddressForm: FC<FilAddressFormProps> = ({
         <p
           className={`
             absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
-            ${(internalEditMode && addressIsValid) ? 'visible' : 'invisible opacity-0'}
+            ${(internalEditMode && addressIsValid && inputAddr.startsWith('f1'))
+              ? 'visible'
+              : 'invisible opacity-0'
+            }
+          `}
+        >
+          Warning: f1 addresses require extra gas for the FilForwarder contract
+        </p>
+        <p
+          className={`
+            absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
+            ${(internalEditMode && addressIsValid && !inputAddr.startsWith('f1'))
+              ? 'visible'
+              : 'invisible opacity-0'
+            }
           `}
         >
           Enter a destination address for the transfer
