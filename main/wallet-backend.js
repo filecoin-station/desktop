@@ -161,7 +161,7 @@ class WalletBackend {
       assert(this.filForwarder)
 
       const gas = await this.getFilForwarderGas(to, amount)
-      const amountMinusGas = amount.sub(gas).sub(ethers.BigNumber.from('100'))
+      const amountMinusGas = amount.sub(gas).sub(ethers.BigNumber.from('800'))
       console.log('filForwarder.forward()', {
         to,
         amountMinusGas: amountMinusGas.toString()
