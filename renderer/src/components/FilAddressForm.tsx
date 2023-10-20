@@ -114,7 +114,8 @@ const FilAddressForm: FC<FilAddressFormProps> = ({
             }
           `}
         >
-          Warning: f1 addresses require extra gas for the FilForwarder contract
+          Warning: Sending rewards to an f1 address incurs a higher gas fee than sending to an f4 address because
+          it invokes the FilForwarder contract. Consider using an f4 address instead.
         </p>
         <p
           className={`
