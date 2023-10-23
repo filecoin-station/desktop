@@ -123,6 +123,7 @@ const ctx = {
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
   browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://filfox.info/en/message/${transactionHash}`) },
+  showTermsOfService: () => { shell.openExternal('https://filstation.app/tos/') },
   transactionUpdate: (transactions) => {
     ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions)
   },

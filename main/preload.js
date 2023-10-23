@@ -37,7 +37,9 @@ contextBridge.exposeInMainWorld('electron', {
     transferAllFundsToDestinationWallet: () =>
       ipcRenderer.invoke('station:transferAllFundsToDestinationWallet'),
     browseTransactionTracker: (/** @type {string } */ transactionHash) =>
-      ipcRenderer.invoke('station:browseTransactionTracker', transactionHash)
+      ipcRenderer.invoke('station:browseTransactionTracker', transactionHash),
+    showTermsOfService: () =>
+      ipcRenderer.invoke('station:showTermsOfService')
   },
   stationEvents: {
     onActivityLogged: (/** @type {(value: Activity) => void} */ callback) => {
