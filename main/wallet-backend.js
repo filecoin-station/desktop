@@ -45,8 +45,17 @@ class WalletBackend {
     this.onTransactionUpdate = onTransactionUpdate
   }
 
-  async setup () {
-    const { seed, isNew } = await this.getSeedPhrase()
+  /**
+   * @param {string} [testSeed]
+   */
+  async setup (testSeed) {
+    let seed, isNew
+    if (testSeed) {
+      seed = testSeed
+      isNew = false
+    } else {
+      ({ seed, isNew } = await this.getSeedPhrase())
+    }
     this.provider = new ethers.providers.JsonRpcProvider(
       'https://api.node.glif.io/rpc/v0'
     )
