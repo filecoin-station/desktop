@@ -66,6 +66,7 @@ describe('Dashboard page', () => {
             let destination = ''
             return {
               stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+              stationAddress0x: '0x000000000000000000000000000000000000dEaD',
               destinationFilAddress: destination,
               walletBalance: 0,
               walletTransactions: [],
@@ -163,6 +164,7 @@ describe('Dashboard page', () => {
           default: () => {
             return {
               stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+              stationAddress0x: '0x000000000000000000000000000000000000dEaD',
               destinationFilAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg',
               walletBalance: 0,
               walletTransactions: [],
