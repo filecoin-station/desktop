@@ -102,7 +102,7 @@ class WalletBackend {
    * @returns Promise<ethers.BigNumber>
    */
   async getGas (to, amount) {
-    console.log('getGas()', { to, amount })
+    console.log('getGas()', { to, amount: amount.toString() })
     assert(this.provider)
     const [gasLimit, feeData] = await Promise.all([
       this.provider.estimateGas({
@@ -112,6 +112,7 @@ class WalletBackend {
       this.provider.getFeeData()
     ])
     assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
+    console.log({ gasLimit, feeData })
     return gasLimit.mul(feeData.maxFeePerGas)
   }
 
@@ -197,7 +198,17 @@ class WalletBackend {
       assert(this.signer)
 
       const gas = await this.getGas(to, amount)
-      const amountMinusGas = amount.sub(gas).sub(ethers.BigNumber.from('100'))
+      const gasPadding = ethers.BigNumber.from('10000000000000')
+      const amountMinusGas = amount
+        .sub(gas)
+        .sub(gasPadding)
+      console.log('sendTransaction()', {
+        to,
+        amount: amount.toString(),
+        gas: gas.toString(),
+        gasPadding: gasPadding.toString(),
+        amountMinusGas: amountMinusGas.toString()
+      })
       return await this.signer.sendTransaction({
         to,
         value: amountMinusGas
