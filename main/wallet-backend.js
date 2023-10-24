@@ -13,6 +13,7 @@ const {
 const fs = require('node:fs/promises')
 const { join } = require('node:path')
 const { decode } = require('@glif/filecoin-address')
+const timers = require('node:timers/promises')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
@@ -283,7 +284,7 @@ class WalletBackend {
         return body.data.message.cid
       }
       console.log(body.errors)
-      await new Promise(resolve => setTimeout(resolve, 10_000))
+      await timers.setTimeout(10_000)
     }
     throw new Error('Could not convert ETH tx hash to CID')
   }
