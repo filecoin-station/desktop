@@ -283,6 +283,7 @@ class WalletBackend {
   async getMessages (address) {
     const url = `https://filfox.info/api/v1/address/${address}/messages?pageSize=1000000`
     const res = await fetch(url)
+    assert(res.ok, `Could not fetch messages (Status ${res.status})`)
     /** @type {{messages: FoxMessage[] | null}} */
     const { messages } = /** @type {any} */ (await res.json())
     return messages || []
