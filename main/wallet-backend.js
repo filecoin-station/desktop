@@ -153,6 +153,7 @@ class WalletBackend {
       ),
       this.provider.getFeeData()
     ])
+    console.log({ gasLimit, feeData })
     assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
     const estimate = gasLimit.mul(feeData.maxFeePerGas)
     console.log({ estimate: estimate.toString() })
