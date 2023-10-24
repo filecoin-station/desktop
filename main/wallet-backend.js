@@ -105,6 +105,7 @@ class WalletBackend {
   async getGas (to, amount) {
     console.log('getGas()', { to, amount: amount.toString() })
     return ethers.utils.parseEther('0.01')
+
     // TODO: eth_estimateGas is having issues
     // assert(this.provider)
     // assert(this.signer)
@@ -133,8 +134,7 @@ class WalletBackend {
     } else if (to.startsWith('f4')) {
       return this.transferFundsToEthAddress(ethAddressFromDelegated(to), amount)
     } else if (to.startsWith('f1')) {
-      throw new Error('Not supported yet')
-      // return this.transferFundsToF1Address(to, amount)
+      return this.transferFundsToF1Address(to, amount)
     } else {
       throw new Error('Unknown address type')
     }
@@ -147,22 +147,23 @@ class WalletBackend {
    */
   async getFilForwarderGas (to, amount) {
     console.log('getFilForwarderGas()', { to, amount: amount.toString() })
+    return ethers.utils.parseEther('0.1')
 
-    assert(this.filForwarder)
-    assert(this.provider)
-
-    const [gasLimit, feeData] = await Promise.all([
-      this.filForwarder.estimateGas.forward(
-        decode(to).bytes,
-        { value: 0 }
-      ),
-      this.provider.getFeeData()
-    ])
-    console.log({ gasLimit, feeData })
-    assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
-    const estimate = gasLimit.mul(feeData.maxFeePerGas)
-    console.log({ estimate: estimate.toString() })
-    return estimate
+    // TODO: eth_estimateGas is having issues
+    // assert(this.filForwarder)
+    // assert(this.provider)
+    // const [gasLimit, feeData] = await Promise.all([
+    //   this.filForwarder.estimateGas.forward(
+    //     decode(to).bytes,
+    //     { value: 0 }
+    //   ),
+    //   this.provider.getFeeData()
+    // ])
+    // console.log({ gasLimit, feeData })
+    // assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
+    // const estimate = gasLimit.mul(feeData.maxFeePerGas)
+    // console.log({ estimate: estimate.toString() })
+    // return estimate
   }
 
   /**
@@ -176,11 +177,7 @@ class WalletBackend {
       assert(this.filForwarder)
 
       const gas = await this.getFilForwarderGas(to, amount)
-      const amountMinusGas = amount
-        .sub(gas)
-        // Worked: ~1 FIL with
-        // .sub(ethers.BigNumber.from('10000000000000000'))
-        .sub(ethers.BigNumber.from('4000000000000000')) // 0.004 FIL
+      const amountMinusGas = amount.sub(gas)
       console.log('filForwarder.forward()', {
         to,
         amountMinusGas: amountMinusGas.toString()

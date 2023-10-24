@@ -21,8 +21,7 @@ const checkAddressString = (address: string) => {
   } else if (address.startsWith('f4')) {
     ethAddressFromDelegated(address)
   } else if (address.startsWith('f1')) {
-    // newFromString(address)
-    throw new Error('Not supported yet')
+    newFromString(address)
   } else {
     throw new Error('Invalid address type')
   }
