@@ -129,7 +129,8 @@ class WalletBackend {
     } else if (to.startsWith('f4')) {
       return this.transferFundsToEthAddress(ethAddressFromDelegated(to), amount)
     } else if (to.startsWith('f1')) {
-      return this.transferFundsToF1Address(to, amount)
+      throw new Error('Not supported yet')
+      // return this.transferFundsToF1Address(to, amount)
     } else {
       throw new Error('Unknown address type')
     }
