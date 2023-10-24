@@ -104,17 +104,20 @@ class WalletBackend {
    */
   async getGas (to, amount) {
     console.log('getGas()', { to, amount: amount.toString() })
-    assert(this.provider)
-    const [gasLimit, feeData] = await Promise.all([
-      this.provider.estimateGas({
-        to,
-        value: amount
-      }),
-      this.provider.getFeeData()
-    ])
-    assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
-    console.log({ gasLimit, feeData })
-    return gasLimit.mul(feeData.maxFeePerGas)
+    return ethers.utils.parseEther('0.01')
+    // TODO: eth_estimateGas is having issues
+    // assert(this.provider)
+    // assert(this.signer)
+    // const [gasLimit, feeData] = await Promise.all([
+    //   this.provider.estimateGas({
+    //     to,
+    //     value: amount
+    //   }),
+    //   this.provider.getFeeData()
+    // ])
+    // assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
+    // console.log({ gasLimit, feeData })
+    // return gasLimit.mul(feeData.maxFeePerGas)
   }
 
   /**
@@ -148,7 +151,6 @@ class WalletBackend {
     assert(this.filForwarder)
     assert(this.provider)
 
-    // Ensure transaction has enough gas to succeed
     const [gasLimit, feeData] = await Promise.all([
       this.filForwarder.estimateGas.forward(
         decode(to).bytes,
@@ -200,15 +202,11 @@ class WalletBackend {
       assert(this.signer)
 
       const gas = await this.getGas(to, amount)
-      const gasPadding = ethers.BigNumber.from('10000000000000')
-      const amountMinusGas = amount
-        .sub(gas)
-        .sub(gasPadding)
+      const amountMinusGas = amount.sub(gas)
       console.log('sendTransaction()', {
         to,
         amount: amount.toString(),
         gas: gas.toString(),
-        gasPadding: gasPadding.toString(),
         amountMinusGas: amountMinusGas.toString()
       })
       return await this.signer.sendTransaction({

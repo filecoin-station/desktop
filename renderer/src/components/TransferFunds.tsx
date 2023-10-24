@@ -25,7 +25,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({
 }) => {
   const disabled = !destinationFilAddress ||
     hasCurrentTransaction ||
-    Number(balance) < 0.001
+    Number(balance) <= 0.01
   return (
     <div
       className={`
