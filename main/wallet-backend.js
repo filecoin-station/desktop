@@ -100,30 +100,6 @@ class WalletBackend {
   /**
    * @param {string} to
    * @param {ethers.BigNumber} amount
-   * @returns Promise<ethers.BigNumber>
-   */
-  async getGas (to, amount) {
-    console.log('getGas()', { to, amount: amount.toString() })
-    return ethers.utils.parseEther('0.01')
-
-    // TODO: eth_estimateGas is having issues
-    // assert(this.provider)
-    // assert(this.signer)
-    // const [gasLimit, feeData] = await Promise.all([
-    //   this.provider.estimateGas({
-    //     to,
-    //     value: amount
-    //   }),
-    //   this.provider.getFeeData()
-    // ])
-    // assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
-    // console.log({ gasLimit, feeData })
-    // return gasLimit.mul(feeData.maxFeePerGas)
-  }
-
-  /**
-   * @param {string} to
-   * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
   async transferFunds (to, amount) {
@@ -143,32 +119,6 @@ class WalletBackend {
   /**
    * @param {string} to
    * @param {ethers.BigNumber} amount
-   * @returns {Promise<ethers.BigNumber>}
-   */
-  async getFilForwarderGas (to, amount) {
-    console.log('getFilForwarderGas()', { to, amount: amount.toString() })
-    return ethers.utils.parseEther('0.1')
-
-    // TODO: eth_estimateGas is having issues
-    // assert(this.filForwarder)
-    // assert(this.provider)
-    // const [gasLimit, feeData] = await Promise.all([
-    //   this.filForwarder.estimateGas.forward(
-    //     decode(to).bytes,
-    //     { value: 0 }
-    //   ),
-    //   this.provider.getFeeData()
-    // ])
-    // console.log({ gasLimit, feeData })
-    // assert(feeData.maxFeePerGas, 'maxFeePerGas not found')
-    // const estimate = gasLimit.mul(feeData.maxFeePerGas)
-    // console.log({ estimate: estimate.toString() })
-    // return estimate
-  }
-
-  /**
-   * @param {string} to
-   * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
   async transferFundsToF1Address (to, amount) {
@@ -176,8 +126,7 @@ class WalletBackend {
       assert(this.signer)
       assert(this.filForwarder)
 
-      const gas = await this.getFilForwarderGas(to, amount)
-      const amountMinusGas = amount.sub(gas)
+      const amountMinusGas = amount.sub(ethers.utils.parseEther('0.1'))
       console.log('filForwarder.forward()', {
         to,
         amountMinusGas: amountMinusGas.toString()
@@ -198,12 +147,10 @@ class WalletBackend {
     return await this.runTransaction(to, amount, async () => {
       assert(this.signer)
 
-      const gas = await this.getGas(to, amount)
-      const amountMinusGas = amount.sub(gas)
+      const amountMinusGas = amount.sub(ethers.utils.parseEther('0.01'))
       console.log('sendTransaction()', {
         to,
         amount: amount.toString(),
-        gas: gas.toString(),
         amountMinusGas: amountMinusGas.toString()
       })
       return await this.signer.sendTransaction({
