@@ -1,7 +1,6 @@
 'use strict'
 
 const keytar = require('keytar')
-// TODO: Replace with ethers tooling
 const { strict: assert } = require('node:assert')
 const { ethers } = require('ethers')
 const {
