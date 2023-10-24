@@ -2,7 +2,6 @@
 
 const keytar = require('keytar')
 // TODO: Replace with ethers tooling
-const { generateMnemonic } = require('@zondax/filecoin-signing-tools')
 const { strict: assert } = require('node:assert')
 const { ethers } = require('ethers')
 const {
@@ -85,7 +84,7 @@ class WalletBackend {
       }
     }
 
-    seed = generateMnemonic()
+    seed = ethers.Wallet.createRandom().mnemonic.phrase
     if (!this.disableKeytar) {
       await keytar.setPassword(service, 'seed', seed)
     }
