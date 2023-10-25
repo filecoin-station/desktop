@@ -104,7 +104,7 @@
     "postcss": "^8.4.31",
     "postcss-loader": "^7.3.3",
     "shx": "^0.3.4",
-    "tailwindcss": "^3.3.3",
+    "tailwindcss": "^3.3.4",
     "tmp": "^0.2.1",
     "typescript": "^5.2.2",
     "vite": "^4.5.0",
