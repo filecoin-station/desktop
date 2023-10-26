@@ -43,7 +43,7 @@
     "@glif/filecoin-address": "2.0.43",
     "@glif/filecoin-message": "^2.0.44",
     "@glif/filecoin-number": "^2.0.70",
-    "@glif/filecoin-wallet-provider": "^2.0.69",
+    "@glif/filecoin-wallet-provider": "^2.0.70",
     "@influxdata/influxdb-client": "^1.33.2",
     "@sentry/node": "^7.75.1",
     "@sentry/react": "^7.75.1",
