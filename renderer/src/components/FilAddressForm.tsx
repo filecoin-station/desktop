@@ -1,5 +1,9 @@
 import { FC, useState, useEffect, useRef } from 'react'
-import { checkAddressString } from '@glif/filecoin-address'
+import {
+  delegatedFromEthAddress,
+  ethAddressFromDelegated,
+  newFromString
+} from '@glif/filecoin-address'
 import { ReactComponent as Warning } from '../assets/img/icons/error.svg'
 import { ReactComponent as EditIcon } from '../assets/img/icons/edit.svg'
 
@@ -9,6 +13,18 @@ interface FilAddressFormProps {
   editMode: boolean;
   transferMode: boolean;
   enableEditMode: () => void;
+}
+
+const checkAddressString = (address: string) => {
+  if (address.startsWith('0x')) {
+    delegatedFromEthAddress(address)
+  } else if (address.startsWith('f4')) {
+    ethAddressFromDelegated(address)
+  } else if (address.startsWith('f1')) {
+    newFromString(address)
+  } else {
+    throw new Error('Invalid address type')
+  }
 }
 
 const FilAddressForm: FC<FilAddressFormProps> = ({
@@ -92,7 +108,22 @@ const FilAddressForm: FC<FilAddressFormProps> = ({
         <p
           className={`
             absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
-            ${(internalEditMode && addressIsValid) ? 'visible' : 'invisible opacity-0'}
+            ${(internalEditMode && addressIsValid && inputAddr.startsWith('f1'))
+              ? 'visible'
+              : 'invisible opacity-0'
+            }
+          `}
+        >
+          Warning: Sending rewards to an f1 address incurs a higher gas fee than sending to an f4 address because
+          it invokes the FilForwarder contract. Consider using an f4 address instead.
+        </p>
+        <p
+          className={`
+            absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
+            ${(internalEditMode && addressIsValid && !inputAddr.startsWith('f1'))
+              ? 'visible'
+              : 'invisible opacity-0'
+            }
           `}
         >
           Enter a destination address for the transfer

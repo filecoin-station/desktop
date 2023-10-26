@@ -14,9 +14,11 @@ import {
   isFILTransactionConfirmed,
   isFILTransactionProcessing
 } from '../typings'
+import { ethAddressFromDelegated } from '@glif/filecoin-address'
 
 interface Wallet {
   stationAddress: string;
+  stationAddress0x: string;
   destinationFilAddress: string | undefined;
   walletBalance: string | undefined;
   walletTransactions: FILTransaction[] | undefined;
@@ -142,6 +144,9 @@ const useWallet = (): Wallet => {
 
   return {
     stationAddress,
+    stationAddress0x: stationAddress !== ''
+      ? ethAddressFromDelegated(stationAddress)
+      : '',
     destinationFilAddress,
     walletBalance,
     walletTransactions,
