@@ -12,6 +12,7 @@ const fs = require('node:fs/promises')
 const { join } = require('node:path')
 const { decode } = require('@glif/filecoin-address')
 const timers = require('node:timers/promises')
+const log = require('electron-log').scope('wallet-backend')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /** @typedef {import('./typings').FoxMessage} FoxMessage */
@@ -58,7 +59,6 @@ class WalletBackend {
     this.provider = new ethers.providers.JsonRpcProvider(
       'https://api.node.glif.io/rpc/v0'
     )
-    // this.provider.on('debug', d => console.log(JSON.stringify(d, null, 2)))
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
     this.address = this.signer.address
     this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
@@ -101,7 +101,7 @@ class WalletBackend {
    * @returns {Promise<string>}
    */
   async transferFunds (to, amount) {
-    console.log('transferFunds()', { to, amount: amount.toString() })
+    log.info('transferFunds()', { to, amount: amount.toString() })
 
     if (to.startsWith('0x')) {
       return this.transferFundsToEthAddress(to, amount)
@@ -125,7 +125,7 @@ class WalletBackend {
       assert(this.filForwarder)
 
       const amountMinusGas = amount.sub(ethers.utils.parseEther('0.1'))
-      console.log('filForwarder.forward()', {
+      log.info('filForwarder.forward()', {
         to,
         amountMinusGas: amountMinusGas.toString()
       })
@@ -146,7 +146,7 @@ class WalletBackend {
       assert(this.signer)
 
       const amountMinusGas = amount.sub(ethers.utils.parseEther('0.01'))
-      console.log('sendTransaction()', {
+      log.info('sendTransaction()', {
         to,
         amount: amount.toString(),
         amountMinusGas: amountMinusGas.toString()
@@ -182,15 +182,15 @@ class WalletBackend {
 
     try {
       const tx = await fn()
-      console.log({ tx })
+      log.info({ hash: tx.hash })
       assert(tx.hash, 'Transaction hash not found')
       const cid = await this.convertEthTxHashToCid(tx.hash)
-      console.log({ cid })
+      log.info({ cid })
       transaction.hash = cid
       this.onTransactionUpdate()
       return cid
     } catch (err) {
-      console.error(err)
+      log.error(err)
       transaction.status = 'failed'
       this.onTransactionUpdate()
       throw err
@@ -202,7 +202,7 @@ class WalletBackend {
    * @returns {Promise<string>}
    */
   async convertEthTxHashToCid (hash) {
-    console.log('convertEthTxHashToCid', { hash })
+    log.info('convertEthTxHashToCid', { hash })
     for (let i = 0; i < 10; i++) {
       const res = await fetch('https://graph.glif.link/query', {
         headers: {
@@ -223,7 +223,7 @@ class WalletBackend {
       if (body.data.message) {
         return body.data.message.cid
       }
-      console.log(body.errors)
+      log.error(body.errors)
       await timers.setTimeout(10_000)
     }
     throw new Error('Could not convert ETH tx hash to CID')
