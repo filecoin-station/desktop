@@ -223,7 +223,12 @@ class WalletBackend {
       if (body.data.message) {
         return body.data.message.cid
       }
-      log.error(body.errors)
+      if (
+        body.errors.length !== 1 ||
+        body.errors[0]?.message !== 'Key not found'
+      ) {
+        log.error(body.errors)
+      }
       await timers.setTimeout(10_000)
     }
     throw new Error('Could not convert ETH tx hash to CID')
