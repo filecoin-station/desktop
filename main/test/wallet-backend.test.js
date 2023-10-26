@@ -2,6 +2,7 @@
 
 const { WalletBackend } = require('../wallet-backend')
 const assert = require('assert').strict
+const pRetry = require('p-retry')
 
 describe('Wallet Backend', function () {
   const backend = new WalletBackend({ disableKeytar: true })
@@ -37,7 +38,7 @@ describe('Wallet Backend', function () {
         // eslint-disable-next-line max-len
         'insane believe defy best among myself mistake account paddle episode life music fame impact below define habit rotate clay innocent history depart slice series'
       )
-      await backend.fetchAllTransactions()
+      await pRetry(() => backend.fetchAllTransactions(), { retries: 10 })
       assert.notStrictEqual(backend.transactions.length, 0, 'has transactions')
       for (const tx of backend.transactions) {
         assert.notStrictEqual(
