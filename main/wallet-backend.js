@@ -203,7 +203,7 @@ class WalletBackend {
    */
   async convertEthTxHashToCid (hash) {
     log.info('convertEthTxHashToCid', { hash })
-    for (let i = 0; i < 10; i++) {
+    for (let attempt = 0; attempt < 10; attempt++) {
       const res = await fetch('https://graph.glif.link/query', {
         headers: {
           accept: '*/*',
