@@ -4,7 +4,7 @@ const { app, dialog, shell } = require('electron')
 const electronLog = require('electron-log')
 const path = require('node:path')
 
-console.log('Log file:', electronLog.transports.file.findLogPath())
+console.log('Log file:', electronLog.transports.file.getFile().path)
 const log = electronLog.scope('main')
 
 // Override the place where we look for config files when running the end-to-end
