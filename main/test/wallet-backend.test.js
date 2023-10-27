@@ -2,10 +2,15 @@
 
 const { WalletBackend } = require('../wallet-backend')
 const assert = require('assert').strict
-const pRetry = require('p-retry')
 
 describe('Wallet Backend', function () {
   const backend = new WalletBackend({ disableKeytar: true })
+  /** @type {import('p-retry').default} */
+  let pRetry
+
+  before(async function () {
+    pRetry = (await import('p-retry')).default
+  })
 
   describe('setup()', function () {
     it('sets up provider and address', async function () {
