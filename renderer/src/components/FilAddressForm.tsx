@@ -15,7 +15,7 @@ interface FilAddressFormProps {
   enableEditMode: () => void;
 }
 
-const checkAddressString = (address: string) => {
+const checkAddressString = async (address: string) => {
   if (address.startsWith('0x')) {
     delegatedFromEthAddress(address)
   } else if (address.startsWith('f4')) {
@@ -24,6 +24,10 @@ const checkAddressString = (address: string) => {
     newFromString(address)
   } else {
     throw new Error('Invalid address type')
+  }
+  const res = await fetch(`https://station-wallet-screening.fly.dev/${address}`)
+  if (res.status === 403) {
+    throw new Error('Sanctioned address')
   }
 }
 
@@ -58,12 +62,14 @@ const FilAddressForm: FC<FilAddressFormProps> = ({
     if (inputAddr === '') {
       setAddressIsValid(true)
     } else {
-      try {
-        checkAddressString(inputAddr)
-        setAddressIsValid(true)
-      } catch {
-        setAddressIsValid(false)
-      }
+      (async () => {
+        try {
+          await checkAddressString(inputAddr)
+          setAddressIsValid(true)
+        } catch {
+          setAddressIsValid(false)
+        }
+      })()
     }
   }, [inputAddr])
 
