@@ -119,7 +119,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
                 vendors, or used specifically by this app.
               </p>
               <p className="text-body-s my-3">
-                By clicking "Create Wallet" or otherwise continuing to use this service, you agree, you
+                By clicking {'"'}Create Wallet{'"'} or otherwise continuing to use this service, you agree, you
                 have read, understand and accept Station&apos;s
                 {' '}
                 <span
