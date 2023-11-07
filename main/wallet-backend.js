@@ -69,6 +69,12 @@ class WalletBackend {
       await fs.readFile(join(__dirname, 'filforwarder-abi.json'), 'utf8'),
       this.provider
     ).connect(this.signer)
+    this.meridian = new ethers.Contract(
+      '0x226f69aa515e57593b537cbf5e627c533f005a1f',
+      await fs.readFile(join(__dirname, 'meridian-abi.json'), 'utf8'),
+      this.provider
+    ).connect(this.signer)
+
     return { seedIsNew: isNew }
   }
 
@@ -287,6 +293,17 @@ class WalletBackend {
     // Update state
     this.transactions = transactions
     this.onTransactionUpdate()
+  }
+
+  /**
+   * @returns {Promise<string>} Balance formatted as string
+   */
+  async fetchScheduledRewards () {
+    assert(this.address, 'address')
+    assert(this.meridian, 'meridian client')
+
+    const balance = await this.meridian.balanceOf(this.address)
+    return ethers.utils.formatUnits(balance, 3)
   }
 }
 
