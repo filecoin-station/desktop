@@ -36,6 +36,8 @@ jobs:
           node-version: 'lts/*'
 
       # See https://github.com/nodejs/node-gyp/issues/2869
+      # Remove this workaround after upgrading electron-builder
+      # https://github.com/filecoin-station/desktop/pull/944
       - name: Fix node-gyp and Python
         run: python3 -m pip install packaging setuptools
 
@@ -121,6 +123,8 @@ jobs:
 
 
       # See https://github.com/nodejs/node-gyp/issues/2869
+      # Remove this workaround after upgrading electron-builder
+      # https://github.com/filecoin-station/desktop/pull/944
       - name: Fix node-gyp and Python
         run: python3 -m pip install packaging setuptools
 
