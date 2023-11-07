@@ -57,7 +57,7 @@ describe('Wallet Backend', function () {
         () => backend.fetchScheduledRewards(),
         { retries: 10 }
       )
-      assert.strictEqual(amount, '0.0')
+      assert.strictEqual(amount.toBigInt(), 0n)
     })
   })
 })

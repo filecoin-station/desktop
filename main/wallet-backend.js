@@ -296,14 +296,12 @@ class WalletBackend {
   }
 
   /**
-   * @returns {Promise<string>} Balance formatted as string
+   * @returns {Promise<ethers.BigNumber>}
    */
   async fetchScheduledRewards () {
     assert(this.address, 'address')
     assert(this.meridian, 'meridian client')
-
-    const balance = await this.meridian.balanceOf(this.address)
-    return ethers.utils.formatUnits(balance, 3)
+    return await this.meridian.balanceOf(this.address)
   }
 }
 
