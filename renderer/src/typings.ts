@@ -24,6 +24,7 @@ declare global {
         getStationWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>;
         transferAllFundsToDestinationWallet: () => Promise<void>;
         browseTransactionTracker: (transactionHash: string) => void;
+        showTermsOfService: () => void;
       };
       stationEvents: {
         onActivityLogged: (callback: (activity: Activity) => void) => () => void;
