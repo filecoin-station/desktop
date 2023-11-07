@@ -123,7 +123,7 @@ const ctx = {
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
   browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://filfox.info/en/message/${transactionHash}`) },
-  showTermsOfService: () => { shell.openExternal('https://filstation.app/tos/') },
+  showTermsOfService: () => { shell.openExternal('https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4') },
   transactionUpdate: (transactions) => {
     ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions)
   },
