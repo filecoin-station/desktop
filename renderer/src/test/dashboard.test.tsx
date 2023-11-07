@@ -27,9 +27,9 @@ const setTotalJobs = () => {
   totalJobs = 200
 }
 
-let totalEarnings = 100
-const setTotalEarnings = () => {
-  totalEarnings = 200
+let scheduledRewards = 100
+const setScheduledRewards = () => {
+  scheduledRewards = 200
 }
 
 describe('Dashboard page', () => {
@@ -39,11 +39,11 @@ describe('Dashboard page', () => {
 
   describe('Unpopulated', () => {
     const onActivityLogged = vi.fn((callback) => () => ({}))
-    const onEarningsChanged = vi.fn((callback) => () => ({}))
     const onJobProcessed = vi.fn((callback) => () => ({}))
     const onUpdateAvailable = vi.fn((callback) => () => ({}))
     const onTransactionUpdate = vi.fn((callback) => () => ({}))
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
+    const onScheduledRewardsUpdate = vi.fn((callback) => () => ({}))
 
     beforeAll(() => {
       vi.mock('../lib/station-config', () => {
@@ -54,7 +54,7 @@ describe('Dashboard page', () => {
           getDestinationWalletAddress: () => Promise.resolve(''),
           getTotalEarnings: () => Promise.resolve(0),
           getActivities: () => Promise.resolve([]),
-          getTotalJobsCompleted: () => Promise.resolve(0)
+          getScheduledRewards: () => Promise.resolve('0.0')
         }
       })
     })
@@ -93,10 +93,10 @@ describe('Dashboard page', () => {
         value: {
           stationEvents: {
             onActivityLogged,
-            onEarningsChanged,
             onJobProcessed,
             onUpdateAvailable,
             onTransactionUpdate,
+            onScheduledRewardsUpdate,
             onBalanceUpdate
           },
           getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({}))),
@@ -141,7 +141,7 @@ describe('Dashboard page', () => {
       return () => ({})
     })
 
-    const onEarningsChanged = vi.fn((callback) => {
+    const onScheduledRewardsUpdate = vi.fn((callback) => {
       const value = 200
       setTimeout(() => { act(() => callback(value)) })
       return () => ({})
@@ -180,7 +180,7 @@ describe('Dashboard page', () => {
         return {
           default: () => ({
             totalJobs,
-            totalEarnings,
+            totalEarnings: scheduledRewards,
             activities
           })
         }
@@ -191,10 +191,10 @@ describe('Dashboard page', () => {
         value: {
           stationEvents: {
             onActivityLogged,
-            onEarningsChanged,
             onJobProcessed,
             onUpdateAvailable,
             onTransactionUpdate,
+            onScheduledRewardsUpdate,
             onBalanceUpdate
           },
           getUpdaterStatus
@@ -216,10 +216,10 @@ describe('Dashboard page', () => {
     })
 
     test('subscribes and listens the earnings counter', () => {
-      onEarningsChanged(setTotalEarnings)
-      waitFor(() => { expect(onEarningsChanged).toBeCalledTimes(1) }, { timeout: 10 })
+      onScheduledRewardsUpdate(setScheduledRewards)
+      waitFor(() => { expect(onScheduledRewardsUpdate).toBeCalledTimes(1) }, { timeout: 10 })
       waitFor(
-        () => { expect((screen.getByTitle('total earnings')).textContent).toBe('200FIL') },
+        () => { expect((screen.getByTitle('scheduled rewards')).textContent).toBe('200FIL') },
         { timeout: 1000 }
       )
     })

@@ -19,6 +19,9 @@ contextBridge.exposeInMainWorld('electron', {
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
 
+  getScheduledRewards: () =>
+    ipcRenderer.invoke('station:getScheduledRewards'),
+
   stationConfig: {
     getOnboardingCompleted: () =>
       ipcRenderer.invoke('station:getOnboardingCompleted'),
@@ -37,7 +40,9 @@ contextBridge.exposeInMainWorld('electron', {
     transferAllFundsToDestinationWallet: () =>
       ipcRenderer.invoke('station:transferAllFundsToDestinationWallet'),
     browseTransactionTracker: (/** @type {string } */ transactionHash) =>
-      ipcRenderer.invoke('station:browseTransactionTracker', transactionHash)
+      ipcRenderer.invoke('station:browseTransactionTracker', transactionHash),
+    getScheduledRewards: () =>
+      ipcRenderer.invoke('station:getScheduledRewards')
   },
   stationEvents: {
     onActivityLogged: (/** @type {(value: Activity) => void} */ callback) => {
@@ -85,6 +90,16 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.on('station:transaction-update', listener)
       return () =>
         ipcRenderer.removeListener('station:transaction-update', listener)
+    },
+
+    onScheduledRewardsUpdate: (
+    /** @type {(value: string) => void} */ callback
+    ) => {
+    /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
+      const listener = (_event, balance) => callback(balance)
+      ipcRenderer.on('station:scheduled-rewards-update', listener)
+      return () =>
+        ipcRenderer.removeListener('station:scheduled-rewards-update', listener)
     }
   },
   dialogs: {

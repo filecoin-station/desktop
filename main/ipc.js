@@ -16,7 +16,8 @@ const ipcMainEvents = Object.freeze({
   UPDATE_AVAILABLE: 'station:update-available',
 
   TRANSACTION_UPDATE: 'station:transaction-update',
-  BALANCE_UPDATE: 'station:wallet-balance-update'
+  BALANCE_UPDATE: 'station:wallet-balance-update',
+  SCHEDULED_REWARDS_UPDATE: 'station:scheduled-rewards-update'
 })
 
 function setupIpcMain (/** @type {Context} */ ctx) {
@@ -40,6 +41,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     (_event, address) => stationConfig.setDestinationWalletAddress(address)
   )
   ipcMain.handle('station:getStationWalletBalance', wallet.getBalance)
+  ipcMain.handle('station:getScheduledRewards', wallet.getScheduledRewards)
   ipcMain.handle(
     'station:getStationWalletTransactionsHistory',
     wallet.listTransactions

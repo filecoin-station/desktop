@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react'
 import {
-  getTotalEarnings,
   getActivities,
+  getScheduledRewards,
   getTotalJobsCompleted
 } from '../lib/station-config'
 import { Activity } from '../typings'
 
 interface StationActivity {
   totalJobs: number;
-  totalEarnings: number;
+  scheduledRewards: string | undefined;
   activities: Activity[] | [];
 }
 const useStationActivity = (): StationActivity => {
   const [totalJobs, setTotalJobs] = useState<number>(0)
+  const [scheduledRewards, setScheduledRewards] = useState<string | undefined>()
   const [activities, setActivities] = useState<Activity[]>([])
-  const [totalEarnings, setTotalEarnigs] = useState<number>(0)
 
   useEffect(() => {
     const loadStoredInfo = async () => setActivities(await getActivities())
@@ -27,7 +27,7 @@ const useStationActivity = (): StationActivity => {
   }, [])
 
   useEffect(() => {
-    const loadStoredInfo = async () => setTotalEarnigs(await getTotalEarnings())
+    const loadStoredInfo = async () => setScheduledRewards(await getScheduledRewards())
     loadStoredInfo()
   }, [])
 
@@ -52,13 +52,15 @@ const useStationActivity = (): StationActivity => {
   }, [])
 
   useEffect(() => {
-    const unsubscribeOnEarningsChanged = window.electron.stationEvents.onEarningsChanged(setTotalEarnigs)
+    const unsubscribeOnScheduledRewardsUpdate = window.electron.stationEvents.onScheduledRewardsUpdate(balance => {
+      setScheduledRewards(balance)
+    })
     return () => {
-      unsubscribeOnEarningsChanged()
+      unsubscribeOnScheduledRewardsUpdate()
     }
   }, [])
 
-  return { totalJobs, totalEarnings, activities }
+  return { totalJobs, scheduledRewards, activities }
 }
 
 export default useStationActivity

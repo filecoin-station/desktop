@@ -17,8 +17,8 @@ export async function getTotalJobsCompleted (): Promise<number> {
   return await window.electron.getTotalJobsCompleted()
 }
 
-export async function getTotalEarnings (): Promise<number> {
-  return 0
+export async function getScheduledRewards () : Promise<string> {
+  return await window.electron.getScheduledRewards()
 }
 
 export async function restartToUpdate (): Promise<void> {
