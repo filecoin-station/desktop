@@ -57,9 +57,7 @@ class WalletBackend {
       ({ seed, isNew } = await this.getSeedPhrase())
     }
     this.provider = new ethers.providers.JsonRpcProvider(
-      // REVERT ME BEFORE LANDING!
-      'https://api.calibration.node.glif.io/rpc/v0'
-      // 'https://api.node.glif.io/rpc/v0'
+      'https://api.node.glif.io/rpc/v0'
     )
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
     this.address = this.signer.address
