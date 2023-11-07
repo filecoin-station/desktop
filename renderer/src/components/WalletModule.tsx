@@ -17,6 +17,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
   const [transferMode, setTransferMode] = useState<boolean>(false)
   const {
     stationAddress,
+    stationAddress0x,
     destinationFilAddress,
     walletBalance,
     walletTransactions,
@@ -68,12 +69,24 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
           {stationAddress.slice(stationAddress.length - 6, stationAddress.length)}
         </p>
         <button
-          className={'h-full w-auto flex flex-row items-center justify-start group ml-2 cursor-pointer'}
+          className={'h-full w-auto flex flex-row items-center justify-start group ml-2 mr-2 cursor-pointer'}
           tabIndex={0}
           onClick={() => navigator.clipboard.writeText(stationAddress) }
         >
           <CopyIcon className="btn-icon-primary mr-1 h-[12px] opacity-80 group-hover:opacity-100" />
-          <span className='text text-body-3xs text-white hidden group-hover:block opacity-80'>Copy</span>
+        </button>
+        <p className='station-address text text-body-3xs text-white'>
+          {' '}
+          {stationAddress0x.slice(0, 6)}
+          {' '}. . .{' '}
+          {stationAddress0x.slice(stationAddress0x.length - 6, stationAddress0x.length)}
+        </p>
+        <button
+          className={'h-full w-auto flex flex-row items-center justify-start group ml-2 cursor-pointer'}
+          tabIndex={1}
+          onClick={() => navigator.clipboard.writeText(stationAddress0x) }
+        >
+          <CopyIcon className="btn-icon-primary mr-1 h-[12px] opacity-80 group-hover:opacity-100" />
         </button>
       </div>
       <div

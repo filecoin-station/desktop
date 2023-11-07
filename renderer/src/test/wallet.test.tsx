@@ -35,6 +35,7 @@ describe('Dashboard wallet display', () => {
             let destination = ''
             return {
               stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+              stationAddress0x: '0x000000000000000000000000000000000000dEaD',
               destinationFilAddress: destination,
               walletBalance: 0,
               walletTransactions: [],
