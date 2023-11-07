@@ -19,12 +19,12 @@ const Loading = () => {
 const OnboardingPage = (): JSX.Element => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isOnboardingCompleted, setIsOnboardingCompleted] = useState<boolean|null>(false)
+  const [isOnboardingCompleted, setIsOnboardingCompleted] = useState<boolean|null>()
 
   useEffect(() => {
     (async () => {
       await sleep(2000)
-      // setIsOnboardingCompleted(await getOnboardingCompleted())
+      setIsOnboardingCompleted(await getOnboardingCompleted())
       setIsLoading(false)
     })()
   }, [navigate])
