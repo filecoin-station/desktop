@@ -30,7 +30,7 @@ backend.transactions = loadStoredEntries()
 /** @type {Context | null} */
 let ctx = null
 let balance = loadBalance()
-const scheduledRewards = loadScheduledRewards()
+let scheduledRewards = loadScheduledRewards()
 
 /**
  * @param {Context} _ctx
@@ -130,9 +130,9 @@ async function updateScheduledRewards () {
 
 async function _updateScheduledRewards () {
   assert(ctx)
-  balance = await backend.fetchScheduledRewards()
-  walletStore.set('scheduled_rewards', balance.toHexString())
-  ctx.scheduledRewardsUpdate(ethers.utils.formatUnits(balance, 18))
+  scheduledRewards = await backend.fetchScheduledRewards()
+  walletStore.set('scheduled_rewards', scheduledRewards.toHexString())
+  ctx.scheduledRewardsUpdate(ethers.utils.formatUnits(scheduledRewards, 18))
 }
 
 function listTransactions () {
