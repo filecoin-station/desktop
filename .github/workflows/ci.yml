@@ -35,6 +35,10 @@ jobs:
         with:
           node-version: 'lts/*'
 
+      # See https://github.com/nodejs/node-gyp/issues/2869
+      - name: Fix node-gyp and Python
+        run: python3 -m pip install packaging
+
       - name: Cache bigger downloads
         uses: actions/cache@v3
         id: cache
@@ -114,6 +118,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
+
+
+      # See https://github.com/nodejs/node-gyp/issues/2869
+      - name: Fix node-gyp and Python
+        run: python3 -m pip install packaging
 
       - name: Cache bigger downloads
         uses: actions/cache@v3
