@@ -40,7 +40,13 @@ const Dashboard = (): JSX.Element => {
             </div>
             <div className="mb-6">
               <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Scheduled rewards</p>
-              <p className="w-fit text-header-m font-bold font-number total-earnings" title="scheduled rewards">
+              <p
+                className="w-fit text-header-m font-bold font-number total-earnings"
+                title="
+                  This is the reward total you have accrued since your last payout.
+                  Scheduled earnings will be sent to your Station Wallet approximately
+                  once a month, provided you have earned more than the payout threshold."
+              >
                 {scheduledRewards}&nbsp;<span className="text-header-3xs">FIL</span>
               </p>
             </div>
