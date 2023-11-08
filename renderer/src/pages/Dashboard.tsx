@@ -10,7 +10,7 @@ const scheduledRewardsTooltip = `
 This is the reward total you have accrued since your last payout.
 Scheduled earnings will be sent to your Station Wallet approximately
 once a month, provided you have earned more than the payout threshold.
-`.trim().replace(/\r?\n */g, '')
+`.trim().replace(/ *\r?\n */g, ' ')
 
 const Dashboard = (): JSX.Element => {
   const { totalJobs, scheduledRewards, activities } = useStationActivity()
