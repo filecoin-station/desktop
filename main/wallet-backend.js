@@ -68,7 +68,7 @@ class WalletBackend {
       this.provider
     ).connect(this.signer)
     this.meridian = new ethers.Contract(
-      '0x226f69aa515e57593b537cbf5e627c533f005a1f',
+      '0x8c9f415ee86e65ec72d08b05c42cdc40bfecb8e5',
       await fs.readFile(join(__dirname, 'meridian-abi.json'), 'utf8'),
       this.provider
     ).connect(this.signer)
@@ -299,7 +299,21 @@ class WalletBackend {
   async fetchScheduledRewards () {
     assert(this.address, 'address')
     assert(this.meridian, 'meridian client')
-    return await this.meridian.balanceOf(this.address)
+    try {
+      return await this.meridian.rewardsScheduledFor(this.address)
+    } catch (/** @type {any} */ err) {
+      if (
+        err?.error?.error instanceof Error &&
+        err.error.error.message.includes(
+          `resolve address ${this.addressDelegated}: actor not found`
+        )
+      ) {
+        // no-op, our address was not assigned any rewards yet
+      } else {
+        log.error('Cannot fetch scheduled rewards:', err)
+      }
+      return ethers.BigNumber.from(0)
+    }
   }
 }
 
