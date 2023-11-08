@@ -7,7 +7,7 @@ import WalletWidget from '../components/WalletWidget'
 import useStationActivity from '../hooks/StationActivity'
 
 const Dashboard = (): JSX.Element => {
-  const { totalJobs, totalEarnings, activities } = useStationActivity()
+  const { totalJobs, scheduledRewards, activities } = useStationActivity()
   const [walletCurtainIsOpen, setWalletCurtainIsOpen] = useState<boolean>(false)
   const toggleCurtain = () => setWalletCurtainIsOpen(!walletCurtainIsOpen)
 
@@ -39,10 +39,15 @@ const Dashboard = (): JSX.Element => {
               </p>
             </div>
             <div className="mb-6">
-              <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Earnings (coming soon)</p>
-              <p className="w-fit text-header-m font-bold font-number total-earnings" title="total earnings">
-                {totalEarnings > 0 ? totalEarnings : '--'}
-                {totalEarnings > 0 ? <span className="text-header-3xs">FIL</span> : ''}
+              <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Scheduled rewards</p>
+              <p
+                className="w-fit text-header-m font-bold font-number total-earnings"
+                title="
+                  This is the reward total you have accrued since your last payout.
+                  Scheduled earnings will be sent to your Station Wallet approximately
+                  once a month, provided you have earned more than the payout threshold."
+              >
+                {scheduledRewards}&nbsp;<span className="text-header-3xs">FIL</span>
               </p>
             </div>
           </div>

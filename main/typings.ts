@@ -37,6 +37,7 @@ export interface Context {
 
   transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void;
   balanceUpdate: (balance:string) => void;
+  scheduledRewardsUpdate: (balance: string) => void;
 }
 
 export interface WalletSeed {

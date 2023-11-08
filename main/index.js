@@ -129,6 +129,9 @@ const ctx = {
   },
   balanceUpdate: (balance) => {
     ipcMain.emit(ipcMainEvents.BALANCE_UPDATE, balance)
+  },
+  scheduledRewardsUpdate: (balance) => {
+    ipcMain.emit(ipcMainEvents.SCHEDULED_REWARDS_UPDATE, balance)
   }
 }
 

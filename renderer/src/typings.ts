@@ -14,6 +14,8 @@ declare global {
       openReleaseNotes(): void;
       restartToUpdate(): void;
 
+      getScheduledRewards: () => Promise<string>;
+
       stationConfig: {
         getOnboardingCompleted: () => Promise<boolean>;
         setOnboardingCompleted: () => Promise<void>;
@@ -34,6 +36,7 @@ declare global {
         onTransactionUpdate:
           (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void) => () => void;
         onBalanceUpdate: (callback: (balance: string) => void) => () => void;
+        onScheduledRewardsUpdate: (callback: (balance: string) => void) => () => void;
       };
       dialogs: {
         confirmChangeWalletAddress: () => Promise<boolean>;

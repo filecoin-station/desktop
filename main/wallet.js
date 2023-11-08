@@ -30,6 +30,7 @@ backend.transactions = loadStoredEntries()
 /** @type {Context | null} */
 let ctx = null
 let balance = loadBalance()
+let scheduledRewards = loadScheduledRewards()
 
 /**
  * @param {Context} _ctx
@@ -56,14 +57,19 @@ async function setup (_ctx) {
 
 async function refreshState () {
   try {
+    await updateScheduledRewards()
+  } catch (err) {
+    log.error('Cannot update scheduled rewards:', err)
+  }
+  try {
     await updateBalance()
   } catch (err) {
-    log.error('Updating balance', err)
+    log.error('Cannot update balance:', err)
   }
   try {
     await backend.fetchAllTransactions()
   } catch (err) {
-    log.error('Updating transactions', err)
+    log.error('Cannot update transactions:', err)
   }
 }
 
@@ -72,6 +78,13 @@ async function refreshState () {
  */
 function getBalance () {
   return ethers.utils.formatUnits(balance, 18)
+}
+
+/**
+ * @returns {string}
+ */
+function getScheduledRewards () {
+  return ethers.utils.formatUnits(scheduledRewards, 18)
 }
 
 // Inline `p-debounce.promise` from
@@ -99,6 +112,27 @@ async function _updateBalance () {
   balance = await backend.fetchBalance()
   walletStore.set('balance_0x', balance.toHexString())
   ctx.balanceUpdate(ethers.utils.formatUnits(balance, 18))
+}
+
+/** @type {Promise<void>|undefined} */
+let updateScheduledRewardsPromise
+async function updateScheduledRewards () {
+  if (updateScheduledRewardsPromise) {
+    return updateScheduledRewardsPromise
+  }
+  try {
+    updateScheduledRewardsPromise = _updateScheduledRewards()
+    return await updateScheduledRewardsPromise
+  } finally {
+    updateScheduledRewardsPromise = undefined
+  }
+}
+
+async function _updateScheduledRewards () {
+  assert(ctx)
+  scheduledRewards = await backend.fetchScheduledRewards()
+  walletStore.set('scheduled_rewards', scheduledRewards.toHexString())
+  ctx.scheduledRewardsUpdate(ethers.utils.formatUnits(scheduledRewards, 18))
 }
 
 function listTransactions () {
@@ -193,10 +227,18 @@ function loadBalance () {
   )
 }
 
+function loadScheduledRewards () {
+  return ethers.BigNumber.from(
+    // A workaround to fix false TypeScript errors
+    /** @type {string} */ (walletStore.get('scheduled_rewards', '0x0'))
+  )
+}
+
 module.exports = {
   setup,
   getAddress,
   getBalance,
+  getScheduledRewards,
   listTransactions,
   transferAllFundsToDestinationWallet,
   getTransactionsForUI
