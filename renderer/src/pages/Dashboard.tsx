@@ -6,6 +6,12 @@ import UpdateBanner from '../components/UpdateBanner'
 import WalletWidget from '../components/WalletWidget'
 import useStationActivity from '../hooks/StationActivity'
 
+const scheduledRewardsTooltip = `
+This is the reward total you have accrued since your last payout.
+Scheduled earnings will be sent to your Station Wallet approximately
+once a month, provided you have earned more than the payout threshold.
+`.trim().replace(/\r?\n */g, '')
+
 const Dashboard = (): JSX.Element => {
   const { totalJobs, scheduledRewards, activities } = useStationActivity()
   const [walletCurtainIsOpen, setWalletCurtainIsOpen] = useState<boolean>(false)
@@ -42,10 +48,7 @@ const Dashboard = (): JSX.Element => {
               <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Scheduled rewards</p>
               <p
                 className="w-fit text-header-m font-bold font-number total-earnings"
-                title="
-                  This is the reward total you have accrued since your last payout.
-                  Scheduled earnings will be sent to your Station Wallet approximately
-                  once a month, provided you have earned more than the payout threshold."
+                title={scheduledRewardsTooltip}
               >
                 {scheduledRewards}&nbsp;<span className="text-header-3xs">FIL</span>
               </p>
