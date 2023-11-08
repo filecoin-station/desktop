@@ -71,7 +71,7 @@ class WalletBackend {
       '0x8c9f415ee86e65ec72d08b05c42cdc40bfecb8e5',
       await fs.readFile(join(__dirname, 'meridian-abi.json'), 'utf8'),
       this.provider
-    ).connect(this.signer)
+    )
 
     return { seedIsNew: isNew }
   }
@@ -302,16 +302,7 @@ class WalletBackend {
     try {
       return await this.meridian.rewardsScheduledFor(this.address)
     } catch (/** @type {any} */ err) {
-      if (
-        err?.error?.error instanceof Error &&
-        err.error.error.message.includes(
-          `resolve address ${this.addressDelegated}: actor not found`
-        )
-      ) {
-        // no-op, our address was not assigned any rewards yet
-      } else {
-        log.error('Cannot fetch scheduled rewards:', err)
-      }
+      log.error('Cannot fetch scheduled rewards:', err)
       return ethers.BigNumber.from(0)
     }
   }
