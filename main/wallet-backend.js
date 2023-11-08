@@ -68,7 +68,7 @@ class WalletBackend {
       this.provider
     ).connect(this.signer)
     this.meridian = new ethers.Contract(
-      '0x8c9f415ee86e65ec72d08b05c42cdc40bfecb8e5',
+      '0xaaef78eaf86dcf34f275288752e892424dda9341',
       await fs.readFile(join(__dirname, 'meridian-abi.json'), 'utf8'),
       this.provider
     )
