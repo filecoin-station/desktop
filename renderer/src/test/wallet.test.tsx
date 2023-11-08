@@ -13,9 +13,8 @@ vi.mock('../lib/station-config', () => ({
   getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
   getDestinationWalletAddress: () => Promise.resolve(''),
   setDestinationWalletAddress: () => mockedSetDestinationWalletAddress,
-  getTotalEarnings: () => Promise.resolve(0),
-  getActivities: () => Promise.resolve([]),
-  getTotalJobsCompleted: () => Promise.resolve(0)
+  getScheduledRewards: () => Promise.resolve('0.0'),
+  getActivities: () => Promise.resolve([])
 }))
 
 describe('Dashboard wallet display', () => {
@@ -26,6 +25,7 @@ describe('Dashboard wallet display', () => {
     const onUpdateAvailable = vi.fn((callback) => () => ({}))
     const onTransactionUpdate = vi.fn((callback) => () => ({}))
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
+    const onScheduledRewardsUpdate = vi.fn((callback) => () => ({}))
 
     beforeEach(() => {
       vi.clearAllMocks()
@@ -66,7 +66,8 @@ describe('Dashboard wallet display', () => {
             onJobProcessed,
             onUpdateAvailable,
             onTransactionUpdate,
-            onBalanceUpdate
+            onBalanceUpdate,
+            onScheduledRewardsUpdate
           },
           getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({}))),
           dialogs: {

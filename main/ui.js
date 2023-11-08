@@ -142,6 +142,11 @@ function setupIpcEventForwarding (ui) {
   }
   ipcMain.on(ipcMainEvents.BALANCE_UPDATE, onBalanceUpdate)
 
+  const onScheduledRewardsUpdate = (/** @type {unknown[]} */ ...args) => {
+    ui.webContents.send(ipcMainEvents.SCHEDULED_REWARDS_UPDATE, ...args)
+  }
+  ipcMain.on(ipcMainEvents.SCHEDULED_REWARDS_UPDATE, onScheduledRewardsUpdate)
+
   return function stopIpcEventForwarding () {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     ipcMain.removeListener(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
@@ -151,5 +156,9 @@ function setupIpcEventForwarding (ui) {
       onTransactionUpdate
     )
     ipcMain.removeListener(ipcMainEvents.BALANCE_UPDATE, onBalanceUpdate)
+    ipcMain.removeListener(
+      ipcMainEvents.SCHEDULED_REWARDS_UPDATE,
+      onScheduledRewardsUpdate
+    )
   }
 }

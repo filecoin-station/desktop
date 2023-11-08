@@ -15,6 +15,7 @@ describe('Dashboard wallet interactions', () => {
     const onUpdateAvailable = vi.fn((callback) => () => ({}))
     const onTransactionUpdate = vi.fn((callback) => () => ({}))
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
+    const onScheduledRewardsUpdate = vi.fn((callback) => () => ({}))
 
     beforeEach(() => {
       vi.clearAllMocks()
@@ -72,6 +73,7 @@ describe('Dashboard wallet interactions', () => {
             onJobProcessed,
             onUpdateAvailable,
             onTransactionUpdate,
+            onScheduledRewardsUpdate,
             onBalanceUpdate
           },
           getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({}))),

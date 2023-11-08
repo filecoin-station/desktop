@@ -67,6 +67,12 @@ class WalletBackend {
       await fs.readFile(join(__dirname, 'filforwarder-abi.json'), 'utf8'),
       this.provider
     ).connect(this.signer)
+    this.meridian = new ethers.Contract(
+      '0x8c9f415ee86e65ec72d08b05c42cdc40bfecb8e5',
+      await fs.readFile(join(__dirname, 'meridian-abi.json'), 'utf8'),
+      this.provider
+    )
+
     return { seedIsNew: isNew }
   }
 
@@ -285,6 +291,20 @@ class WalletBackend {
     // Update state
     this.transactions = transactions
     this.onTransactionUpdate()
+  }
+
+  /**
+   * @returns {Promise<ethers.BigNumber>}
+   */
+  async fetchScheduledRewards () {
+    assert(this.address, 'address')
+    assert(this.meridian, 'meridian client')
+    try {
+      return await this.meridian.rewardsScheduledFor(this.address)
+    } catch (/** @type {any} */ err) {
+      log.error('Cannot fetch scheduled rewards:', err)
+      return ethers.BigNumber.from(0)
+    }
   }
 }
 
