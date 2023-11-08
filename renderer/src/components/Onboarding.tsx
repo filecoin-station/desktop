@@ -2,6 +2,7 @@ import { FC, useState } from 'react'
 import { ReactComponent as Back } from './../assets/img/icons/arrow-left.svg'
 import { ReactComponent as Page } from './../assets/img/icons/paginator-page.svg'
 import { ReactComponent as CurrentPage } from './../assets/img/icons/paginator-current.svg'
+import { showTermsOfService } from '../lib/station-config'
 
 interface FooterProps {
   page: number;
@@ -87,7 +88,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
           <div className='min-h-[372px]'>
             <div className='pb-20 px-20 pt-16 min-h-[250px]'>
               <p className="text-body-s my-3">
-                To get you set up, Station will create a new Filecoin Wallet, just for you.
+                To get you set up, you will create a new Filecoin Wallet, controlled just by you.
               </p>
               <p className="text-body-s my-3">
                 FIL will be transferred to your wallet according to your participation in the economy.
@@ -118,8 +119,15 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
                 vendors, or used specifically by this app.
               </p>
               <p className="text-body-s my-3">
-                By clicking on the “Accept” button or otherwise continuing to use this service, you agree, you have
-                read, understand and accept Station&apos;s Terms & Conditions.
+                By clicking {'"'}Create Wallet{'"'} or otherwise continuing to use this service, you agree, you
+                have read, understand and accept Station&apos;s
+                {' '}
+                <span
+                  className="text-primary cursor-pointer"
+                  onClick={showTermsOfService}
+                >
+                  Terms of Service
+                </span>.
               </p>
             </div>
             <div className='pb-20 bottom-0 px-20'>
@@ -136,7 +144,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
                   className="btn-primary-small"
                   title="accept"
                   onClick={() => { onFinish() }}
-                >Accept
+                >Create Wallet
                 </button>
               </div>
             </div>

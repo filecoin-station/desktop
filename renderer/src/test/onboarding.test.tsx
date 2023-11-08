@@ -24,7 +24,8 @@ describe('Welcome page test', () => {
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(true)
+          getOnboardingCompleted: (status: boolean) => Promise.resolve(true),
+          showTermsOfService: () => Promise.resolve(undefined)
         }
       })
 
@@ -56,7 +57,8 @@ describe('Welcome page test', () => {
       vi.mock('../lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(false)
+          getOnboardingCompleted: (status: boolean) => Promise.resolve(false),
+          showTermsOfService: () => Promise.resolve(undefined)
         }
       })
     })

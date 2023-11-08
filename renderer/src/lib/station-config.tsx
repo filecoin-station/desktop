@@ -59,3 +59,7 @@ export async function transferAllFundsToDestinationWallet (): Promise<void> {
 export function browseTransactionTracker (transactionHash: string): void {
   return window.electron.stationConfig.browseTransactionTracker(transactionHash)
 }
+
+export function showTermsOfService (): void {
+  return window.electron.stationConfig.showTermsOfService()
+}

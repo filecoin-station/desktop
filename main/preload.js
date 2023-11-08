@@ -42,7 +42,9 @@ contextBridge.exposeInMainWorld('electron', {
     browseTransactionTracker: (/** @type {string } */ transactionHash) =>
       ipcRenderer.invoke('station:browseTransactionTracker', transactionHash),
     getScheduledRewards: () =>
-      ipcRenderer.invoke('station:getScheduledRewards')
+      ipcRenderer.invoke('station:getScheduledRewards'),
+    showTermsOfService: () =>
+      ipcRenderer.invoke('station:showTermsOfService')
   },
   stationEvents: {
     onActivityLogged: (/** @type {(value: Activity) => void} */ callback) => {

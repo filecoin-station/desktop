@@ -33,6 +33,7 @@ export interface Context {
   restartToUpdate: () => void;
   getUpdaterStatus: () => {updateAvailable: boolean};
   browseTransactionTracker: (transactionHash: string) => void;
+  showTermsOfService: () => void;
 
   transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void;
   balanceUpdate: (balance:string) => void;
