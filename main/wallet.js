@@ -88,8 +88,8 @@ function getScheduledRewards () {
   const [whole, fraction] = fullPrecision.split('.')
   if (fraction === undefined) return fullPrecision
   const truncated = fraction
-    // keep the first 4 digits, discard the rest
-    .slice(0, 4)
+    // keep the first 6 digits, discard the rest
+    .slice(0, 6)
     // remove trailing zeroes
     .replace(/0+$/, '0')
   return [whole, truncated].join('.')
