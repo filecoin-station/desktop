@@ -84,7 +84,15 @@ function getBalance () {
  * @returns {string}
  */
 function getScheduledRewards () {
-  return ethers.utils.formatUnits(scheduledRewards, 18)
+  const fullPrecision = ethers.utils.formatUnits(scheduledRewards, 18)
+  const [whole, fraction] = fullPrecision.split('.')
+  if (fraction === undefined) return fullPrecision
+  const truncated = fraction
+    // keep the first 6 digits, discard the rest
+    .slice(0, 6)
+    // remove trailing zeroes
+    .replace(/0+$/, '0')
+  return [whole, truncated].join('.')
 }
 
 // Inline `p-debounce.promise` from
@@ -132,7 +140,7 @@ async function _updateScheduledRewards () {
   assert(ctx)
   scheduledRewards = await backend.fetchScheduledRewards()
   walletStore.set('scheduled_rewards', scheduledRewards.toHexString())
-  ctx.scheduledRewardsUpdate(ethers.utils.formatUnits(scheduledRewards, 18))
+  ctx.scheduledRewardsUpdate(getScheduledRewards())
 }
 
 function listTransactions () {
