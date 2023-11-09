@@ -50,7 +50,7 @@ const Dashboard = (): JSX.Element => {
                 className="w-fit text-header-m font-bold font-number total-earnings"
                 title={scheduledRewardsTooltip}
               >
-                {scheduledRewards}&nbsp;<span className="text-header-3xs">FIL</span>
+                {scheduledRewards}<span className="text-header-3xs">&nbsp;FIL</span>
               </p>
             </div>
           </div>
