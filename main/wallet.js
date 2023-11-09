@@ -84,7 +84,15 @@ function getBalance () {
  * @returns {string}
  */
 function getScheduledRewards () {
-  return ethers.utils.formatUnits(scheduledRewards, 18)
+  const fullPrecision = ethers.utils.formatUnits(scheduledRewards, 18 - 3)
+  const [whole, fraction] = fullPrecision.split('.')
+  if (fraction === undefined) return fullPrecision
+  const truncated = fraction
+    // keep the first 4 digits, discard the rest
+    .slice(0, 4)
+    // remove trailing zeroes
+    .replace(/0+$/, '0')
+  return [whole, truncated].join('.')
 }
 
 // Inline `p-debounce.promise` from
