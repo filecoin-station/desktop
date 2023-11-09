@@ -132,7 +132,7 @@ async function _updateScheduledRewards () {
   assert(ctx)
   scheduledRewards = await backend.fetchScheduledRewards()
   walletStore.set('scheduled_rewards', scheduledRewards.toHexString())
-  ctx.scheduledRewardsUpdate(ethers.utils.formatUnits(scheduledRewards, 18))
+  ctx.scheduledRewardsUpdate(getScheduledRewards())
 }
 
 function listTransactions () {
