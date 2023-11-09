@@ -2,6 +2,7 @@
 
 const { WalletBackend } = require('../wallet-backend')
 const assert = require('assert').strict
+const { ethers } = require('ethers')
 
 describe('Wallet Backend', function () {
   const backend = new WalletBackend({ disableKeytar: true })
@@ -60,8 +61,7 @@ describe('Wallet Backend', function () {
     it('fetches rewards scheduled for disbursement', async function () {
       await backend.setup(
         // Here we want a random seed that doesn't have any scheduled rewards
-        // eslint-disable-next-line max-len
-        'expect trouble oyster fire leave frown strong mechanic cotton harsh black since bargain paddle stereo fresh neutral math iron coral trophy slab place marine'
+        ethers.Wallet.createRandom().mnemonic.phrase
       )
       const amount = await pRetry(
         () => backend.fetchScheduledRewards(),
