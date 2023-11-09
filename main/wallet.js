@@ -84,7 +84,7 @@ function getBalance () {
  * @returns {string}
  */
 function getScheduledRewards () {
-  const fullPrecision = ethers.utils.formatUnits(scheduledRewards, 18 - 3)
+  const fullPrecision = ethers.utils.formatUnits(scheduledRewards, 18)
   const [whole, fraction] = fullPrecision.split('.')
   if (fraction === undefined) return fullPrecision
   const truncated = fraction
