@@ -4,6 +4,14 @@ const { WalletBackend } = require('../wallet-backend')
 const assert = require('assert').strict
 const { ethers } = require('ethers')
 
+const randomSeed = () => {
+  const wallet = ethers.Wallet.createRandom()
+  const seed = wallet.mnemonic.phrase
+  console.log('Using randomly-generated wallet address', wallet.address)
+  console.log('SEED:', seed)
+  return seed
+}
+
 describe('Wallet Backend', function () {
   const backend = new WalletBackend({ disableKeytar: true })
   /** @type {import('p-retry').default} */
@@ -59,10 +67,8 @@ describe('Wallet Backend', function () {
 
   describe('fetchScheduledRewards()', function () {
     it('fetches rewards scheduled for disbursement', async function () {
-      await backend.setup(
-        // Here we want a random seed that doesn't have any scheduled rewards
-        ethers.Wallet.createRandom().mnemonic.phrase
-      )
+      // We want a random wallet that doesn't have any scheduled rewards
+      await backend.setup(randomSeed())
       const amount = await pRetry(
         () => backend.fetchScheduledRewards(),
         { retries: 10 }
