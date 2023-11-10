@@ -134,28 +134,11 @@ function onUpdateAvailable ({ version /*, releaseNotes */ }) {
   updateAvailable = true
   nextVersion = version
 
-  ipcMain.emit(ipcMainEvents.UPDATE_AVAILABLE)
   log.info(`Update to version ${version} is available, downloading..`)
   autoUpdater.downloadUpdate().then(
     _ => log.info('Update downloaded'),
     err => log.error('Cannot download the update.', err)
   )
-
-  if (!checkingManually) { return }
-  // do not toggle checkingManually off here so we can show a dialog once the
-  // download is finished.
-
-  const buttonIx = showDialogSync({
-    title: 'Update available',
-    message: `A new version ${version} of Filecoin Station is available. ` +
-      'The download will begin shortly in the background.',
-    type: 'info',
-    buttons: ['Close', 'Show Release Notes']
-  })
-
-  if (buttonIx === 1) {
-    openReleaseNotes()
-  }
 }
 
 function openReleaseNotes () {
@@ -207,6 +190,7 @@ function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
     // showUpdateDialog() offers the user to restart
   } else if (ctx.isShowingUI) {
     // show unobtrusive notification + dialog on click
+    ipcMain.emit(ipcMainEvents.UPDATE_AVAILABLE)
     updateNotification = new Notification({
       title: 'Filecoin Station Update',
       body: `An update to Filecoin Station ${version} is available.`
