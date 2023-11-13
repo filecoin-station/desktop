@@ -4,6 +4,8 @@ const { WalletBackend } = require('../wallet-backend')
 const assert = require('assert').strict
 const { ethers } = require('ethers')
 
+const { TEST_SEED_PHRASE } = process.env
+
 const randomSeed = () => {
   const wallet = ethers.Wallet.createRandom()
   const seed = wallet.mnemonic.phrase
@@ -46,13 +48,11 @@ describe('Wallet Backend', function () {
 
   describe('fetchAllTransactions()', function () {
     it('fetches all transactions', /** @this {Mocha.Test} */ async function () {
+      //  We need a seed for a wallet that already has some transactions
+      if (!TEST_SEED_PHRASE) return this.skip()
       this.timeout(20_000)
 
-      await backend.setup(
-        // Here we want a seed for a wallet that already has some transactions
-        // eslint-disable-next-line max-len
-        'insane believe defy best among myself mistake account paddle episode life music fame impact below define habit rotate clay innocent history depart slice series'
-      )
+      await backend.setup(TEST_SEED_PHRASE)
       await pRetry(() => backend.fetchAllTransactions(), { retries: 10 })
       assert.notStrictEqual(backend.transactions.length, 0, 'has transactions')
       for (const tx of backend.transactions) {
@@ -67,7 +67,7 @@ describe('Wallet Backend', function () {
 
   describe('fetchScheduledRewards()', function () {
     it('fetches rewards scheduled for disbursement', async function () {
-      // We want a random wallet that doesn't have any scheduled rewards
+      // We need a new wallet that doesn't have any scheduled rewards
       await backend.setup(randomSeed())
       const amount = await pRetry(
         () => backend.fetchScheduledRewards(),
