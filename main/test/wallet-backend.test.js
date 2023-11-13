@@ -52,7 +52,7 @@ describe('Wallet Backend', function () {
       if (!TEST_SEED_PHRASE) return this.skip()
       this.timeout(20_000)
 
-      await backend.setup(process.env.TEST_SEED_PHRASE)
+      await backend.setup(TEST_SEED_PHRASE)
       await pRetry(() => backend.fetchAllTransactions(), { retries: 10 })
       assert.notStrictEqual(backend.transactions.length, 0, 'has transactions')
       for (const tx of backend.transactions) {
