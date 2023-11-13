@@ -90,6 +90,8 @@ jobs:
 
       - name: Test backend
         run: npm run test:backend
+        env:
+          TEST_SEED_PHRASE: ${{ secrets.TEST_SEED_PHRASE }}
 
       - name: Test frontend
         run: npm run test:ui
