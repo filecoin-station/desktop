@@ -176,9 +176,11 @@ function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
       message: `An update to Filecoin Station ${version} is available. ` +
         'Would you like to install it now?',
       type: 'info',
-      buttons: ['Later', 'Install now']
+      buttons: ['Later', 'Show Release Notes', 'Install now']
     })
-    if (buttonIx === 1) { // install now
+    if (buttonIx === 1) { // show release notes
+      openReleaseNotes()
+    } else if (buttonIx === 2) { // install now
       setImmediate(quitAndInstall)
     }
   }
