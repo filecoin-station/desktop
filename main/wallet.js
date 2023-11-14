@@ -84,14 +84,23 @@ function getBalance () {
  * @returns {string}
  */
 function getScheduledRewards () {
-  const fullPrecision = ethers.utils.formatUnits(scheduledRewards, 18)
+  return formatWithSixDecimalDigits(scheduledRewards)
+}
+
+/**
+ * @param {ethers.BigNumber} amount
+ * @returns {string}
+ */
+function formatWithSixDecimalDigits (amount) {
+  const fullPrecision = ethers.utils.formatUnits(amount, 18)
   const [whole, fraction] = fullPrecision.split('.')
   if (fraction === undefined) return fullPrecision
   const truncated = fraction
     // keep the first 6 digits, discard the rest
     .slice(0, 6)
-    // remove trailing zeroes
-    .replace(/0+$/, '0')
+    // remove trailing zeroes as long as there are some leading digits
+    // (we want to preserve .0 if there is no fraction)
+    .replace(/(\d)0+$/, '$1')
   return [whole, truncated].join('.')
 }
 
@@ -247,6 +256,7 @@ module.exports = {
   getAddress,
   getBalance,
   getScheduledRewards,
+  formatWithSixDecimalDigits,
   listTransactions,
   transferAllFundsToDestinationWallet,
   getTransactionsForUI
