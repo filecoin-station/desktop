@@ -84,7 +84,7 @@
     "@vitest/ui": "^0.34.6",
     "autoprefixer": "^10.4.16",
     "cross-env": "^7.0.3",
-    "electron": "^26.3.0",
+    "electron": "^27.1.0",
     "electron-builder": "^24.4.0",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.53.0",
@@ -113,7 +113,7 @@
     "xvfb-maybe": "^0.2.1"
   },
   "overrides": {
-    "node-abi": "^3.45.0"
+    "node-abi": "^3.51.0"
   },
   "ts-standard": {
     "project": [
