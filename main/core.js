@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, BrowserWindow, dialog } = require('electron')
+const { app, dialog } = require('electron')
 const { join, dirname } = require('node:path')
 const { fork } = require('node:child_process')
 const wallet = require('./wallet')
@@ -34,10 +34,9 @@ async function setup (ctx) {
     const opts = {
       defaultPath: `station-modules-${(new Date()).getTime()}.log`
     }
-    const win = BrowserWindow.getFocusedWindow()
-    const { filePath } = win
-      ? await dialog.showSaveDialog(win, opts)
-      : await dialog.showSaveDialog(opts)
+    // The dialog might not show if the UI is hidden
+    ctx.showUI()
+    const { filePath } = await dialog.showSaveDialog(opts)
     if (filePath) {
       await fs.writeFile(filePath, logs.get())
     }
