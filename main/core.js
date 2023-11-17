@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, BrowserWindow, dialog } = require('electron')
+const { app, dialog } = require('electron')
 const { join, dirname } = require('node:path')
 const { fork } = require('node:child_process')
 const wallet = require('./wallet')
