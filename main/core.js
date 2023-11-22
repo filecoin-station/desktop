@@ -74,7 +74,9 @@ async function start (ctx) {
       } catch (_err) {
         const err = new Error(`Failed to parse core event: ${line}`)
         err.cause = _err
-        Sentry.captureException(err)
+        if (!line.includes('failed to detect network')) {
+          Sentry.captureException(err)
+        }
         console.error(err)
         return
       }
