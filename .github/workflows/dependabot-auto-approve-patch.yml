@@ -15,6 +15,7 @@ jobs:
           - graphql
           - dayjs
           - autoprefixer
+          - electron-log
     steps:
       - name: Dependabot metadata
         id: metadata
