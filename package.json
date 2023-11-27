@@ -52,7 +52,7 @@
     "electron-log": "^5.0.1",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
-    "electron-updater": "^6.1.4",
+    "electron-updater": "^6.1.7",
     "ethers": "^5.7.2",
     "graphql": "^16.8.1",
     "keytar": "^7.9.0",
