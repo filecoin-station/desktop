@@ -85,7 +85,7 @@
     "autoprefixer": "^10.4.16",
     "cross-env": "^7.0.3",
     "electron": "^27.1.2",
-    "electron-builder": "^24.4.0",
+    "electron-builder": "^24.9.1",
     "electron-devtools-installer": "^3.2.0",
     "eslint": "^8.54.0",
     "eslint-config-react-app": "^7.0.1",
