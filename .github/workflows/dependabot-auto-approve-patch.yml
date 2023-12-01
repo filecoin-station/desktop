@@ -16,6 +16,7 @@ jobs:
           - dayjs
           - autoprefixer
           - electron-log
+          - jsdom
     steps:
       - name: Dependabot metadata
         id: metadata
