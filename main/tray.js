@@ -46,9 +46,7 @@ function getTrayIcon (isUpdateAvailable, isOnline) {
 
 const contextMenuBuilder = (/** @type {Context} */ ctx) => {
   const contextMenu = Menu.buildFromTemplate([
-    {
-      label: `Filecoin Station v${STATION_VERSION}`,
-    },
+    { label: `Filecoin Station v${STATION_VERSION}` },
     { type: 'separator' },
     { label: `Jobs Completed: ${ctx.getTotalJobsCompleted() || '...'}` },
     { label: `Wallet Balance: ${ctx.getWalletBalance()} FIL` },
