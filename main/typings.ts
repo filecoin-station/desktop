@@ -22,6 +22,9 @@ export interface Context {
   setTotalJobsCompleted(count: number): void;
   getTotalJobsCompleted(): number;
 
+  getScheduledRewards(): string;
+  getWalletBalance(): string;
+
   showUI: () => void;
   isShowingUI: boolean;
   loadWebUIFromDist: import('electron-serve').loadURL;

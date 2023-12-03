@@ -44,13 +44,16 @@ function getTrayIcon (isUpdateAvailable, isOnline) {
       : icons.off
 }
 
-module.exports = function (/** @type {Context} */ ctx) {
-  tray = new Tray(getTrayIcon(false, core.isOnline()))
+const contextMenuBuilder = (/** @type {Context} */ ctx) => {
   const contextMenu = Menu.buildFromTemplate([
     {
       label: `Filecoin Station v${STATION_VERSION}`,
-      enabled: false
     },
+    { type: 'separator' },
+    { label: `Jobs Completed: ${ctx.getTotalJobsCompleted() || '...'}` },
+    { label: `Wallet Balance: ${ctx.getWalletBalance()} FIL` },
+    { label: `Scheduled Rewards: ${ctx.getScheduledRewards()} FIL` },
+    { type: 'separator' },
     {
       label: 'Open Station',
       click: () => ctx.showUI()
@@ -91,6 +94,13 @@ module.exports = function (/** @type {Context} */ ctx) {
       accelerator: IS_MAC ? 'Command+Q' : undefined
     }
   ])
+  return contextMenu
+}
+
+module.exports = async function (/** @type {Context} */ ctx) {
+  tray = new Tray(getTrayIcon(false, core.isOnline()))
+
+  const contextMenu = contextMenuBuilder(ctx)
   tray.setToolTip('Filecoin Station')
   tray.setContextMenu(contextMenu)
 
@@ -114,6 +124,9 @@ function setupIpcEventListeners (contextMenu, ctx) {
 
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, updateTray)
   ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, updateTray)
+  ipcMain.on(ipcMainEvents.JOB_STATS_UPDATED, updateTray)
+  ipcMain.on(ipcMainEvents.BALANCE_UPDATE, updateTray)
+  ipcMain.on(ipcMainEvents.SCHEDULED_REWARDS_UPDATE, updateTray)
 
   /**
    * Get an item from the Tray menu or fail with a useful error message.
@@ -131,5 +144,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
     tray.setImage(
       getTrayIcon(ctx.getUpdaterStatus().updateAvailable, core.isOnline())
     )
+    const contextMenu = contextMenuBuilder(ctx)
+    tray.setContextMenu(contextMenu)
   }
 }
