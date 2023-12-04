@@ -16,15 +16,8 @@ const { parseEther, formatEther } = require('ethers/lib/utils')
 } FILTransactionProcessing */
 
 const log = electronLog.scope('wallet')
-
-/** @type {Store<{
-  scheduled_rewards: string
-}>} */
 const walletStore = new Store({
-  name: 'wallet',
-  defaults: {
-    scheduled_rewards: ''
-  }
+  name: 'wallet'
 })
 
 const backend = new WalletBackend({
