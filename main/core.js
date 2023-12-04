@@ -25,7 +25,7 @@ console.log('Core binary: %s', corePath)
 const logs = new Logs()
 const activities = new Activities()
 let totalJobsCompleted = 0
-let scheduledRewardsForAddress = ""
+let scheduledRewardsForAddress = ''
 
 /**
  * @param {Context} ctx

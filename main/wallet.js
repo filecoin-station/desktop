@@ -22,7 +22,7 @@ const log = electronLog.scope('wallet')
 const walletStore = new Store({
   name: 'wallet',
   defaults: {
-    scheduled_rewards: ""
+    scheduled_rewards: ''
   }
 })
 
@@ -37,7 +37,7 @@ backend.transactions = loadStoredEntries()
 /** @type {Context | null} */
 let ctx = null
 let balance = loadBalance()
-let scheduledRewards = loadScheduledRewards()
+const scheduledRewards = loadScheduledRewards()
 
 /**
  * @param {Context} _ctx
