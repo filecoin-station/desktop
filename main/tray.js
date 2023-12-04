@@ -59,7 +59,10 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
       enabled: false
     },
     {
-      label: `Wallet Balance: ${ctx.getWalletBalance()} FIL`,
+      label:
+        `Wallet Balance: ${
+          roundToSixDecimalPlaces(ctx.getWalletBalance())
+        } FIL`,
       enabled: false
     },
     {
