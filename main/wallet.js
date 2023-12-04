@@ -15,8 +15,15 @@ const { ethers } = require('ethers')
 } FILTransactionProcessing */
 
 const log = electronLog.scope('wallet')
+
+/** @type {Store<{
+  scheduled_rewards: string
+}>} */
 const walletStore = new Store({
-  name: 'wallet'
+  name: 'wallet',
+  defaults: {
+    scheduled_rewards: ""
+  }
 })
 
 const backend = new WalletBackend({
@@ -84,7 +91,7 @@ function getBalance () {
  * @returns {string}
  */
 function getScheduledRewards () {
-  return formatWithSixDecimalDigits(scheduledRewards)
+  return scheduledRewards
 }
 
 /**
@@ -147,9 +154,7 @@ async function updateScheduledRewards () {
 
 async function _updateScheduledRewards () {
   assert(ctx)
-  scheduledRewards = await backend.fetchScheduledRewards()
-  walletStore.set('scheduled_rewards', scheduledRewards.toHexString())
-  ctx.scheduledRewardsUpdate(getScheduledRewards())
+  walletStore.set('scheduled_rewards', ctx.getScheduledRewardsForAddress())
 }
 
 function listTransactions () {
@@ -245,10 +250,7 @@ function loadBalance () {
 }
 
 function loadScheduledRewards () {
-  return ethers.BigNumber.from(
-    // A workaround to fix false TypeScript errors
-    /** @type {string} */ (walletStore.get('scheduled_rewards', '0x0'))
-  )
+  return walletStore.get('scheduled_rewards')
 }
 
 module.exports = {

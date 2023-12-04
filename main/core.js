@@ -25,6 +25,7 @@ console.log('Core binary: %s', corePath)
 const logs = new Logs()
 const activities = new Activities()
 let totalJobsCompleted = 0
+let scheduledRewardsForAddress = ""
 
 /**
  * @param {Context} ctx
@@ -83,7 +84,9 @@ async function start (ctx) {
       switch (event.type) {
         case 'jobs-completed':
           totalJobsCompleted = event.total
+          scheduledRewardsForAddress = event.rewardsScheduledForAddress
           ctx.setTotalJobsCompleted(event.total)
+          ctx.setScheduledRewardsForAddress(event.rewardsScheduledForAddress)
           break
         case 'activity:info':
         case 'activity:error': {
@@ -164,5 +167,6 @@ module.exports = {
   setup,
   isOnline: () => activities.isOnline(),
   getActivities: () => activities.get(),
-  getTotalJobsCompleted: () => totalJobsCompleted
+  getTotalJobsCompleted: () => totalJobsCompleted,
+  getScheduledRewardsForAddress: () => scheduledRewardsForAddress
 }

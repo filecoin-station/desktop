@@ -41,7 +41,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     (_event, address) => stationConfig.setDestinationWalletAddress(address)
   )
   ipcMain.handle('station:getStationWalletBalance', wallet.getBalance)
-  ipcMain.handle('station:getScheduledRewards', wallet.getScheduledRewards)
+  ipcMain.handle('station:getScheduledRewards', ctx.getScheduledRewardsForAddress)
   ipcMain.handle(
     'station:getStationWalletTransactionsHistory',
     wallet.listTransactions

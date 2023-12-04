@@ -110,6 +110,13 @@ const ctx = {
       count
     )
   },
+  getScheduledRewardsForAddress: () => core.getScheduledRewardsForAddress(),
+  setScheduledRewardsForAddress: (balance) => {
+    ipcMain.emit(
+      ipcMainEvents.SCHEDULED_REWARDS_UPDATE,
+      balance
+    )
+  },
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
   saveModuleLogsAs: () => { throw new Error('never get here') },
@@ -129,9 +136,6 @@ const ctx = {
   },
   balanceUpdate: (balance) => {
     ipcMain.emit(ipcMainEvents.BALANCE_UPDATE, balance)
-  },
-  scheduledRewardsUpdate: (balance) => {
-    ipcMain.emit(ipcMainEvents.SCHEDULED_REWARDS_UPDATE, balance)
   }
 }
 
