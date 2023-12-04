@@ -45,16 +45,28 @@ function getTrayIcon (isUpdateAvailable, isOnline) {
       : icons.off
 }
 
-const contextMenuBuilder = (/** @type {Context} */ ctx) => {
+const createContextMenu = (/** @type {Context} */ ctx) => {
   const contextMenu = Menu.buildFromTemplate([
-    { label: `Filecoin Station v${STATION_VERSION}` },
+    {
+      label: `Filecoin Station v${STATION_VERSION}`,
+      enabled: false
+    },
     { type: 'separator' },
-    { label: `Jobs Completed: ${ctx.getTotalJobsCompleted() || '...'}` },
-    { label: `Wallet Balance: ${ctx.getWalletBalance()} FIL` },
+    {
+      label: `Jobs Completed: ${
+        ctx.getTotalJobsCompleted() || '...'
+      }`,
+      enabled: false
+    },
+    {
+      label: `Wallet Balance: ${ctx.getWalletBalance()} FIL`,
+      enabled: false
+    },
     {
       label: `Scheduled Rewards: ${
         roundToSixDecimalPlaces(ctx.getScheduledRewards())
-      } FIL`
+      } FIL`,
+      enabled: false
     },
     { type: 'separator' },
     {
@@ -103,7 +115,7 @@ const contextMenuBuilder = (/** @type {Context} */ ctx) => {
 module.exports = async function (/** @type {Context} */ ctx) {
   tray = new Tray(getTrayIcon(false, core.isOnline()))
 
-  const contextMenu = contextMenuBuilder(ctx)
+  const contextMenu = createContextMenu(ctx)
   tray.setToolTip('Filecoin Station')
   tray.setContextMenu(contextMenu)
 
@@ -147,7 +159,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
     tray.setImage(
       getTrayIcon(ctx.getUpdaterStatus().updateAvailable, core.isOnline())
     )
-    const contextMenu = contextMenuBuilder(ctx)
+    const contextMenu = createContextMenu(ctx)
     tray.setContextMenu(contextMenu)
   }
 }
