@@ -7,6 +7,7 @@ const timers = require('node:timers/promises')
 const Store = require('electron-store')
 const { WalletBackend } = require('./wallet-backend')
 const { ethers } = require('ethers')
+const { parseEther, formatEther } = require('ethers/lib/utils')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
@@ -91,7 +92,7 @@ function getBalance () {
  * @returns {string}
  */
 function getScheduledRewards () {
-  return scheduledRewards
+  return formatEther(scheduledRewards)
 }
 
 /**
@@ -154,7 +155,11 @@ async function updateScheduledRewards () {
 
 async function _updateScheduledRewards () {
   assert(ctx)
-  walletStore.set('scheduled_rewards', ctx.getScheduledRewardsForAddress())
+  if (!ctx.getScheduledRewardsForAddress()) return
+  const storeValue = parseEther(
+    ctx.getScheduledRewardsForAddress()
+  ).toHexString()
+  walletStore.set('scheduled_rewards', storeValue)
 }
 
 function listTransactions () {
@@ -250,7 +255,10 @@ function loadBalance () {
 }
 
 function loadScheduledRewards () {
-  return walletStore.get('scheduled_rewards')
+  return ethers.BigNumber.from(
+    // A workaround to fix false TypeScript errors
+    /** @type {string} */ (walletStore.get('scheduled_rewards', '0x0'))
+  )
 }
 
 module.exports = {
