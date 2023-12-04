@@ -6,6 +6,7 @@ const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const assert = require('node:assert')
 const core = require('./core')
+const { roundToSixDecimalPlaces } = require('./utils')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -50,7 +51,11 @@ const contextMenuBuilder = (/** @type {Context} */ ctx) => {
     { type: 'separator' },
     { label: `Jobs Completed: ${ctx.getTotalJobsCompleted() || '...'}` },
     { label: `Wallet Balance: ${ctx.getWalletBalance()} FIL` },
-    { label: `Scheduled Rewards: ${ctx.getScheduledRewards()} FIL` },
+    {
+      label: `Scheduled Rewards: ${
+        roundToSixDecimalPlaces(ctx.getScheduledRewards())
+      } FIL`
+    },
     { type: 'separator' },
     {
       label: 'Open Station',
