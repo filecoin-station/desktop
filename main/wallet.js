@@ -7,7 +7,7 @@ const timers = require('node:timers/promises')
 const Store = require('electron-store')
 const { WalletBackend } = require('./wallet-backend')
 const { ethers } = require('ethers')
-const { parseEther, formatEther } = require('ethers/lib/utils')
+const { formatEther } = require('ethers/lib/utils')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
@@ -148,11 +148,14 @@ async function updateScheduledRewards () {
 
 async function _updateScheduledRewards () {
   assert(ctx)
-  if (!ctx.getScheduledRewardsForAddress()) return
-  const storeValue = parseEther(
-    ctx.getScheduledRewardsForAddress()
-  ).toHexString()
-  walletStore.set('scheduled_rewards', storeValue)
+  ctx.setScheduledRewardsForAddress(getScheduledRewards())
+}
+
+/**
+ * @param {ethers.BigNumber} scheduledRewards
+ */
+async function setScheduledRewards (scheduledRewards) {
+  walletStore.set('scheduled_rewards', scheduledRewards.toHexString())
 }
 
 function listTransactions () {
@@ -259,6 +262,7 @@ module.exports = {
   getAddress,
   getBalance,
   getScheduledRewards,
+  setScheduledRewards,
   formatWithSixDecimalDigits,
   listTransactions,
   transferAllFundsToDestinationWallet,

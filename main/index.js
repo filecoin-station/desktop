@@ -110,7 +110,7 @@ const ctx = {
       count
     )
   },
-  getScheduledRewardsForAddress: () => core.getScheduledRewardsForAddress(),
+  getScheduledRewardsForAddress: () => wallet.getScheduledRewards(),
   setScheduledRewardsForAddress: (balance) => {
     ipcMain.emit(
       ipcMainEvents.SCHEDULED_REWARDS_UPDATE,

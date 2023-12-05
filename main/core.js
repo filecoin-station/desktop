@@ -12,6 +12,7 @@ const { randomUUID } = require('node:crypto')
 const { Activities } = require('./activities')
 const { Logs } = require('./logs')
 const split2 = require('split2')
+const { parseEther } = require('ethers/lib/utils')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -25,7 +26,6 @@ console.log('Core binary: %s', corePath)
 const logs = new Logs()
 const activities = new Activities()
 let totalJobsCompleted = 0
-let scheduledRewardsForAddress = ''
 
 /**
  * @param {Context} ctx
@@ -81,11 +81,14 @@ async function start (ctx) {
         console.error(err)
         return
       }
+      console.log('event', event)
       switch (event.type) {
         case 'jobs-completed':
           totalJobsCompleted = event.total
-          scheduledRewardsForAddress = event.rewardsScheduledForAddress
           ctx.setTotalJobsCompleted(event.total)
+          wallet.setScheduledRewards(
+            parseEther(event.rewardsScheduledForAddress || 0)
+          )
           ctx.setScheduledRewardsForAddress(event.rewardsScheduledForAddress)
           break
         case 'activity:info':
@@ -167,6 +170,5 @@ module.exports = {
   setup,
   isOnline: () => activities.isOnline(),
   getActivities: () => activities.get(),
-  getTotalJobsCompleted: () => totalJobsCompleted,
-  getScheduledRewardsForAddress: () => scheduledRewardsForAddress
+  getTotalJobsCompleted: () => totalJobsCompleted
 }
