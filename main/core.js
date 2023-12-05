@@ -81,7 +81,6 @@ async function start (ctx) {
         console.error(err)
         return
       }
-      console.log('event', event)
       switch (event.type) {
         case 'jobs-completed':
           totalJobsCompleted = event.total
