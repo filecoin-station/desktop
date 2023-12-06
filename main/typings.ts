@@ -24,6 +24,9 @@ export interface Context {
   setScheduledRewardsForAddress(balance: string): void;
   getScheduledRewardsForAddress(): string;
 
+  getScheduledRewards(): string;
+  getWalletBalance(): string;
+
   showUI: () => void;
   isShowingUI: boolean;
   loadWebUIFromDist: import('electron-serve').loadURL;
