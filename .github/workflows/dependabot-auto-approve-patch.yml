@@ -17,6 +17,8 @@ jobs:
           - autoprefixer
           - electron-log
           - jsdom
+          - react-helmet-async
+          - tailwindcss
     steps:
       - name: Dependabot metadata
         id: metadata
