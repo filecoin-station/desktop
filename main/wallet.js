@@ -88,23 +88,6 @@ function getScheduledRewards () {
   return formatEther(scheduledRewards)
 }
 
-/**
- * @param {ethers.BigNumber} amount
- * @returns {string}
- */
-function formatWithSixDecimalDigits (amount) {
-  const fullPrecision = ethers.utils.formatUnits(amount, 18)
-  const [whole, fraction] = fullPrecision.split('.')
-  if (fraction === undefined) return fullPrecision
-  const truncated = fraction
-    // keep the first 6 digits, discard the rest
-    .slice(0, 6)
-    // remove trailing zeroes as long as there are some leading digits
-    // (we want to preserve .0 if there is no fraction)
-    .replace(/(\d)0+$/, '$1')
-  return [whole, truncated].join('.')
-}
-
 // Inline `p-debounce.promise` from
 // https://github.com/sindresorhus/p-debounce/blob/1ba9d31dd81eee55b93ef67e38b8fa24781df63b/index.js#L38-L53
 // since v5 is ESM only.
@@ -263,7 +246,6 @@ module.exports = {
   getBalance,
   getScheduledRewards,
   setScheduledRewards,
-  formatWithSixDecimalDigits,
   listTransactions,
   transferAllFundsToDestinationWallet,
   getTransactionsForUI

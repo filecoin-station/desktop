@@ -86,7 +86,7 @@ async function start (ctx) {
           totalJobsCompleted = event.total
           ctx.setTotalJobsCompleted(event.total)
           wallet.setScheduledRewards(
-            parseEther(event.rewardsScheduledForAddress || 0)
+            parseEther(event.rewardsScheduledForAddress)
           )
           ctx.setScheduledRewardsForAddress(event.rewardsScheduledForAddress)
           break
