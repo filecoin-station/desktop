@@ -31,7 +31,6 @@ backend.transactions = loadStoredEntries()
 /** @type {Context | null} */
 let ctx = null
 let balance = loadBalance()
-const scheduledRewards = loadScheduledRewards()
 
 /**
  * @param {Context} _ctx
@@ -85,7 +84,7 @@ function getBalance () {
  * @returns {string}
  */
 function getScheduledRewards () {
-  return formatEther(scheduledRewards)
+  return formatEther(loadScheduledRewards())
 }
 
 // Inline `p-debounce.promise` from
