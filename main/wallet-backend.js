@@ -31,7 +31,7 @@ class WalletBackend {
     disableKeytar = DISABLE_KEYTAR,
     onTransactionUpdate = noop
   } = {}) {
-    /** @type {ethers.providers.JsonRpcProvider | null} */
+    /** @type {ethers.JsonRpcProvider | null} */
     this.provider = null
     /** @type {ethers.Wallet | null} */
     this.signer = null
@@ -56,10 +56,12 @@ class WalletBackend {
     } else {
       ({ seed, isNew } = await this.getSeedPhrase())
     }
-    this.provider = new ethers.providers.JsonRpcProvider(
-      'https://api.node.glif.io/rpc/v0'
+    this.provider = new ethers.JsonRpcProvider(
+      'https://api.node.glif.io/rpc/v0',
+      undefined,
+      { batchMaxCount: 1 }
     )
-    this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
+    this.signer = ethers.Wallet.fromPhrase(seed).connect(this.provider)
     this.address = this.signer.address
     this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
     this.filForwarder = new ethers.Contract(
@@ -89,7 +91,9 @@ class WalletBackend {
       }
     }
 
-    seed = ethers.Wallet.createRandom().mnemonic.phrase
+    const { mnemonic } = ethers.HDNodeWallet.createRandom()
+    assert(mnemonic)
+    seed = mnemonic.phrase
     if (!this.disableKeytar) {
       await keytar.setPassword(service, 'seed', seed)
     }
