@@ -4,6 +4,7 @@
    * @param {string | number | undefined} input
    * @returns {number}
 */
+// Keep in sync with renderer/src/number-ops.ts
 function formatTokenValue (input) {
   const number = Number(input)
   if (!input) return 0
