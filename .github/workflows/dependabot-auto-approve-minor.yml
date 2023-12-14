@@ -24,6 +24,7 @@ jobs:
           - '@playwright/'
           - playwright
           - '@vitejs/plugin-react'
+          - react-router-dom
     steps:
       - name: Dependabot metadata
         id: metadata
