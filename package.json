@@ -49,7 +49,7 @@
     "@sentry/react": "^7.91.0",
     "@sentry/tracing": "^7.91.0",
     "dayjs": "^1.11.10",
-    "electron-log": "^5.0.1",
+    "electron-log": "^5.0.2",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
     "electron-updater": "^6.1.7",
