@@ -30,7 +30,6 @@ export interface Context {
   loadWebUIFromDist: import('electron-serve').loadURL;
   manualCheckForUpdates: () => void;
   saveModuleLogsAs: () => Promise<void>;
-  confirmChangeWalletAddress: () => boolean;
 
   openReleaseNotes: () => void;
   restartToUpdate: () => void;

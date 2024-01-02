@@ -35,7 +35,6 @@ const setupTray = require('./tray')
 const setupUI = require('./ui')
 const setupUpdater = require('./updater')
 const Sentry = require('@sentry/node')
-const { setup: setupDialogs } = require('./dialog')
 const telemetry = require('./telemetry')
 
 const inTest = (process.env.NODE_ENV === 'test')
@@ -121,7 +120,6 @@ const ctx = {
   loadWebUIFromDist: serve({
     directory: path.resolve(__dirname, '../renderer/dist')
   }),
-  confirmChangeWalletAddress: () => { throw new Error('never get here') },
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
@@ -160,7 +158,6 @@ async function run () {
 
   try {
     setupTray(ctx)
-    setupDialogs(ctx)
     if (process.platform === 'darwin') {
       await setupAppMenu(ctx)
     }

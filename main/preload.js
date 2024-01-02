@@ -103,9 +103,5 @@ contextBridge.exposeInMainWorld('electron', {
       return () =>
         ipcRenderer.removeListener('station:scheduled-rewards-update', listener)
     }
-  },
-  dialogs: {
-    confirmChangeWalletAddress: () =>
-      ipcRenderer.invoke('dialogs:confirmChangeWalletAddress')
   }
 })
