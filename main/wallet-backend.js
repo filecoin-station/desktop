@@ -56,9 +56,12 @@ class WalletBackend {
     } else {
       ({ seed, isNew } = await this.getSeedPhrase())
     }
-    this.provider = new ethers.providers.JsonRpcProvider(
-      'https://api.node.glif.io/rpc/v0'
-    )
+    this.provider = new ethers.providers.JsonRpcProvider({
+      url: 'https://api.node.glif.io/rpc/v0',
+      headers: {
+        Authorization: 'Bearer VOeqfEFbUjr/vnvYSwbohKuilNkdmD/4tI3gXzV7f3g='
+      }
+    })
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
     this.address = this.signer.address
     this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
