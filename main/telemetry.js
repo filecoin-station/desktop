@@ -62,7 +62,7 @@ async function setup () {
       }
       Sentry.captureException(err)
     })
-  }, 10_000).unref()
+  }, 10 * 60 * 1000).unref()
 }
 
 module.exports = {
