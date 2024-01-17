@@ -56,9 +56,12 @@ class WalletBackend {
     } else {
       ({ seed, isNew } = await this.getSeedPhrase())
     }
-    this.provider = new ethers.providers.JsonRpcProvider(
-      'https://api.node.glif.io/rpc/v0'
-    )
+    this.provider = new ethers.providers.JsonRpcProvider({
+      url: 'https://api.node.glif.io/rpc/v0',
+      headers: {
+        Authorization: 'Bearer VOeqfEFbUjr/vnvYSwbohKuilNkdmD/4tI3gXzV7f3g='
+      }
+    })
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
     this.address = this.signer.address
     this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
@@ -68,7 +71,7 @@ class WalletBackend {
       this.provider
     ).connect(this.signer)
     this.meridian = new ethers.Contract(
-      '0xaaef78eaf86dcf34f275288752e892424dda9341',
+      '0x811765AccE724cD5582984cb35f5dE02d587CA12',
       await fs.readFile(join(__dirname, 'meridian-abi.json'), 'utf8'),
       this.provider
     )
