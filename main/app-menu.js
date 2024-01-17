@@ -16,7 +16,7 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
     click: () => { ctx.saveModuleLogsAs() }
   }))
   menu.items[1].submenu?.insert(1, new MenuItem({
-    label: 'Copy Seed Phrase To Clipboard',
+    label: 'Copy Wallet Seed Phrase To Clipboard',
     click: async () => {
       clipboard.writeText(await getSeedPhrase())
     }
