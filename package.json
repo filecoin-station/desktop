@@ -60,7 +60,7 @@
     "npm": "^10.3.0",
     "p-debounce": "^4.0.0",
     "package": "^1.0.1",
-    "prettier": "^3.2.2",
+    "prettier": "^3.2.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-helmet-async": "^2.0.4",
