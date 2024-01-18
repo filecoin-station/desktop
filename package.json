@@ -40,7 +40,7 @@
   "homepage": "https://github.com/filecoin-station/desktop#readme",
   "dependencies": {
     "@filecoin-station/core": "^16.3.3",
-    "@glif/filecoin-address": "2.0.43",
+    "@glif/filecoin-address": "3.0.0",
     "@glif/filecoin-message": "^3.0.0",
     "@glif/filecoin-number": "^3.0.0",
     "@glif/filecoin-wallet-provider": "^3.0.0",
