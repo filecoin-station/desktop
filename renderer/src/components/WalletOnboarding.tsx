@@ -1,6 +1,6 @@
-import { ReactComponent as CafeIcon } from '../assets/img/icons/cafe.svg'
-import { ReactComponent as TransferIcon } from '../assets/img/icons/transfer.svg'
-import { ReactComponent as WalletIcon } from '../assets/img/icons/wallet.svg'
+import CafeIcon from '../assets/img/icons/cafe.svg?react'
+import TransferIcon from '../assets/img/icons/transfer.svg?react'
+import WalletIcon from '../assets/img/icons/wallet.svg?react'
 
 const WalletOnboarding = () => {
   return (
