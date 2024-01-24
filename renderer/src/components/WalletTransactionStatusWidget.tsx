@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import { ReactComponent as SentIcon } from '../assets/img/icons/sent.svg'
-import { ReactComponent as FailedIcon } from '../assets/img/icons/failed.svg'
-import { ReactComponent as ProcessingIcon } from '../assets/img/icons/processing.svg'
+import SentIcon from '../assets/img/icons/sent.svg?react'
+import FailedIcon from '../assets/img/icons/failed.svg?react'
+import ProcessingIcon from '../assets/img/icons/processing.svg?react'
 import { FILTransaction, FILTransactionProcessing } from '../typings'
 import { browseTransactionTracker } from '../lib/station-config'
 

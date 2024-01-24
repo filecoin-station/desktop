@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react'
 import useWallet from '../hooks/StationWallet'
 import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 
-import { ReactComponent as WalletIcon } from '../assets/img/icons/wallet.svg'
+import WalletIcon from '../assets/img/icons/wallet.svg?react'
 import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
 import { FILTransactionProcessing } from '../typings'
 
