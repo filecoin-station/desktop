@@ -1,8 +1,8 @@
 import { FC } from 'react'
 import { Activity } from '../typings'
 import dayjs from 'dayjs'
-import { ReactComponent as WarningIcon } from '../assets/img/icons/warning.svg'
-import { ReactComponent as JobIcon } from '../assets/img/icons/job.svg'
+import WarningIcon from '../assets/img/icons/warning.svg?react'
+import JobIcon from '../assets/img/icons/job.svg?react'
 
 const dateTimeFormat = new Intl.DateTimeFormat(window.navigator.language, {
   hour: 'numeric', minute: 'numeric', second: 'numeric'
