@@ -6,7 +6,10 @@
 class Activities {
   /** @type {Activity[]} */
   #activities = []
-  #online = false
+  #online = {
+    spark: false,
+    voyager: false
+  }
 
   /**
    * Display last 100 activities
@@ -24,14 +27,19 @@ class Activities {
    * @param {Activity} activity
    */
   #detectChangeInOnlineStatus (activity) {
-    if (
-      activity.type === 'info' &&
-      (activity.message === 'SPARK started reporting retrievals' ||
-      activity.message === 'SPARK retrieval reporting resumed')
-    ) {
-      this.#online = true
-    } else if (activity.message === 'SPARK failed reporting retrieval') {
-      this.#online = false
+    const firstWord = activity.message.split(' ')[0].toLowerCase()
+    if (activity.type === 'info') {
+      if (firstWord === 'spark') {
+        this.#online.spark = true
+      } else if (firstWord === 'voyager') {
+        this.#online.voyager = true
+      }
+    } else if (activity.type === 'error') {
+      if (firstWord === 'spark') {
+        this.#online.spark = false
+      } else if (firstWord === 'voyager') {
+        this.#online.voyager = false
+      }
     }
   }
 
@@ -40,7 +48,7 @@ class Activities {
   }
 
   isOnline () {
-    return this.#online
+    return this.#online.spark || this.#online.voyager
   }
 }
 
