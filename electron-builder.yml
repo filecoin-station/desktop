@@ -32,8 +32,7 @@ mac:
       arch: ['universal']
     - target: zip
       arch: ['universal']
-  singleArchFiles:
-    - 'node_modules/secp256k1/build'
+  singleArchFiles: 'node_modules/secp256k1/build'
 
 dmg:
   iconSize: 160
