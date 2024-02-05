@@ -68,7 +68,7 @@ module.exports = async function (ctx) {
     ui.webContents.openDevTools()
 
     console.log('Loading the WebUI')
-    ui.loadURL('http://localhost:3000/')
+    await ui.loadURL('http://localhost:3000/')
   }
 
   // UX trick to avoid jittery UI while browser initializes chrome
