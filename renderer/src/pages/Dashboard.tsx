@@ -5,6 +5,7 @@ import ActivityLog from '../components/ActivityLog'
 import UpdateBanner from '../components/UpdateBanner'
 import WalletWidget from '../components/WalletWidget'
 import useStationActivity from '../hooks/StationActivity'
+import { formatTokenValue } from '../utils/number-ops'
 
 const scheduledRewardsTooltip = `
 This is the reward total you have accrued since your last payout.
@@ -50,7 +51,7 @@ const Dashboard = (): JSX.Element => {
                 className="w-fit text-header-m font-bold font-number total-earnings"
                 title={scheduledRewardsTooltip}
               >
-                {scheduledRewards}<span className="text-header-3xs">&nbsp;FIL</span>
+                {formatTokenValue(scheduledRewards)}<span className="text-header-3xs">&nbsp;FIL</span>
               </p>
             </div>
           </div>

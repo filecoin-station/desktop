@@ -6,7 +6,7 @@ const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const assert = require('node:assert')
 const core = require('./core')
-const { roundToSixDecimalPlaces } = require('./utils')
+const { formatTokenValue } = require('./utils')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -61,13 +61,13 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
     {
       label:
         `Wallet Balance: ${
-          roundToSixDecimalPlaces(ctx.getWalletBalance())
+          formatTokenValue(ctx.getWalletBalance())
         } FIL`,
       enabled: false
     },
     {
       label: `Scheduled Rewards: ${
-        roundToSixDecimalPlaces(ctx.getScheduledRewards())
+        formatTokenValue(ctx.getScheduledRewards())
       } FIL`,
       enabled: false
     },

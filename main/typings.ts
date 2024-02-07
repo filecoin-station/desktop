@@ -21,6 +21,8 @@ export interface Context {
   getActivities(): Activity[];
   setTotalJobsCompleted(count: number): void;
   getTotalJobsCompleted(): number;
+  setScheduledRewardsForAddress(balance: string): void;
+  getScheduledRewardsForAddress(): string;
 
   getScheduledRewards(): string;
   getWalletBalance(): string;
@@ -40,7 +42,6 @@ export interface Context {
 
   transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void;
   balanceUpdate: (balance:string) => void;
-  scheduledRewardsUpdate: (balance: string) => void;
 }
 
 export interface WalletSeed {

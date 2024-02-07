@@ -1,12 +1,18 @@
 'use strict'
 
 /**
- * @param { number | string | undefined } amount
- * @returns { string }
- */
+   * @param {string | number | undefined} input
+   * @returns {number}
+*/
+// Keep in sync with renderer/src/number-ops.ts
+function formatTokenValue (input) {
+  const number = Number(input)
+  if (!input) return 0
+  if (Number.isInteger(number)) return number
+  // decimal cases below
+  return Number(number.toFixed(6))
+}
 
-exports.roundToSixDecimalPlaces = (amount) => {
-  if (!amount) return '0'
-  const roundedNumber = Number(amount).toFixed(6) // Round to 6 decimal places
-  return roundedNumber.toString()
+module.exports = {
+  formatTokenValue
 }

@@ -12,6 +12,7 @@ const { randomUUID } = require('node:crypto')
 const { Activities } = require('./activities')
 const { Logs } = require('./logs')
 const split2 = require('split2')
+const { parseEther } = require('ethers/lib/utils')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -84,6 +85,10 @@ async function start (ctx) {
         case 'jobs-completed':
           totalJobsCompleted = event.total
           ctx.setTotalJobsCompleted(event.total)
+          wallet.setScheduledRewards(
+            parseEther(event.rewardsScheduledForAddress)
+          )
+          ctx.setScheduledRewardsForAddress(event.rewardsScheduledForAddress)
           break
         case 'activity:info':
         case 'activity:error': {
