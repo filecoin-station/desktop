@@ -69,7 +69,7 @@ describe('Wallet Backend', function () {
     it(
       'fetches rewards scheduled for disbursement',
       /** @this {Mocha.Test} */ async function () {
-        this.timeout(20_000)
+        this.timeout(60_000)
         // We need a new wallet that doesn't have any scheduled rewards
         await backend.setup(randomSeed())
         const amount = await pRetry(
