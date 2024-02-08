@@ -51,6 +51,10 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
       label: `Filecoin Station v${STATION_VERSION}`,
       enabled: false
     },
+    {
+      label: 'Open Station',
+      click: () => ctx.showUI()
+    },
     { type: 'separator' },
     {
       label: `Jobs Completed: ${
@@ -70,11 +74,6 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
         formatTokenValue(ctx.getScheduledRewards())
       } FIL`,
       enabled: false
-    },
-    { type: 'separator' },
-    {
-      label: 'Open Station',
-      click: () => ctx.showUI()
     },
     { type: 'separator' },
     {
