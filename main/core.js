@@ -113,7 +113,9 @@ async function start (ctx) {
 
   assert(childProcess.stderr)
   childProcess.stderr.setEncoding('utf8')
-  childProcess.stderr.on('data', chunk => logs.push(chunk))
+  childProcess.stderr
+    .pipe(split2())
+    .on('data', line => logs.push(line))
 
   /** @type {string | null} */
   let exitReason = null
