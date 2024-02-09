@@ -127,14 +127,12 @@ async function start (ctx) {
   childProcess.on('close', code => {
     console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
 
-    ;(async () => {
-      Sentry.captureException('Core exited', scope => {
-        // Sentry UI can't show the full 100 lines
-        scope.setExtra('logs', logs.getLast(10))
-        scope.setExtra('reason', exitReason)
-        return scope
-      })
-    })()
+    Sentry.captureException('Core exited', scope => {
+      // Sentry UI can't show the full 100 lines
+      scope.setExtra('logs', logs.getLast(10))
+      scope.setExtra('reason', exitReason)
+      return scope
+    })
   })
 
   childProcess.on('exit', (code, signal) => {
