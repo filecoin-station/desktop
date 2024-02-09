@@ -10,7 +10,7 @@ const Sentry = require('@sentry/node')
 const consts = require('./consts')
 const { randomUUID } = require('node:crypto')
 const { Activities } = require('./activities')
-const { Logs } = require('./logs')
+const { LogLines } = require('./logs')
 const split2 = require('split2')
 const { parseEther } = require('ethers/lib/utils')
 
@@ -23,7 +23,7 @@ const corePath = app.isPackaged
   : join(__dirname, '..', 'core', 'bin', 'station.js')
 console.log('Core binary: %s', corePath)
 
-const logs = new Logs()
+const logLines = new LogLines()
 const activities = new Activities()
 let totalJobsCompleted = 0
 
@@ -39,7 +39,7 @@ async function setup (ctx) {
     ctx.showUI()
     const { filePath } = await dialog.showSaveDialog(opts)
     if (filePath) {
-      await fs.writeFile(filePath, logs.get())
+      await fs.writeFile(filePath, logLines.get())
     }
   }
   await maybeMigrateFiles()
@@ -68,7 +68,7 @@ async function start (ctx) {
   childProcess.stdout
     .pipe(split2())
     .on('data', line => {
-      logs.push(line)
+      logLines.push(line)
       let event
       try {
         event = JSON.parse(line)
@@ -115,7 +115,7 @@ async function start (ctx) {
   childProcess.stderr.setEncoding('utf8')
   childProcess.stderr
     .pipe(split2())
-    .on('data', line => logs.push(line))
+    .on('data', line => logLines.push(line))
 
   /** @type {string | null} */
   let exitReason = null
@@ -130,7 +130,7 @@ async function start (ctx) {
     ;(async () => {
       Sentry.captureException('Core exited', scope => {
         // Sentry UI can't show the full 100 lines
-        scope.setExtra('logs', logs.getLast(10))
+        scope.setExtra('logs', logLines.getLast(10))
         scope.setExtra('reason', exitReason)
         return scope
       })
