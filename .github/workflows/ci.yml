@@ -196,6 +196,7 @@ jobs:
           USE_HARD_LINKS: false
 
       - name: Show dist/
+        if: ${{ !(matrix.os == 'windows-latest' && github.event_name == 'pull_request') }}
         run: du -sh dist/ && ls -l dist/
 
       # Persist produced binaries and effective config used for building them
@@ -203,6 +204,7 @@ jobs:
       # - action artifacts can be downloaded for 90 days, then are removed by github
       # - binaries in PRs from forks won't be signed
       - name: Attach produced packages to Github Action
+        if: ${{ !(matrix.os == 'windows-latest' && github.event_name == 'pull_request') }}
         uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.os }}
@@ -210,4 +212,5 @@ jobs:
           if-no-files-found: error
 
       - name: Show Cache
+        if: ${{ !(matrix.os == 'windows-latest' && github.event_name == 'pull_request') }}
         run: du -sh ${{ github.workspace }}/.cache/ && ls -l ${{ github.workspace }}/.cache/
