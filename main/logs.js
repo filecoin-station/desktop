@@ -13,7 +13,7 @@ class Logs {
     this.#logs.splice(0, this.#logs.length - 100)
   }
 
-  getLines () {
+  get () {
     return this.getLastLines(Infinity)
   }
 

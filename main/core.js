@@ -39,7 +39,7 @@ async function setup (ctx) {
     ctx.showUI()
     const { filePath } = await dialog.showSaveDialog(opts)
     if (filePath) {
-      await fs.writeFile(filePath, logs.getLines())
+      await fs.writeFile(filePath, logs.get())
     }
   }
   await maybeMigrateFiles()
