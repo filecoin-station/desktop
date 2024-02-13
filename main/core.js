@@ -39,7 +39,7 @@ async function setup (ctx) {
     ctx.showUI()
     const { filePath } = await dialog.showSaveDialog(opts)
     if (filePath) {
-      await fs.writeFile(filePath, logs.get())
+      await fs.writeFile(filePath, logs.getLines())
     }
   }
   await maybeMigrateFiles()
@@ -68,7 +68,7 @@ async function start (ctx) {
   childProcess.stdout
     .pipe(split2())
     .on('data', line => {
-      logs.push(line)
+      logs.pushLine(line)
       let event
       try {
         event = JSON.parse(line)
@@ -115,7 +115,7 @@ async function start (ctx) {
   childProcess.stderr.setEncoding('utf8')
   childProcess.stderr
     .pipe(split2())
-    .on('data', line => logs.push(line))
+    .on('data', line => logs.pushLine(line))
 
   /** @type {string | null} */
   let exitReason = null
@@ -129,7 +129,7 @@ async function start (ctx) {
 
     Sentry.captureException('Core exited', scope => {
       // Sentry UI can't show the full 100 lines
-      scope.setExtra('logs', logs.getLast(10))
+      scope.setExtra('logs', logs.getLastLines(10))
       scope.setExtra('reason', exitReason)
       return scope
     })
