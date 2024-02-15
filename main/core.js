@@ -91,7 +91,8 @@ async function start (ctx) {
           ctx.setScheduledRewardsForAddress(event.rewardsScheduledForAddress)
           break
         case 'activity:info':
-        case 'activity:error': {
+        case 'activity:error':
+        case 'activity:started': {
           const activity = {
             ...event,
             type: event.type.replace('activity:', ''),
