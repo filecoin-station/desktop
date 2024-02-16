@@ -70,7 +70,7 @@
     "vite-plugin-svgr": "^4.2.0"
   },
   "devDependencies": {
-    "@electron/notarize": "^2.2.1",
+    "@electron/notarize": "^2.3.0",
     "@playwright/test": "^1.41.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.2.1",
