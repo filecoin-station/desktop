@@ -72,6 +72,7 @@ describe('Wallet', function () {
         ]
       )
     })
+
     it('lists only processing transactions', function () {
       assert.deepStrictEqual(
         getTransactionsForUI([
@@ -84,6 +85,7 @@ describe('Wallet', function () {
         ]
       )
     })
+
     it('lists only succeeded transactions', function () {
       assert.deepStrictEqual(
         getTransactionsForUI([
