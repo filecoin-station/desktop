@@ -42,7 +42,7 @@ module.exports = async function (ctx) {
   let devServer
 
   if (app.isPackaged || process.env.NODE_ENV !== 'development') {
-    ctx.loadWebUIFromDist(ui)
+    await ctx.loadWebUIFromDist(ui)
   } else {
     console.log('Starting Vite DEV server')
     const { createServer } = require('vite')
