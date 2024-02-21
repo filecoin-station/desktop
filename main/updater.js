@@ -15,7 +15,7 @@ let updateNotification = null
 
 let checkingManually = false
 
-let updateAvailable = false
+let updateDownloaded = false
 
 /** @type {string | undefined} */
 let nextVersion
@@ -54,7 +54,7 @@ module.exports = async function setupUpdater (
   /** @type {import('./typings').Context} */ ctx
 ) {
   ctx.getUpdaterStatus = function getUpdaterStatus () {
-    return { updateAvailable }
+    return { updateAvailable: updateDownloaded }
   }
 
   ctx.openReleaseNotes = openReleaseNotes
@@ -131,7 +131,6 @@ function onUpdaterError (err) {
  * @param {import('electron-updater').UpdateInfo} info
  */
 function onUpdateAvailable ({ version /*, releaseNotes */ }) {
-  updateAvailable = true
   nextVersion = version
 
   log.info(`Update to version ${version} is available, downloading..`)
@@ -168,6 +167,7 @@ function onUpdateNotAvailable ({ version }) {
  * @param {import('electron-updater').UpdateDownloadedEvent} event
  */
 function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
+  updateDownloaded = true
   log.info(`update to ${version} downloaded`)
 
   const showUpdateDialog = () => {
