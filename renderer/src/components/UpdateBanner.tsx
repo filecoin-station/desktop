@@ -3,23 +3,23 @@ import Warning from '../assets/img/icons/error.svg?react'
 import { openReleaseNotes, restartToUpdate } from '../lib/station-config'
 
 const UpdateBanner = () => {
-  const [isUpdateAvailable, setIsUpdateAvailable] = useState<boolean>(false)
+  const [isReadyToUpdate, setIsReadyToUpdate] = useState<boolean>(false)
 
   useEffect(() => {
     const reload = async () => {
       const updateStatus = await window.electron.getUpdaterStatus()
-      setIsUpdateAvailable(updateStatus.updateAvailable)
+      setIsReadyToUpdate(updateStatus.readyToUpdate)
     }
 
     reload()
-    const unsubscribeUpdateNotification = window.electron.stationEvents.onUpdateAvailable(() => {
-      setIsUpdateAvailable(true)
+    const unsubscribeUpdateNotification = window.electron.stationEvents.onReadyToUpdate(() => {
+      setIsReadyToUpdate(true)
     })
 
     return unsubscribeUpdateNotification
   }, [])
 
-  if (!isUpdateAvailable) return null
+  if (!isReadyToUpdate) return null
   return (
     <div className="h-14 bg-black top-0 left-0 w-full">
       <div className="h-full max-w-[844px] mx-auto flex flex-row items-center justify-between">

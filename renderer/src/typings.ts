@@ -10,7 +10,7 @@ declare global {
       getActivities(): Promise<Activity[]>;
       getTotalJobsCompleted(): Promise<number>;
       onJobStatsUpdated (callback: (totalJobCount: number) => void): () => void;
-      getUpdaterStatus(): Promise<{updateAvailable: boolean}>;
+      getUpdaterStatus(): Promise<{readyToUpdate: boolean}>;
       openReleaseNotes(): void;
       restartToUpdate(): void;
 
@@ -32,7 +32,7 @@ declare global {
         onActivityLogged: (callback: (activity: Activity) => void) => () => void;
         onJobProcessed: (callback: (value: number) => void) => () => void;
         onEarningsChanged: (callback: (value: number) => void) => () => void;
-        onUpdateAvailable: (callback: () => void) => () => void;
+        onReadyToUpdate: (callback: () => void) => () => void;
         onTransactionUpdate:
           (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void) => () => void;
         onBalanceUpdate: (callback: (balance: string) => void) => () => void;
