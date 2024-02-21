@@ -15,7 +15,7 @@ let updateNotification = null
 
 let checkingManually = false
 
-let updateDownloaded = false
+let readyToUpdate = false
 
 /** @type {string | undefined} */
 let nextVersion
@@ -54,7 +54,7 @@ module.exports = async function setupUpdater (
   /** @type {import('./typings').Context} */ ctx
 ) {
   ctx.getUpdaterStatus = function getUpdaterStatus () {
-    return { updateAvailable: updateDownloaded }
+    return { readyToUpdate }
   }
 
   ctx.openReleaseNotes = openReleaseNotes
@@ -167,7 +167,7 @@ function onUpdateNotAvailable ({ version }) {
  * @param {import('electron-updater').UpdateDownloadedEvent} event
  */
 function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
-  updateDownloaded = true
+  readyToUpdate = true
   log.info(`update to ${version} downloaded`)
 
   const showUpdateDialog = () => {
@@ -192,7 +192,7 @@ function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
     // showUpdateDialog() offers the user to restart
   } else if (ctx.isShowingUI) {
     // show unobtrusive notification + dialog on click
-    ipcMain.emit(ipcMainEvents.UPDATE_AVAILABLE)
+    ipcMain.emit(ipcMainEvents.READY_TO_UPDATE)
     updateNotification = new Notification({
       title: 'Filecoin Station Update',
       body: `An update to Filecoin Station ${version} is available.`
