@@ -5,12 +5,12 @@ class Logs {
   #logs = []
 
   /**
-   * Keep last 100 lines of logs for inspection
+   * Keep last 1000 lines of logs for inspection
    * @param {string} line
    */
   pushLine (line) {
     this.#logs.push(line)
-    this.#logs.splice(0, this.#logs.length - 100)
+    this.#logs.splice(0, this.#logs.length - 1000)
   }
 
   get () {
