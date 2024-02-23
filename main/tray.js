@@ -32,11 +32,11 @@ function icon (/** @type {'on' | 'off' | 'update' | 'update-off'} */ state) {
 }
 
 /**
- * @param {boolean} readyToUpdate
+ * @param {boolean} isUpdateAvailable
  * @param {boolean} isOnline
  */
-function getTrayIcon (readyToUpdate, isOnline) {
-  return readyToUpdate
+function getTrayIcon (isUpdateAvailable, isOnline) {
+  return isUpdateAvailable
     ? isOnline
       ? icons.updateOn
       : icons.updateOff
@@ -140,7 +140,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
   })
 
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, updateTray)
-  ipcMain.on(ipcMainEvents.READY_TO_UPDATE, updateTray)
+  ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, updateTray)
   ipcMain.on(ipcMainEvents.JOB_STATS_UPDATED, updateTray)
   ipcMain.on(ipcMainEvents.BALANCE_UPDATE, updateTray)
   ipcMain.on(ipcMainEvents.SCHEDULED_REWARDS_UPDATE, updateTray)
@@ -159,7 +159,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
   function updateTray () {
     assert(tray)
     tray.setImage(
-      getTrayIcon(ctx.getUpdaterStatus().readyToUpdate, core.isOnline())
+      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, core.isOnline())
     )
     const contextMenu = createContextMenu(ctx)
     tray.setContextMenu(contextMenu)

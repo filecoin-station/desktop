@@ -36,7 +36,7 @@ export interface Context {
 
   openReleaseNotes: () => void;
   restartToUpdate: () => void;
-  getUpdaterStatus: () => {readyToUpdate: boolean};
+  getUpdaterStatus: () => {updateAvailable: boolean};
   browseTransactionTracker: (transactionHash: string) => void;
   showTermsOfService: () => void;
 

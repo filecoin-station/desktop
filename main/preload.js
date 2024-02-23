@@ -68,11 +68,11 @@ contextBridge.exposeInMainWorld('electron', {
       return () =>
         ipcRenderer.removeListener('station:earnings-counter', listener)
     },
-    onReadyToUpdate: (/** @type {() => void} */ callback) => {
+    onUpdateAvailable: (/** @type {() => void} */ callback) => {
       const listener = () => callback()
-      ipcRenderer.on('station:ready-to-update', listener)
+      ipcRenderer.on('station:update-available', listener)
       return () =>
-        ipcRenderer.removeListener('station:ready-to-update', listener)
+        ipcRenderer.removeListener('station:update-available', listener)
     },
     onBalanceUpdate: (/** @type {(value: string) => void} */ callback) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */

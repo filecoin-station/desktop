@@ -12,7 +12,7 @@ describe('Dashboard wallet interactions', () => {
     const onActivityLogged = vi.fn((callback) => () => ({}))
     const onEarningsChanged = vi.fn((callback) => () => ({}))
     const onJobProcessed = vi.fn((callback) => () => ({}))
-    const onReadyToUpdate = vi.fn((callback) => () => ({}))
+    const onUpdateAvailable = vi.fn((callback) => () => ({}))
     const onTransactionUpdate = vi.fn((callback) => () => ({}))
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
     const onScheduledRewardsUpdate = vi.fn((callback) => () => ({}))
@@ -71,7 +71,7 @@ describe('Dashboard wallet interactions', () => {
             onActivityLogged,
             onEarningsChanged,
             onJobProcessed,
-            onReadyToUpdate,
+            onUpdateAvailable,
             onTransactionUpdate,
             onScheduledRewardsUpdate,
             onBalanceUpdate
