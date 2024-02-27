@@ -2,18 +2,28 @@ import { Activity, FILTransaction, FILTransactionProcessing } from '../shared/ty
 export type { FILTransactionStatus } from '../shared/typings'
 export type { Activity, FILTransaction, FILTransactionProcessing }
 
-export interface FoxMessage {
-  cid: string;
-  to: string;
-  from: string;
-  nonce: number;
+export interface BeryxTransaction {
   height: number;
-  method: string;
-  value: string;
-  timestamp: number;
-  receipt: {
-    exitCode: number;
-  };
+  canonical: boolean;
+  tx_timestamp: string;
+  tipset_cid: string;
+  block_cid: string;
+  level: number;
+  gas_used: string;
+  tx_cid: string;
+  id: string;
+  parent_id: string;
+  search_id: string;
+  tx_from: string;
+  tx_to: string;
+  amount: number;
+  status: 'Ok' | 'Fail';
+  tx_type: string;
+}
+
+export interface BeryxTransactionsResponse {
+  transactions: BeryxTransaction[];
+  next_cursor: string;
 }
 
 export interface Context {
