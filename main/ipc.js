@@ -79,6 +79,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     'station:browseTransactionTracker',
     (_events, transactionHash) => ctx.browseTransactionTracker(transactionHash)
   )
+  ipcMain.handle('station:openBeryx', () => ctx.openBeryx())
   ipcMain.handle(
     'station:showTermsOfService',
     (_events) => ctx.showTermsOfService()

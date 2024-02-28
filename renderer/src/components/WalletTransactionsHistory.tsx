@@ -5,7 +5,7 @@ import IncomeIcon from '../assets/img/icons/income.svg?react'
 import OutcomeIcon from '../assets/img/icons/outcome.svg?react'
 import ExternalLinkIcon from '../assets/img/icons/external.svg?react'
 import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
-import { browseTransactionTracker } from '../lib/station-config'
+import { browseTransactionTracker, openBeryx } from '../lib/station-config'
 import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
@@ -41,6 +41,7 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({
               <Transaction transaction={transaction} />
             </div>
           ))}
+          powered by <button onClick={openBeryx}>beryx.io</button>
         </div>
       </>
     )
