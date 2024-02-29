@@ -41,8 +41,8 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({
               <Transaction transaction={transaction} />
             </div>
           ))}
-          <p className="p-8 text-body-2xs text-right">
-            powered by <button onClick={openBeryx}>beryx.io</button>
+          <p className="p-8 text-body-2xs text-center">
+            powered by <button type="button" className="underline" onClick={openBeryx}>beryx.io</button>
           </p>
         </div>
       </>
