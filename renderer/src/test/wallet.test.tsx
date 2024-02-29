@@ -14,7 +14,8 @@ vi.mock('../lib/station-config', () => ({
   getDestinationWalletAddress: () => Promise.resolve(''),
   setDestinationWalletAddress: () => mockedSetDestinationWalletAddress,
   getScheduledRewards: () => Promise.resolve('0.0'),
-  getActivities: () => Promise.resolve([])
+  getActivities: () => Promise.resolve([]),
+  openBeryx: () => Promise.resolve()
 }))
 
 describe('Dashboard wallet display', () => {
