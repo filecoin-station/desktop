@@ -19,6 +19,7 @@ jobs:
           - jsdom
           - react-helmet-async
           - tailwindcss
+          - '@glif/'
     steps:
       - name: Dependabot metadata
         id: metadata
