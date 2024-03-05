@@ -13,6 +13,7 @@ declare global {
       getUpdaterStatus(): Promise<{readyToUpdate: boolean}>;
       openReleaseNotes(): void;
       restartToUpdate(): void;
+      openBeryx: () => void;
 
       getScheduledRewards: () => Promise<string>;
 
@@ -26,7 +27,6 @@ declare global {
         getStationWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>;
         transferAllFundsToDestinationWallet: () => Promise<void>;
         browseTransactionTracker: (transactionHash: string) => void;
-        openBeryx: () => void;
         showTermsOfService: () => void;
       };
       stationEvents: {

@@ -61,7 +61,7 @@ export function browseTransactionTracker (transactionHash: string): void {
 }
 
 export function openBeryx (): void {
-  return window.electron.stationConfig.openBeryx()
+  return window.electron.openBeryx()
 }
 
 export function showTermsOfService (): void {
