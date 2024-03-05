@@ -66,10 +66,12 @@ async function refreshState () {
   } catch (err) {
     log.error('Cannot update balance:', err)
   }
-  try {
-    await backend.fetchAllTransactions()
-  } catch (err) {
-    log.error('Cannot update transactions:', err)
+  if (ctx?.isShowingUI) {
+    try {
+      await backend.fetchAllTransactions()
+    } catch (err) {
+      log.error('Cannot update transactions:', err)
+    }
   }
 }
 
