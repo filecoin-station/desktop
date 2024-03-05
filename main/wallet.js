@@ -50,7 +50,7 @@ async function setup (_ctx) {
   ;(async () => {
     while (true) {
       await refreshState()
-      await timers.setTimeout(60_000)
+      await timers.setTimeout(120_000)
     }
   })()
 }
