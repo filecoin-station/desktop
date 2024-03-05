@@ -10,6 +10,7 @@ const {
   getOnboardingCompleted
 } = require('./station-config')
 const { showDialogSync } = require('./dialog')
+const wallet = require('./wallet')
 
 /**
  * @param {import('./typings').Context} ctx
@@ -35,7 +36,10 @@ module.exports = async function (ctx) {
     }
   })
 
-  ui.on('show', () => { ctx.isShowingUI = true })
+  ui.on('show', () => {
+    ctx.isShowingUI = true
+    wallet.refreshState().catch(console.error)
+  })
   ui.on('hide', () => { ctx.isShowingUI = false })
 
   /** @type {import('vite').ViteDevServer} */

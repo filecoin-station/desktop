@@ -243,6 +243,7 @@ function loadScheduledRewards () {
 
 module.exports = {
   setup,
+  refreshState,
   getAddress,
   getBalance,
   getScheduledRewards,
