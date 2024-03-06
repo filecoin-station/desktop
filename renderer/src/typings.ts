@@ -13,6 +13,7 @@ declare global {
       getUpdaterStatus(): Promise<{readyToUpdate: boolean}>;
       openReleaseNotes(): void;
       restartToUpdate(): void;
+      openBeryx: () => void;
 
       getScheduledRewards: () => Promise<string>;
 

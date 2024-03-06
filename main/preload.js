@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('electron', {
   getUpdaterStatus: () => ipcRenderer.invoke('station:getUpdaterStatus'),
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
+  openBeryx: () => ipcRenderer.invoke('station:openBeryx'),
 
   getScheduledRewards: () =>
     ipcRenderer.invoke('station:getScheduledRewards'),

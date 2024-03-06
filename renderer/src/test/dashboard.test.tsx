@@ -54,7 +54,8 @@ describe('Dashboard page', () => {
           getDestinationWalletAddress: () => Promise.resolve(''),
           getTotalEarnings: () => Promise.resolve(0),
           getActivities: () => Promise.resolve([]),
-          getScheduledRewards: () => Promise.resolve('0.0')
+          getScheduledRewards: () => Promise.resolve('0.0'),
+          openBeryx: () => Promise.resolve()
         }
       })
     })
