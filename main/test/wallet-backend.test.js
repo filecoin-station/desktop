@@ -50,7 +50,7 @@ describe('Wallet Backend', function () {
     it('fetches all transactions', /** @this {Mocha.Test} */ async function () {
       //  We need a seed for a wallet that already has some transactions
       if (!TEST_SEED_PHRASE) return this.skip()
-      this.timeout(20_000)
+      this.timeout(60_000)
 
       await backend.setup(TEST_SEED_PHRASE)
       await pRetry(() => backend.fetchAllTransactions(), { retries: 10 })
