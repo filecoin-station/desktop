@@ -76,7 +76,7 @@
     "@testing-library/react": "^14.2.2",
     "@types/mocha": "^10.0.6",
     "@types/node-fetch": "^2.6.11",
-    "@types/react": "^18.2.69",
+    "@types/react": "^18.2.70",
     "@types/react-dom": "^18.2.22",
     "@types/split2": "^4.2.3",
     "@types/tmp": "^0.2.6",
