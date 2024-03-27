@@ -20,6 +20,7 @@ jobs:
           - react-helmet-async
           - tailwindcss
           - '@glif/'
+          - '@filecoin-station/core'
     steps:
       - name: Dependabot metadata
         id: metadata
