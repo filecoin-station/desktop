@@ -100,10 +100,7 @@ describe('Dashboard page', () => {
             onScheduledRewardsUpdate,
             onBalanceUpdate
           },
-          getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({}))),
-          dialogs: {
-            confirmChangeWalletAddress: () => Promise.resolve(true)
-          }
+          getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({})))
         }
       })
       render(<BrowserRouter><Dashboard /></BrowserRouter>)

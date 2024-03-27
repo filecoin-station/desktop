@@ -39,9 +39,6 @@ declare global {
         onBalanceUpdate: (callback: (balance: string) => void) => () => void;
         onScheduledRewardsUpdate: (callback: (balance: string) => void) => () => void;
       };
-      dialogs: {
-        confirmChangeWalletAddress: () => Promise<boolean>;
-      };
     };
   }
 }

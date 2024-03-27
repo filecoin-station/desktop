@@ -6,8 +6,7 @@ const { dialog } = require('electron')
 /** @typedef {import('./typings').Context} Context */
 
 module.exports = {
-  showDialogSync,
-  setup
+  showDialogSync
 }
 
 /**
@@ -54,17 +53,4 @@ function showDialogSync ({
   return isInverse
     ? buttons.length - selected - 1
     : selected
-}
-
-function setup (/** @type {Context} */ ctx) {
-  ctx.confirmChangeWalletAddress = () => {
-    const choice = showDialogSync({
-      title: 'You\'re about to change the FIL address',
-      message:
-        'Are you sure you want to change your wallet address? This will stop ' +
-        'all Station activity.',
-      buttons: ['Continue', 'Cancel']
-    })
-    return choice === 0
-  }
 }
