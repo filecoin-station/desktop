@@ -15,13 +15,20 @@ const timers = require('node:timers/promises')
 const log = require('electron-log').scope('wallet-backend')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
-/** @typedef {import('./typings').FoxMessage} FoxMessage */
+/**
+ * @typedef
+ * {import('./typings').BeryxTransactionsResponse}
+ * BeryxTransactionsResponse
+ */
+/** @typedef {import('./typings').BeryxTransaction} BeryxTransaction */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
 /** @typedef {
   import('./typings').FILTransactionProcessing
 } FILTransactionProcessing */
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
+// eslint-disable-next-line max-len
+const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3MTE3OTM5MjAsImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.BGJQa_aM3EAV9pWMM_dgb2E7MiUdQflSHp4LJpMq7qOjfywpBudLUtbDSHaZmR2WtvrCv7wGJbEficVXFa5BAg'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 async function noop () {}
@@ -212,31 +219,19 @@ class WalletBackend {
    */
   async convertEthTxHashToCid (hash) {
     log.info('convertEthTxHashToCid', { hash })
-    for (let attempt = 0; attempt < 10; attempt++) {
-      const res = await fetch('https://graph.glif.link/query', {
-        headers: {
-          accept: '*/*',
-          'accept-language': 'en-US,en;q=0.9,de;q=0.8',
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          operationName: 'Message',
-          variables: {
-            cid: hash
-          },
-          query: 'query Message($cid: String!) {message(cid: $cid) {cid}}'
-        }),
-        method: 'POST'
-      })
-      const body = await res.json()
-      if (body.data.message) {
-        return body.data.message.cid
-      }
-      if (
-        body.errors.length !== 1 ||
-        body.errors[0]?.message !== 'Key not found'
-      ) {
-        log.error(body.errors)
+    for (let attempt = 0; attempt < 20; attempt++) {
+      const res = await fetch(
+        `https://api.zondax.ch/fil/data/v3/mainnet/transactions/hash/${hash}`,
+        {
+          headers: {
+            authorization: `Bearer ${BERYX_TOKEN}`
+          }
+        }
+      )
+      const body = /** @type {BeryxTransactionsResponse} */ (await res.json())
+      const tx = body.transactions.find(tx => tx.tx_type !== 'Fee')
+      if (tx) {
+        return tx.tx_cid
       }
       await timers.setTimeout(10_000)
     }
@@ -245,15 +240,31 @@ class WalletBackend {
 
   /**
    * @param {string} address
-   * @returns Promise<GQLMessage[]>
+   * @returns Promise<BeryxTransaction[]>
    */
   async getMessages (address) {
-    const url = `https://filfox.info/api/v1/address/${address}/messages?pageSize=1000000`
-    const res = await fetch(url)
-    assert(res.ok, `Could not fetch messages (Status ${res.status})`)
-    /** @type {{messages: FoxMessage[] | null}} */
-    const { messages } = /** @type {any} */ (await res.json())
-    return messages || []
+    const types = ['sender', 'receiver']
+    const messages = await Promise.all(types.map(async type => {
+      const res = await fetch(
+        `https://api.zondax.ch/fil/data/v3/mainnet/transactions/address/${address}/${type}`,
+        {
+          headers: {
+            authorization: `Bearer ${BERYX_TOKEN}`
+          }
+        }
+      )
+      assert(res.ok, `Could not fetch messages (Status ${res.status})`)
+      const { transactions } =
+        /** @type {BeryxTransactionsResponse} */ (await res.json())
+      return transactions
+    }))
+    return messages
+      .flat()
+      .filter(tx => tx.tx_type !== 'Fee')
+      .sort((a, b) => {
+        return new Date(b.tx_timestamp).getTime() -
+          new Date(a.tx_timestamp).getTime()
+      })
   }
 
   /**
@@ -270,14 +281,16 @@ class WalletBackend {
       assert(this.addressDelegated)
       return {
         height: message.height,
-        hash: message.cid,
-        outgoing: message.from === this.addressDelegated,
-        amount: ethers.utils.formatUnits(message.value, 18),
-        address: message.from === this.addressDelegated
-          ? message.to
-          : message.from,
-        timestamp: message.timestamp * 1000,
-        status: message.receipt.exitCode === 0 ? 'succeeded' : 'failed'
+        hash: message.tx_cid,
+        outgoing: message.tx_from === this.addressDelegated,
+        amount: ethers.utils.formatUnits(BigInt(message.amount), 18),
+        address: message.tx_from === this.addressDelegated
+          ? message.tx_to
+          : message.tx_from,
+        timestamp: new Date(message.tx_timestamp).getTime(),
+        status: message.status === 'Ok'
+          ? 'succeeded'
+          : 'failed'
       }
     })
 

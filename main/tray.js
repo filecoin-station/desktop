@@ -6,7 +6,7 @@ const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const assert = require('node:assert')
 const core = require('./core')
-const { roundToSixDecimalPlaces } = require('./utils')
+const { formatTokenValue } = require('./utils')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -32,11 +32,11 @@ function icon (/** @type {'on' | 'off' | 'update' | 'update-off'} */ state) {
 }
 
 /**
- * @param {boolean} isUpdateAvailable
+ * @param {boolean} readyToUpdate
  * @param {boolean} isOnline
  */
-function getTrayIcon (isUpdateAvailable, isOnline) {
-  return isUpdateAvailable
+function getTrayIcon (readyToUpdate, isOnline) {
+  return readyToUpdate
     ? isOnline
       ? icons.updateOn
       : icons.updateOff
@@ -51,6 +51,10 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
       label: `Filecoin Station v${STATION_VERSION}`,
       enabled: false
     },
+    {
+      label: 'Open Station',
+      click: () => ctx.showUI()
+    },
     { type: 'separator' },
     {
       label: `Jobs Completed: ${
@@ -61,20 +65,15 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
     {
       label:
         `Wallet Balance: ${
-          roundToSixDecimalPlaces(ctx.getWalletBalance())
+          formatTokenValue(ctx.getWalletBalance())
         } FIL`,
       enabled: false
     },
     {
       label: `Scheduled Rewards: ${
-        roundToSixDecimalPlaces(ctx.getScheduledRewards())
+        formatTokenValue(ctx.getScheduledRewards())
       } FIL`,
       enabled: false
-    },
-    { type: 'separator' },
-    {
-      label: 'Open Station',
-      click: () => ctx.showUI()
     },
     { type: 'separator' },
     {
@@ -141,7 +140,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
   })
 
   ipcMain.on(ipcMainEvents.ACTIVITY_LOGGED, updateTray)
-  ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, updateTray)
+  ipcMain.on(ipcMainEvents.READY_TO_UPDATE, updateTray)
   ipcMain.on(ipcMainEvents.JOB_STATS_UPDATED, updateTray)
   ipcMain.on(ipcMainEvents.BALANCE_UPDATE, updateTray)
   ipcMain.on(ipcMainEvents.SCHEDULED_REWARDS_UPDATE, updateTray)
@@ -160,7 +159,7 @@ function setupIpcEventListeners (contextMenu, ctx) {
   function updateTray () {
     assert(tray)
     tray.setImage(
-      getTrayIcon(ctx.getUpdaterStatus().updateAvailable, core.isOnline())
+      getTrayIcon(ctx.getUpdaterStatus().readyToUpdate, core.isOnline())
     )
     const contextMenu = createContextMenu(ctx)
     tray.setContextMenu(contextMenu)

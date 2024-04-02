@@ -50,7 +50,7 @@ describe('Wallet Backend', function () {
     it('fetches all transactions', /** @this {Mocha.Test} */ async function () {
       //  We need a seed for a wallet that already has some transactions
       if (!TEST_SEED_PHRASE) return this.skip()
-      this.timeout(20_000)
+      this.timeout(60_000)
 
       await backend.setup(TEST_SEED_PHRASE)
       await pRetry(() => backend.fetchAllTransactions(), { retries: 10 })
@@ -66,14 +66,18 @@ describe('Wallet Backend', function () {
   })
 
   describe('fetchScheduledRewards()', function () {
-    it('fetches rewards scheduled for disbursement', async function () {
-      // We need a new wallet that doesn't have any scheduled rewards
-      await backend.setup(randomSeed())
-      const amount = await pRetry(
-        () => backend.fetchScheduledRewards(),
-        { retries: 10 }
-      )
-      assert.strictEqual(amount.toBigInt(), 0n)
-    })
+    it(
+      'fetches rewards scheduled for disbursement',
+      /** @this {Mocha.Test} */ async function () {
+        this.timeout(60_000)
+        // We need a new wallet that doesn't have any scheduled rewards
+        await backend.setup(randomSeed())
+        const amount = await pRetry(
+          () => backend.fetchScheduledRewards(),
+          { retries: 10 }
+        )
+        assert.strictEqual(amount.toBigInt(), 0n)
+      }
+    )
   })
 })

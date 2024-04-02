@@ -6,7 +6,7 @@ import FilAddressForm from './FilAddressForm'
 import WalletTransactionsHistory from './WalletTransactionsHistory'
 import useWallet from '../hooks/StationWallet'
 import TransferFundsButtons from './TransferFunds'
-import { ReactComponent as CopyIcon } from '../assets/img/icons/copy.svg'
+import CopyIcon from '../assets/img/icons/copy.svg?react'
 
 interface PropsWallet {
   isOpen: boolean;

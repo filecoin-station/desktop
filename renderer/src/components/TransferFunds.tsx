@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { ReactComponent as InfoIcon } from '../assets/img/icons/info.svg'
+import InfoIcon from '../assets/img/icons/info.svg?react'
 import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 
 interface TransferFundsButtonsProps {

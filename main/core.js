@@ -12,6 +12,7 @@ const { randomUUID } = require('node:crypto')
 const { Activities } = require('./activities')
 const { Logs } = require('./logs')
 const split2 = require('split2')
+const { parseEther } = require('ethers/lib/utils')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -67,7 +68,7 @@ async function start (ctx) {
   childProcess.stdout
     .pipe(split2())
     .on('data', line => {
-      logs.push(line)
+      logs.pushLine(line)
       let event
       try {
         event = JSON.parse(line)
@@ -84,9 +85,14 @@ async function start (ctx) {
         case 'jobs-completed':
           totalJobsCompleted = event.total
           ctx.setTotalJobsCompleted(event.total)
+          wallet.setScheduledRewards(
+            parseEther(event.rewardsScheduledForAddress)
+          )
+          ctx.setScheduledRewardsForAddress(event.rewardsScheduledForAddress)
           break
         case 'activity:info':
-        case 'activity:error': {
+        case 'activity:error':
+        case 'activity:started': {
           const activity = {
             ...event,
             type: event.type.replace('activity:', ''),
@@ -108,7 +114,9 @@ async function start (ctx) {
 
   assert(childProcess.stderr)
   childProcess.stderr.setEncoding('utf8')
-  childProcess.stderr.on('data', chunk => logs.push(chunk))
+  childProcess.stderr
+    .pipe(split2())
+    .on('data', line => logs.pushLine(line))
 
   /** @type {string | null} */
   let exitReason = null
@@ -120,14 +128,12 @@ async function start (ctx) {
   childProcess.on('close', code => {
     console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
 
-    ;(async () => {
-      Sentry.captureException('Core exited', scope => {
-        // Sentry UI can't show the full 100 lines
-        scope.setExtra('logs', logs.getLast(10))
-        scope.setExtra('reason', exitReason)
-        return scope
-      })
-    })()
+    Sentry.captureException('Core exited', scope => {
+      // Sentry UI can't show the full 100 lines
+      scope.setExtra('logs', logs.getLastLines(10))
+      scope.setExtra('reason', exitReason)
+      return scope
+    })
   })
 
   childProcess.on('exit', (code, signal) => {

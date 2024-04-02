@@ -4,8 +4,8 @@ import {
   ethAddressFromDelegated,
   newFromString
 } from '@glif/filecoin-address'
-import { ReactComponent as Warning } from '../assets/img/icons/error.svg'
-import { ReactComponent as EditIcon } from '../assets/img/icons/edit.svg'
+import Warning from '../assets/img/icons/error.svg?react'
+import EditIcon from '../assets/img/icons/edit.svg?react'
 
 interface FilAddressFormProps {
   destinationAddress: string | undefined;

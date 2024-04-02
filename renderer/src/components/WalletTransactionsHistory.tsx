@@ -1,11 +1,11 @@
 import { FC, useState, useEffect } from 'react'
 import { FILTransaction, FILTransactionProcessing } from '../typings'
 import dayjs from 'dayjs'
-import { ReactComponent as IncomeIcon } from '../assets/img/icons/income.svg'
-import { ReactComponent as OutcomeIcon } from '../assets/img/icons/outcome.svg'
-import { ReactComponent as ExternalLinkIcon } from '../assets/img/icons/external.svg'
+import IncomeIcon from '../assets/img/icons/income.svg?react'
+import OutcomeIcon from '../assets/img/icons/outcome.svg?react'
+import ExternalLinkIcon from '../assets/img/icons/external.svg?react'
 import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
-import { browseTransactionTracker } from '../lib/station-config'
+import { browseTransactionTracker, openBeryx } from '../lib/station-config'
 import WalletOnboarding from './WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
@@ -41,6 +41,9 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({
               <Transaction transaction={transaction} />
             </div>
           ))}
+          <p className="p-8 text-body-2xs text-right">
+            powered by <button type="button" className="underline" onClick={openBeryx}>beryx.io</button>
+          </p>
         </div>
       </>
     )

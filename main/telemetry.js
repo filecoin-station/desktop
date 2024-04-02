@@ -12,9 +12,9 @@ const pkg = require('../package.json')
 const client = new InfluxDB({
   url: 'https://eu-central-1-1.aws.cloud2.influxdata.com',
   token:
-    // station-anonymous-write
+    // station-desktop-1-2-5
     // eslint-disable-next-line max-len
-    '0fZyu9zjDvYlaNfOeuwgnQoUI0VcSzeYDpnOLjQyr30mz-Plqels5JHEwgKRbtCcDJbQmv62VnOV_FsZVxgoow=='
+    'ZAy6YGlJksEm1Bs34Z51glKOL5h2MFxQC46hM5l8ElZWENBmazdzLl9_-1kRKNQknrcVa9_K1k7-1luH_bOVPQ=='
 })
 
 const writeClient = client.getWriteApi(

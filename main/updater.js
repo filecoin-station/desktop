@@ -10,12 +10,15 @@ const log = require('electron-log').scope('updater')
 const { showDialogSync } = require('./dialog')
 const Store = require('electron-store')
 
+/** @type {import('p-retry').default} */
+let pRetry
+
 // must be global to avoid gc
 let updateNotification = null
 
 let checkingManually = false
 
-let updateAvailable = false
+let readyToUpdate = false
 
 /** @type {string | undefined} */
 let nextVersion
@@ -34,7 +37,9 @@ function beforeQuitCleanup () {
   app.removeAllListeners('window-all-closed')
 }
 
-function setup (/** @type {import('./typings').Context} */ ctx) {
+async function setup (/** @type {import('./typings').Context} */ ctx) {
+  pRetry = (await import('p-retry')).default
+
   autoUpdater.logger = log
   autoUpdater.autoDownload = false // we download manually in 'update-available'
 
@@ -54,7 +59,7 @@ module.exports = async function setupUpdater (
   /** @type {import('./typings').Context} */ ctx
 ) {
   ctx.getUpdaterStatus = function getUpdaterStatus () {
-    return { updateAvailable }
+    return { readyToUpdate }
   }
 
   ctx.openReleaseNotes = openReleaseNotes
@@ -131,11 +136,19 @@ function onUpdaterError (err) {
  * @param {import('electron-updater').UpdateInfo} info
  */
 function onUpdateAvailable ({ version /*, releaseNotes */ }) {
-  updateAvailable = true
   nextVersion = version
 
   log.info(`Update to version ${version} is available, downloading..`)
-  autoUpdater.downloadUpdate().then(
+  pRetry(
+    () => autoUpdater.downloadUpdate(),
+    {
+      retries: 10,
+      onFailedAttempt: err => {
+        console.error(err)
+        console.error('Failed to download update. Retrying...')
+      }
+    }
+  ).then(
     _ => log.info('Update downloaded'),
     err => log.error('Cannot download the update.', err)
   )
@@ -168,6 +181,7 @@ function onUpdateNotAvailable ({ version }) {
  * @param {import('electron-updater').UpdateDownloadedEvent} event
  */
 function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
+  readyToUpdate = true
   log.info(`update to ${version} downloaded`)
 
   const showUpdateDialog = () => {
@@ -192,7 +206,7 @@ function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
     // showUpdateDialog() offers the user to restart
   } else if (ctx.isShowingUI) {
     // show unobtrusive notification + dialog on click
-    ipcMain.emit(ipcMainEvents.UPDATE_AVAILABLE)
+    ipcMain.emit(ipcMainEvents.READY_TO_UPDATE)
     updateNotification = new Notification({
       title: 'Filecoin Station Update',
       body: `An update to Filecoin Station ${version} is available.`

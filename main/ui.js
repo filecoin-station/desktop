@@ -10,6 +10,7 @@ const {
   getOnboardingCompleted
 } = require('./station-config')
 const { showDialogSync } = require('./dialog')
+const wallet = require('./wallet')
 
 /**
  * @param {import('./typings').Context} ctx
@@ -35,14 +36,17 @@ module.exports = async function (ctx) {
     }
   })
 
-  ui.on('show', () => { ctx.isShowingUI = true })
+  ui.on('show', () => {
+    ctx.isShowingUI = true
+    wallet.refreshState().catch(console.error)
+  })
   ui.on('hide', () => { ctx.isShowingUI = false })
 
   /** @type {import('vite').ViteDevServer} */
   let devServer
 
   if (app.isPackaged || process.env.NODE_ENV !== 'development') {
-    ctx.loadWebUIFromDist(ui)
+    await ctx.loadWebUIFromDist(ui)
   } else {
     console.log('Starting Vite DEV server')
     const { createServer } = require('vite')
@@ -68,7 +72,7 @@ module.exports = async function (ctx) {
     ui.webContents.openDevTools()
 
     console.log('Loading the WebUI')
-    ui.loadURL('http://localhost:3000/')
+    await ui.loadURL('http://localhost:3000/')
   }
 
   // UX trick to avoid jittery UI while browser initializes chrome
@@ -127,10 +131,10 @@ function setupIpcEventForwarding (ui) {
   }
   ipcMain.on(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
 
-  const onUpdateAvailable = (/** @type {unknown[]} */ ...args) => {
-    ui.webContents.send(ipcMainEvents.UPDATE_AVAILABLE, ...args)
+  const onReadyToUpdate = (/** @type {unknown[]} */ ...args) => {
+    ui.webContents.send(ipcMainEvents.READY_TO_UPDATE, ...args)
   }
-  ipcMain.on(ipcMainEvents.UPDATE_AVAILABLE, onUpdateAvailable)
+  ipcMain.on(ipcMainEvents.READY_TO_UPDATE, onReadyToUpdate)
 
   const onTransactionUpdate = (/** @type {unknown[]} */ ...args) => {
     ui.webContents.send(ipcMainEvents.TRANSACTION_UPDATE, ...args)
@@ -150,7 +154,7 @@ function setupIpcEventForwarding (ui) {
   return function stopIpcEventForwarding () {
     ipcMain.removeListener(ipcMainEvents.ACTIVITY_LOGGED, onNewActivity)
     ipcMain.removeListener(ipcMainEvents.JOB_STATS_UPDATED, onJobStatsUpdated)
-    ipcMain.removeListener(ipcMainEvents.UPDATE_AVAILABLE, onUpdateAvailable)
+    ipcMain.removeListener(ipcMainEvents.READY_TO_UPDATE, onReadyToUpdate)
     ipcMain.removeListener(
       ipcMainEvents.TRANSACTION_UPDATE,
       onTransactionUpdate

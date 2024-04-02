@@ -40,7 +40,7 @@ describe('Dashboard page', () => {
   describe('Unpopulated', () => {
     const onActivityLogged = vi.fn((callback) => () => ({}))
     const onJobProcessed = vi.fn((callback) => () => ({}))
-    const onUpdateAvailable = vi.fn((callback) => () => ({}))
+    const onReadyToUpdate = vi.fn((callback) => () => ({}))
     const onTransactionUpdate = vi.fn((callback) => () => ({}))
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
     const onScheduledRewardsUpdate = vi.fn((callback) => () => ({}))
@@ -54,7 +54,8 @@ describe('Dashboard page', () => {
           getDestinationWalletAddress: () => Promise.resolve(''),
           getTotalEarnings: () => Promise.resolve(0),
           getActivities: () => Promise.resolve([]),
-          getScheduledRewards: () => Promise.resolve('0.0')
+          getScheduledRewards: () => Promise.resolve('0.0'),
+          openBeryx: () => Promise.resolve()
         }
       })
     })
@@ -94,7 +95,7 @@ describe('Dashboard page', () => {
           stationEvents: {
             onActivityLogged,
             onJobProcessed,
-            onUpdateAvailable,
+            onReadyToUpdate,
             onTransactionUpdate,
             onScheduledRewardsUpdate,
             onBalanceUpdate
@@ -150,7 +151,7 @@ describe('Dashboard page', () => {
       return () => ({})
     })
 
-    const onUpdateAvailable = vi.fn((callback) => () => ({}))
+    const onReadyToUpdate = vi.fn((callback) => () => ({}))
     const onTransactionUpdate = vi.fn((callback) => () => ({}))
     const onBalanceUpdate = vi.fn((callback) => () => ({}))
     const getUpdaterStatus = vi.fn(() => new Promise((resolve, reject) => ({})))
@@ -189,7 +190,7 @@ describe('Dashboard page', () => {
           stationEvents: {
             onActivityLogged,
             onJobProcessed,
-            onUpdateAvailable,
+            onReadyToUpdate,
             onTransactionUpdate,
             onScheduledRewardsUpdate,
             onBalanceUpdate

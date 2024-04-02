@@ -7,6 +7,7 @@ const timers = require('node:timers/promises')
 const Store = require('electron-store')
 const { WalletBackend } = require('./wallet-backend')
 const { ethers } = require('ethers')
+const { formatEther } = require('ethers/lib/utils')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
@@ -30,7 +31,6 @@ backend.transactions = loadStoredEntries()
 /** @type {Context | null} */
 let ctx = null
 let balance = loadBalance()
-let scheduledRewards = loadScheduledRewards()
 
 /**
  * @param {Context} _ctx
@@ -50,7 +50,7 @@ async function setup (_ctx) {
   ;(async () => {
     while (true) {
       await refreshState()
-      await timers.setTimeout(10_000)
+      await timers.setTimeout(120_000)
     }
   })()
 }
@@ -66,10 +66,12 @@ async function refreshState () {
   } catch (err) {
     log.error('Cannot update balance:', err)
   }
-  try {
-    await backend.fetchAllTransactions()
-  } catch (err) {
-    log.error('Cannot update transactions:', err)
+  if (ctx?.isShowingUI) {
+    try {
+      await backend.fetchAllTransactions()
+    } catch (err) {
+      log.error('Cannot update transactions:', err)
+    }
   }
 }
 
@@ -84,24 +86,7 @@ function getBalance () {
  * @returns {string}
  */
 function getScheduledRewards () {
-  return formatWithSixDecimalDigits(scheduledRewards)
-}
-
-/**
- * @param {ethers.BigNumber} amount
- * @returns {string}
- */
-function formatWithSixDecimalDigits (amount) {
-  const fullPrecision = ethers.utils.formatUnits(amount, 18)
-  const [whole, fraction] = fullPrecision.split('.')
-  if (fraction === undefined) return fullPrecision
-  const truncated = fraction
-    // keep the first 6 digits, discard the rest
-    .slice(0, 6)
-    // remove trailing zeroes as long as there are some leading digits
-    // (we want to preserve .0 if there is no fraction)
-    .replace(/(\d)0+$/, '$1')
-  return [whole, truncated].join('.')
+  return formatEther(loadScheduledRewards())
 }
 
 // Inline `p-debounce.promise` from
@@ -147,9 +132,14 @@ async function updateScheduledRewards () {
 
 async function _updateScheduledRewards () {
   assert(ctx)
-  scheduledRewards = await backend.fetchScheduledRewards()
+  ctx.setScheduledRewardsForAddress(getScheduledRewards())
+}
+
+/**
+ * @param {ethers.BigNumber} scheduledRewards
+ */
+async function setScheduledRewards (scheduledRewards) {
   walletStore.set('scheduled_rewards', scheduledRewards.toHexString())
-  ctx.scheduledRewardsUpdate(getScheduledRewards())
 }
 
 function listTransactions () {
@@ -261,10 +251,11 @@ async function getSeedPhrase () {
 
 module.exports = {
   setup,
+  refreshState,
   getAddress,
   getBalance,
   getScheduledRewards,
-  formatWithSixDecimalDigits,
+  setScheduledRewards,
   listTransactions,
   transferAllFundsToDestinationWallet,
   getTransactionsForUI,

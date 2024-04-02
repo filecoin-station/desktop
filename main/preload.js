@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('electron', {
   getUpdaterStatus: () => ipcRenderer.invoke('station:getUpdaterStatus'),
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
+  openBeryx: () => ipcRenderer.invoke('station:openBeryx'),
 
   getScheduledRewards: () =>
     ipcRenderer.invoke('station:getScheduledRewards'),
@@ -68,11 +69,11 @@ contextBridge.exposeInMainWorld('electron', {
       return () =>
         ipcRenderer.removeListener('station:earnings-counter', listener)
     },
-    onUpdateAvailable: (/** @type {() => void} */ callback) => {
+    onReadyToUpdate: (/** @type {() => void} */ callback) => {
       const listener = () => callback()
-      ipcRenderer.on('station:update-available', listener)
+      ipcRenderer.on('station:ready-to-update', listener)
       return () =>
-        ipcRenderer.removeListener('station:update-available', listener)
+        ipcRenderer.removeListener('station:ready-to-update', listener)
     },
     onBalanceUpdate: (/** @type {(value: string) => void} */ callback) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */

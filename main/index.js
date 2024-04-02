@@ -109,6 +109,13 @@ const ctx = {
       count
     )
   },
+  getScheduledRewardsForAddress: () => wallet.getScheduledRewards(),
+  setScheduledRewardsForAddress: (balance) => {
+    ipcMain.emit(
+      ipcMainEvents.SCHEDULED_REWARDS_UPDATE,
+      balance
+    )
+  },
 
   getScheduledRewards: () => wallet.getScheduledRewards(),
   getWalletBalance: () => wallet.getBalance(),
@@ -123,16 +130,14 @@ const ctx = {
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
-  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://filfox.info/en/message/${transactionHash}`) },
+  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://beryx.zondax.ch/v1/search/fil/mainnet/address/${transactionHash}`) },
   showTermsOfService: () => { shell.openExternal('https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4') },
+  openBeryx: () => { shell.openExternal('https://beryx.io/') },
   transactionUpdate: (transactions) => {
     ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions)
   },
   balanceUpdate: (balance) => {
     ipcMain.emit(ipcMainEvents.BALANCE_UPDATE, balance)
-  },
-  scheduledRewardsUpdate: (balance) => {
-    ipcMain.emit(ipcMainEvents.SCHEDULED_REWARDS_UPDATE, balance)
   }
 }
 

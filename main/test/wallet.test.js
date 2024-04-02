@@ -1,11 +1,7 @@
 'use strict'
 
-const {
-  getTransactionsForUI,
-  formatWithSixDecimalDigits
-} = require('../wallet')
+const { getTransactionsForUI } = require('../wallet')
 const assert = require('assert').strict
-const ethers = require('ethers')
 
 /** @typedef {import('../typings').FILTransactionStatus} FILTransactionStatus */
 
@@ -76,6 +72,7 @@ describe('Wallet', function () {
         ]
       )
     })
+
     it('lists only processing transactions', function () {
       assert.deepStrictEqual(
         getTransactionsForUI([
@@ -88,6 +85,7 @@ describe('Wallet', function () {
         ]
       )
     })
+
     it('lists only succeeded transactions', function () {
       assert.deepStrictEqual(
         getTransactionsForUI([
@@ -101,41 +99,5 @@ describe('Wallet', function () {
         ]
       )
     })
-  })
-})
-
-describe('formatWithSixDecimalDigits', function () {
-  it('keeps six decimal digits only', function () {
-    assert.strictEqual(
-      formatWithSixDecimalDigits(ethers.BigNumber.from('1654759687033008')),
-      '0.001654'
-    )
-  })
-
-  it('rounds down', function () {
-    assert.strictEqual(
-      formatWithSixDecimalDigits(ethers.BigNumber.from('1999999999999999')),
-      '0.001999'
-    )
-  })
-
-  it('strips trailing zeroes after rounding down', function () {
-    assert.strictEqual(
-      formatWithSixDecimalDigits(ethers.BigNumber.from('1000000000000001')),
-      '0.001'
-    )
-  })
-  it('strips trailing zeroes when no rounding is needed', function () {
-    assert.strictEqual(
-      formatWithSixDecimalDigits(ethers.BigNumber.from('1000000000000000')),
-      '0.001'
-    )
-  })
-
-  it('preserves .0 at the end', function () {
-    assert.strictEqual(
-      formatWithSixDecimalDigits(ethers.BigNumber.from('1000000000000000000')),
-      '1.0'
-    )
   })
 })

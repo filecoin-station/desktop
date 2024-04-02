@@ -84,9 +84,9 @@ test.describe.serial('Application launch', async () => {
     expect(new URL(mainWindow.url()).pathname).toBe('/dashboard')
   })
 
-  test('wait for "Zinnia started." activity log', async () => {
+  test('wait for "SPARK started." activity log', async () => {
     await mainWindow.waitForSelector(
-      'div.activity-log p:has-text("Zinnia started.")',
+      'div.activity-log p:has-text("SPARK started")',
       { timeout: 1000 * TIMEOUT_MULTIPLIER }
     )
   })

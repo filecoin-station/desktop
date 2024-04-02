@@ -60,6 +60,10 @@ export function browseTransactionTracker (transactionHash: string): void {
   return window.electron.stationConfig.browseTransactionTracker(transactionHash)
 }
 
+export function openBeryx (): void {
+  return window.electron.openBeryx()
+}
+
 export function showTermsOfService (): void {
   return window.electron.stationConfig.showTermsOfService()
 }
