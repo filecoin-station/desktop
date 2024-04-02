@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/filecoin-station/desktop#readme",
   "dependencies": {
-    "@filecoin-station/core": "^20.1.10",
+    "@filecoin-station/core": "^20.1.11",
     "@glif/filecoin-address": "3.0.0",
     "@glif/filecoin-message": "^3.0.4",
     "@glif/filecoin-number": "^3.0.3",
