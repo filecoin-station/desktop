@@ -241,6 +241,14 @@ function loadScheduledRewards () {
   )
 }
 
+/**
+ * @returns {Promise<string>}
+ */
+async function getSeedPhrase () {
+  const { seed } = await backend.getSeedPhrase()
+  return seed
+}
+
 module.exports = {
   setup,
   refreshState,
@@ -250,5 +258,6 @@ module.exports = {
   setScheduledRewards,
   listTransactions,
   transferAllFundsToDestinationWallet,
-  getTransactionsForUI
+  getTransactionsForUI,
+  getSeedPhrase
 }

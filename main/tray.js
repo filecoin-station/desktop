@@ -1,12 +1,14 @@
 'use strict'
 
 const { IS_MAC, STATION_VERSION } = require('./consts')
-const { Menu, Tray, app, ipcMain, nativeImage } = require('electron')
+const { Menu, Tray, app, ipcMain, nativeImage, clipboard } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
 const assert = require('node:assert')
 const core = require('./core')
 const { formatTokenValue } = require('./utils')
+const { getSeedPhrase } = require('./wallet')
+const { showDialogSync } = require('./dialog')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -91,6 +93,21 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
       label: 'Save Module Logs As…',
       click: function () {
         ctx.saveModuleLogsAs()
+      }
+    },
+    {
+      label: 'Export Seed Phrase…',
+      click: async () => {
+        const button = showDialogSync({
+          title: 'Export Seed Phrase',
+          // eslint-disable-next-line max-len
+          message: 'The seed phrase is used in order to back up your wallet, or move it to a different machine. Please be cautious, as anyone with access to it has full control over your wallet and funds.',
+          type: 'info',
+          buttons: ['Cancel', 'Copy to Clipboard']
+        })
+        if (button === 1) {
+          clipboard.writeText(await getSeedPhrase())
+        }
       }
     },
     { type: 'separator' },
