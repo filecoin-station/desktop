@@ -1,8 +1,7 @@
 'use strict'
 
-const { Menu, MenuItem, ipcMain, clipboard } = require('electron')
+const { Menu, MenuItem, ipcMain } = require('electron')
 const { ipcMainEvents } = require('./ipc')
-const { getSeedPhrase } = require('./wallet')
 
 function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
   const menu = Menu.getApplicationMenu()
@@ -14,12 +13,6 @@ function setupAppMenu (/** @type {import('./typings').Context} */ ctx) {
   menu.items[1].submenu?.insert(0, new MenuItem({
     label: 'Save Module Logs As…',
     click: () => { ctx.saveModuleLogsAs() }
-  }))
-  menu.items[1].submenu?.insert(1, new MenuItem({
-    label: 'Copy Wallet Seed Phrase To Clipboard',
-    click: async () => {
-      clipboard.writeText(await getSeedPhrase())
-    }
   }))
 
   Menu.setApplicationMenu(menu)
