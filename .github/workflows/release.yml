@@ -31,6 +31,6 @@ jobs:
       - name: Finalize the Sentry release
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: protocol-labs-ip
+          SENTRY_ORG: space-meridian
           SENTRY_PROJECT: filecoin-station
         run: sentry-cli releases finalize "${{ env.SENTRY_VERSION }}"
