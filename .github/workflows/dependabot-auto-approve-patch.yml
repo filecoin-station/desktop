@@ -21,6 +21,7 @@ jobs:
           - tailwindcss
           - '@glif/'
           - '@filecoin-station/core'
+          - npm
     steps:
       - name: Dependabot metadata
         id: metadata
