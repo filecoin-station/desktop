@@ -22,6 +22,7 @@ jobs:
           - '@glif/'
           - '@filecoin-station/core'
           - npm
+          - undici
     steps:
       - name: Dependabot metadata
         id: metadata
