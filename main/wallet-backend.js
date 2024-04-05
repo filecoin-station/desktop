@@ -28,7 +28,7 @@ const log = require('electron-log').scope('wallet-backend')
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 // eslint-disable-next-line max-len
-const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3MTI5MjY3NzcsImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.lLNAsllhZWo4jYI2nuc7rh0ZGK4Z05PXHEtO0y05k_sxquY5Qq8PGhWcdnQxAKHMNUdbrHhbPv0qqSHwPW9ZfQ'
+const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3MTc0OTk3MTgsImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.1COrxNiDQado0s5Rb2yxL-GNFTCbtYnXQGCQcVnm9hjRaMk6rhgesfRP_Um_B09NcQY02oWpk0y75njBkDwp5A'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 async function noop () {}
