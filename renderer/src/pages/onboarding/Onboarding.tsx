@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getOnboardingCompleted, setOnboardingCompleted } from '../../lib/station-config'
 import Onboarding from '../../components/Onboarding'
 import StationLogoLight from '../assets/img/station-logo-light.svg?react'
+import { ROUTES } from '../../lib/routes'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -31,7 +32,7 @@ const OnboardingPage = (): JSX.Element => {
 
   useEffect(() => {
     if (isOnboardingCompleted) {
-      navigate('/dashboard', { replace: true })
+      navigate(ROUTES.dashboard, { replace: true })
     }
   }, [isOnboardingCompleted, navigate])
 
