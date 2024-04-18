@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
-import Onboarding from './pages/onboarding/Onboarding'
-import Dashboard from './pages/dashboard/Dashboard'
-import Sentry from './components/Sentry'
-import Plausible from './components/Plausible'
+import Onboarding from 'src/pages/onboarding/Onboarding'
+import Dashboard from 'src/pages/dashboard/Dashboard'
+import Sentry from 'src/components/Sentry'
+import Plausible from 'src/components/Plausible'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
-import { ROUTES } from './lib/routes'
+import { ROUTES } from 'src/lib/routes'
 
 const App = ():JSX.Element => {
   return (
