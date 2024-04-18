@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import HeaderBackgroundImage from '../assets/img/header.png'
+import HeaderBackgroundImage from '../../assets/img/header.png'
 import Modal from '../../components/Modal'
 import ActivityLog from '../../components/ActivityLog'
 import UpdateBanner from '../../components/UpdateBanner'
