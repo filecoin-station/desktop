@@ -3,7 +3,7 @@ import { render, screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import '../lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
-import Dashboard from '../pages/Dashboard'
+import Dashboard from '../pages/dashboard/Dashboard'
 
 const activities = [{
   id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',

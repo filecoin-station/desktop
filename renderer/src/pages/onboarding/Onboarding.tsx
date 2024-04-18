@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getOnboardingCompleted, setOnboardingCompleted } from '../lib/station-config'
-import Onboarding from '../components/Onboarding'
+import { getOnboardingCompleted, setOnboardingCompleted } from '../../lib/station-config'
+import Onboarding from '../../components/Onboarding'
 import StationLogoLight from '../assets/img/station-logo-light.svg?react'
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))

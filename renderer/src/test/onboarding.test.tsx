@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import '../lib/station-config'
-import Onboarding from '../pages/Onboarding'
+import Onboarding from '../pages/onboarding/Onboarding'
 import { BrowserRouter } from 'react-router-dom'
 
 const mockedUsedNavigate = vi.fn()
