@@ -4,6 +4,7 @@ import '@testing-library/jest-dom'
 import 'src/lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
 import Dashboard from 'src/pages/dashboard/Dashboard'
+import BaseLayout from 'src/components/BaseLayout'
 
 const mockedSetDestinationWalletAddress = vi.fn()
 
@@ -73,7 +74,7 @@ describe('Dashboard wallet display', () => {
           getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({})))
         }
       })
-      render(<BrowserRouter><Dashboard /></BrowserRouter>)
+      render(<BrowserRouter><BaseLayout><Dashboard /></BaseLayout></BrowserRouter>)
     })
 
     test('Wallet curtain opens on click widget and closes on click background shadow', () => {
