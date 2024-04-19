@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import WalletModule from '../components/WalletModule'
+import WalletModule from 'src/components/WalletModule'
 
 interface ModalProps {
   isOpen: boolean;

@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { render, screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import '../lib/station-config'
+import 'src/lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
-import Dashboard from '../pages/dashboard/Dashboard'
+import Dashboard from 'src/pages/dashboard/Dashboard'
 
 const activities = [{
   id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
@@ -46,7 +46,7 @@ describe('Dashboard page', () => {
     const onScheduledRewardsUpdate = vi.fn((callback) => () => ({}))
 
     beforeAll(() => {
-      vi.mock('../lib/station-config', () => {
+      vi.mock('src/lib/station-config', () => {
         return {
           getStationWalletBalance: () => Promise.resolve(0),
           getStationWalletTransactionsHistory: () => Promise.resolve([]),

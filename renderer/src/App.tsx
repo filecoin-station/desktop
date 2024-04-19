@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import './App.css'
+import 'src/App.css'
 import Onboarding from 'src/pages/onboarding/Onboarding'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import Sentry from 'src/components/Sentry'

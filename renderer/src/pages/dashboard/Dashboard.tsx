@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import HeaderBackgroundImage from '../../assets/img/header.png'
-import Modal from '../../components/Modal'
-import ActivityLog from '../../components/ActivityLog'
-import UpdateBanner from '../../components/UpdateBanner'
-import WalletWidget from '../../components/WalletWidget'
-import useStationActivity from '../../hooks/StationActivity'
-import { formatTokenValue } from '../../utils/number-ops'
+import HeaderBackgroundImage from 'src/assets/img/header.png'
+import Modal from 'src/components/Modal'
+import ActivityLog from 'src/components/ActivityLog'
+import UpdateBanner from 'src/components/UpdateBanner'
+import WalletWidget from 'src/components/WalletWidget'
+import useStationActivity from 'src/hooks/StationActivity'
+import { formatTokenValue } from 'src/utils/number-ops'
 
 const scheduledRewardsTooltip = `
 This is the reward total you have accrued since your last payout.

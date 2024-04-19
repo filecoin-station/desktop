@@ -1,12 +1,12 @@
 import { FC, useState, useEffect } from 'react'
-import { FILTransaction, FILTransactionProcessing } from '../typings'
+import { FILTransaction, FILTransactionProcessing } from 'src/typings'
 import dayjs from 'dayjs'
-import IncomeIcon from '../assets/img/icons/income.svg?react'
-import OutcomeIcon from '../assets/img/icons/outcome.svg?react'
-import ExternalLinkIcon from '../assets/img/icons/external.svg?react'
-import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
-import { browseTransactionTracker, openBeryx } from '../lib/station-config'
-import WalletOnboarding from './WalletOnboarding'
+import IncomeIcon from 'src/assets/img/icons/income.svg?react'
+import OutcomeIcon from 'src/assets/img/icons/outcome.svg?react'
+import ExternalLinkIcon from 'src/assets/img/icons/external.svg?react'
+import WalletTransactionStatusWidget from 'src/components/WalletTransactionStatusWidget'
+import { browseTransactionTracker, openBeryx } from 'src/lib/station-config'
+import WalletOnboarding from 'src/components/WalletOnboarding'
 
 interface WalletTransactionsHistoryProps {
   allTransactions: FILTransaction[] | [];

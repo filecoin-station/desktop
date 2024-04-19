@@ -3,8 +3,8 @@ import {
   getActivities,
   getScheduledRewards,
   getTotalJobsCompleted
-} from '../lib/station-config'
-import { Activity } from '../typings'
+} from 'src/lib/station-config'
+import { Activity } from 'src/typings'
 
 interface StationActivity {
   totalJobs: number;

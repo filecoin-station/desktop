@@ -1,4 +1,4 @@
-import { Activity, FILTransaction, FILTransactionProcessing } from '../typings'
+import { Activity, FILTransaction, FILTransactionProcessing } from 'src/typings'
 import pDebounce from 'p-debounce'
 
 export async function getOnboardingCompleted (): Promise<boolean> {
