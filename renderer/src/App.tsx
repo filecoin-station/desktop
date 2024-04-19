@@ -6,6 +6,7 @@ import Sentry from 'src/components/Sentry'
 import Plausible from 'src/components/Plausible'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { ROUTES } from 'src/lib/routes'
+import BaseLayout from 'src/components/BaseLayout'
 
 const App = ():JSX.Element => {
   return (
@@ -19,13 +20,13 @@ const App = ():JSX.Element => {
           <Route
             path="*"
             element={
-            <>
+            <BaseLayout>
               <Sentry />
               <Plausible />
               <Routes>
                 <Route path={ROUTES.dashboard} element={<Dashboard />} />
               </Routes>
-            </>
+            </BaseLayout>
             }
           >
           </Route>
