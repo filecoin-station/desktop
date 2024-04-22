@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, dialog } = require('electron')
+const { app, dialog, clipboard } = require('electron')
 const { join, dirname } = require('node:path')
 const { fork } = require('node:child_process')
 const wallet = require('./wallet')
@@ -13,6 +13,7 @@ const { Activities } = require('./activities')
 const { Logs } = require('./logs')
 const split2 = require('split2')
 const { parseEther } = require('ethers/lib/utils')
+const { showDialogSync } = require('./dialog')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -42,6 +43,29 @@ async function setup (ctx) {
       await fs.writeFile(filePath, logs.get())
     }
   }
+
+  ctx.toggleOpenAtLogin = () => {
+    const openAtLogin = !app.getLoginItemSettings().openAtLogin
+    app.setLoginItemSettings({ openAtLogin })
+  }
+
+  ctx.isOpenAtLogin = () => {
+    return app.getLoginItemSettings().openAtLogin
+  }
+
+  ctx.exportSeedPhrase = async () => {
+    const button = showDialogSync({
+      title: 'Export Seed Phrase',
+      // eslint-disable-next-line max-len
+      message: 'The seed phrase is used in order to back up your wallet, or move it to a different machine. Please be cautious, as anyone with access to it has full control over your wallet and funds.',
+      type: 'info',
+      buttons: ['Cancel', 'Copy to Clipboard']
+    })
+    if (button === 1) {
+      clipboard.writeText(await wallet.getSeedPhrase())
+    }
+  }
+
   await maybeMigrateFiles()
   await start(ctx)
 }

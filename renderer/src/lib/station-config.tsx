@@ -67,3 +67,23 @@ export function openBeryx (): void {
 export function showTermsOfService (): void {
   return window.electron.stationConfig.showTermsOfService()
 }
+
+export function toggleOpenAtLogin () {
+  return window.electron.stationConfig.toggleOpenAtLogin()
+}
+
+export function isOpenAtLogin () {
+  return window.electron.stationConfig.isOpenAtLogin()
+}
+
+export function exportSeedPhrase () {
+  return window.electron.stationConfig.exportSeedPhrase()
+}
+
+export function saveModuleLogsAs () {
+  return window.electron.stationConfig.saveModuleLogsAs()
+}
+
+export function checkForUpdates () {
+  return window.electron.stationConfig.checkForUpdates()
+}
