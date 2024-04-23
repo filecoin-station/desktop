@@ -27,7 +27,7 @@ const Settings = () => {
       <h2>General</h2>
       <div className="flex flex-col items-start mb-6">
         <label>
-          <input type="checkbox" onChange={handleClick} checked={isOpenAtLoginChecked} />
+            <input type="checkbox" onChange={handleClick} checked={isOpenAtLoginChecked} />
             Start at login
         </label>
         <button type="button" onClick={checkForUpdates}>Check for updates</button>

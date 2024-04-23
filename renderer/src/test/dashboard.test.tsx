@@ -86,7 +86,6 @@ describe('Dashboard page', () => {
     })
 
     test('display jobs counter', () => {
-      console.log(`Electron: ${!!window.electron}`)
       waitFor(() => { expect(document.getElementsByClassName('total-jobs')[0].textContent).toBe('0') })
     })
 
@@ -95,8 +94,6 @@ describe('Dashboard page', () => {
     })
 
     test('displays empty activty log', () => {
-      console.log(document.querySelector('.activity-item')?.textContent)
-
       expect(document.getElementsByClassName('activity-item').length).toBe(0)
     })
   })
