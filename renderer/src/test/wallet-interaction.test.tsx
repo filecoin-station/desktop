@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 import 'src/lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
 import Dashboard from 'src/pages/dashboard/Dashboard'
-import BaseLayout from 'src/components/BaseLayout'
+import Layout from 'src/components/Layout'
 
 const mockedTransferAllFunds = vi.fn(() => new Promise((resolve, reject) => ({})))
 
@@ -80,7 +80,7 @@ describe('Dashboard wallet interactions', () => {
           getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({})))
         }
       })
-      render(<BrowserRouter><BaseLayout><Dashboard /></BaseLayout></BrowserRouter>)
+      render(<BrowserRouter><Layout><Dashboard /></Layout></BrowserRouter>)
     })
 
     test('Wallet displays correct balance', () => {

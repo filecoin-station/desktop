@@ -4,7 +4,7 @@ import UpdateBanner from 'src/components/UpdateBanner'
 import Modal from 'src/components/Modal'
 import WalletWidget from 'src/components/WalletWidget'
 
-const BaseLayout = ({ children }: {children: ReactNode}) => {
+const Layout = ({ children }: {children: ReactNode}) => {
   const [walletCurtainIsOpen, setWalletCurtainIsOpen] = useState(false)
 
   const toggleCurtain = () => setWalletCurtainIsOpen(!walletCurtainIsOpen)
@@ -26,4 +26,4 @@ const BaseLayout = ({ children }: {children: ReactNode}) => {
   )
 }
 
-export default BaseLayout
+export default Layout
