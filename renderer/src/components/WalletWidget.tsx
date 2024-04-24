@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react'
-import useWallet from '../hooks/StationWallet'
+import useWallet from 'src/hooks/StationWallet'
 import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
 
-import WalletIcon from '../assets/img/icons/wallet.svg?react'
-import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
-import { FILTransactionProcessing } from '../typings'
+import WalletIcon from 'src/assets/img/icons/wallet.svg?react'
+import WalletTransactionStatusWidget from 'src/components/WalletTransactionStatusWidget'
+import { FILTransactionProcessing } from 'src/typings'
 
 interface WalletWidgetProps {
   onClick: () => void;

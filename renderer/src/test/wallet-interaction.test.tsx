@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { fireEvent, render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import '../lib/station-config'
+import 'src/lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
-import Dashboard from '../pages/dashboard/Dashboard'
+import Dashboard from 'src/pages/dashboard/Dashboard'
 
 const mockedTransferAllFunds = vi.fn(() => new Promise((resolve, reject) => ({})))
 

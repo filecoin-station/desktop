@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 
-import '../lib/station-config'
-import Onboarding from '../pages/onboarding/Onboarding'
+import 'src/lib/station-config'
+import Onboarding from 'src/pages/onboarding/Onboarding'
 import { BrowserRouter } from 'react-router-dom'
 
 const mockedUsedNavigate = vi.fn()
@@ -21,7 +21,7 @@ describe('Welcome page test', () => {
 
   describe('User has completed the onboarding previously', () => {
     beforeAll(() => {
-      vi.mock('../lib/station-config', () => {
+      vi.mock('src/lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
           getOnboardingCompleted: (status: boolean) => Promise.resolve(true),
@@ -54,7 +54,7 @@ describe('Welcome page test', () => {
 
   describe('User has not completed the onboarding', () => {
     beforeAll(() => {
-      vi.mock('../lib/station-config', () => {
+      vi.mock('src/lib/station-config', () => {
         return {
           setOnboardingCompleted: () => Promise.resolve(undefined),
           getOnboardingCompleted: (status: boolean) => Promise.resolve(false),

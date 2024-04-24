@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react'
 import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
-import HeaderBackgroundImage from '../assets/img/header-curtain.png'
+import HeaderBackgroundImage from 'src/assets/img/header-curtain.png'
 
-import FilAddressForm from './FilAddressForm'
-import WalletTransactionsHistory from './WalletTransactionsHistory'
-import useWallet from '../hooks/StationWallet'
-import TransferFundsButtons from './TransferFunds'
-import CopyIcon from '../assets/img/icons/copy.svg?react'
+import FilAddressForm from 'src/components/FilAddressForm'
+import WalletTransactionsHistory from 'src/components/WalletTransactionsHistory'
+import useWallet from 'src/hooks/StationWallet'
+import TransferFundsButtons from 'src/components/TransferFunds'
+import CopyIcon from 'src/assets/img/icons/copy.svg?react'
 
 interface PropsWallet {
   isOpen: boolean;

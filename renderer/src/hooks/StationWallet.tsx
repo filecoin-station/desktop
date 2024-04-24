@@ -6,14 +6,14 @@ import {
   getStationWalletBalance,
   getStationWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
-} from '../lib/station-config'
+} from 'src/lib/station-config'
 import {
   FILTransaction,
   FILTransactionProcessing,
   FILTransactionStatus,
   isFILTransactionConfirmed,
   isFILTransactionProcessing
-} from '../typings'
+} from 'src/typings'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
 
 interface Wallet {

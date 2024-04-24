@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import SentIcon from '../assets/img/icons/sent.svg?react'
-import FailedIcon from '../assets/img/icons/failed.svg?react'
-import ProcessingIcon from '../assets/img/icons/processing.svg?react'
-import { FILTransaction, FILTransactionProcessing } from '../typings'
-import { browseTransactionTracker } from '../lib/station-config'
+import SentIcon from 'src/assets/img/icons/sent.svg?react'
+import FailedIcon from 'src/assets/img/icons/failed.svg?react'
+import ProcessingIcon from 'src/assets/img/icons/processing.svg?react'
+import { FILTransaction, FILTransactionProcessing } from 'src/typings'
+import { browseTransactionTracker } from 'src/lib/station-config'
 
 interface WalletTransactionStatusWidgetProps {
   processingTransaction: FILTransactionProcessing | FILTransaction;
@@ -41,7 +41,7 @@ const WalletTransactionStatusWidget: FC<WalletTransactionStatusWidgetProps> = ({
         `}
       >
         <ProcessingIcon width={14} height={14} />
-        <span className=' text-body-s text-[#F3AE0C]'>Processing...</span>
+        <span className=' text-body-s text-[#F3AE0C]'>Processingsrc.</span>
       </div>
     )
   } else if (processingTransaction?.status === 'failed') {

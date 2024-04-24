@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { fireEvent, render, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import '../lib/station-config'
+import 'src/lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
-import Dashboard from '../pages/dashboard/Dashboard'
+import Dashboard from 'src/pages/dashboard/Dashboard'
 
 const mockedSetDestinationWalletAddress = vi.fn()
 
-vi.mock('../lib/station-config', () => ({
+vi.mock('src/lib/station-config', () => ({
   getStationWalletBalance: () => Promise.resolve(0),
   getStationWalletTransactionsHistory: () => Promise.resolve([]),
   getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
