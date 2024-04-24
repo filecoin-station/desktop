@@ -122,6 +122,9 @@ const ctx = {
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
   saveModuleLogsAs: () => { throw new Error('never get here') },
+  toggleOpenAtLogin: () => { throw new Error('never get here') },
+  isOpenAtLogin: () => { throw new Error('never get here') },
+  exportSeedPhrase: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   isShowingUI: false,
   loadWebUIFromDist: serve({
