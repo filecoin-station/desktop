@@ -4,6 +4,7 @@ const electronLog = require('electron-log')
 const assert = require('assert')
 const { getDestinationWalletAddress } = require('./station-config')
 const timers = require('node:timers/promises')
+const { format } = require('node:util')
 const Store = require('electron-store')
 const { WalletBackend } = require('./wallet-backend')
 const { ethers } = require('ethers')
@@ -45,7 +46,7 @@ async function setup (_ctx) {
     log.info('Using existing seed phrase')
   }
 
-  log.info('Address: %s', backend.address)
+  log.info(format('Address: %s', backend.address))
 
   ;(async () => {
     while (true) {

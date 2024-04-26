@@ -3,6 +3,7 @@
 const { app, dialog, shell } = require('electron')
 const electronLog = require('electron-log')
 const path = require('node:path')
+const { format } = require('node:util')
 
 console.log('Log file:', electronLog.transports.file.getFile().path)
 const log = electronLog.scope('main')
@@ -40,15 +41,15 @@ const telemetry = require('./telemetry')
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
-log.info(
+log.info(format(
   'Filecoin Station build version: %s %s-%s%s%s',
   BUILD_VERSION,
   os.platform(),
   os.arch(),
   isDev ? ' [DEV]' : '',
   inTest ? ' [TEST]' : ''
-)
-log.info('Machine spec: %s version %s', os.type(), os.release())
+))
+log.info(format('Machine spec: %s version %s', os.type(), os.release()))
 // TODO(bajtos) print machine architecture after we upgrade to Electron with
 // Node.js 18
 // log.info('Machine spec: %s %s version %s', os.type(),
