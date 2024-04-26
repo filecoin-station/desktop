@@ -7,7 +7,7 @@ import Plausible from 'src/components/Plausible'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { ROUTES } from 'src/lib/routes'
 import Layout from 'src/components/Layout'
-import Settings from './pages/settings/Settings'
+import Settings from 'src/pages/settings/Settings'
 
 const App = ():JSX.Element => {
   return (
