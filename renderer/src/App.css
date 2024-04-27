@@ -37,7 +37,7 @@
   h1, h2, p, a, span,
   .onboarding,
   .activity-item,
-  .modal-bg {
+  .modal-bg, input, label {
     -webkit-app-region: no-drag;
   }
   input {

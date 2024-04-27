@@ -7,6 +7,7 @@ import Plausible from 'src/components/Plausible'
 import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { ROUTES } from 'src/lib/routes'
 import Layout from 'src/components/Layout'
+import Settings from 'src/pages/settings/Settings'
 
 const App = ():JSX.Element => {
   return (
@@ -25,6 +26,7 @@ const App = ():JSX.Element => {
               <Plausible />
               <Routes>
                 <Route path={ROUTES.dashboard} element={<Dashboard />} />
+                <Route path={ROUTES.settings} element={<Settings />} />
               </Routes>
             </Layout>
             }
