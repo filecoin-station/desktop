@@ -249,6 +249,15 @@ async function getSeedPhrase () {
   return seed
 }
 
+/**
+ * @param {string | ethers.utils.Bytes} message
+ * @returns {Promise<string>}
+ */
+async function signMessage (message) {
+  assert(backend.signer, 'backend not initialized')
+  return await backend.signer.signMessage(message)
+}
+
 module.exports = {
   setup,
   refreshState,
@@ -257,6 +266,7 @@ module.exports = {
   getScheduledRewards,
   setScheduledRewards,
   listTransactions,
+  signMessage,
   transferAllFundsToDestinationWallet,
   getTransactionsForUI,
   getSeedPhrase

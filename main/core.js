@@ -56,6 +56,7 @@ async function start (ctx) {
     env: {
       ...process.env,
       FIL_WALLET_ADDRESS: await wallet.getAddress(),
+      PASSPHRASE: await wallet.signMessage('station core passhprase'),
       CACHE_ROOT: consts.CACHE_ROOT,
       STATE_ROOT: consts.STATE_ROOT,
       DEPLOYMENT_TYPE: 'station-desktop'
