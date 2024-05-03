@@ -23,6 +23,7 @@ jobs:
           - '@filecoin-station/core'
           - npm
           - undici
+          - ejs
     steps:
       - name: Dependabot metadata
         id: metadata
