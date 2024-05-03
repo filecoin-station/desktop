@@ -1,13 +1,23 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { render, screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import 'src/lib/station-config'
+import {
+  getActivities,
+  getDestinationWalletAddress,
+  getScheduledRewards,
+  getStationWalletAddress,
+  getStationWalletBalance,
+  getStationWalletTransactionsHistory
+} from 'src/lib/station-config'
 import { BrowserRouter } from 'react-router-dom'
 import Dashboard from 'src/pages/dashboard/Dashboard'
+import useWallet from 'src/hooks/StationWallet'
+import useStationActivity from 'src/hooks/StationActivity'
+import { Activity } from '../../../shared/typings'
 
-const activities = [{
+const activities: Activity[] = [{
   id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
-  timestamp: 166386083297,
+  timestamp: new Date(166386083297),
   source: 'Saturn',
   type: 'info',
   message: 'Saturn node exited with code: 2'
@@ -15,7 +25,7 @@ const activities = [{
 const addToActivities = () => {
   activities.push({
     id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c3',
-    timestamp: 166386083298,
+    timestamp: new Date(166386083298),
     source: 'Saturn',
     type: 'info',
     message: 'Saturn node exited with code: 2'
@@ -27,10 +37,14 @@ const setTotalJobs = () => {
   totalJobs = 200
 }
 
-let scheduledRewards = 100
+let scheduledRewards = '100'
 const setScheduledRewards = () => {
-  scheduledRewards = 200
+  scheduledRewards = '200'
 }
+
+vi.mock('src/hooks/StationWallet')
+vi.mock('src/hooks/StationActivity')
+vi.mock('src/lib/station-config')
 
 describe('Dashboard page', () => {
   beforeEach(() => {
@@ -38,71 +52,36 @@ describe('Dashboard page', () => {
   })
 
   describe('Unpopulated', () => {
-    const onActivityLogged = vi.fn((callback) => () => ({}))
-    const onJobProcessed = vi.fn((callback) => () => ({}))
-    const onReadyToUpdate = vi.fn((callback) => () => ({}))
-    const onTransactionUpdate = vi.fn((callback) => () => ({}))
-    const onBalanceUpdate = vi.fn((callback) => () => ({}))
-    const onScheduledRewardsUpdate = vi.fn((callback) => () => ({}))
-
     beforeAll(() => {
-      vi.mock('src/lib/station-config', () => {
-        return {
-          getStationWalletBalance: () => Promise.resolve(0),
-          getStationWalletTransactionsHistory: () => Promise.resolve([]),
-          getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-          getDestinationWalletAddress: () => Promise.resolve(''),
-          getTotalEarnings: () => Promise.resolve(0),
-          getActivities: () => Promise.resolve([]),
-          getScheduledRewards: () => Promise.resolve('0.0'),
-          openBeryx: () => Promise.resolve()
-        }
-      })
+      vi.mocked(getStationWalletBalance).mockReturnValue(Promise.resolve('0'))
+      vi.mocked(getStationWalletTransactionsHistory).mockReturnValue(Promise.resolve([]))
+      vi.mocked(getStationWalletAddress).mockReturnValue(
+        Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
+      )
+      vi.mocked(getDestinationWalletAddress).mockReturnValue(Promise.resolve(''))
+      vi.mocked(getActivities).mockReturnValue(Promise.resolve([]))
+      vi.mocked(getScheduledRewards).mockReturnValue(Promise.resolve('0.0'))
     })
 
     beforeEach(() => {
-      vi.mock('../hooks/StationWallet', async () => {
-        return {
-          default: () => {
-            let destination = ''
-            return {
-              stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-              stationAddress0x: '0x000000000000000000000000000000000000dEaD',
-              destinationFilAddress: destination,
-              walletBalance: 0,
-              walletTransactions: [],
-              editDestinationAddress: (value: string) => { destination = value },
-              currentTransaction: undefined,
-              dismissCurrentTransaction: () => ({})
-            }
-          }
-        }
+      vi.mocked(useWallet).mockReturnValue({
+        stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+        stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+        destinationFilAddress: '',
+        walletBalance: '0',
+        walletTransactions: [],
+        editDestinationAddress: (value?: string) => null,
+        dismissCurrentTransaction: () => ({}),
+        transferAllFundsToDestinationWallet: async () => undefined,
+        processingTransaction: undefined
       })
 
-      vi.mock('../hooks/StationActivity', async () => {
-        return {
-          default: () => ({
-            totalJobs: 0,
-            totalEarnings: 0,
-            activities: []
-          })
-        }
+      vi.mocked(useStationActivity).mockReturnValue({
+        totalJobs: 0,
+        scheduledRewards: undefined,
+        activities: []
       })
 
-      Object.defineProperty(window, 'electron', {
-        writable: true,
-        value: {
-          stationEvents: {
-            onActivityLogged,
-            onJobProcessed,
-            onReadyToUpdate,
-            onTransactionUpdate,
-            onScheduledRewardsUpdate,
-            onBalanceUpdate
-          },
-          getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({})))
-        }
-      })
       render(<BrowserRouter><Dashboard /></BrowserRouter>)
     })
 
@@ -151,59 +130,33 @@ describe('Dashboard page', () => {
       return () => ({})
     })
 
-    const onReadyToUpdate = vi.fn((callback) => () => ({}))
-    const onTransactionUpdate = vi.fn((callback) => () => ({}))
-    const onBalanceUpdate = vi.fn((callback) => () => ({}))
-    const getUpdaterStatus = vi.fn(() => new Promise((resolve, reject) => ({})))
-
     beforeEach(() => {
-      vi.mock('../hooks/StationWallet', async () => {
-        return {
-          default: () => {
-            return {
-              stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-              stationAddress0x: '0x000000000000000000000000000000000000dEaD',
-              destinationFilAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg',
-              walletBalance: 0,
-              walletTransactions: [],
-              editDestinationAddress: () => ({}),
-              currentTransaction: undefined,
-              dismissCurrentTransaction: () => ({})
-            }
-          }
-        }
+      vi.mocked(useWallet).mockReturnValue({
+        stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+        stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+        destinationFilAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg',
+        walletBalance: '0',
+        walletTransactions: [],
+        editDestinationAddress: () => null,
+        dismissCurrentTransaction: () => ({}),
+        transferAllFundsToDestinationWallet: async () => undefined,
+        processingTransaction: undefined
       })
 
-      vi.mock('../hooks/StationActivity', async () => {
-        return {
-          default: () => ({
-            totalJobs,
-            totalEarnings: scheduledRewards,
-            activities
-          })
-        }
+      vi.mocked(useStationActivity).mockReturnValue({
+        totalJobs,
+        scheduledRewards,
+        activities
       })
 
-      Object.defineProperty(window, 'electron', {
-        writable: true,
-        value: {
-          stationEvents: {
-            onActivityLogged,
-            onJobProcessed,
-            onReadyToUpdate,
-            onTransactionUpdate,
-            onScheduledRewardsUpdate,
-            onBalanceUpdate
-          },
-          getUpdaterStatus
-        }
-      })
       render(<BrowserRouter><Dashboard /></BrowserRouter>)
     })
 
     test('subscribes and listens the activity logger', () => {
       onActivityLogged(addToActivities)
-      waitFor(() => { expect(onActivityLogged).toBeCalledTimes(1) }, { timeout: 10 })
+      waitFor(() => {
+        expect(onActivityLogged).toBeCalledTimes(1)
+      }, { timeout: 10 })
       waitFor(() => { expect(document.getElementsByClassName('activity-item').length).toBe(2) }, { timeout: 3000 })
     })
 
