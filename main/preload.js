@@ -45,7 +45,13 @@ contextBridge.exposeInMainWorld('electron', {
     getScheduledRewards: () =>
       ipcRenderer.invoke('station:getScheduledRewards'),
     showTermsOfService: () =>
-      ipcRenderer.invoke('station:showTermsOfService')
+      ipcRenderer.invoke('station:showTermsOfService'),
+    toggleOpenAtLogin: () =>
+      ipcRenderer.invoke('station:toggleOpenAtLogin'),
+    isOpenAtLogin: () => ipcRenderer.invoke('station:isOpenAtLogin'),
+    exportSeedPhrase: () => ipcRenderer.invoke('station:exportSeedPhrase'),
+    saveModuleLogsAs: () => ipcRenderer.invoke('station:saveModuleLogsAs'),
+    checkForUpdates: () => ipcRenderer.invoke('station:checkForUpdates')
   },
   stationEvents: {
     onActivityLogged: (/** @type {(value: Activity) => void} */ callback) => {

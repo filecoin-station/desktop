@@ -42,6 +42,7 @@ async function setup (ctx) {
       await fs.writeFile(filePath, logs.get())
     }
   }
+
   await maybeMigrateFiles()
   await start(ctx)
 }

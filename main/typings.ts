@@ -52,6 +52,10 @@ export interface Context {
 
   transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void;
   balanceUpdate: (balance:string) => void;
+
+  toggleOpenAtLogin: () => void;
+  isOpenAtLogin: () => boolean;
+  exportSeedPhrase: () => void;
 }
 
 export interface WalletSeed {

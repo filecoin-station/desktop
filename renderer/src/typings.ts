@@ -28,6 +28,11 @@ declare global {
         transferAllFundsToDestinationWallet: () => Promise<void>;
         browseTransactionTracker: (transactionHash: string) => void;
         showTermsOfService: () => void;
+        toggleOpenAtLogin: () => void;
+        isOpenAtLogin: () => Promise<boolean>;
+        exportSeedPhrase: () => void;
+        saveModuleLogsAs: () => void;
+        checkForUpdates: () => void;
       };
       stationEvents: {
         onActivityLogged: (callback: (activity: Activity) => void) => () => void;

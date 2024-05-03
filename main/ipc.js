@@ -80,6 +80,26 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     'station:showTermsOfService',
     (_events) => ctx.showTermsOfService()
   )
+  ipcMain.handle(
+    'station:toggleOpenAtLogin',
+    (_events) => ctx.toggleOpenAtLogin()
+  )
+  ipcMain.handle(
+    'station:isOpenAtLogin',
+    (_events) => ctx.isOpenAtLogin()
+  )
+  ipcMain.handle(
+    'station:exportSeedPhrase',
+    (_events) => ctx.exportSeedPhrase()
+  )
+  ipcMain.handle(
+    'station:saveModuleLogsAs',
+    (_events) => ctx.saveModuleLogsAs()
+  )
+  ipcMain.handle(
+    'station:checkForUpdates',
+    (_events) => ctx.manualCheckForUpdates()
+  )
 }
 
 module.exports = {

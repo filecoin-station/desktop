@@ -29,6 +29,7 @@ const { ipcMain } = require('electron/main')
 const os = require('os')
 const core = require('./core')
 const wallet = require('./wallet')
+const settings = require('./settings')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
@@ -122,6 +123,9 @@ const ctx = {
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
   saveModuleLogsAs: () => { throw new Error('never get here') },
+  toggleOpenAtLogin: () => { throw new Error('never get here') },
+  isOpenAtLogin: () => { throw new Error('never get here') },
+  exportSeedPhrase: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   isShowingUI: false,
   loadWebUIFromDist: serve({
@@ -173,6 +177,7 @@ async function run () {
     await wallet.setup(ctx)
     await telemetry.setup()
     await core.setup(ctx)
+    await settings.setup(ctx)
   } catch (e) {
     handleError(e)
   }
