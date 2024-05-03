@@ -14,7 +14,7 @@ const Settings = () => {
 
   async function handleClick () {
     toggleOpenAtLogin()
-    updateIsOpenAtLogin()
+    setIsOpenAtLoginChecked(!isOpenAtLoginChecked)
   }
 
   useEffect(() => {
