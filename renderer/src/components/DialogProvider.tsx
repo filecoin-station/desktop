@@ -1,8 +1,8 @@
-import { ReactNode, createContext, useContext, useRef, useState } from 'react'
-import { Root, Trigger, Overlay, Portal, Content, Dialog } from '@radix-ui/react-dialog'
+import { ReactNode, createContext, useContext, useState } from 'react'
+import { Root, Overlay, Portal, Content } from '@radix-ui/react-dialog'
 
 type OpenDialogOptions = {
-    content: () => JSX.Element;
+    content: ReactNode;
 }
 type DialogContextType = {
     openDialog: (options: OpenDialogOptions) => void;
@@ -29,15 +29,15 @@ export const DialogProvider = ({ children }: {children: ReactNode}) => {
       {children}
 
       <Root open={isOpen} onOpenChange={setIsOpen}>
-          <Portal>
-              <Overlay className='fixed inset-0 bg-[#00000055]' data-dialog-overlay />
-              <Content
-                  className='fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px]
-                  translate-x-[-50%] translate-y-[-50%] bg-white p-[25px] z-10'
-              >
-                  {content}
-              </Content>
-          </Portal>
+        <Portal>
+          <Overlay className='fixed inset-0 bg-[#00000055]' data-dialog-overlay />
+            <Content
+                className='fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px]
+                translate-x-[-50%] translate-y-[-50%] bg-white p-[25px] z-10'
+            >
+                {content}
+            </Content>
+        </Portal>
       </Root>
     </DialogContext.Provider>
   )
