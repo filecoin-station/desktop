@@ -9,6 +9,7 @@ const TransferForm = () => {
   const { openDialog } = useDialog()
   const { walletBalance } = useWallet()
 
+  const [formState, setFormState] = useState<'edit' | 'transfer'>()
   const [addressIsValid, setAddressIsValid] = useState(true)
   const [address, setAddress] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
@@ -16,8 +17,16 @@ const TransferForm = () => {
   useEffect(() => {
     if (destinationFilAddress) {
       setAddress(destinationFilAddress)
+      setFormState('transfer')
     }
   }, [destinationFilAddress])
+
+  useEffect(() => {
+    if (formState === 'edit') {
+      inputRef.current?.focus()
+      inputRef.current?.setSelectionRange(0, inputRef.current.value.length)
+    }
+  }, [formState])
 
   async function handleInputChange (event: ChangeEvent<HTMLInputElement>) {
     if (event.target.value === '') {
@@ -29,7 +38,7 @@ const TransferForm = () => {
   }
 
   function handleEditClick () {
-    inputRef.current?.focus()
+    setFormState('edit')
   }
 
   async function handleSaveAddress (event: FormEvent<HTMLFormElement>) {
@@ -37,6 +46,7 @@ const TransferForm = () => {
 
     if (addressIsValid) {
       editDestinationAddress(address)
+      setFormState('transfer')
     }
   }
 
@@ -54,7 +64,8 @@ const TransferForm = () => {
     })
   }
 
-  const hasAddressSaved = destinationFilAddress && address === destinationFilAddress
+  const hasAddressSaved = destinationFilAddress && formState === 'transfer'
+  const hasBalance = Number(walletBalance) >= 0.01
 
   return (
     <div>
@@ -64,11 +75,13 @@ const TransferForm = () => {
             <div className='my-4'>
                 <input
                     name='address'
+                    className='border-b p-2'
                     type="text"
                     placeholder="Destination"
                     defaultValue={address}
                     onChange={handleInputChange}
                     ref={inputRef}
+                    disabled={formState !== 'edit'}
                 />
             </div>
 
@@ -84,9 +97,25 @@ const TransferForm = () => {
               <p>The FIL address entered is invalid. Please check and try again.</p>
             )}
 
-            <button type='submit' className='block' disabled={!addressIsValid}>
-                {hasAddressSaved ? 'Transfer' : 'Save'}
-            </button>
+            {hasAddressSaved
+              ? (
+              <button
+                type='submit'
+                className='block disabled:opacity-30'
+                disabled={!addressIsValid || !hasBalance}
+              >
+                Transfer
+              </button>
+                )
+              : (
+              <button
+                type='submit'
+                className='block disabled:opacity-30'
+                disabled={!addressIsValid}
+              >
+                Save
+              </button>
+                )}
         </form>
 
     </div>
