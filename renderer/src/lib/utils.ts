@@ -11,6 +11,6 @@ export function formatFilValue (value = '') {
     .toString()
 }
 
-export function openExplorerLink (hash: string) {
-  return () => browseTransactionTracker(hash)
+export function openExplorerLink (hash?: string) {
+  if (hash) browseTransactionTracker(hash)
 }

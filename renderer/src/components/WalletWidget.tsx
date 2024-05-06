@@ -38,7 +38,7 @@ const WalletModalContent = () => {
             {processingTransaction.hash && (
               <button
                 type='button'
-                onClick={openExplorerLink(processingTransaction.hash)}
+                onClick={() => openExplorerLink(processingTransaction.hash)}
               >
                 View on explorer
               </button>
