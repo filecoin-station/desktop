@@ -68,8 +68,8 @@ const WalletWidget = () => {
   }
 
   return (
-    <div className="wallet-widget flex cursor-pointer">
-      <button type='button' onClick={handleClick} className='flex items-center'>
+    <div className="flex cursor-pointer">
+      <button type='button' onClick={handleClick} className='flex items-center wallet-widget'>
         <WalletIcon />
         <span className="text-right mx-3" title="wallet">
           <span className='font-bold'>
