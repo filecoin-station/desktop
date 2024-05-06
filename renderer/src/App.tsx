@@ -8,6 +8,7 @@ import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { ROUTES } from 'src/lib/routes'
 import Layout from 'src/components/Layout'
 import Settings from 'src/pages/settings/Settings'
+import Wallet from 'src/pages/wallet/Wallet'
 import { DialogProvider } from './components/DialogProvider'
 
 const App = ():JSX.Element => {
@@ -28,6 +29,7 @@ const App = ():JSX.Element => {
                     <Plausible />
                       <Routes>
                         <Route path={ROUTES.dashboard} element={<Dashboard />} />
+                        <Route path={ROUTES.wallet} element={<Wallet />} />
                         <Route path={ROUTES.settings} element={<Settings />} />
                       </Routes>
                   </Layout>
