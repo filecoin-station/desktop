@@ -31,9 +31,10 @@ const TransferForm = () => {
   async function handleInputChange (event: ChangeEvent<HTMLInputElement>) {
     if (event.target.value === '') {
       setAddressIsValid(true)
+    } else {
+      setAddressIsValid(await validateAddress(event.target.value))
     }
 
-    setAddressIsValid(await validateAddress(event.target.value))
     setAddress(event.target.value)
   }
 
