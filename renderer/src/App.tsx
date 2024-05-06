@@ -8,6 +8,7 @@ import { HelmetProvider, Helmet } from 'react-helmet-async'
 import { ROUTES } from 'src/lib/routes'
 import Layout from 'src/components/Layout'
 import Settings from 'src/pages/settings/Settings'
+import { DialogProvider } from './components/DialogProvider'
 
 const App = ():JSX.Element => {
   return (
@@ -16,23 +17,25 @@ const App = ():JSX.Element => {
         <title>Filecoin Station</title>
       </Helmet>
       <Router>
-        <Routes>
-          <Route path={ROUTES.onboarding} element={<Onboarding />} />
-          <Route
-            path="*"
-            element={
-            <Layout>
-              <Sentry />
-              <Plausible />
-              <Routes>
-                <Route path={ROUTES.dashboard} element={<Dashboard />} />
-                <Route path={ROUTES.settings} element={<Settings />} />
-              </Routes>
-            </Layout>
-            }
-          >
-          </Route>
-        </Routes>
+        <DialogProvider>
+          <Routes>
+            <Route path={ROUTES.onboarding} element={<Onboarding />} />
+            <Route
+              path="*"
+              element={
+                  <Layout>
+                    <Sentry />
+                    <Plausible />
+                      <Routes>
+                        <Route path={ROUTES.dashboard} element={<Dashboard />} />
+                        <Route path={ROUTES.settings} element={<Settings />} />
+                      </Routes>
+                  </Layout>
+              }
+            >
+            </Route>
+          </Routes>
+        </DialogProvider>
       </Router>
     </HelmetProvider>
   )

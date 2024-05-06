@@ -24,7 +24,7 @@ const Dashboard = (): JSX.Element => {
           }}
         >
         </div>
-        <div className="h-[300px] flex flex-col relative z-20">
+        <div className="h-[300px] flex flex-col relative">
           <div className="mb-6">
             <p className="w-fit text-body-3xs text-grayscale-700 uppercase">Total Jobs Completed</p>
             <p className="w-fit text-header-m font-bold font-number total-jobs" title="total jobs">
@@ -43,7 +43,7 @@ const Dashboard = (): JSX.Element => {
         </div>
       </div>
       <div
-        className="pointer-events-none absolute h-14 bg-grayscale-100 w-full z-20"
+        className="pointer-events-none absolute h-14 bg-grayscale-100 w-full"
         style={{
           WebkitMaskImage: 'linear-gradient(black, transparent)',
           maskImage: 'linear-gradient(black, transparent)'
@@ -56,7 +56,7 @@ const Dashboard = (): JSX.Element => {
         </div>
       </div>
       <div
-        className="pointer-events-none fixed h-14 bg-grayscale-100 w-full z-10 bottom-0"
+        className="pointer-events-none fixed h-14 bg-grayscale-100 w-full bottom-0"
         style={{
           WebkitMaskImage: 'linear-gradient(transparent, black)',
           maskImage: 'linear-gradient(transparent, black)'
