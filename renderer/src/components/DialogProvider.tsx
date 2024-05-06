@@ -1,5 +1,6 @@
-import { ReactNode, createContext, useContext, useState } from 'react'
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { Root, Overlay, Portal, Content } from '@radix-ui/react-dialog'
+import { useLocation } from 'react-router-dom'
 
 type OpenDialogOptions = {
     content: ReactNode;
@@ -12,6 +13,8 @@ type DialogContextType = {
 const DialogContext = createContext<DialogContextType>({} as DialogContextType)
 
 export const DialogProvider = ({ children }: {children: ReactNode}) => {
+  const location = useLocation()
+
   const [isOpen, setIsOpen] = useState(false)
   const [content, setContent] = useState<ReactNode>()
 
@@ -23,6 +26,10 @@ export const DialogProvider = ({ children }: {children: ReactNode}) => {
   function closeDialog () {
     setIsOpen(false)
   }
+
+  useEffect(() => {
+    setIsOpen(false)
+  }, [location.pathname])
 
   return (
     <DialogContext.Provider value={{ openDialog, closeDialog }}>

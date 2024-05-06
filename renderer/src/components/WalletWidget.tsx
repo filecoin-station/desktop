@@ -8,15 +8,6 @@ import { formatFilValue, openExplorerLink, truncateString } from 'src/lib/utils'
 import { Link } from 'react-router-dom'
 import { ROUTES } from 'src/lib/routes'
 
-/* const processingTransaction = {
-  hash: 'bafy2bzacebi5g5t5x77aeuviwfx5np4xo2f6viunt4bjnnecfjbjqzhufxfk2',
-  timestamp: new Date('01/12/2022'),
-  status: 'succeeded',
-  outgoing: true,
-  amount: '4000',
-  address: 'f0123'
-} */
-
 const WalletModalContent = () => {
   const {
     stationAddress,
