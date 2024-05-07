@@ -61,7 +61,7 @@ const Sidebar = () => {
                   ${isActive ? 'active' : ''}`}
               >
               <Icon />
-              <span className={`uppercase text-[10px] ${isOpen ? 'block' : 'hidden'}`}>{title}</span>
+              <span className={`uppercase text-body-3xs ${isOpen ? 'block' : 'hidden'}`}>{title}</span>
             </NavLink>
             ))}
         </nav>
