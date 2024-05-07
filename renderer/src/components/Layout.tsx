@@ -5,14 +5,14 @@ import WalletWidget from 'src/components/WalletWidget'
 
 const Layout = ({ children }: {children: ReactNode}) => {
   return (
-    <div className='h-screen w-screen overflow-hidden bg-grayscale-100'>
-      <div className='w-full flex flex-wrap justify-end'>
-        <UpdateBanner />
-        <WalletWidget />
-      </div>
+    <div className='h-screen w-screen overflow-hidden'>
       <div className='flex w-full'>
       <Sidebar />
       <main className='flex-1'>
+        <div className='w-full flex flex-wrap justify-end'>
+          <UpdateBanner />
+          <WalletWidget />
+        </div>
         {children}
       </main>
       </div>
