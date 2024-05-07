@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { ROUTES } from 'src/lib/routes'
 import HomeIcon from 'src/assets/img/icons/home.svg?react'
 import ModulesIcon from 'src/assets/img/icons/modules.svg?react'
@@ -27,7 +27,7 @@ const links = [
     title: 'Settings',
     Icon: SettingsIcon
   }
-]
+] as const
 
 const Sidebar = () => {
   return (
@@ -35,15 +35,30 @@ const Sidebar = () => {
       <div className='flex flex-col items-center gap-9 px-4 pt-5'>
         <Logo />
         <nav className='flex flex-col gap-2'>
-            {links.map(({ href, title, Icon }) => (
-              <Link to={href} key={href} className='p-3.5'>
-                <Icon />
-                {/* <span>{title}</span> */}
-              </Link>
-            ))}
+            {links.map(link => <MenuNavLink key={link.href} {...link} />)}
         </nav>
       </div>
     </section>
+  )
+}
+
+const MenuNavLink = ({ ...link }: typeof links[number]) => {
+  const { href, title, Icon } = link
+
+  return (
+    <NavLink
+      to={href}
+      key={href}
+      className={({ isActive }) =>
+        `flex gap-2 items-center p-3.5 rounded-[5px] outline-dashed
+        ${isActive
+          ? 'bg-[#D9D9E4] text-primary outline-[#A0A1BA]'
+          : 'hover:bg-[#EAEAEF] text-black outline-[#F1F1F5] hover:outline-[#A0A1BA]'}`
+    }
+    >
+      <Icon />
+      <span className='uppercase text-[10px]'>{title}</span>
+    </NavLink>
   )
 }
 
