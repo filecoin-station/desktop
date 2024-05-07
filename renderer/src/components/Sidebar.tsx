@@ -43,7 +43,7 @@ const Sidebar = () => {
           type='button'
           onClick={() => setIsOpen(!isOpen)}
           className='nav-button absolute right-0 top-16 translate-x-[50%] outline-slate-400
-          opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'
+          opacity-0 group-hover:opacity-100 focus:opacity-100'
         >
           <div className={`text-primary ${isOpen ? 'rotate-180' : ''}`}>
             <MenuArrow />
