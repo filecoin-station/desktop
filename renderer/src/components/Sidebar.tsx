@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ROUTES } from 'src/lib/routes'
 import HomeIcon from 'src/assets/img/icons/home.svg?react'
 import ModulesIcon from 'src/assets/img/icons/modules.svg?react'
 import WalletIcon from 'src/assets/img/icons/wallet-2.svg?react'
 import SettingsIcon from 'src/assets/img/icons/settings.svg?react'
+import MenuArrow from 'src/assets/img/icons/menu-arrow.svg?react'
 import Logo from 'src/assets/img/icons/logo-symbol.svg?react'
 
 const links = [
@@ -27,38 +29,44 @@ const links = [
     title: 'Settings',
     Icon: SettingsIcon
   }
-] as const
+]
 
 const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
-    <section className='pt-9 bg-[#F1F1F5] outline-r outline-[#A0A1BA] outline-dashed'>
+    <section className='no-drag group relative pt-9 bg-slate-50 outline-slate-400 outline-dashed outline-1'>
       <div className='flex flex-col items-center gap-9 px-4 pt-5'>
         <Logo />
+
+        <button
+          type='button'
+          onClick={() => setIsOpen(!isOpen)}
+          className='nav-button absolute right-0 top-16 translate-x-[50%] outline-slate-400
+          opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'
+        >
+          <div className={`text-primary ${isOpen ? 'rotate-180' : ''}`}>
+            <MenuArrow />
+          </div>
+        </button>
+
         <nav className='flex flex-col gap-2'>
-            {links.map(link => <MenuNavLink key={link.href} {...link} />)}
+            {links.map(({ href, title, Icon }) => (
+              <NavLink
+                to={href}
+                key={href}
+                className={({ isActive }) =>
+                  `flex gap-2 items-center py-3.5 nav-button 
+                  ${isOpen ? 'px-3' : 'px-3.5'} 
+                  ${isActive ? 'active' : ''}`}
+              >
+              <Icon />
+              <span className={`uppercase text-[10px] ${isOpen ? 'block' : 'hidden'}`}>{title}</span>
+            </NavLink>
+            ))}
         </nav>
       </div>
     </section>
-  )
-}
-
-const MenuNavLink = ({ ...link }: typeof links[number]) => {
-  const { href, title, Icon } = link
-
-  return (
-    <NavLink
-      to={href}
-      key={href}
-      className={({ isActive }) =>
-        `flex gap-2 items-center p-3.5 rounded-[5px] outline-dashed
-        ${isActive
-          ? 'bg-[#D9D9E4] text-primary outline-[#A0A1BA]'
-          : 'hover:bg-[#EAEAEF] text-black outline-[#F1F1F5] hover:outline-[#A0A1BA]'}`
-    }
-    >
-      <Icon />
-      <span className='uppercase text-[10px]'>{title}</span>
-    </NavLink>
   )
 }
 

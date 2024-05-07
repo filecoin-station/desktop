@@ -38,7 +38,8 @@
   .onboarding,
   .activity-item,
   .modal-bg, input, label,
-  [data-dialog-overlay] {
+  [data-dialog-overlay],
+  .no-drag {
     -webkit-app-region: no-drag;
   }
   input {
@@ -141,4 +142,13 @@
     @apply text-body-3xs
   }
 
+  .nav-button {
+    @apply rounded outline-dashed outline-1 bg-slate-50 outline-slate-50
+  }
+  .nav-button.active {
+    @apply bg-slate-200 text-primary outline-slate-400
+  }
+  .nav-button:not(.active):hover, .nav-button:not(.active):focus-visible {
+    @apply bg-slate-100 text-black  outline-slate-400
+  }
 }
