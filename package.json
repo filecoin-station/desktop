@@ -63,7 +63,7 @@
     "prettier": "^3.2.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-helmet-async": "^2.0.4",
+    "react-helmet-async": "^2.0.5",
     "react-router-dom": "^6.23.0",
     "run": "^1.5.0",
     "split2": "^4.2.0",
