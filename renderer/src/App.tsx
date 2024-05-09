@@ -9,6 +9,7 @@ import { ROUTES } from 'src/lib/routes'
 import Layout from 'src/components/Layout'
 import Settings from 'src/pages/settings/Settings'
 import Wallet from 'src/pages/wallet/Wallet'
+import Modules from 'src/pages/modules/Modules'
 import { DialogProvider } from './components/DialogProvider'
 
 const App = ():JSX.Element => {
@@ -31,6 +32,7 @@ const App = ():JSX.Element => {
                         <Route path={ROUTES.dashboard} element={<Dashboard />} />
                         <Route path={ROUTES.wallet} element={<Wallet />} />
                         <Route path={ROUTES.settings} element={<Settings />} />
+                        <Route path={ROUTES.modules} element={<Modules />} />
                       </Routes>
                   </Layout>
               }
