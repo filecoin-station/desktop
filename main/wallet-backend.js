@@ -6,6 +6,7 @@ const { ethers } = require('ethers')
 const {
   delegatedFromEthAddress,
   ethAddressFromDelegated,
+  isEthAddress,
   CoinType
 } = require('@glif/filecoin-address')
 const fs = require('node:fs/promises')
@@ -33,6 +34,14 @@ const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJ
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 async function noop () {}
 
+/**
+ * @param {string} value
+ * @returns {value is `f1${string}`}
+ */
+function isF1Address (value) {
+  return value.startsWith('f1')
+}
+
 class WalletBackend {
   constructor ({
     disableKeytar = DISABLE_KEYTAR,
@@ -42,7 +51,7 @@ class WalletBackend {
     this.provider = null
     /** @type {ethers.Wallet | null} */
     this.signer = null
-    /** @type {string | null} */
+    /** @type {`0x${string}` | null} */
     this.address = null
     /** @type {string | null} */
     this.addressDelegated = null
@@ -70,7 +79,8 @@ class WalletBackend {
       }
     })
     this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
-    this.address = this.signer.address
+    this.address = /** @type {any} */(this.signer.address)
+    assert(this.address !== null)
     this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
     this.filForwarder = new ethers.Contract(
       '0x2b3ef6906429b580b7b2080de5ca893bc282c225',
@@ -119,11 +129,11 @@ class WalletBackend {
   async transferFunds (to, amount) {
     log.info('transferFunds()', { to, amount: amount.toString() })
 
-    if (to.startsWith('0x')) {
+    if (isEthAddress(to)) {
       return this.transferFundsToEthAddress(to, amount)
     } else if (to.startsWith('f4')) {
       return this.transferFundsToEthAddress(ethAddressFromDelegated(to), amount)
-    } else if (to.startsWith('f1')) {
+    } else if (isF1Address(to)) {
       return this.transferFundsToF1Address(to, amount)
     } else {
       throw new Error('Unknown address type')
@@ -131,7 +141,7 @@ class WalletBackend {
   }
 
   /**
-   * @param {string} to
+   * @param {`f1${string}`} to
    * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
@@ -153,7 +163,7 @@ class WalletBackend {
   }
 
   /**
-   * @param {string} to
+   * @param {`0x${string}`} to
    * @param {ethers.BigNumber} amount
    * @returns {Promise<string>}
    */
@@ -175,7 +185,7 @@ class WalletBackend {
   }
 
   /**
-   * @param {string} to
+   * @param {`f1${string}` | `0x${string}`} to
    * @param {ethers.BigNumber} amount
    * @param {function} fn
    * @returns {Promise<string>}
@@ -189,7 +199,7 @@ class WalletBackend {
       status: 'processing',
       outgoing: true,
       amount: ethers.utils.formatUnits(amount, 18),
-      address: to.startsWith('f1')
+      address: isF1Address(to)
         ? to
         : delegatedFromEthAddress(to, CoinType.MAIN)
     }
