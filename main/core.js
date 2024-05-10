@@ -129,6 +129,13 @@ async function start (ctx) {
   childProcess.on('close', code => {
     console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
 
+    if (code === 2) {
+      // FIL_WALLET_ADDRESS did not pass our screening. There is not much
+      // we can do about that, there is no point in reporting this error
+      // to Sentry.
+      return
+    }
+
     Sentry.captureException('Core exited', scope => {
       // Sentry UI can't show the full 100 lines
       scope.setExtra('logs', logs.getLastLines(10))
