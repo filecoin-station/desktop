@@ -14,6 +14,7 @@ import Dashboard from 'src/pages/dashboard/Dashboard'
 import useWallet from 'src/hooks/StationWallet'
 import useStationActivity from 'src/hooks/StationActivity'
 import { Activity } from '../../../shared/typings'
+import useStationRewards from 'src/hooks/StationRewards'
 
 const activities: Activity[] = [{
   id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
@@ -44,6 +45,7 @@ const setScheduledRewards = () => {
 
 vi.mock('src/hooks/StationWallet')
 vi.mock('src/hooks/StationActivity')
+vi.mock('src/hooks/StationRewards')
 vi.mock('src/lib/station-config')
 
 describe('Dashboard page', () => {
@@ -78,8 +80,12 @@ describe('Dashboard page', () => {
 
       vi.mocked(useStationActivity).mockReturnValue({
         totalJobs: 0,
-        scheduledRewards: undefined,
         activities: []
+      })
+      vi.mocked(useStationRewards).mockReturnValue({
+        totalRewardsReceived: 1,
+        scheduledRewards,
+        historicalRewards: []
       })
 
       render(<BrowserRouter><Dashboard /></BrowserRouter>)
@@ -143,9 +149,14 @@ describe('Dashboard page', () => {
         processingTransaction: undefined
       })
 
+      vi.mocked(useStationRewards).mockReturnValue({
+        totalRewardsReceived: 1,
+        scheduledRewards,
+        historicalRewards: []
+      })
+
       vi.mocked(useStationActivity).mockReturnValue({
         totalJobs,
-        scheduledRewards,
         activities
       })
 

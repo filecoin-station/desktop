@@ -8,6 +8,7 @@ import Layout from 'src/components/Layout'
 import { DialogProvider } from 'src/components/DialogProvider'
 import useStationActivity from 'src/hooks/StationActivity'
 import useWallet from 'src/hooks/StationWallet'
+import useStationRewards from 'src/hooks/StationRewards'
 
 const mockedSetDestinationWalletAddress = vi.fn()
 
@@ -23,6 +24,7 @@ vi.mock('src/lib/station-config', () => ({
 }))
 vi.mock('src/hooks/StationWallet')
 vi.mock('src/hooks/StationActivity')
+vi.mock('src/hooks/StationRewards')
 
 describe('Dashboard wallet display', () => {
   describe('Wallet modal empty state', () => {
@@ -56,8 +58,12 @@ describe('Dashboard wallet display', () => {
 
       vi.mocked(useStationActivity).mockReturnValue({
         totalJobs: 0,
-        scheduledRewards: undefined,
         activities: []
+      })
+      vi.mocked(useStationRewards).mockReturnValue({
+        totalRewardsReceived: 1,
+        scheduledRewards: undefined,
+        historicalRewards: []
       })
 
       render(<BrowserRouter><DialogProvider><Layout><Dashboard /></Layout></DialogProvider></BrowserRouter>)
