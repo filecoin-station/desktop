@@ -38,7 +38,7 @@ async function noop () {}
  * @param {string} value
  * @returns {value is `f1${string}`}
  */
-function isF1Address (value) {
+function startsWithF1 (value) {
   return value.startsWith('f1')
 }
 
@@ -133,7 +133,7 @@ class WalletBackend {
       return this.transferFundsToEthAddress(to, amount)
     } else if (to.startsWith('f4')) {
       return this.transferFundsToEthAddress(ethAddressFromDelegated(to), amount)
-    } else if (isF1Address(to)) {
+    } else if (startsWithF1(to)) {
       return this.transferFundsToF1Address(to, amount)
     } else {
       throw new Error('Unknown address type')
@@ -199,7 +199,7 @@ class WalletBackend {
       status: 'processing',
       outgoing: true,
       amount: ethers.utils.formatUnits(amount, 18),
-      address: isF1Address(to)
+      address: startsWithF1(to)
         ? to
         : delegatedFromEthAddress(to, CoinType.MAIN)
     }
