@@ -2,6 +2,7 @@ import { FC, useState, useEffect, useRef } from 'react'
 import {
   delegatedFromEthAddress,
   ethAddressFromDelegated,
+  isEthAddress,
   newFromString
 } from '@glif/filecoin-address'
 import Warning from '../assets/img/icons/error.svg?react'
@@ -16,7 +17,7 @@ interface FilAddressFormProps {
 }
 
 const checkAddressString = async (address: string) => {
-  if (address.startsWith('0x')) {
+  if (isEthAddress(address)) {
     delegatedFromEthAddress(address)
   } else if (address.startsWith('f4')) {
     ethAddressFromDelegated(address)
