@@ -33,12 +33,17 @@
   }
 
   .drag-area {
-    -webkit-app-region: drag;
+    -webkit-app-region: drag;    
   }
   
+  .no-drag-area {
+    -webkit-app-region: no-drag;    
+  }
+
   input {
     -webkit-user-select: text;
   }
+  
   p {
     margin-block-start: 0;
     margin-block-end: 0;
