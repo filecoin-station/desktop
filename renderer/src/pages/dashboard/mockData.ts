@@ -1,27 +1,48 @@
-export const mockData = [
-  {
-    timestamp: '2024-05-09',
-    totalRewardsReceived: 0.2,
-    totalScheduledRewards: 0.2
-  },
-  {
-    timestamp: '2024-05-10',
-    totalRewardsReceived: 0.2,
-    totalScheduledRewards: 0.3
-  },
-  {
-    timestamp: '2024-05-11',
-    totalRewardsReceived: 0.2,
-    totalScheduledRewards: 0.4
-  },
-  {
-    timestamp: '2024-05-12',
-    totalRewardsReceived: 0.2,
-    totalScheduledRewards: 0.5
-  },
-  {
-    timestamp: '2024-05-13',
-    totalRewardsReceived: 0.7,
-    totalScheduledRewards: 0.7
+type RewardsRecord = {
+  timestamp: string;
+  totalRewardsReceived: number;
+  totalScheduledRewards: number;
+}
+
+function getRandomNumber (min: number, max: number) {
+  return Math.random() * (max - min) + min
+}
+
+const mockData: RewardsRecord[] = []
+
+const config = {
+  recordsCount: 30,
+  minReward: 0.05,
+  maxReward: 0.1,
+  payoutFrequency: 7
+}
+
+const currentDate = new Date()
+const date = new Date(new Date().setDate(currentDate.getDate() - config.recordsCount))
+
+let rewardsAccumulatedInWindow = 0
+
+for (let index = 0; index < config.recordsCount; index++) {
+  const prevRecordReceived = mockData.at(-1)?.totalRewardsReceived || 0
+  const timestamp = date.toISOString()
+
+  if (index % config.payoutFrequency === 0) {
+    mockData.push({
+      timestamp,
+      totalRewardsReceived: prevRecordReceived + rewardsAccumulatedInWindow,
+      totalScheduledRewards: 0
+    })
+  } else {
+    const amount = getRandomNumber(config.minReward, config.maxReward)
+    rewardsAccumulatedInWindow += amount
+    mockData.push({
+      timestamp,
+      totalRewardsReceived: prevRecordReceived,
+      totalScheduledRewards: amount
+    })
   }
-]
+
+  date.setDate(date.getDate() + 1)
+}
+
+export { mockData }
