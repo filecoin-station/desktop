@@ -7,9 +7,6 @@ const isDevBuild = BUILD_VERSION.endsWith('-dev')
 
 // Disable Sentry integration for dev builds
 if (!isDevBuild) {
-  // Importing @sentry/tracing patches the global hub for tracing to work.
-  require('@sentry/tracing')
-
   Sentry.init({
     dsn: 'https://ff9615d8516545158e186d863a06a0f1@o1408530.ingest.sentry.io/6762462',
     release: BUILD_VERSION,
