@@ -24,6 +24,7 @@ jobs:
           - npm
           - undici
           - ejs
+          - '@electron/notarize'
     steps:
       - name: Dependabot metadata
         id: metadata
