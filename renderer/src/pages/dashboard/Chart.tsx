@@ -46,9 +46,10 @@ const Chart = ({ historicalRewards }: {historicalRewards: RewardsRecord[]}) => {
         label: 'Scheduled rewards',
         data: historicalRewards.map(record =>
           record.totalScheduledRewards + record.totalRewardsReceived),
-        borderColor: '#ccc',
-        fill: true,
-        backgroundColor: '#ccc'
+        borderColor: '#ddd',
+        border: false,
+        fill: '-1',
+        backgroundColor: '#ddd'
       }
     ]
   }

@@ -1,8 +1,4 @@
-type RewardsRecord = {
-  timestamp: string;
-  totalRewardsReceived: number;
-  totalScheduledRewards: number;
-}
+import { RewardsRecord } from 'src/hooks/StationRewards'
 
 function getRandomNumber (min: number, max: number) {
   return Math.random() * (max - min) + min
@@ -23,22 +19,23 @@ const date = new Date(new Date().setDate(currentDate.getDate() - config.recordsC
 let rewardsAccumulatedInWindow = 0
 
 for (let index = 0; index < config.recordsCount; index++) {
-  const prevRecordReceived = mockData.at(-1)?.totalRewardsReceived || 0
+  const prevRecord = mockData.at(-1)
   const timestamp = date.toISOString()
 
   if (index % config.payoutFrequency === 0) {
     mockData.push({
       timestamp,
-      totalRewardsReceived: prevRecordReceived + rewardsAccumulatedInWindow,
+      totalRewardsReceived: (prevRecord?.totalRewardsReceived || 0) + rewardsAccumulatedInWindow,
       totalScheduledRewards: 0
     })
+    rewardsAccumulatedInWindow = 0
   } else {
     const amount = getRandomNumber(config.minReward, config.maxReward)
     rewardsAccumulatedInWindow += amount
     mockData.push({
       timestamp,
-      totalRewardsReceived: prevRecordReceived,
-      totalScheduledRewards: amount
+      totalRewardsReceived: prevRecord?.totalRewardsReceived || 0,
+      totalScheduledRewards: (prevRecord?.totalScheduledRewards || 0) + amount
     })
   }
 
