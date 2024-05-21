@@ -14,11 +14,12 @@
   }
   @font-face {
     font-family: "SpaceGrotesk";
-    font-weight: 700;
-    src: url('assets/fonts/SpaceGrotesk/SpaceGrotesk-Bold.ttf');
+    font-weight: 500;
+    src: url('assets/fonts/SpaceGrotesk/SpaceGrotesk-Medium.ttf');
   }
   @font-face {
     font-family: "SpaceMono";
+    font-weight: 400;
     src: url('assets/fonts/SpaceMono/SpaceMono-Regular.ttf');
   }
   @font-face {
@@ -49,14 +50,6 @@
     margin-block-end: 0;
   }
 
-  .title {
-    @apply text-header-l font-title text-primary leading-[1.25] tracking-[-0.4px];
-  }
-
-  .subtitle {
-    @apply text-header-xxs font-title text-secondary tracking-[-0.4px];
-  }
-
   .app-bg {
     background-image: url('./assets/img/bg-pattern.svg');
     background-repeat: no-repeat;
@@ -66,12 +59,6 @@
 }
 
 @layer components {
-  
-  .input {
-    @apply text-header-3xs font-body text-white
-    bg-transparent appearance-none focus:outline-none focus:ring-0;
-  }
-
   .btn-primary {
     @apply py-2 px-4 h-12 rounded-full font-body text-body-s w-fit
     bg-transparent text-white border border-white border-solid
@@ -124,17 +111,6 @@
      hover:border-primary-hover hover:border-opacity-25 hover:text-primary-hover
      visited:border-primary-click visited:border-opacity-25 visited:text-primary-click 
      disabled:border-grayscale-500 disabled:text-grayscale-500;  
-  }
-
-  .btn-primary-accent {
-    @apply bg-accent hover:bg-accent-hover visited:bg-accent-click
-    disabled:bg-accent/40 
-  }
-
-  .link-primary {
-    @apply text-body-xs text-primary underline decoration-primary/70
-     hover:text-primary-hover hover:decoration-primary-hover/70
-     visited:text-primary-click visited:decoration-primary-click/70
   }
 
   input:focus ~ label,	

@@ -8,24 +8,36 @@ module.exports = {
   ],
   theme: {
     fontSize: {
-      base: '1.25rem',
-      'header-3xs': '1.25rem',
-      'header-2xs': '1.5rem',
-      'header-xs': '1.75rem',
-      'header-s': '2.25rem',
-      'header-m': '2.75rem',
-      'header-l': '3.25rem',
-      'body-3xs': '0.625rem',
-      'body-2xs': '0.75rem',
-      'body-xs': '0.875rem',
-      'body-s': '1rem',
-      'body-m': '1.25rem',
-      'body-l': '1.75rem'
+      'header-3xs': ['20px', '24px'],
+      'header-2xs': ['24px', '28px'],
+      'header-xs': ['28px', '36px'],
+      'header-s': ['36px', '44px'],
+      'header-m': ['44px', '52px'],
+      'header-l': ['52px', '68px'],
+      'body-3xs': ['10px', '14px'],
+      'body-2xs': ['12px', '16px'],
+      'body-xs': ['14px', '20px'],
+      'body-s': ['16px', '20px'],
+      'body-m': ['20px', '28px'],
+      'body-l': ['36px', '52px'],
+      'mono-3xs': ['12px', '16px'],
+      'mono-2xs': ['14px', '20px'],
+      'mono-xs': ['16px', '20px'],
+      'mono-s': ['20px', '28px'],
+      'mono-m': ['24px', '36px'],
+      'mono-l': ['28px', '36px'],
+      'mono-xl': ['36px', '52px'],
+      'mono-2xl': ['44px', '52px']
     },
     fontFamily: {
       title: ['SuisseIntl', 'sans-serif'],
       body: ['SpaceGrotesk', 'serif'],
-      number: ['SpaceMono', 'monospace']
+      mono: ['SpaceMono', 'monospace']
+    },
+    fontWeight: {
+      normal: 400,
+      medium: 500,
+      bold: 700
     },
     colors: {
       white: '#fff',
@@ -33,11 +45,6 @@ module.exports = {
       primary: '#2a1cf7',
       'primary-hover': '#1A1199',
       'primary-click': '#2317CC',
-      'primary-dark': '#330867',
-      accent: '#40ffc4',
-      secondary: '#30b7e8',
-      'secondary-accent': '#d5f710',
-      'tertiary-accent': '#330867',
       grayscale: {
         100: '#f0f0f0',
         200: '#f7f7f7',
