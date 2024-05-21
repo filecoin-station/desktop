@@ -6,7 +6,7 @@ import DraggableArea from 'src/components/DraggableArea'
 
 const Layout = ({ children }: {children: ReactNode}) => {
   return (
-    <div className='h-screen w-screen overflow-x-hidden flex'>
+    <div className='h-screen w-screen overflow-x-hidden flex relative app-bg'>
       <DraggableArea />
       <Sidebar />
       <main className='flex-1 px-20'>
@@ -16,7 +16,6 @@ const Layout = ({ children }: {children: ReactNode}) => {
         </div>
         {children}
       </main>
-
     </div>
   )
 }

@@ -56,6 +56,13 @@
   .subtitle {
     @apply text-header-xxs font-title text-secondary tracking-[-0.4px];
   }
+
+  .app-bg {
+    background-image: url('./assets/img/bg-pattern.svg');
+    background-repeat: no-repeat;
+    background-size: 86vw;
+    background-position: 10vw 80%;
+  }
 }
 
 @layer components {
