@@ -21,6 +21,8 @@ let rewardsAccumulatedInWindow = 0
 for (let index = 0; index < config.recordsCount; index++) {
   const prevRecord = mockData.at(-1)
   const timestamp = date.toISOString()
+  const amount = getRandomNumber(config.minReward, config.maxReward)
+  rewardsAccumulatedInWindow += amount
 
   if (index % config.payoutFrequency === 0) {
     mockData.push({
@@ -30,8 +32,6 @@ for (let index = 0; index < config.recordsCount; index++) {
     })
     rewardsAccumulatedInWindow = 0
   } else {
-    const amount = getRandomNumber(config.minReward, config.maxReward)
-    rewardsAccumulatedInWindow += amount
     mockData.push({
       timestamp,
       totalRewardsReceived: prevRecord?.totalRewardsReceived || 0,
