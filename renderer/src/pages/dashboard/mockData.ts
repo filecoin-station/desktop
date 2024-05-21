@@ -7,14 +7,14 @@ function getRandomNumber (min: number, max: number) {
 const mockData: RewardsRecord[] = []
 
 const config = {
-  recordsCount: 30,
+  recordsCount: 300,
   minReward: 0.05,
   maxReward: 0.1,
   payoutFrequency: 7
 }
 
 const currentDate = new Date()
-const date = new Date(new Date().setDate(currentDate.getDate() - config.recordsCount))
+const date = new Date(new Date().setDate(currentDate.getDate() - (config.recordsCount - 1)))
 
 let rewardsAccumulatedInWindow = 0
 
