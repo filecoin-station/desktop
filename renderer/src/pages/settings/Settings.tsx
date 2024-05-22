@@ -1,4 +1,6 @@
+/* eslint-disable react/jsx-no-comment-textnodes */
 import { useEffect, useState } from 'react'
+import Text from 'src/components/Text'
 import {
   checkForUpdates,
   exportSeedPhrase,
@@ -6,6 +8,12 @@ import {
   saveModuleLogsAs,
   toggleOpenAtLogin
 } from 'src/lib/station-config'
+import SettingsGroup, { SettingsGroupItem } from './SettingsGroup'
+import SwitchInput from 'src/components/SwitchInput'
+import Button from 'src/components/Button'
+import UpdateIcon from 'src/assets/img/icons/update.svg?react'
+import SaveIcon from 'src/assets/img/icons/save.svg?react'
+import ExportIcon from 'src/assets/img/icons/export.svg?react'
 
 const Settings = () => {
   const [isOpenAtLoginChecked, setIsOpenAtLoginChecked] = useState(true)
@@ -22,20 +30,72 @@ const Settings = () => {
   }, [])
 
   return (
-    <div className="px-20">
-      <h1 className="font-bold mb-6">Settings</h1>
-      <h2>General</h2>
-      <div className="flex flex-col items-start mb-6">
-        <label>
-            <input type="checkbox" onChange={handleClick} checked={isOpenAtLoginChecked} />
-            Start at login
-        </label>
-        <button type="button" onClick={checkForUpdates}>Check for updates</button>
-        <button type="button" onClick={saveModuleLogsAs}>Save module logs as...</button>
+    <>
+      <header className='mb-9'>
+        <Text font='mono' size='xs' color='primary' uppercase>// Settings ... :</Text>
+      </header>
+      <div className='flex flex-col gap-7 max-w-[928px]'>
+        <SettingsGroup name='General'>
+          <SettingsGroupItem
+            title='Start at login'
+            input={
+              <SwitchInput
+                name="openAtLogin"
+                onChange={handleClick}
+                checked={isOpenAtLoginChecked}
+              />
+            }
+          />
+          <SettingsGroupItem
+            title='Updates'
+            description='Check for updates regularly to ensure your software is running smoothly and securely.'
+            input={
+              <Button
+                type='button'
+                variant='secondary'
+                icon={<UpdateIcon />}
+                onClick={checkForUpdates}
+              >
+                  Check for updates
+              </Button>
+            }
+          />
+          <SettingsGroupItem
+            title='Module logs'
+            description={`Saving module logs in the Station app helps users track 
+            and diagnose issues, providing insights into the performance of individual 
+            components for effective troubleshooting.`}
+            input={
+              <Button
+                type='button'
+                variant='secondary'
+                icon={<SaveIcon />}
+                onClick={saveModuleLogsAs}
+              >
+                  Save module logs as...
+              </Button>
+            }
+          />
+        </SettingsGroup>
+        <SettingsGroup name='Security'>
+          <SettingsGroupItem
+              title='Seed phrase'
+              description={`Export your seed phrase for safekeeping, 
+              allowing you to recover your cryptocurrency assets if necessary.`}
+              input={
+                <Button
+                  type='button'
+                  variant='secondary'
+                  icon={<ExportIcon />}
+                  onClick={exportSeedPhrase}
+                >
+                    Export seed phrase
+                </Button>
+              }
+          />
+        </SettingsGroup>
       </div>
-      <h2>Security</h2>
-      <button type="button" onClick={exportSeedPhrase}>Export seed phrase</button>
-    </div>
+    </>
   )
 }
 
