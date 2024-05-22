@@ -1,4 +1,5 @@
 import { ReactNode } from 'react'
+import BorderedBox from 'src/components/BorderedBox'
 import Text from 'src/components/Text'
 
 export const SettingsGroupItem = (
@@ -13,10 +14,7 @@ export const SettingsGroupItem = (
   }
 ) => {
   return (
-    <div className='flex py-5 px-9 justify-between items-center
-                    first:rounded-t-lg last:rounded-b-lg bg-slate-50
-                    border border-dashed border-slate-400 border-t-0 first:border-t'
-    >
+    <BorderedBox className='py-5 px-9' isGrouped>
       <div className='flex flex-col gap-3 max-w-[485px]'>
         <Text size='s' bold>{title}</Text>
         {description && (
@@ -24,7 +22,7 @@ export const SettingsGroupItem = (
         )}
       </div>
       {input}
-    </div>
+    </BorderedBox>
   )
 }
 
