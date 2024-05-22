@@ -13,6 +13,11 @@ type ButtonOwnProps<C> = {
 type ButtonProps<C extends ElementType = typeof DEFAULT_ELEMENT>
     = ButtonOwnProps<C> & ComponentPropsWithoutRef<C>
 
+const variantClassNames = {
+  primary: 'bg-primary text-white',
+  secondary: 'bg-slate-50 text-primary outline-1 outline-dashed outline-primary'
+}
+
 const Button = <C extends ElementType = typeof DEFAULT_ELEMENT>({
   variant,
   as,
@@ -25,10 +30,7 @@ const Button = <C extends ElementType = typeof DEFAULT_ELEMENT>({
   const className = classNames(
     `flex gap-2 items-center font-mono text-2xs py-2 px-6 rounded-[28px] 
      focus:ring ring-slate-400 focus:outline-0`,
-    {
-      'bg-primary text-white': variant === 'primary',
-      'bg-slate-50 text-primary outline-1 outline-dashed outline-primary': variant === 'secondary'
-    },
+    variantClassNames[variant],
     props.className
   )
 

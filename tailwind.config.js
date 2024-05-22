@@ -81,5 +81,16 @@ module.exports = {
       transparent: '#ffffff00'
     }
   },
-  plugins: []
+  plugins: [],
+  safelist: [
+    {
+      pattern: /text-(header|body|mono)-(3xs|2xs|xs|s|m|l|xl|2xl)/
+    },
+    {
+      pattern: /text-(black|secondary|primary|white)/
+    },
+    {
+      pattern: /font-(title|body|mono)/
+    }
+  ]
 }
