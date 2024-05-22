@@ -9,13 +9,11 @@ const Layout = ({ children }: {children: ReactNode}) => {
     <div className='h-screen w-screen overflow-x-hidden flex relative app-bg'>
       <DraggableArea />
       <Sidebar />
-      <main className='flex-1 px-9 mt-28 flex flex-col'>
-        <div className='w-full flex flex-wrap justify-end'>
-          <UpdateBanner />
-          <WalletWidget />
-        </div>
-        {children}
-      </main>
+      <div className='w-full flex flex-wrap justify-end absolute'>
+        <UpdateBanner />
+        <WalletWidget />
+      </div>
+      {children}
     </div>
   )
 }
