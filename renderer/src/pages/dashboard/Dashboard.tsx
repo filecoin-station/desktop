@@ -1,7 +1,7 @@
 import useStationRewards from 'src/hooks/StationRewards'
 import { formatFilValue } from 'src/lib/utils'
-import Chart from 'src/pages/dashboard/Chart'
 import Activity from 'src/pages/dashboard/Activity'
+import ChartController from './ChartController'
 
 const Dashboard = (): JSX.Element => {
   const { historicalRewards, totalRewardsReceived, scheduledRewards } = useStationRewards()
@@ -19,7 +19,7 @@ const Dashboard = (): JSX.Element => {
             <p>{formatFilValue(scheduledRewards)} FIL</p>
           </div>
           <div className='w-full my-4'>
-            <Chart historicalRewards={historicalRewards} />
+            <ChartController historicalRewards={historicalRewards} />
           </div>
         </div>
       </section>
