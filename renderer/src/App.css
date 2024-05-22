@@ -56,6 +56,11 @@
     background-size: 86vw;
     background-position: 10vw 80%;
   }
+
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #A0A1BA #F1F1F5;
+  }
 }
 
 @layer components {
