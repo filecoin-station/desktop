@@ -30,11 +30,11 @@ const Settings = () => {
   }, [])
 
   return (
-    <>
+    <div className='flex flex-col self-center w-[928px] max-w-full'>
       <header className='mb-9'>
-        <Text font='mono' size='xs' color='primary' uppercase>// Settings ... :</Text>
+        <Text as='h1' font='mono' size='xs' color='primary' uppercase>// Settings ... :</Text>
       </header>
-      <div className='flex flex-col gap-7 max-w-[928px]'>
+      <div className='flex flex-col gap-7'>
         <SettingsGroup name='General'>
           <SettingsGroupItem
             title='Start at login'
@@ -95,7 +95,7 @@ const Settings = () => {
           />
         </SettingsGroup>
       </div>
-    </>
+    </div>
   )
 }
 
