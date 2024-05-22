@@ -47,6 +47,7 @@
     "@influxdata/influxdb-client": "^1.33.2",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-tooltip": "^1.0.7",
     "@sentry/node": "^7.111.0",
     "@sentry/react": "^7.111.0",
     "@sentry/tracing": "^7.111.0",
