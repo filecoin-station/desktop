@@ -13,6 +13,7 @@ const { Activities } = require('./activities')
 const { Logs } = require('./logs')
 const split2 = require('split2')
 const { parseEther } = require('ethers/lib/utils')
+const { once } = require('node:events')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -43,7 +44,9 @@ async function setup (ctx) {
     }
   }
   await maybeMigrateFiles()
-  await start(ctx)
+  while (true) {
+    await start(ctx)
+  }
 }
 
 /**
@@ -63,6 +66,7 @@ async function start (ctx) {
     },
     stdio: ['pipe', 'pipe', 'pipe', 'ipc']
   })
+  console.log('Core pid', childProcess.pid)
 
   assert(childProcess.stdout)
   childProcess.stdout.setEncoding('utf8')
@@ -122,34 +126,46 @@ async function start (ctx) {
   /** @type {string | null} */
   let exitReason = null
 
-  app.on('before-quit', () => {
-    childProcess.kill()
+  const controller = new AbortController()
+  const { signal } = controller
+
+  const onBeforeQuit = () => childProcess.kill()
+  app.on('before-quit', onBeforeQuit)
+  signal.addEventListener('abort', () => {
+    app.removeListener('before-quit', onBeforeQuit)
   })
 
-  childProcess.on('close', code => {
-    console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
+  await Promise.all([
+    (async () => {
+      const [code, exitSignal] = await once(childProcess, 'exit', { signal })
+      controller.abort()
+      const reason = exitSignal
+        ? `via signal ${exitSignal}`
+        : `with code: ${code}`
+      const msg = `Core exited ${reason}`
+      console.log(msg)
+      exitReason = exitSignal || code ? reason : null
+    })(),
+    (async () => {
+      const [code] = await once(childProcess, 'close')
+      controller.abort()
+      console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
 
-    if (code === 2) {
-      // FIL_WALLET_ADDRESS did not pass our screening. There is not much
-      // we can do about that, there is no point in reporting this error
-      // to Sentry.
-      return
-    }
+      if (code === 2) {
+        // FIL_WALLET_ADDRESS did not pass our screening. There is not much
+        // we can do about that, there is no point in reporting this error
+        // to Sentry.
+        throw new Error('Don\'t restart')
+      }
 
-    Sentry.captureException('Core exited', scope => {
-      // Sentry UI can't show the full 100 lines
-      scope.setExtra('logs', logs.getLastLines(10))
-      scope.setExtra('reason', exitReason)
-      return scope
-    })
-  })
-
-  childProcess.on('exit', (code, signal) => {
-    const reason = signal ? `via signal ${signal}` : `with code: ${code}`
-    const msg = `Core exited ${reason}`
-    console.log(msg)
-    exitReason = signal || code ? reason : null
-  })
+      Sentry.captureException('Core exited', scope => {
+        // Sentry UI can't show the full 100 lines
+        scope.setExtra('logs', logs.getLastLines(10))
+        scope.setExtra('reason', exitReason)
+        return scope
+      })
+    })()
+  ])
 }
 
 async function maybeMigrateFiles () {
