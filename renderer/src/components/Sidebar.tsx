@@ -35,7 +35,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <section className='no-drag group relative pt-9 bg-slate-50 outline-slate-400 outline-dashed outline-1'>
+    <section className='sticky top-0 group pt-9 bg-slate-50 outline-slate-400 outline-dashed outline-1'>
       <div className='flex flex-col items-center gap-9 px-4 pt-5'>
         <Logo />
 

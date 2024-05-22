@@ -30,21 +30,20 @@
   body {
     @apply font-body text-black overflow-x-hidden;
     -webkit-user-select: none;
-    -webkit-app-region: drag;
   }
-  form,
-  button,
-  h1, h2, p, a, span,
-  .onboarding,
-  .activity-item,
-  .modal-bg, input, label,
-  [data-dialog-overlay],
-  .no-drag {
-    -webkit-app-region: no-drag;
+
+  .drag-area {
+    -webkit-app-region: drag;    
   }
+  
+  .no-drag-area {
+    -webkit-app-region: no-drag;    
+  }
+
   input {
     -webkit-user-select: text;
   }
+  
   p {
     margin-block-start: 0;
     margin-block-end: 0;
@@ -56,6 +55,13 @@
 
   .subtitle {
     @apply text-header-xxs font-title text-secondary tracking-[-0.4px];
+  }
+
+  .app-bg {
+    background-image: url('./assets/img/bg-pattern.svg');
+    background-repeat: no-repeat;
+    background-size: 86vw;
+    background-position: 10vw 80%;
   }
 }
 
