@@ -36,7 +36,8 @@ const Text = <C extends ElementType = typeof DEFAULT_ELEMENT>({
     {
       uppercase,
       'font-bold': bold && (font === 'title' || font === 'mono'),
-      'font-medium': bold && font === 'body'
+      'font-medium': bold && font === 'body',
+      'text-slate-800': color === 'secondary'
     },
     props.className
   )

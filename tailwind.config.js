@@ -8,26 +8,26 @@ module.exports = {
   ],
   theme: {
     fontSize: {
-      'header-3xs': ['20px', '24px'],
-      'header-2xs': ['24px', '28px'],
-      'header-xs': ['28px', '36px'],
-      'header-s': ['36px', '44px'],
-      'header-m': ['44px', '52px'],
-      'header-l': ['52px', '68px'],
-      'body-3xs': ['10px', '14px'],
-      'body-2xs': ['12px', '16px'],
-      'body-xs': ['14px', '20px'],
-      'body-s': ['16px', '20px'],
-      'body-m': ['20px', '28px'],
-      'body-l': ['36px', '52px'],
-      'mono-3xs': ['12px', '16px'],
-      'mono-2xs': ['14px', '20px'],
-      'mono-xs': ['16px', '20px'],
-      'mono-s': ['20px', '28px'],
-      'mono-m': ['24px', '36px'],
-      'mono-l': ['28px', '36px'],
-      'mono-xl': ['36px', '52px'],
-      'mono-2xl': ['44px', '52px']
+      'header-3xs': ['1.25rem', '1.5rem'],
+      'header-2xs': ['1.5rem', '1.75rem'],
+      'header-xs': ['1.75rem', '2.25rem'],
+      'header-s': ['2.25rem', '2.75rem'],
+      'header-m': ['2.75rem', '3.25rem'],
+      'header-l': ['3.25rem', '4.25rem'],
+      'body-3xs': ['0.625rem', '0.875rem'],
+      'body-2xs': ['0.75rem', '1rem'],
+      'body-xs': ['0.875rem', '1.25rem'],
+      'body-s': ['1rem', '1.25rem'],
+      'body-m': ['1.25rem', '1.75rem'],
+      'body-l': ['2.25rem', '3.25rem'],
+      'mono-3xs': ['0.75rem', '1rem'],
+      'mono-2xs': ['0.875rem', '1.25rem'],
+      'mono-xs': ['1rem', '1.25rem'],
+      'mono-s': ['1.25rem', '1.75rem'],
+      'mono-m': ['1.5rem', '2.25rem'],
+      'mono-l': ['1.75rem', '2.25rem'],
+      'mono-xl': ['2.25rem', '3.25rem'],
+      'mono-2xl': ['2.75rem', '3.25rem']
     },
     fontFamily: {
       title: ['SuisseIntl', 'sans-serif'],
@@ -38,6 +38,9 @@ module.exports = {
       normal: 400,
       medium: 500,
       bold: 700
+    },
+    boxShadow: {
+      switchButton: '0px 1px 3px 0px #1018281A, 0px 1px 2px -1px #1018281A'
     },
     colors: {
       white: '#fff',
