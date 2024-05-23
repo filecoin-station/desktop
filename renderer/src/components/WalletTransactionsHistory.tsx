@@ -96,7 +96,7 @@ const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) 
               ? <i><OutcomeIcon className="btn-icon-primary-small m-auto w-[12px] h-[12px]" /></i>
               : <i><IncomeIcon className="btn-icon-primary-small m-auto w-[12px] h-[12px]" /></i>
             }
-            <span className="mr-6 text-body-2xs text-black opacity-60 font-number">
+            <span className="mr-6 text-body-2xs text-black opacity-60 font-mono">
               {dayjs(displayTransition?.timestamp).format('HH:MM')}
             </span>
             <span className='text-body-s text-black'>
@@ -142,7 +142,7 @@ const Transaction: FC<TransactionProps> = ({ transaction }) => {
               ? <i><OutcomeIcon className="btn-icon-primary-small m-auto w-[12px] h-[12px]" /></i>
               : <i><IncomeIcon className="btn-icon-primary-small m-auto w-[12px] h-[12px]" /></i>
             }
-            <span className="mr-6 text-body-2xs text-black opacity-60 font-number">
+            <span className="mr-6 text-body-2xs text-black opacity-60 font-mono">
               {dayjs(transaction.timestamp).format('DD/MM/YYYY')}
             </span>
             <span className='text-body-s text-black'>

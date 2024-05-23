@@ -60,7 +60,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
 
   return (
     <div className='relative z-20'>
-      <div className='h-8 bg-primary-dark flex items-center px-8'>
+      <div className='h-8 flex items-center px-8'>
         <p className='text text-body-3xs text-white opacity-80 mr-3'>STATION ADDRESS</p>
         <p className='station-address text text-body-3xs text-white'>
           {' '}
@@ -108,7 +108,7 @@ const WalletModule: FC<PropsWallet> = ({ isOpen = false }) => {
           <div className="flex flex-row justify-between align-baseline" onClick={() => setEditMode(false)}>
             <div>
               <p className="w-fit text-body-3xs text-white opacity-80 uppercase leading-none">Total FIL</p>
-              <p className="wallet-balance w-fit text-header-m text-white font-bold font-number leading-none">
+              <p className="wallet-balance w-fit text-header-m text-white font-bold font-mono leading-none">
                 {new FilecoinNumber(String(walletBalance), 'fil')
                   .decimalPlaces(3, BigNumber.ROUND_DOWN)
                   .toString()}
