@@ -18,15 +18,14 @@ describe('Settings page', () => {
     test('shows openAtLogin initial state as unchecked when disabled', async () => {
       vi.mocked(isOpenAtLogin).mockReturnValue(Promise.resolve(false))
       render(<Settings />)
-
-      expect(await screen.findByLabelText('Start at login')).not.toBeChecked()
+      expect(await screen.findByLabelText('No')).not.toBeChecked()
     })
 
     test('shows openAtLogin initial state as checked when enabled', async () => {
       vi.mocked(isOpenAtLogin).mockReturnValue(Promise.resolve(true))
       render(<Settings />)
 
-      expect(await screen.findByLabelText('Start at login')).toBeChecked()
+      expect(await screen.findByLabelText('Yes')).toBeChecked()
     })
   })
 
