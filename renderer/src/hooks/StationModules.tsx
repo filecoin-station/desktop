@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import * as Name from 'w3name'
-import SparkLogo from 'src/assets/img/icons/spark.png'
+import SparkLogo from 'src/assets/img/icons/spark-logo.png'
+import SaturnLogo from 'src/assets/img/icons/saturn-logo.svg'
 
 /**
  * @returns {Promise<string>} The contract address of the Spark module
@@ -37,7 +38,7 @@ const modules = {
     name: 'Voyager',
     description: 'Module Y empowers users to spark new ideas, projects, and solutions that harness the full potential of Filecoin\'s decentralized storage protocol.',
     contractAddress: '0xc524b83bf85021e674a7c9f18f5381179fabaf6c',
-    logo: 'https://assets-global.website-files.com/633bfdb71d8e552b70ceff10/633eb29c75502c0e935ff647_station-connect.svg',
+    logo: SaturnLogo,
     stats: {
       totalJobs: 0, // TODO: Updater after data export
       totalRewards: 0 // TODO: Update after airdrop
