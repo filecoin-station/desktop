@@ -44,6 +44,12 @@ async function setup (ctx) {
     }
   }
   await maybeMigrateFiles()
+}
+
+/**
+ * @param {Context} ctx
+ */
+async function run (ctx) {
   while (true) {
     await start(ctx)
   }
@@ -192,6 +198,7 @@ async function maybeMigrateFiles () {
 
 module.exports = {
   setup,
+  run,
   isOnline: () => activities.isOnline(),
   getActivities: () => activities.get(),
   getTotalJobsCompleted: () => totalJobsCompleted
