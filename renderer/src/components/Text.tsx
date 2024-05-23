@@ -8,7 +8,7 @@ type TextOwnProps<C> = {
   size?: '3xs' | '2xs' | 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
   font?: 'title' | 'body' | 'mono';
   bold?: boolean;
-  color?: 'black' | 'secondary' | 'primary' | 'white';
+  color?: 'black' | 'secondary' | 'primary' | 'white' | 'red';
   uppercase?: boolean;
   as?: C;
   children: ReactNode;
@@ -37,7 +37,8 @@ const Text = <C extends ElementType = typeof DEFAULT_ELEMENT>({
       uppercase,
       'font-bold': bold && (font === 'title' || font === 'mono'),
       'font-medium': bold && font === 'body',
-      'text-slate-800': color === 'secondary'
+      'text-slate-800': color === 'secondary',
+      'text-red-400': color === 'red'
     },
     props.className
   )
