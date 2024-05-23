@@ -42,6 +42,28 @@ module.exports = {
     boxShadow: {
       switchButton: '0px 1px 3px 0px #1018281A, 0px 1px 2px -1px #1018281A'
     },
+    keyframes: {
+      fadeIn: {
+        from: {
+          opacity: 0
+        },
+        to: {
+          opacity: 1
+        }
+      },
+      fadeOut: {
+        from: {
+          opacity: 1
+        },
+        to: {
+          opacity: 0
+        }
+      }
+    },
+    animation: {
+      fadeIn: 'fadeIn 200ms ease',
+      fadeOut: 'fadeOut 200ms ease'
+    },
     colors: {
       white: '#fff',
       black: '#000',

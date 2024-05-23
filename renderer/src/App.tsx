@@ -21,7 +21,7 @@ const App = ():JSX.Element => {
       </Helmet>
       <Router>
         <DialogProvider>
-          <TooltipProvider delayDuration={400}>
+          <TooltipProvider delayDuration={200}>
             <Routes>
               <Route path={ROUTES.onboarding} element={<Onboarding />} />
               <Route

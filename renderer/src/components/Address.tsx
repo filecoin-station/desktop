@@ -7,7 +7,7 @@ import { useRef, useState } from 'react'
 const Address = ({
   address
 }: {
-    address: string;
+  address: string;
 }) => {
   const [copyText, setCopyText] = useState('Copy')
   const triggerRef = useRef<HTMLButtonElement>(null)
@@ -19,9 +19,12 @@ const Address = ({
     setCopyText('Copied')
 
     setTimeout(() => {
-      setCopyText('Copy')
       triggerRef.current?.blur()
     }, 700)
+
+    setTimeout(() => {
+      setCopyText('Copy')
+    }, 800)
   }
 
   return (
