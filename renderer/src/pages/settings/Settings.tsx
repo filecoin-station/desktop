@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-comment-textnodes */
 import { useEffect, useState } from 'react'
 import Text from 'src/components/Text'
 import {
@@ -32,7 +31,7 @@ const Settings = () => {
   return (
     <div className='flex flex-col self-center w-[928px] max-w-full'>
       <header className='mb-9'>
-        <Text as='h1' font='mono' size='xs' color='primary' uppercase>// Settings ... :</Text>
+        <Text as='h1' font='mono' size='xs' color='primary' uppercase>&#47;&#47; Settings ... :</Text>
       </header>
       <div className='flex flex-col gap-7'>
         <SettingsGroup name='General'>
