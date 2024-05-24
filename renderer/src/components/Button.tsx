@@ -29,7 +29,7 @@ const Button = <C extends ElementType = typeof DEFAULT_ELEMENT>({
 
   const className = classNames(
     `flex gap-2 items-center font-mono text-2xs py-2 px-6 rounded-[28px] 
-     focus:ring ring-slate-400 focus:outline-0`,
+     focus:ring ring-slate-400 focus:outline-0 disabled:opacity-80`,
     variantClassNames[variant],
     props.className
   )

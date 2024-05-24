@@ -1,5 +1,4 @@
 import Text from 'src/components/Text'
-import GridCanvas from './GridCanvas'
 import useWallet from 'src/hooks/StationWallet'
 import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
@@ -22,8 +21,6 @@ const TransferWrapper = ({
 
   return (
     <section className='w-1/2 bg-black relative flex flex-col'>
-      <GridCanvas />
-
       {stationAddress && (
         <>
           {!destinationFilAddress && (
