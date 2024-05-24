@@ -70,7 +70,7 @@
   },
   "devDependencies": {
     "@electron/notarize": "^2.3.2",
-    "@playwright/test": "^1.44.0",
+    "@playwright/test": "^1.44.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^15.0.7",
     "@types/mocha": "^10.0.6",
