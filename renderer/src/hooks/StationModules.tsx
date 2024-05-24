@@ -50,6 +50,8 @@ const modules = {
   }
 }
 
+export type Module = (typeof modules)[keyof typeof modules]
+
 export const useModules = () => {
   const [sparkStats] = useState<typeof modules.spark.stats>(modules.spark.stats)
   const [sparkContractAddress, setSparkContractAddress] = useState<string>()

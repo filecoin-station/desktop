@@ -1,15 +1,19 @@
 import { useModules } from 'src/hooks/StationModules'
 import { openExplorerLink } from 'src/lib/utils'
+import ModuleCard from './ModuleCard'
+import Text from 'src/components/Text'
 
 const Modules = () => {
   const { modules } = useModules()
 
   return (
-    <div>
-      <h1>Modules</h1>
-
-      <section className='flex flex-wrap gap-8'>
-        {modules?.map(module => (
+    <div className='w-[928px] max-w-full'>
+        <header className='mb-9'>
+          <Text as='h1' font='mono' size='xs' color='primary' uppercase>// Modules ... :</Text>
+        </header>
+      <section className='grid gap-8 grid-cols-2 grid-flow-col'>
+        {modules?.map(module => <ModuleCard module={module} key={module.id} />)}
+        {/* {modules?.map(module => (
           <div key={module.id} className='w-1/3'>
             <div className='mb-4'>
               <h2 className='font-bold'>{module.name}</h2>
@@ -36,7 +40,7 @@ const Modules = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))} */}
       </section>
     </div>
   )
