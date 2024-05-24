@@ -1,9 +1,13 @@
 import classNames from 'classnames'
 import { ComponentPropsWithoutRef, ReactNode } from 'react'
-import BorderedBox from 'src/components/BorderedBox'
 import Tag from 'src/components/Tag'
 import Text from 'src/components/Text'
 import { Module } from 'src/hooks/StationModules'
+import GithubIcon from 'src/assets/img/icons/github.svg?react'
+import DocsIcon from 'src/assets/img/icons/docs.svg?react'
+import ExplorerIcon from 'src/assets/img/icons/explorer.svg?react'
+import { openExplorerLink } from 'src/lib/utils'
+import { openExternalURL } from 'src/lib/station-config'
 
 const InnerSection = ({
   children,
@@ -14,6 +18,18 @@ const InnerSection = ({
     <div className={classNames('py-9 px-5', props.className)}>
         {children}
     </div>
+)
+
+const ModuleLink = ({ children, onClick }: {children: ReactNode; onClick: () => void}) => (
+    <Text
+        as='button'
+        type='button'
+        size='xs'
+        className='flex items-center gap-2'
+        onClick={onClick}
+    >
+            {children}
+        </Text>
 )
 
 const tagStatus = {
@@ -36,18 +52,27 @@ const ModuleCard = ({ module }: {module: Module}) => {
         <InnerSection className='flex w-full'>
             <section className='w-3/5 flex flex-col gap-5'>
                 <div className='flex flex-col'>
-                    <Text font='mono' size="3xs" color='primary' uppercase>// Rewards given ... :</Text>
+                    <Text font='mono' size="3xs" color='primary' uppercase>&#47;&#47; Rewards given ... :</Text>
                     <Text font='mono' size="xs">{module.stats.totalRewards}</Text>
                 </div>
                 <div className='flex flex-col'>
-                    <Text font='mono' size="3xs" color='primary' uppercase>// #Jobs done ... :</Text>
+                    <Text font='mono' size="3xs" color='primary' uppercase>&#47;&#47; # Jobs done ... :</Text>
                     <Text font='mono' size="xs">{module.stats.totalJobs}</Text>
                 </div>
             </section>
             <section className='flex flex-col gap-6 w-2/5'>
-                <Text as='a' size='xs' href={module.links.github}>Github</Text>
-                <Text as='a' size='xs' href={module.links.docs}>Docs</Text>
-                <Text as='a' size='xs' href={module.links.github}>Explorer</Text>
+                <ModuleLink onClick={() => openExternalURL(module.links.github) }>
+                    <GithubIcon className='text-primary' />
+                    Github
+                </ModuleLink>
+                <ModuleLink onClick={() => openExternalURL(module.links.docs) }>
+                    <DocsIcon className='text-primary' />
+                    Docs
+                </ModuleLink>
+                <ModuleLink onClick={() => openExplorerLink(module.contractAddress) }>
+                    <ExplorerIcon className='text-primary' />
+                    Explorer
+                </ModuleLink>
             </section>
         </InnerSection>
     </div>

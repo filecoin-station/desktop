@@ -64,6 +64,10 @@ export function openExternalURL (url: string): void {
   return window.electron.stationConfig.openExternalURL(url)
 }
 
+export function openExternalURL (url: string): void {
+  return window.electron.stationConfig.openExternalURL(url)
+}
+
 export function openBeryx (): void {
   return window.electron.stationConfig.openExternalURL('https://beryx.io/')
 }
