@@ -129,49 +129,37 @@ async function start (ctx) {
     .pipe(split2())
     .on('data', line => logs.pushLine(line))
 
-  /** @type {string | null} */
-  let exitReason = null
-
-  const controller = new AbortController()
-  const { signal } = controller
-
   const onBeforeQuit = () => childProcess.kill()
   app.on('before-quit', onBeforeQuit)
-  signal.addEventListener('abort', () => {
-    app.removeListener('before-quit', onBeforeQuit)
+
+  const onceExited = once(childProcess, 'exit')
+  const onceClosed = once(childProcess, 'close')
+
+  const [exitCode, exitSignal] = await onceExited
+  app.removeListener('before-quit', onBeforeQuit)
+  const reason = exitSignal
+    ? `via signal ${exitSignal}`
+    : `with code: ${exitCode}`
+  const msg = `Core exited ${reason}`
+  console.log(msg)
+  const exitReason = exitSignal || exitCode ? reason : null
+
+  const [closeCode] = await onceClosed
+  console.log(`Core closed all stdio with code ${closeCode ?? '<no code>'}`)
+
+  if (closeCode === 2) {
+    // FIL_WALLET_ADDRESS did not pass our screening. There is not much
+    // we can do about that, there is no point in reporting this error
+    // to Sentry.
+    throw new Error('Don\'t restart')
+  }
+
+  Sentry.captureException('Core exited', scope => {
+    // Sentry UI can't show the full 100 lines
+    scope.setExtra('logs', logs.getLastLines(10))
+    scope.setExtra('reason', exitReason)
+    return scope
   })
-
-  await Promise.all([
-    (async () => {
-      const [code, exitSignal] = await once(childProcess, 'exit', { signal })
-      controller.abort()
-      const reason = exitSignal
-        ? `via signal ${exitSignal}`
-        : `with code: ${code}`
-      const msg = `Core exited ${reason}`
-      console.log(msg)
-      exitReason = exitSignal || code ? reason : null
-    })(),
-    (async () => {
-      const [code] = await once(childProcess, 'close')
-      controller.abort()
-      console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
-
-      if (code === 2) {
-        // FIL_WALLET_ADDRESS did not pass our screening. There is not much
-        // we can do about that, there is no point in reporting this error
-        // to Sentry.
-        throw new Error('Don\'t restart')
-      }
-
-      Sentry.captureException('Core exited', scope => {
-        // Sentry UI can't show the full 100 lines
-        scope.setExtra('logs', logs.getLastLines(10))
-        scope.setExtra('reason', exitReason)
-        return scope
-      })
-    })()
-  ])
 }
 
 async function maybeMigrateFiles () {
