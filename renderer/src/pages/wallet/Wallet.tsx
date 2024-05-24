@@ -43,7 +43,7 @@ const Wallet = () => {
                         <Text font='mono' size='3xs' color='primary' uppercase>// Transaction history ... :</Text>
                     </BorderedBox>
                     <BorderedBox className='p-5 flex flex-col gap-2' isGrouped>
-                        <TransactionHistory walletTransactions={walletTransactions} />
+                        <TransactionHistory walletTransactions={walletTransactions || []} />
                     </BorderedBox>
                 </div>
             </section>
