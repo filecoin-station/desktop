@@ -42,6 +42,8 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.invoke('station:transferAllFundsToDestinationWallet'),
     browseTransactionTracker: (/** @type {string } */ transactionHash) =>
       ipcRenderer.invoke('station:browseTransactionTracker', transactionHash),
+    openExternalURL: (/** @type {string } */ url) =>
+      ipcRenderer.invoke('station:openExternalURL', url),
     getScheduledRewards: () =>
       ipcRenderer.invoke('station:getScheduledRewards'),
     showTermsOfService: () =>

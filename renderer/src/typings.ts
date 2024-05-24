@@ -27,6 +27,7 @@ declare global {
         getStationWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>;
         transferAllFundsToDestinationWallet: () => Promise<void>;
         browseTransactionTracker: (transactionHash: string) => void;
+        openExternalURL: (url: string) => void;
         showTermsOfService: () => void;
         toggleOpenAtLogin: () => void;
         isOpenAtLogin: () => Promise<boolean>;
