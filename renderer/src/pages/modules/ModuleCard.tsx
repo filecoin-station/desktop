@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { ComponentPropsWithoutRef, ReactNode } from 'react'
 import BorderedBox from 'src/components/BorderedBox'
+import Tag from 'src/components/Tag'
 import Text from 'src/components/Text'
 import { Module } from 'src/hooks/StationModules'
 
@@ -15,12 +16,19 @@ const InnerSection = ({
     </div>
 )
 
+const tagStatus = {
+  active: 'primary',
+  deprecated: 'secondary',
+  comingSoon: 'dashed'
+} as const
+
 const ModuleCard = ({ module }: {module: Module}) => {
   return (
     <div className='flex flex-wrap bg-slate-50 border border-dashed border-slate-400 rounded-xl'>
         <InnerSection className='w-2/3 border-b border-dashed border-slate-400'>
             <Text as='h2' size="l" className='mb-3'>{module.name}</Text>
-            <Text as='p' size="xs">{module.description}</Text>
+            <Text as='p' size="xs" className='mb-3'>{module.description}</Text>
+            <Tag type={tagStatus[module.status]}>{module.status}</Tag>
         </InnerSection>
         <InnerSection className='w-1/3 self-stretch border-l border-b border-dashed border-slate-400 flex'>
             <img src={module.logo} alt={`${module.name}'s logo`} className='max-w-[100px] m-auto' />

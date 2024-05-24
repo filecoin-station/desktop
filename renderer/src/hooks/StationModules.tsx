@@ -32,7 +32,8 @@ const modules = {
     links: {
       github: 'https://github.com/filecoin-station/spark',
       docs: 'https://filspark.com/'
-    }
+    },
+    status: 'active'
   },
   voyager: {
     name: 'Voyager',
@@ -46,9 +47,10 @@ const modules = {
     links: {
       github: 'https://github.com/filecoin-station/voyager',
       docs: 'https://filstation.app/'
-    }
+    },
+    status: 'active'
   }
-}
+} as const
 
 export type Module = (typeof modules)[keyof typeof modules]
 
