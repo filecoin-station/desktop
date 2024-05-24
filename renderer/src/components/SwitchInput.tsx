@@ -14,19 +14,19 @@ type SwitchInputProps = {
 
 const SwitchInput = ({
   onChange,
-  defaultChecked,
+  checked,
   ...props
 }: SwitchInputProps) => {
   const id = useId()
 
   return (
-    <div className='flex gap-5 items-center focus-within:ring-2 ring-slate-400 rounded-sm'>
+    <div className='flex gap-5 items-center focus-within:ring-2 ring-slate-400 rounded-sm w-[84px]'>
         <Root
             id={id}
             {...props}
             className="w-[34px] h-5 bg-slate-400 rounded-full relative data-[state=checked]:bg-primary
                         outline-none cursor-default peer"
-            checked={defaultChecked}
+            checked={checked}
             onCheckedChange={onChange}
         >
             <Thumb className="block w-4 h-4 bg-white rounded-full shadow-switchButton
