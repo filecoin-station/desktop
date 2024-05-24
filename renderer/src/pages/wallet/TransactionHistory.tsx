@@ -20,7 +20,7 @@ const TransactionHistory = ({
     <div className={className}>
       {walletTransactions?.length > 0
         ? walletTransactions?.map(transaction => (
-        <div key={transaction.hash} className='flex gap-4'>
+          <div key={transaction.hash} className='flex gap-4'>
             {transaction.outgoing ? <SendIcon /> : <ReceiveIcon />}
             <div>
               <Text size='s' as='p'>
@@ -37,19 +37,19 @@ const TransactionHistory = ({
               </Text>
             </div>
             <Text font='mono' size='xs' className='ml-auto'>{formatFilValue(transaction.amount)} FIL</Text>
-        </div>
+          </div>
         ))
         : (
-        <div className='flex flex-col items-center text-center flex-1'>
-          <figure className='flex flex-1'>
-            <img src={stationIllustration} alt='Station' className='m-auto' />
-          </figure>
-          <Text as="p" size='m' bold className='mb-1'>No transfers yet</Text>
-          <Text as="p" className='max-w-[210px]' size='xs'>
+          <div className='flex flex-col items-center text-center flex-1'>
+            <figure className='flex flex-1'>
+              <img src={stationIllustration} alt='Station' className='m-auto' />
+            </figure>
+            <Text as="p" size='m' bold className='mb-1'>No transfers yet</Text>
+            <Text as="p" className='max-w-[210px]' size='xs'>
             After your first transaction you will be able to view it here
-          </Text>
-        </div>
-          )}
+            </Text>
+          </div>
+        )}
     </div>
   )
 }
