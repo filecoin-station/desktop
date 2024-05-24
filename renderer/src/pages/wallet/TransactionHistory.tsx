@@ -14,7 +14,7 @@ const TransactionHistory = ({
 }) => {
   const className = classNames({
     'pr-4': walletTransactions && walletTransactions?.length > 5
-  }, 'flex flex-col gap-4 max-h-[300px] overflow-y-scroll custom-scrollbar')
+  }, 'flex flex-col gap-4 h-[300px] overflow-y-scroll custom-scrollbar')
 
   return (
     <div className={className}>
@@ -40,10 +40,12 @@ const TransactionHistory = ({
         </div>
         ))
         : (
-        <div className='flex flex-col gap-3 justify-center items-center text-center'>
-          <img src={stationIllustration} alt='Station' className='my-2' />
-          <Text as="p" size='m' bold>No transfers yet</Text>
-          <Text as="p" className='max-w-[240px]'>
+        <div className='flex flex-col items-center text-center flex-1'>
+          <figure className='flex flex-1'>
+            <img src={stationIllustration} alt='Station' className='m-auto' />
+          </figure>
+          <Text as="p" size='m' bold className='mb-1'>No transfers yet</Text>
+          <Text as="p" className='max-w-[210px]' size='xs'>
             After your first transaction you will be able to view it here
           </Text>
         </div>

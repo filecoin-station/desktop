@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-comment-textnodes */
 import useWallet from 'src/hooks/StationWallet'
 import { formatFilValue, openExplorerLink } from 'src/lib/utils'
 import TransactionHistory from './TransactionHistory'
@@ -19,13 +18,15 @@ const Wallet = () => {
   return (
     <div className='w-full flex'>
         <PageShell>
-            <section className='flex flex-col gap-5'>
+            <section className='flex flex-col gap-5 h-full mb-9'>
                 <BorderedBox className='p-5 flex flex-col gap-2'>
-                    <Text font='mono' size='3xs' color='primary' uppercase>// Station wallet balance ... :</Text>
+                    <Text font='mono' size='3xs' color='primary' uppercase>
+                        &#47;&#47; Station wallet balance ... :
+                    </Text>
                     <Text font='mono' size='s'>{formatFilValue(walletBalance)}{' '}FIL</Text>
                 </BorderedBox>
                 <BorderedBox className='p-5 flex flex-col gap-2'>
-                    <Text font='mono' size='3xs' color='primary' uppercase>// Station address ... :</Text>
+                    <Text font='mono' size='3xs' color='primary' uppercase>&#47;&#47; Station address ... :</Text>
                     <div className='flex gap-5 items-center'>
                         <Address address={stationAddress} />
                         <Address address={stationAddress0x} />
@@ -38,12 +39,14 @@ const Wallet = () => {
                         </button>
                     </div>
                 </BorderedBox>
-                <div>
+                <div className='flex-1 flex flex-col'>
                     <BorderedBox className='p-5 flex flex-col gap-2' isGrouped>
-                        <Text font='mono' size='3xs' color='primary' uppercase>// Transaction history ... :</Text>
+                        <Text font='mono' size='3xs' color='primary' uppercase>
+                            &#47;&#47; Transaction history ... :
+                        </Text>
                     </BorderedBox>
-                    <BorderedBox className='p-5 flex flex-col gap-2' isGrouped>
-                        <TransactionHistory walletTransactions={walletTransactions || []} />
+                    <BorderedBox className='p-5 flex flex-col gap-2 flex-1' isGrouped>
+                        <TransactionHistory walletTransactions={walletTransactions || []}/>
                     </BorderedBox>
                 </div>
             </section>
