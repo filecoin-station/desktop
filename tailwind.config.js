@@ -70,6 +70,11 @@ module.exports = {
       primary: '#2a1cf7',
       'primary-hover': '#1A1199',
       'primary-click': '#2317CC',
+      blue: {
+        50: '#E9EFFF',
+        300: '#8BA4FF',
+        700: '#2A1CF7'
+      },
       grayscale: {
         100: '#f0f0f0',
         200: '#f7f7f7',
