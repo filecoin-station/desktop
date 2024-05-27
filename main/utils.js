@@ -20,12 +20,14 @@ const allowedURLs = [
   'https://github.com/filecoin-station/voyager',
   'https://filstation.app/',
   'https://github.com/filecoin-station/spark'
-]
+].map(str => new URL(str))
+
 /**
    * @param {string} url
 */
 function validateExternalURL (url) {
-  assert(allowedURLs.includes(url))
+  const normalizedURL = new URL(url).href
+  assert(allowedURLs.find(item => item.href === normalizedURL))
 }
 
 module.exports = {
