@@ -148,7 +148,7 @@ export class Grid {
       let ease = 0
 
       const progress = isPastHalfway
-        ? (this.warp.linesAffected - nthFromCenter - 1) / this.warp.linesAffected
+        ? (this.warp.linesAffected - nthFromCenter) / this.warp.linesAffected
         : (this.warp.linesAffected - nthFromCenter) / this.warp.linesAffected
 
       const accEase = easeInOutCubic(progress)
