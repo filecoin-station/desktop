@@ -1,7 +1,6 @@
 import useWallet from 'src/hooks/StationWallet'
 import { formatFilValue, openExplorerLink } from 'src/lib/utils'
 import TransactionHistory from './TransactionHistory'
-import PageShell from 'src/components/PageShell'
 import BorderedBox from 'src/components/BorderedBox'
 import Text from 'src/components/Text'
 import Address from 'src/components/Address'
@@ -17,7 +16,7 @@ const Wallet = () => {
 
   return (
     <div className='w-full flex'>
-      <PageShell>
+      <main className='px-9 mt-28 flex flex-col flex-1'>
         <section className='flex flex-col gap-5 h-full mb-9'>
           <BorderedBox className='p-5 flex flex-col gap-2'>
             <Text font='mono' size='3xs' color='primary' uppercase>
@@ -50,7 +49,7 @@ const Wallet = () => {
             </BorderedBox>
           </div>
         </section>
-      </PageShell>
+      </main>
       <section className='w-1/2 bg-black h-screen'>
       </section>
     </div>
