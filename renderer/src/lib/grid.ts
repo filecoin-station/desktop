@@ -19,8 +19,8 @@ function easeInOutCubic (x: number): number {
 export class Grid {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
-  height: number
-  width: number
+  height = 0
+  width = 0
   gridSize: number
   dashSize: number
   rows: Line[] = []
@@ -38,9 +38,28 @@ export class Grid {
       container: HTMLElement;
       gridSize: number;
    }) {
-    const dPr = window.devicePixelRatio
     this.gridSize = gridSize
     this.canvas = canvas
+    this.dashSize = Math.round(this.gridSize / 8)
+    this.ctx = this.canvas.getContext('2d')!
+
+    this.setup(container)
+  }
+
+  setup (container?: HTMLElement) {
+    if (!container) return
+
+    this.calcSize(container)
+    this.calcPositions()
+    this.setupCanvasStyles()
+    this.calcGridLines()
+    this.renderGrid()
+    this.renderMidLine()
+    this.renderTargetCircles()
+  }
+
+  calcSize (container: HTMLElement) {
+    const dPr = window.devicePixelRatio
     this.width = container.clientWidth
     this.height = container.clientHeight
 
@@ -49,19 +68,14 @@ export class Grid {
     this.canvas.height = this.height * dPr
     this.canvas.style.width = `${this.width}px`
     this.canvas.style.height = `${this.height}px`
-    this.ctx = canvas.getContext('2d')!
+    this.ctx = this.canvas.getContext('2d')!
     this.ctx.scale(dPr, dPr)
+  }
 
-    this.dashSize = Math.round(this.gridSize / 8)
-    this.target = { x: this.width / 2, y: 90 }
+  calcPositions () {
+    this.target = { x: this.width / 2, y: 10 * this.height / 100 }
     this.warp.x = this.width / 2
     this.warp.y = 70 * this.height / 100
-
-    this.setupCanvasStyles()
-    this.calcGridLines()
-    this.renderGrid()
-    this.renderMidLine()
-    this.renderTargetCircles()
   }
 
   setupCanvasStyles () {
@@ -176,7 +190,7 @@ export class Grid {
     this.ctx.strokeStyle = '#ffffff'
     this.ctx.beginPath()
     this.ctx.moveTo(midX, this.target.y + 20)
-    this.ctx.lineTo(midX, 500)
+    this.ctx.lineTo(midX, this.warp.y)
     this.ctx.stroke()
   }
 

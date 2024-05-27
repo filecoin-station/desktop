@@ -6,13 +6,7 @@ const GridCanvas = () => {
   const gridCanvas = useRef<Grid>()
 
   function handleResize () {
-    if (gridCanvas.current && ref.current && ref.current.parentElement) {
-      gridCanvas.current = new Grid({
-        canvas: ref.current,
-        container: ref.current.parentElement,
-        gridSize: 40
-      })
-    }
+    gridCanvas.current?.setup(ref.current?.parentElement || undefined)
   }
 
   useEffect(() => {
@@ -24,9 +18,9 @@ const GridCanvas = () => {
       })
     }
 
-    // window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize)
 
-    // return () => window.removeEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
   return (
