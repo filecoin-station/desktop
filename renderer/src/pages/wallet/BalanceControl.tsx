@@ -3,6 +3,7 @@ import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import { formatFilValue } from 'src/lib/utils'
 import { Wallet } from 'src/hooks/StationWallet'
+import CheckmarkIcon from 'src/assets/img/icons/checkmark.svg?react'
 
 const BalanceControl = ({
   walletBalance = '',
@@ -20,10 +21,7 @@ const BalanceControl = ({
   const setBalanceStateAfterComplete = useCallback((oldStatus: typeof status, newStatus: typeof status) => {
     if (oldStatus === 'processing') {
       setStatus('complete')
-      setTimeout(() => {
-        console.log(`Set: ${status}, after delay`)
-        setStatus(newStatus)
-      }, 2000)
+      setTimeout(() => setStatus(newStatus), 2000)
     } else {
       setStatus(newStatus)
     }
@@ -35,7 +33,7 @@ const BalanceControl = ({
 
     if (processingTransaction) {
       setStatus('processing')
-    } else if (!processingTransaction && hasSufficientBalance) { // TODO: complete
+    } else if (!processingTransaction && hasSufficientBalance) {
       setBalanceStateAfterComplete(status, 'idle')
     } else if (!processingTransaction && !hasSufficientBalance) {
       setBalanceStateAfterComplete(status, 'accruing')
@@ -67,7 +65,10 @@ const BalanceControl = ({
           <Text font='mono' size='2xs' className="text-slate-50">Sending...</Text>
         )}
         {status === 'complete' && (
-          <Text font='mono' size='2xs' className="text-slate-50">Sent</Text>
+          <div className='flex gap-3 items-center'>
+            <CheckmarkIcon className="text-slate-50" />
+            <Text font='mono' size='2xs' className="text-slate-50">Sent</Text>
+          </div>
         )}
       </div>
     </div>
