@@ -19,7 +19,10 @@ const allowedURLs = [
   'https://filspark.com/',
   'https://github.com/filecoin-station/voyager',
   'https://filstation.app/',
-  'https://github.com/filecoin-station/spark'
+  'https://github.com/filecoin-station/spark',
+  'https://beryx.zondax.ch',
+  'https://beryx.io',
+  'https://pl-strflt.notion.site'
 ].map(str => new URL(str))
 
 /**
@@ -27,7 +30,7 @@ const allowedURLs = [
 */
 function validateExternalURL (url) {
   const normalizedURL = new URL(url).href
-  assert(allowedURLs.find(item => item.href === normalizedURL))
+  assert(allowedURLs.find(item => normalizedURL.startsWith(item.href)))
 }
 
 module.exports = {

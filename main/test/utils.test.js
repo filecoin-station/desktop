@@ -83,4 +83,10 @@ describe('validateExternalURL', function () {
       validateExternalURL('https://filspark.com/')
     })
   })
+
+  it('should not throw when url starts with allowed url', function () {
+    assert.doesNotThrow(() => {
+      validateExternalURL('https://beryx.zondax.ch/v1/search/fil/mainnet/address/123')
+    })
+  })
 })

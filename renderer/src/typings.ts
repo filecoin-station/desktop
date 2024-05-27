@@ -13,7 +13,6 @@ declare global {
       getUpdaterStatus(): Promise<{readyToUpdate: boolean}>;
       openReleaseNotes(): void;
       restartToUpdate(): void;
-      openBeryx: () => void;
 
       getScheduledRewards: () => Promise<string>;
 
@@ -26,9 +25,7 @@ declare global {
         getStationWalletBalance: () => Promise<string>;
         getStationWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>;
         transferAllFundsToDestinationWallet: () => Promise<void>;
-        browseTransactionTracker: (transactionHash: string) => void;
         openExternalURL: (url: string) => void;
-        showTermsOfService: () => void;
         toggleOpenAtLogin: () => void;
         isOpenAtLogin: () => Promise<boolean>;
         exportSeedPhrase: () => void;
