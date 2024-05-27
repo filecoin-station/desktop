@@ -26,8 +26,8 @@ export class Grid {
   rows: Line[] = []
   cols : Line[] = []
   target = { x: 0, y: 0 }
-  warp = { x: 0, y: 550, radius: 90, linesAffected: 8 }
-  force = 250
+  warp = { x: 0, y: 550, radius: 80, linesAffected: 8 }
+  force = 200
 
   constructor ({
     canvas,
@@ -55,10 +55,9 @@ export class Grid {
     this.dashSize = Math.round(this.gridSize / 8)
     this.target = { x: this.width / 2, y: 90 }
     this.warp.x = this.width / 2
-    this.warp.y = 550
+    this.warp.y = 70 * this.height / 100
 
     this.setupCanvasStyles()
-    this.ctx.fillRect(this.warp.x, this.warp.y, 10, 10)
     this.calcGridLines()
     this.renderGrid()
     this.renderMidLine()
@@ -148,7 +147,7 @@ export class Grid {
       let ease = 0
 
       const progress = isPastHalfway
-        ? (this.warp.linesAffected - nthFromCenter) / this.warp.linesAffected
+        ? (this.warp.linesAffected - nthFromCenter - 1) / this.warp.linesAffected
         : (this.warp.linesAffected - nthFromCenter) / this.warp.linesAffected
 
       const accEase = easeInOutCubic(progress)
@@ -206,16 +205,13 @@ export class Grid {
   }
 
   getCurveConfig (axis: 'x' | 'y', line: Line) {
-    const bendOffset =
-      this.warp.radius + (line.nthFromCenter + 8) * this.warp.linesAffected
-
+    const bendOffset = this.warp.radius * 2.5
     const bendInStart = this.warp[axis] - bendOffset
     const bendOutEnd = this.warp[axis] + bendOffset
-
     const bendFollow = (this.force / 20) * line.ease
 
     const apply = line.ease * this.force
-    const bendSize = 50 * Math.abs(line.ease)
+    const bendSize = 100 * Math.abs(line.ease)
 
     return {
       bendInStart,
@@ -236,18 +232,28 @@ export class Grid {
 
       if (col.deform) {
         const config = this.getCurveConfig('y', col)
-
         // line
-        this.ctx.lineTo(col.x1, config.bendInStart)
+        // this.ctx.lineTo(col.x1, config.bendInStart)
+        // this.ctx.strokeStyle = 'lightblue'
+        this.ctx.stroke()
+
         // curve in
+        // this.ctx.beginPath()
+        // this.ctx.moveTo(col.x1, config.bendInStart)
+        // this.ctx.strokeStyle = 'yellow'
         this.ctx.quadraticCurveTo(
           col.x1,
           config.bendInCp,
           col.x1 + config.bendFollow,
           config.bendInEnd
         )
+        // this.ctx.stroke()
 
         // deform
+        // this.ctx.beginPath()
+        // this.ctx.moveTo(col.x1 + config.bendFollow,
+        //   config.bendInEnd)
+        // this.ctx.strokeStyle = 'hotpink'
         this.ctx.bezierCurveTo(
           col.cp1x + config.apply,
           col.cp1y,
@@ -256,14 +262,25 @@ export class Grid {
           col.x2 + config.bendFollow,
           config.bendOutStart
         )
+        // this.ctx.stroke()
+
         // curve out
+        // this.ctx.strokeStyle = 'yellow'
+        // this.ctx.beginPath()
+        // this.ctx.moveTo(col.x2 + config.bendFollow,
+        //   config.bendOutStart)
         this.ctx.quadraticCurveTo(
           col.x2,
           config.bendOutCp,
           col.x2,
           config.bendOutEnd
         )
+        // this.ctx.stroke()
         // line
+        // this.ctx.beginPath()
+        // this.ctx.moveTo(col.x2,
+        //   config.bendOutEnd)
+        // this.ctx.strokeStyle = 'red'
         this.ctx.lineTo(col.x2, col.y2)
       } else {
         this.ctx.lineTo(col.x2, col.y2)
@@ -280,6 +297,7 @@ export class Grid {
 
         // line
         this.ctx.lineTo(config.bendInStart, row.y1)
+
         // curve in
         this.ctx.quadraticCurveTo(
           config.bendInCp,
