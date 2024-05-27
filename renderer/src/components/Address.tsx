@@ -9,28 +9,35 @@ const Address = ({
 }: {
   address: string;
 }) => {
-  const [copyText, setCopyText] = useState('Copy')
+  const [isTextCopied, setIsTextCopied] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     event.preventDefault()
 
     navigator.clipboard.writeText(address)
-    setCopyText('Copied')
+    setIsTextCopied(true)
 
-    setTimeout(() => {
-      triggerRef.current?.blur()
-    }, 700)
+    const timeouts = [
+      setTimeout(() => {
+        triggerRef.current?.blur()
+      }, 700),
+      setTimeout(() => {
+        setIsTextCopied(false)
+      }, 800)
+    ]
 
-    setTimeout(() => {
-      setCopyText('Copy')
-    }, 800)
+    return () => {
+      for (const timeout of timeouts) {
+        clearTimeout(timeout)
+      }
+    }
   }
 
   return (
     <div className='w-fit flex gap-1 items-center p-1 rounded-sm'>
       <Tooltip
-        content={copyText}
+        content={isTextCopied ? 'Copied' : 'Copy'}
         keepOpenOnClick
         trigger={
           <button
