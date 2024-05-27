@@ -37,6 +37,7 @@ const setupUI = require('./ui')
 const setupUpdater = require('./updater')
 const Sentry = require('@sentry/node')
 const telemetry = require('./telemetry')
+const { validateExternalURL } = require('./utils')
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -134,9 +135,10 @@ const ctx = {
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
-  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://beryx.zondax.ch/v1/search/fil/mainnet/address/${transactionHash}`) },
-  showTermsOfService: () => { shell.openExternal('https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4') },
-  openBeryx: () => { shell.openExternal('https://beryx.io/') },
+  openExternalURL: (/** @type {string} */ url) => {
+    validateExternalURL(url)
+    shell.openExternal(url)
+  },
   transactionUpdate: (transactions) => {
     ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions)
   },

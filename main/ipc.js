@@ -72,13 +72,8 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     (_events, _args) => ctx.getUpdaterStatus()
   )
   ipcMain.handle(
-    'station:browseTransactionTracker',
-    (_events, transactionHash) => ctx.browseTransactionTracker(transactionHash)
-  )
-  ipcMain.handle('station:openBeryx', () => ctx.openBeryx())
-  ipcMain.handle(
-    'station:showTermsOfService',
-    (_events) => ctx.showTermsOfService()
+    'station:openExternalURL',
+    (_events, url) => ctx.openExternalURL(url)
   )
   ipcMain.handle(
     'station:toggleOpenAtLogin',

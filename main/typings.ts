@@ -46,9 +46,7 @@ export interface Context {
   openReleaseNotes: () => void;
   restartToUpdate: () => void;
   getUpdaterStatus: () => {readyToUpdate: boolean};
-  browseTransactionTracker: (transactionHash: string) => void;
-  showTermsOfService: () => void;
-  openBeryx: () => void;
+  openExternalURL: (url: string) => void;
 
   transactionUpdate: (transactions: (FILTransaction|FILTransactionProcessing)[]) => void;
   balanceUpdate: (balance:string) => void;

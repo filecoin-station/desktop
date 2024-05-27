@@ -18,7 +18,6 @@ contextBridge.exposeInMainWorld('electron', {
   getUpdaterStatus: () => ipcRenderer.invoke('station:getUpdaterStatus'),
   restartToUpdate: () => ipcRenderer.invoke('station:restartToUpdate'),
   openReleaseNotes: () => ipcRenderer.invoke('station:openReleaseNotes'),
-  openBeryx: () => ipcRenderer.invoke('station:openBeryx'),
 
   getScheduledRewards: () =>
     ipcRenderer.invoke('station:getScheduledRewards'),
@@ -40,12 +39,10 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.invoke('station:getStationWalletTransactionsHistory'),
     transferAllFundsToDestinationWallet: () =>
       ipcRenderer.invoke('station:transferAllFundsToDestinationWallet'),
-    browseTransactionTracker: (/** @type {string } */ transactionHash) =>
-      ipcRenderer.invoke('station:browseTransactionTracker', transactionHash),
+    openExternalURL: (/** @type {string } */ url) =>
+      ipcRenderer.invoke('station:openExternalURL', url),
     getScheduledRewards: () =>
       ipcRenderer.invoke('station:getScheduledRewards'),
-    showTermsOfService: () =>
-      ipcRenderer.invoke('station:showTermsOfService'),
     toggleOpenAtLogin: () =>
       ipcRenderer.invoke('station:toggleOpenAtLogin'),
     isOpenAtLogin: () => ipcRenderer.invoke('station:isOpenAtLogin'),
