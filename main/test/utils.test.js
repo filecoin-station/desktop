@@ -84,9 +84,15 @@ describe('validateExternalURL', function () {
     })
   })
 
-  it('should not throw when url starts with allowed url', function () {
+  it('should not throw when url matches allowed pattern', function () {
     assert.doesNotThrow(() => {
       validateExternalURL('https://beryx.zondax.ch/v1/search/fil/mainnet/address/123')
+    })
+  })
+
+  it('should throw when url doesnt match allowed pattern', function () {
+    assert.throws(() => {
+      validateExternalURL('https://bery.zonda.ch/v1/search/fil/mainnet/address/123')
     })
   })
 })
