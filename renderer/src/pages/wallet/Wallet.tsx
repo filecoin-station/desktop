@@ -15,7 +15,9 @@ const Wallet = () => {
     walletTransactions,
     destinationFilAddress,
     editDestinationAddress,
-    transferAllFundsToDestinationWallet
+    transferAllFundsToDestinationWallet,
+    processingTransaction,
+    dismissCurrentTransaction
   } = useWallet()
 
   return (
@@ -55,10 +57,13 @@ const Wallet = () => {
         </section>
       </main>
       <TransferWrapper
+        walletBalance={walletBalance}
         destinationFilAddress={destinationFilAddress}
         editDestinationAddress={editDestinationAddress}
         transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
         stationAddress={stationAddress}
+        processingTransaction={processingTransaction}
+        dismissCurrentTransaction={dismissCurrentTransaction}
       />
     </div>
   )

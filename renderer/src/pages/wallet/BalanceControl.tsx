@@ -1,65 +1,74 @@
-import { useState } from 'react'
-import BorderedBox from 'src/components/BorderedBox'
+import { useCallback, useEffect, useState } from 'react'
 import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import { formatFilValue } from 'src/lib/utils'
+import { Wallet } from 'src/hooks/StationWallet'
 
 const BalanceControl = ({
-  balance = '',
+  walletBalance = '',
   sendThreshold,
+  processingTransaction,
   transfer
 }: {
-    balance?: string;
+    walletBalance?: string;
     sendThreshold: number;
-    transfer: () => Promise<void>;
+    processingTransaction: Wallet['processingTransaction'];
+    transfer: () => void;
 }) => {
-  const [status, setStatus] = useState<'display' | 'transfer'>('display')
+  const [status, setStatus] = useState<'accruing' | 'idle' | 'processing' | 'complete'>('idle')
 
-  const hasBalance = Number(balance) >= sendThreshold
+  const setBalanceStateAfterComplete = useCallback((oldStatus: typeof status, newStatus: typeof status) => {
+    if (oldStatus === 'processing') {
+      setStatus('complete')
+      setTimeout(() => {
+        console.log(`Set: ${status}, after delay`)
+        setStatus(newStatus)
+      }, 2000)
+    } else {
+      setStatus(newStatus)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  if (status === 'transfer') {
-    return (
-      <BorderedBox className='relative flex flex-col gap-5 bg-white p-5 w-[80%] mx-auto mt-[170px] text-center'>
-        <Text as="p" size='s'>Send <strong>{formatFilValue(balance)}</strong> to the destination address?</Text>
-        <div className='flex gap-5 justify-center'>
-          <Button
-            type='button'
-            variant='primary'
-            onClick={() => setStatus('display')}
-            className='bg-white text-primary'
-          >
-            <Text font='mono' size='2xs' color='primary'>Cancel</Text>
-          </Button>
-          <Button type='button' variant='primary' onClick={transfer}>Transfer</Button>
-        </div>
-      </BorderedBox>
-    )
-  }
+  useEffect(() => {
+    const hasSufficientBalance = Number(walletBalance) >= sendThreshold
+
+    if (processingTransaction) {
+      setStatus('processing')
+    } else if (!processingTransaction && hasSufficientBalance) { // TODO: complete
+      setBalanceStateAfterComplete(status, 'idle')
+    } else if (!processingTransaction && !hasSufficientBalance) {
+      setBalanceStateAfterComplete(status, 'accruing')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [processingTransaction, walletBalance])
 
   return (
     <div className={`w-[260px] aspect-square mx-auto bg-black mt-[100px]
                     border border-dashed border-slate-50 rounded-full z-10`}
     >
-
       <div className='m-auto flex flex-col gap-5 items-center justify-center h-full'>
         <Text font="mono" size="xl" bold className="text-slate-50">
-          {formatFilValue(balance)} FIL
+          {formatFilValue(walletBalance)} FIL
         </Text>
-        {hasBalance
-          ? (
-            <Button
-              type='button'
-              variant='primary'
-              onClick={() => {
-                setStatus('transfer')
-              }}
-            >
-              Transfer
-            </Button>
-          )
-          : (
-            <Text font='mono' size='2xs' className="text-slate-50">Accruing...</Text>
-          )}
+        {status === 'idle' && (
+          <Button
+            type='button'
+            variant='primary'
+            onClick={transfer}
+          >
+            Transfer
+          </Button>
+        )}
+        {status === 'accruing' && (
+          <Text font='mono' size='2xs' className="text-slate-50">Accruing...</Text>
+        )}
+        {status === 'processing' && (
+          <Text font='mono' size='2xs' className="text-slate-50">Sending...</Text>
+        )}
+        {status === 'complete' && (
+          <Text font='mono' size='2xs' className="text-slate-50">Sent</Text>
+        )}
       </div>
     </div>
   )

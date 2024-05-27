@@ -1,23 +1,31 @@
 import Text from 'src/components/Text'
-import useWallet from 'src/hooks/StationWallet'
+import { Wallet } from 'src/hooks/StationWallet'
 import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
+import { useState } from 'react'
+import ConfirmTransfer from './ConfirmTransfer'
 
 const SEND_THRESHOLD = 0.01
 
 const TransferWrapper = ({
   destinationFilAddress,
+  stationAddress,
+  processingTransaction,
+  walletBalance,
   editDestinationAddress,
   transferAllFundsToDestinationWallet,
-  stationAddress
+  dismissCurrentTransaction
 }: {
-  destinationFilAddress?: string;
-  stationAddress?: string;
-  editDestinationAddress: (address: string | undefined) => void;
-  transferAllFundsToDestinationWallet: () => Promise<void>;
+  walletBalance: Wallet['walletBalance'];
+  destinationFilAddress?: Wallet['destinationFilAddress'];
+  stationAddress?: Wallet['stationAddress'];
+  processingTransaction : Wallet['processingTransaction'];
+  editDestinationAddress:Wallet['editDestinationAddress'];
+  transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
+  dismissCurrentTransaction: Wallet['dismissCurrentTransaction'];
 }) => {
-  const { walletBalance } = useWallet()
+  const [showConfirm, setShowConfirm] = useState(false)
 
   return (
     <section className='w-1/2 bg-black relative flex flex-col'>
@@ -34,11 +42,20 @@ const TransferWrapper = ({
             />
           )}
 
-          {destinationFilAddress && (
+          {destinationFilAddress && !showConfirm && (
             <BalanceControl
-              balance={walletBalance}
+              walletBalance={walletBalance}
               sendThreshold={SEND_THRESHOLD}
-              transfer={transferAllFundsToDestinationWallet}
+              processingTransaction={processingTransaction}
+              transfer={() => setShowConfirm(true)}
+            />
+          )}
+
+          {showConfirm && (
+            <ConfirmTransfer
+              walletBalance={walletBalance}
+              transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
+              hide={() => setShowConfirm(false)}
             />
           )}
         </>

@@ -45,7 +45,7 @@ const EditDestinationAddressForm = ({
         <Tooltip
           bg='light'
           open={showTooltip}
-          trigger={<div className='absolute h-[1px] bottom-0 w-full'></div>}
+          trigger={<div className='absolute h-0 bottom-0 w-full'></div>}
           content="Saved"
           side='bottom'
         />
@@ -58,12 +58,12 @@ const EditDestinationAddressForm = ({
               onChange={validateOnChange}
               error={inputState.error}
             />
-          )
+            )
           : (
             <div className='border border-dashed border-slate-400 p-[10px] rounded-[4px] text-center bg-black'>
               <Text size="xs" className='text-slate-100 leading-6'>{destinationAddress}</Text>
             </div>
-          )}
+            )}
       </div>
 
       {editing
@@ -77,18 +77,17 @@ const EditDestinationAddressForm = ({
           >
             Save
           </Button>
-        )
+          )
         : (
-          <Button
-            variant='tertiary'
+          <button
             type='button'
-            className='ml-auto py-[4px]'
+            className='ml-auto flex items-center gap-2 text-white focus-visible:outline-slate-400'
             onClick={() => setEditing(true)}
-            icon={<EditIcon />}
           >
-            Edit
-          </Button>
-        )}
+            <EditIcon />
+            <Text size="xs" bold color='white'>Edit</Text>
+          </button>
+          )}
     </div>
   )
 }
