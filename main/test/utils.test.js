@@ -1,6 +1,6 @@
 'use strict'
 
-const { formatTokenValue } = require('../utils')
+const { formatTokenValue, validateExternalURL } = require('../utils')
 const assert = require('assert').strict
 
 describe('formatTokenValue', function () {
@@ -63,4 +63,24 @@ describe('formatTokenValue', function () {
       const result = formatTokenValue(input)
       assert.equal(result, expectedOutput)
     })
+})
+
+describe('validateExternalURL', function () {
+  it('should throw on empty string', function () {
+    assert.throws(() => {
+      validateExternalURL('')
+    })
+  })
+
+  it('should throw on URL not in allowlist', function () {
+    assert.throws(() => {
+      validateExternalURL('https://google.com')
+    })
+  })
+
+  it('should not throw for allowed URL', function () {
+    assert.doesNotThrow(() => {
+      validateExternalURL('https://filspark.com/')
+    })
+  })
 })
