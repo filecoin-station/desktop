@@ -24,7 +24,7 @@ const TransferWrapper = ({
       {stationAddress && (
         <>
           {!destinationFilAddress && (
-          <DestinationAddressForm editDestinationAddress={editDestinationAddress} />
+            <DestinationAddressForm editDestinationAddress={editDestinationAddress} />
           )}
 
           {destinationFilAddress && (

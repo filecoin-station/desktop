@@ -16,7 +16,7 @@ type ButtonProps<C extends ElementType = typeof DEFAULT_ELEMENT>
 const variantClassNames = {
   primary: 'py-2 px-6 bg-primary text-white disabled:bg-blue-300',
   secondary: 'py-2 px-6 bg-slate-50 text-primary outline-1 outline-dashed outline-primary disabled:text-blue-300',
-  tertiary: 'py-1 px-2 bg-none text-white'
+  tertiary: 'py-1 px-1 bg-none text-white'
 }
 
 const Button = <C extends ElementType = typeof DEFAULT_ELEMENT>({

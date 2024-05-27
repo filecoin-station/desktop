@@ -28,11 +28,11 @@ const BalanceControl = ({
             onClick={() => setStatus('display')}
             className='bg-white text-primary'
           >
-              <Text font='mono' size='2xs' color='primary'>Cancel</Text>
+            <Text font='mono' size='2xs' color='primary'>Cancel</Text>
           </Button>
           <Button type='button' variant='primary' onClick={transfer}>Transfer</Button>
         </div>
-    </BorderedBox>
+      </BorderedBox>
     )
   }
 
@@ -56,10 +56,10 @@ const BalanceControl = ({
             >
               Transfer
             </Button>
-            )
+          )
           : (
             <Text font='mono' size='2xs' className="text-slate-50">Accruing...</Text>
-            )}
+          )}
       </div>
     </div>
   )
