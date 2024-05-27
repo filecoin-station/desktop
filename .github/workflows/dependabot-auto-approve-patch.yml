@@ -16,7 +16,6 @@ jobs:
           - dayjs
           - autoprefixer
           - electron-log
-          - jsdom
           - react-helmet-async
           - tailwindcss
           - '@glif/'
