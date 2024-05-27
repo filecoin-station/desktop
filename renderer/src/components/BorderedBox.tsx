@@ -16,7 +16,7 @@ const BorderedBox = ({
       'first:rounded-t-lg last:rounded-b-lg border-t-0 first:border-t': isGrouped,
       'rounded-lg': !isGrouped
     },
-    'flex justify-between items-center bg-slate-50 border border-dashed border-slate-400',
+    'bg-slate-50 border border-dashed border-slate-400',
     props.className
   )
 

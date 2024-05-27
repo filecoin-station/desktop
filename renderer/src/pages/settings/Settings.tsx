@@ -29,7 +29,7 @@ const Settings = () => {
   }, [])
 
   return (
-    <div className='flex flex-col self-center w-[928px] max-w-full'>
+    <main className='px-9 mt-28 flex flex-col w-[1000px] max-w-full mx-auto'>
       <header className='mb-9'>
         <Text as='h1' font='mono' size='xs' color='primary' uppercase>&#47;&#47; Settings ... :</Text>
       </header>
@@ -94,7 +94,7 @@ const Settings = () => {
           />
         </SettingsGroup>
       </div>
-    </div>
+    </main>
   )
 }
 

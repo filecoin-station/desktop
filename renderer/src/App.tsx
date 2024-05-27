@@ -11,6 +11,7 @@ import Settings from 'src/pages/settings/Settings'
 import Wallet from 'src/pages/wallet/Wallet'
 import Modules from 'src/pages/modules/Modules'
 import { DialogProvider } from './components/DialogProvider'
+import { TooltipProvider } from '@radix-ui/react-tooltip'
 
 const App = ():JSX.Element => {
   return (
@@ -20,25 +21,27 @@ const App = ():JSX.Element => {
       </Helmet>
       <Router>
         <DialogProvider>
-          <Routes>
-            <Route path={ROUTES.onboarding} element={<Onboarding />} />
-            <Route
-              path="*"
-              element={
-                  <Layout>
-                    <Sentry />
-                    <Plausible />
-                      <Routes>
-                        <Route path={ROUTES.dashboard} element={<Dashboard />} />
-                        <Route path={ROUTES.wallet} element={<Wallet />} />
-                        <Route path={ROUTES.settings} element={<Settings />} />
-                        <Route path={ROUTES.modules} element={<Modules />} />
-                      </Routes>
-                  </Layout>
-              }
-            >
-            </Route>
-          </Routes>
+          <TooltipProvider delayDuration={200}>
+            <Routes>
+              <Route path={ROUTES.onboarding} element={<Onboarding />} />
+              <Route
+                path="*"
+                element={
+                    <Layout>
+                      <Sentry />
+                      <Plausible />
+                        <Routes>
+                          <Route path={ROUTES.dashboard} element={<Dashboard />} />
+                          <Route path={ROUTES.wallet} element={<Wallet />} />
+                          <Route path={ROUTES.settings} element={<Settings />} />
+                          <Route path={ROUTES.modules} element={<Modules />} />
+                        </Routes>
+                    </Layout>
+                }
+              >
+              </Route>
+            </Routes>
+          </TooltipProvider>
         </DialogProvider>
       </Router>
     </HelmetProvider>
