@@ -58,12 +58,12 @@ const EditDestinationAddressForm = ({
               onChange={validateOnChange}
               error={inputState.error}
             />
-            )
+          )
           : (
             <div className='border border-dashed border-slate-400 p-[10px] rounded-[4px] text-center bg-black'>
               <Text size="xs" className='text-slate-100 leading-6'>{destinationAddress}</Text>
             </div>
-            )}
+          )}
       </div>
 
       {editing
@@ -77,7 +77,7 @@ const EditDestinationAddressForm = ({
           >
             Save
           </Button>
-          )
+        )
         : (
           <button
             type='button'
@@ -87,7 +87,7 @@ const EditDestinationAddressForm = ({
             <EditIcon />
             <Text size="xs" bold color='white'>Edit</Text>
           </button>
-          )}
+        )}
     </div>
   )
 }

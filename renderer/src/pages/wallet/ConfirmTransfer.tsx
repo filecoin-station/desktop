@@ -19,24 +19,24 @@ const ConfirmTransfer = ({
           Send <strong>{formatFilValue(walletBalance)}</strong> to the destination address?
       </Text>
       <div className='flex gap-5 justify-center'>
-          <Button
+        <Button
           type='button'
           variant='primary'
           onClick={hide}
           className='bg-white text-primary'
-          >
+        >
           <Text font='mono' size='2xs' color='primary'>Cancel</Text>
-          </Button>
-          <Button
+        </Button>
+        <Button
           type='button'
           variant='primary'
           onClick={() => {
             transferAllFundsToDestinationWallet()
             hide()
           }}
-          >
+        >
           Transfer
-          </Button>
+        </Button>
       </div>
     </BorderedBox>
   )

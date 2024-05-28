@@ -19,7 +19,7 @@ export function openExplorerLink (hash?: string) {
 export async function validateAddress (input: string) {
   const checkAddressString = async (address: string) => {
     if (address.startsWith('0x')) {
-      delegatedFromEthAddress(address)
+      delegatedFromEthAddress(address as `0x${string}`)
     } else if (address.startsWith('f4')) {
       ethAddressFromDelegated(address)
     } else if (address.startsWith('f1')) {

@@ -5,6 +5,8 @@ import { formatFilValue } from 'src/lib/utils'
 import { Wallet } from 'src/hooks/StationWallet'
 import CheckmarkIcon from 'src/assets/img/icons/checkmark.svg?react'
 
+type Status = 'accruing' | 'idle' | 'processing' | 'complete'
+
 const BalanceControl = ({
   walletBalance = '',
   sendThreshold,
@@ -16,9 +18,9 @@ const BalanceControl = ({
     processingTransaction: Wallet['processingTransaction'];
     transfer: () => void;
 }) => {
-  const [status, setStatus] = useState<'accruing' | 'idle' | 'processing' | 'complete'>('idle')
+  const [status, setStatus] = useState<Status>('idle')
 
-  const setBalanceStateAfterComplete = useCallback((oldStatus: typeof status, newStatus: typeof status) => {
+  const setStatusAfterComplete = useCallback((oldStatus: Status, newStatus: Status) => {
     if (oldStatus === 'processing') {
       setStatus('complete')
       setTimeout(() => setStatus(newStatus), 2000)
@@ -33,9 +35,9 @@ const BalanceControl = ({
     if (processingTransaction) {
       setStatus('processing')
     } else if (!processingTransaction && hasSufficientBalance) {
-      setBalanceStateAfterComplete(status, 'idle')
+      setStatusAfterComplete(status, 'idle')
     } else if (!processingTransaction && !hasSufficientBalance) {
-      setBalanceStateAfterComplete(status, 'accruing')
+      setStatusAfterComplete(status, 'accruing')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [processingTransaction, walletBalance])
