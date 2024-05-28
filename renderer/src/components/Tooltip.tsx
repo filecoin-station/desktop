@@ -4,7 +4,7 @@ import { ComponentProps, ReactNode, useEffect, useState } from 'react'
 
 const sizeClassNames = {
   s: 'py-1 px-2 w-fit text-body-xxs',
-  m: 'py-4 w-[232px] text-body-xs'
+  m: 'p-4 w-[232px] text-body-xs'
 }
 const bgClassNames = {
   light: 'bg-white text-black',
@@ -35,7 +35,7 @@ const Tooltip = ({
   const contentClassName = classNames(
     sizeClassNames[size],
     bgClassNames[bg],
-    ` rounded select-none pointer-events-none
+    ` rounded select-none pointer-events-none z-10 max-w-[232px]
      data-[state=delayed-open]:animate-fadeIn data-[state=closed]:animate-fadeOut`
   )
 
