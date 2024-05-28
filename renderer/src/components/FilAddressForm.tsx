@@ -2,6 +2,7 @@ import { FC, useState, useEffect, useRef } from 'react'
 import {
   delegatedFromEthAddress,
   ethAddressFromDelegated,
+  isEthAddress,
   newFromString
 } from '@glif/filecoin-address'
 import Warning from 'src/assets/img/icons/error.svg?react'
@@ -16,7 +17,7 @@ interface FilAddressFormProps {
 }
 
 const checkAddressString = async (address: string) => {
-  if (address.startsWith('0x')) {
+  if (isEthAddress(address)) {
     delegatedFromEthAddress(address)
   } else if (address.startsWith('f4')) {
     ethAddressFromDelegated(address)
@@ -115,9 +116,9 @@ const FilAddressForm: FC<FilAddressFormProps> = ({
           className={`
             absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
             ${(internalEditMode && addressIsValid && inputAddr.startsWith('f1'))
-              ? 'visible'
-              : 'invisible opacity-0'
-            }
+        ? 'visible'
+        : 'invisible opacity-0'
+      }
           `}
         >
           Warning: Sending rewards to an f1 address incurs a higher gas fee than sending to an f4 address because
@@ -127,9 +128,9 @@ const FilAddressForm: FC<FilAddressFormProps> = ({
           className={`
             absolute text-body-2xs text-white mt-3 ease-[cubic-bezier(0.85,0,0.15,1)] duration-500
             ${(internalEditMode && addressIsValid && !inputAddr.startsWith('f1'))
-              ? 'visible'
-              : 'invisible opacity-0'
-            }
+        ? 'visible'
+        : 'invisible opacity-0'
+      }
           `}
         >
           Enter a destination address for the transfer

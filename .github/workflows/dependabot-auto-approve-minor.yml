@@ -26,6 +26,8 @@ jobs:
           - '@vitejs/plugin-react'
           - react-router-dom
           - mocha
+          - npm
+          - jsdom
     steps:
       - name: Dependabot metadata
         id: metadata

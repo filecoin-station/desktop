@@ -27,16 +27,16 @@ const App = ():JSX.Element => {
               <Route
                 path="*"
                 element={
-                    <Layout>
-                      <Sentry />
-                      <Plausible />
-                        <Routes>
-                          <Route path={ROUTES.dashboard} element={<Dashboard />} />
-                          <Route path={ROUTES.wallet} element={<Wallet />} />
-                          <Route path={ROUTES.settings} element={<Settings />} />
-                          <Route path={ROUTES.modules} element={<Modules />} />
-                        </Routes>
-                    </Layout>
+                  <Layout>
+                    <Sentry />
+                    <Plausible />
+                    <Routes>
+                      <Route path={ROUTES.dashboard} element={<Dashboard />} />
+                      <Route path={ROUTES.wallet} element={<Wallet />} />
+                      <Route path={ROUTES.settings} element={<Settings />} />
+                      <Route path={ROUTES.modules} element={<Modules />} />
+                    </Routes>
+                  </Layout>
                 }
               >
               </Route>

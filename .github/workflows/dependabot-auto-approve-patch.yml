@@ -16,13 +16,14 @@ jobs:
           - dayjs
           - autoprefixer
           - electron-log
-          - jsdom
           - react-helmet-async
           - tailwindcss
           - '@glif/'
           - '@filecoin-station/core'
           - npm
           - undici
+          - ejs
+          - '@electron/notarize'
     steps:
       - name: Dependabot metadata
         id: metadata
