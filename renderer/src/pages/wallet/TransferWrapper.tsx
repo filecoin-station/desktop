@@ -25,7 +25,7 @@ const TransferWrapper = ({
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
   dismissCurrentTransaction: Wallet['dismissCurrentTransaction'];
 }) => {
-  const [showConfirm, setShowConfirm] = useState(false)
+  const [isShowingConfirm, setIsShowingConfirm] = useState(false)
 
   return (
     <section className='w-1/2 bg-black relative flex flex-col'>
@@ -42,20 +42,20 @@ const TransferWrapper = ({
             />
           )}
 
-          {destinationFilAddress && !showConfirm && (
+          {destinationFilAddress && !isShowingConfirm && (
             <BalanceControl
               walletBalance={walletBalance}
               sendThreshold={SEND_THRESHOLD}
               processingTransaction={processingTransaction}
-              transfer={() => setShowConfirm(true)}
+              transfer={() => setIsShowingConfirm(true)}
             />
           )}
 
-          {showConfirm && (
+          {isShowingConfirm && (
             <ConfirmTransfer
               walletBalance={walletBalance}
               transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
-              hide={() => setShowConfirm(false)}
+              hide={() => setIsShowingConfirm(false)}
             />
           )}
         </>
