@@ -10,7 +10,7 @@ const Modules = () => {
       <header className='mb-9'>
         <Text as='h1' font='mono' size='xs' color='primary' uppercase>&#47;&#47; Modules ... :</Text>
       </header>
-      <section className='grid gap-8 grid-cols-2 grid-flow-col'>
+      <section className='grid gap-8 grid-cols-2'>
         {modules?.map(module => <ModuleCard module={module} key={module.id} />)}
       </section>
     </main>

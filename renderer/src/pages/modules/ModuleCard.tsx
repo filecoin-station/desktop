@@ -39,12 +39,18 @@ const ModuleCard = ({ module }: {module: Module}) => {
   return (
     <div className='bg-slate-50 border border-dashed border-slate-400 rounded-xl'>
       <div className='h-[276px] flex border-b border-dashed border-slate-400'>
-        <div className='py-9 px-5'>
-          <Text as='h2' size="l" className='mb-3'>{module.name}</Text>
-          <Text as='p' size="xs" className='mb-3'>{module.description}</Text>
-          <Tag type={moduleStatus[module.status].tagStatus}>{moduleStatus[module.status].text}</Tag>
+        <div className='py-9 px-5 flex flex-col gap-3 justify-between'>
+          <Text as='h2' size="l" font='mono'>{module.name}</Text>
+          <Text as='p' size="xs" className='text-pretty no-overflow-text line-clamp-6'>
+            {module.description}
+          </Text>
+          <div className='mt-auto'>
+            <Tag type={moduleStatus[module.status].tagStatus}>{moduleStatus[module.status].text}</Tag>
+          </div>
         </div>
-        <figure className='flex py-9 px-5 border-l border-dashed border-slate-400 bg-white rounded-tr-xl'>
+        <figure
+          className='flex w-[140px] py-9 px-5 border-l border-dashed border-slate-400 bg-white rounded-tr-xl'
+        >
           <img src={module.logo} alt={`${module.name}'s logo`} className='max-w-[100px] m-auto' />
         </figure>
       </div>
