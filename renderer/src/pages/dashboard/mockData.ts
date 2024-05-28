@@ -12,7 +12,7 @@ const allModuleIds = Object.keys(modules)
 const mockData: RewardsRecord[] = []
 
 const config = {
-  recordsCount: 10,
+  recordsCount: 100,
   minReward: 0.05,
   maxReward: 0.1,
   payoutFrequency: 7
@@ -52,5 +52,4 @@ for (let index = 0; index < config.recordsCount; index++) {
   date.setDate(date.getDate() + 1)
 }
 
-console.log(mockData)
 export { mockData }

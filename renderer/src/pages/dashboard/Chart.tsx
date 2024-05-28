@@ -8,6 +8,7 @@ import {
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { RewardsRecord } from 'src/hooks/StationRewards'
+import { getRewardValue } from 'src/lib/utils'
 
 ChartJS.register(
   CategoryScale,
@@ -30,7 +31,13 @@ const options = {
   }
 } as const
 
-const Chart = ({ historicalRewards }: {historicalRewards: RewardsRecord[]}) => {
+const Chart = ({
+  historicalRewards,
+  moduleId
+}: {
+  historicalRewards: RewardsRecord[];
+  moduleId: string;
+}) => {
   const labels = historicalRewards.map(record => new Date(record.timestamp).toDateString())
 
   const data = {
@@ -38,14 +45,15 @@ const Chart = ({ historicalRewards }: {historicalRewards: RewardsRecord[]}) => {
     datasets: [
       {
         label: 'Total rewards received',
-        data: historicalRewards.map(record => record.totalRewardsReceived),
+        data: historicalRewards.map(record => getRewardValue(record.totalRewardsReceived, moduleId)),
         borderColor: '#777',
         stepped: true
       },
       {
         label: 'Scheduled rewards',
         data: historicalRewards.map(record =>
-          record.totalScheduledRewards + record.totalRewardsReceived),
+          getRewardValue(record.totalScheduledRewards, moduleId) +
+          getRewardValue(record.totalRewardsReceived, moduleId)),
         borderColor: '#ddd',
         border: false,
         fill: '-1',
