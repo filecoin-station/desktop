@@ -10,7 +10,7 @@ const DestinationAddressForm = ({
 }: {
     editDestinationAddress: ReturnType<typeof useWallet>['editDestinationAddress'];
 }) => {
-  const { inputRef, validateOnChange, inputState } = useAddressValidation()
+  const { inputRef, validateOnChange, inputState } = useAddressValidation({ initialValid: false })
 
   function handleSubmit () {
     editDestinationAddress(inputRef.current?.value)

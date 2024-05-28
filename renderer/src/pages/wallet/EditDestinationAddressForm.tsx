@@ -16,7 +16,7 @@ const EditDestinationAddressForm = ({
 }) => {
   const [editing, setEditing] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
-  const { inputRef, validateOnChange, inputState } = useAddressValidation()
+  const { inputRef, validateOnChange, inputState } = useAddressValidation({ initialValid: true })
 
   const handleSave = () => {
     editDestinationAddress(inputRef.current?.value)

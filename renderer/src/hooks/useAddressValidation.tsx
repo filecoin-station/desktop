@@ -1,9 +1,9 @@
 import { ChangeEventHandler, useRef, useState } from 'react'
 import { validateAddress } from 'src/lib/utils'
 
-const useAddressValidation = () => {
+const useAddressValidation = ({ initialValid }: {initialValid: boolean}) => {
   const [inputState, setInputState] = useState({
-    isValid: true,
+    isValid: initialValid,
     error: ''
   })
   const inputRef = useRef<HTMLInputElement>(null)
