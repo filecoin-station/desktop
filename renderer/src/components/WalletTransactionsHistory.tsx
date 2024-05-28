@@ -35,7 +35,7 @@ const WalletTransactionsHistory: FC<WalletTransactionsHistoryProps> = ({
             ${processingTransaction ? 'h-[calc(100vh_-_470px)]' : 'h-[calc(100vh_-_305px)]'}
           `}
         >
-           <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
+          <p className="px-8 mb-2 w-fit text-body-3xs text-black opacity-80 uppercase">WALLET HISTORY</p>
           {allTransactions.map((transaction, index) => (
             <div className='wallet-transaction' key={transaction.hash}>
               <Transaction transaction={transaction} />
@@ -81,10 +81,10 @@ const ProcessingTransaction: FC<ProcessingTransactionProps> = ({ transaction }) 
         pt-8 pb-8 bg-opacity-10 h-[165px] transition-all duration-1000 ease-in-out
         ${transaction ? 'mt-0' : '-mt-[165px]'}
         ${displayTransition?.status === 'succeeded'
-          ? 'bg-green-200'
-          : displayTransition?.status === 'failed'
-            ? 'bg-red-100'
-            : 'bg-orange-100'}
+      ? 'bg-green-200'
+      : displayTransition?.status === 'failed'
+        ? 'bg-red-100'
+        : 'bg-orange-100'}
       `}
       onTransitionEnd={() => !transaction && setDisplayTransaction(undefined)}
     >

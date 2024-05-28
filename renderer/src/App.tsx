@@ -18,13 +18,13 @@ const App = ():JSX.Element => {
           <Route
             path="*"
             element={
-            <>
-              <Sentry />
-              <Plausible />
-              <Routes>
-                <Route path="/dashboard" element={<Dashboard />} />
-              </Routes>
-            </>
+              <>
+                <Sentry />
+                <Plausible />
+                <Routes>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                </Routes>
+              </>
             }
           >
           </Route>

@@ -95,7 +95,7 @@ const TransferFundsButtons: FC<TransferFundsButtonsProps> = ({
           `}
           onClick={reset}
         >
-            <span className="text-2xs px-4 text-body-s">Cancel</span>
+          <span className="text-2xs px-4 text-body-s">Cancel</span>
         </button>
       </div>
     </div>

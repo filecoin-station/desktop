@@ -72,7 +72,8 @@
         "react/jsx-first-prop-new-line": "error",
         "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
         "react/jsx-indent-props": ["error", "first"],
-        "react/jsx-closing-bracket-location": "error"
+        "react/jsx-closing-bracket-location": "error",
+        "indent": ["error", 2]
       }
     }
   ]
