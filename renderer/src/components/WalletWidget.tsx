@@ -7,10 +7,12 @@ import WalletModal from './WalletModal'
 import classNames from 'classnames'
 import { ROUTES } from 'src/lib/routes'
 import TransactionStatusIndicator from './TransactionStatusIndicator'
+import { useLocation } from 'react-router-dom'
 
 const WalletWidget = () => {
   const { openDialog } = useDialog()
   const { walletBalance, processingTransaction } = useWallet()
+  const { pathname } = useLocation()
 
   function handleClick () {
     openDialog({
@@ -19,15 +21,18 @@ const WalletWidget = () => {
   }
 
   const classNameForPage = (rest?: string) =>
-    classNames(rest, window.location.pathname === ROUTES.wallet ? 'text-white' : 'text-black')
+    classNames(rest, pathname === ROUTES.wallet ? 'text-white' : 'text-black')
 
   return (
-    <div className='absolute top-5 right-9 flex items-center gap-2'>
-      <TransactionStatusIndicator transaction={processingTransaction} />
+    <div className='absolute top-5 right-9 flex gap-4 z-10'>
+      <TransactionStatusIndicator
+        transaction={processingTransaction}
+        dark={pathname === ROUTES.wallet}
+      />
       <button
         type='button'
         onClick={handleClick}
-        className={classNameForPage(`flex items-center gap-3 no-drag-area z-10 
+        className={classNameForPage(`flex items-center gap-3 no-drag-area 
       focus-visible:outline-slate-400 focus:outline-slate-400 p-1`)}
       >
         <WalletIcon />

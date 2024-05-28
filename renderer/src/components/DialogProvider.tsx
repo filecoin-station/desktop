@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { Root, Overlay, Portal, Content } from '@radix-ui/react-dialog'
 import { useLocation } from 'react-router-dom'
-import BorderedBox from './BorderedBox'
 
 type OpenDialogOptions = {
   content: ReactNode;
@@ -30,7 +29,7 @@ export const DialogProvider = ({ children }: {children: ReactNode}) => {
 
   useEffect(() => {
     setIsOpen(false)
-  }, [location.pathname])
+  }, [location])
 
   return (
     <DialogContext.Provider value={{ openDialog, closeDialog }}>
