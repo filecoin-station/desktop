@@ -3,43 +3,59 @@ import { FILTransactionProcessing } from '../../../shared/typings'
 import Text from './Text'
 import CheckmarkIcon from 'src/assets/img/icons/checkmark.svg?react'
 import LoadingIcon from 'src/assets/img/icons/loading.svg?react'
+import WarningIcon from 'src/assets/img/icons/warning.svg?react'
 import { ReactNode } from 'react'
-import classNames from 'classnames'
+
+const StatusWrapper = ({
+  icon,
+  text
+} : {
+  icon: ReactNode;
+  text: string;
+}) => (
+  <div className='flex gap-2 items-center'>
+    {icon}
+    <Text as='p' size='s'>
+      {text}
+    </Text>
+  </div>
+)
 
 const TransactionStatusIndicator = ({
-  transaction,
-  fallback = null,
-  dark
+  transaction
 }: {
-    transaction?: FILTransactionProcessing;
-    fallback?: ReactNode;
-    dark?: boolean;
+  transaction?: FILTransactionProcessing;
 }) => {
-  const { status, currentTransaction } = useCurrentTransactionStatus(transaction)
+  const { currentTransaction } = useCurrentTransactionStatus(transaction)
 
-  if (status === 'processing') {
+  if (currentTransaction?.status === 'processing') {
     return (
-      <div className='flex gap-3 items-center'>
-        <LoadingIcon className={classNames(dark ? 'text-white' : 'text-black', 'animate-spin')} />
-        <Text as='p' size='s' color={dark ? 'white' : 'black'}>
-          {currentTransaction?.outgoing ? 'Sending...' : 'Receiving...'}
-        </Text>
-      </div>
+      <StatusWrapper
+        icon={<LoadingIcon className="text-primary animate-spin" />}
+        text={currentTransaction?.outgoing ? 'Sending...' : 'Receiving...'}
+      />
     )
   }
 
-  if (status === 'complete') {
+  if (currentTransaction?.status === 'succeeded') {
     return (
-      <div className='flex gap-3 items-center'>
-        <CheckmarkIcon className='text-white fill-primary' />
-        <Text as='p' size='s' color={dark ? 'white' : 'black'}>
-          {currentTransaction?.outgoing ? 'Sent' : 'Received'}
-        </Text>
-      </div>
+      <StatusWrapper
+        icon={<CheckmarkIcon className='text-white fill-primary' />}
+        text={currentTransaction?.outgoing ? 'Sent' : 'Received'}
+      />
     )
   }
 
-  return fallback
+  if (currentTransaction?.status === 'failed') {
+    return (
+      <StatusWrapper
+        icon={<WarningIcon className='text-red-400' />}
+        text="Failed"
+      />
+    )
+  }
+
+  return null
 }
 
 export default TransactionStatusIndicator

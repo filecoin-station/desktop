@@ -51,14 +51,15 @@ const WalletModal = () => {
           <Text as='p' font='mono' size='s' uppercase>
             {formatFilValue(walletBalance)} FIL
           </Text>
-          <TransactionStatusIndicator
-            transaction={processingTransaction}
-            fallback={
+          {processingTransaction
+            ? (
+              <TransactionStatusIndicator transaction={processingTransaction} />
+            )
+            : (
               <Button as={Link} to={ROUTES.wallet} variant='primary' className='ml-auto pt-1 pb-1'>
                 Transfer
               </Button>
-            }
-          />
+            )}
         </div>
       </BorderedBox>
     </>
