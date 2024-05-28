@@ -40,7 +40,7 @@ const Tooltip = ({
   )
 
   useEffect(() => {
-    setOpen(receivedOpen)
+    setIsOpen(receivedOpen)
   }, [receivedOpen])
 
   return (
