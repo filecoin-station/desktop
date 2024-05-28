@@ -20,61 +20,61 @@ const WalletModal = () => {
     processingTransaction
   } = useWallet()
   const { closeDialog } = useDialog()
-  const { status } = useCurrentTransactionStatus(processingTransaction)
+  const { status, currentTransaction } = useCurrentTransactionStatus(processingTransaction)
 
   return (
-      <>
-        <BorderedBox isGrouped className='flex p-5 justify-end'>
+    <>
+      <BorderedBox isGrouped className='flex p-5 justify-end'>
+        <button
+          onClick={closeDialog}
+          type='button'
+          className='focus-visible:outline-slate-400 focus:outline-slate-400'
+        >
+          <CloseIcon />
+        </button>
+      </BorderedBox>
+      <BorderedBox isGrouped className='p-5'>
+        <Text as='p' font='mono' size='3xs' color='primary' uppercase>&#47;&#47; Station address ... :</Text>
+        <div className='flex gap-5 items-center mt-4'>
+          <Address address={stationAddress} />
+          <Address address={stationAddress0x} />
           <button
-            onClick={closeDialog}
             type='button'
-            className='focus-visible:outline-slate-400 focus:outline-slate-400'
+            className='text-primary ml-auto focus:outline-slate-400 w-5 h-5'
+            onClick={() => openExplorerLink(stationAddress)}
           >
-            <CloseIcon />
+            <LinkOutIcon />
           </button>
-        </BorderedBox>
-        <BorderedBox isGrouped className='p-5'>
-          <Text as='p' font='mono' size='3xs' color='primary' uppercase>&#47;&#47; Station address ... :</Text>
-          <div className='flex gap-5 items-center mt-4'>
-            <Address address={stationAddress} />
-            <Address address={stationAddress0x} />
-            <button
-              type='button'
-              className='text-primary ml-auto focus:outline-slate-400 w-5 h-5'
-              onClick={() => openExplorerLink(stationAddress)}
-            >
-              <LinkOutIcon />
-            </button>
-          </div>
-        </BorderedBox>
-        <BorderedBox isGrouped className='p-5'>
-          <Text as='p' font='mono' size='3xs' color='primary' uppercase>&#47;&#47; Balance ... :</Text>
-          <div className='flex mt-4 items-center justify-between'>
-            <Text as='p' font='mono' size='s' uppercase>
-              {formatFilValue(walletBalance)} FIL
-            </Text>
+        </div>
+      </BorderedBox>
+      <BorderedBox isGrouped className='p-5'>
+        <Text as='p' font='mono' size='3xs' color='primary' uppercase>&#47;&#47; Balance ... :</Text>
+        <div className='flex mt-4 items-center justify-between'>
+          <Text as='p' font='mono' size='s' uppercase>
+            {formatFilValue(walletBalance)} FIL
+          </Text>
 
-            {status === 'none' && (
-                <Button as={Link} to={ROUTES.wallet} variant='primary' className='ml-auto pt-1 pb-1'>
-                    Transfer
-                </Button>
-            )}
-            {status === 'processing' && (
-                <Text as='p' size='s'>
-                    Sending...
-                </Text>
-            )}
-            {status === 'complete' && (
-                <div className='flex gap-3 items-center'>
-                    <CheckmarkIcon className='text-white fill-primary' />
-                    <Text as='p' size='s'>
-                        Sent
-                    </Text>
-                </div>
-            )}
-          </div>
-        </BorderedBox>
-      </>
+          {status === 'none' && (
+            <Button as={Link} to={ROUTES.wallet} variant='primary' className='ml-auto pt-1 pb-1'>
+                Transfer
+            </Button>
+          )}
+          {status === 'processing' && (
+            <Text as='p' size='s'>
+                Sending...
+            </Text>
+          )}
+          {status === 'complete' && (
+            <div className='flex gap-3 items-center'>
+              <CheckmarkIcon className='text-white fill-primary' />
+              <Text as='p' size='s'>
+                  {currentTransaction?.outgoing ? 'Sent' : 'Received'}
+              </Text>
+            </div>
+          )}
+        </div>
+      </BorderedBox>
+    </>
   )
 }
 
