@@ -30,7 +30,7 @@ const Tooltip = ({
   keepOpenOnClick,
   ...contentProps
 }: TooltipProps) => {
-  const [open, setOpen] = useState(receivedOpen)
+  const [isOpen, setIsOpen] = useState(receivedOpen)
 
   const contentClassName = classNames(
     sizeClassNames[size],
