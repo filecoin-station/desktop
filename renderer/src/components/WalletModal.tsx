@@ -9,8 +9,7 @@ import { Link } from 'react-router-dom'
 import { ROUTES } from 'src/lib/routes'
 import LinkOutIcon from 'src/assets/img/icons/link-out.svg?react'
 import CloseIcon from 'src/assets/img/icons/close.svg?react'
-import useCurrentTransactionStatus from 'src/hooks/useCurrentTransactionStatus'
-import CheckmarkIcon from 'src/assets/img/icons/checkmark.svg?react'
+import TransactionStatusIndicator from './TransactionStatusIndicator'
 
 const WalletModal = () => {
   const {
@@ -20,7 +19,6 @@ const WalletModal = () => {
     processingTransaction
   } = useWallet()
   const { closeDialog } = useDialog()
-  const { status, currentTransaction } = useCurrentTransactionStatus(processingTransaction)
 
   return (
     <>
@@ -53,25 +51,14 @@ const WalletModal = () => {
           <Text as='p' font='mono' size='s' uppercase>
             {formatFilValue(walletBalance)} FIL
           </Text>
-
-          {status === 'none' && (
-            <Button as={Link} to={ROUTES.wallet} variant='primary' className='ml-auto pt-1 pb-1'>
+          <TransactionStatusIndicator
+            transaction={processingTransaction}
+            fallback={
+              <Button as={Link} to={ROUTES.wallet} variant='primary' className='ml-auto pt-1 pb-1'>
                 Transfer
-            </Button>
-          )}
-          {status === 'processing' && (
-            <Text as='p' size='s'>
-                Sending...
-            </Text>
-          )}
-          {status === 'complete' && (
-            <div className='flex gap-3 items-center'>
-              <CheckmarkIcon className='text-white fill-primary' />
-              <Text as='p' size='s'>
-                  {currentTransaction?.outgoing ? 'Sent' : 'Received'}
-              </Text>
-            </div>
-          )}
+              </Button>
+            }
+          />
         </div>
       </BorderedBox>
     </>
