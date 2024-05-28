@@ -20,8 +20,8 @@ const App = ():JSX.Element => {
         <title>Filecoin Station</title>
       </Helmet>
       <Router>
-        <DialogProvider>
-          <TooltipProvider delayDuration={200}>
+        <TooltipProvider delayDuration={200}>
+          <DialogProvider>
             <Routes>
               <Route path={ROUTES.onboarding} element={<Onboarding />} />
               <Route
@@ -41,8 +41,8 @@ const App = ():JSX.Element => {
               >
               </Route>
             </Routes>
-          </TooltipProvider>
-        </DialogProvider>
+          </DialogProvider>
+        </TooltipProvider>
       </Router>
     </HelmetProvider>
   )

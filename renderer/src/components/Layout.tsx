@@ -9,9 +9,9 @@ const Layout = ({ children }: {children: ReactNode}) => {
     <div className='h-screen w-screen overflow-x-hidden flex relative app-bg'>
       <DraggableArea />
       <Sidebar />
+      <WalletWidget />
       <div className='w-full flex flex-wrap justify-end absolute'>
         <UpdateBanner />
-        <WalletWidget />
       </div>
       {children}
     </div>

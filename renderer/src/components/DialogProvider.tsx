@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { Root, Overlay, Portal, Content } from '@radix-ui/react-dialog'
 import { useLocation } from 'react-router-dom'
+import BorderedBox from './BorderedBox'
 
 type OpenDialogOptions = {
   content: ReactNode;
@@ -37,10 +38,10 @@ export const DialogProvider = ({ children }: {children: ReactNode}) => {
 
       <Root open={isOpen} onOpenChange={setIsOpen}>
         <Portal>
-          <Overlay className='fixed inset-0 bg-[#00000055]' data-dialog-overlay />
+          <Overlay className='fixed inset-0 bg-[#00000055] backdrop-blur' data-dialog-overlay />
           <Content
             className='fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px]
-                translate-x-[-50%] translate-y-[-50%] bg-white p-[25px] z-10'
+                translate-x-[-50%] translate-y-[-50%] z-10'
           >
             {content}
           </Content>
