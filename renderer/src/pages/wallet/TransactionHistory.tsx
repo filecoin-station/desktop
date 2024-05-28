@@ -49,7 +49,7 @@ const TransactionHistory = ({
             After your first transaction you will be able to view it here
             </Text>
           </div>
-          )}
+        )}
     </div>
   )
 }

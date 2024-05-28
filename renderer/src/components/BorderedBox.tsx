@@ -22,7 +22,7 @@ const BorderedBox = ({
 
   return (
     <div {...props} className={className}>
-        {children}
+      {children}
     </div>
   )
 }

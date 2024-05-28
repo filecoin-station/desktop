@@ -70,54 +70,54 @@ const TransferForm = () => {
 
   return (
     <div>
-        <p className='font-bold'>Transfer Destination address</p>
+      <p className='font-bold'>Transfer Destination address</p>
 
-        <form onSubmit={hasAddressSaved ? handleTransfer : handleSaveAddress}>
-            <div className='my-4'>
-                <input
-                    name='address'
-                    className='border-b p-2'
-                    type="text"
-                    placeholder="Destination"
-                    defaultValue={address}
-                    onChange={handleInputChange}
-                    ref={inputRef}
-                    disabled={formState !== 'edit'}
-                />
-            </div>
+      <form onSubmit={hasAddressSaved ? handleTransfer : handleSaveAddress}>
+        <div className='my-4'>
+          <input
+            name='address'
+            className='border-b p-2'
+            type="text"
+            placeholder="Destination"
+            defaultValue={address}
+            onChange={handleInputChange}
+            ref={inputRef}
+            disabled={formState !== 'edit'}
+          />
+        </div>
 
-            {hasAddressSaved && (
-                <button type='button' onClick={handleEditClick} className='block my-2'>Edit</button>
-            )}
+        {hasAddressSaved && (
+          <button type='button' onClick={handleEditClick} className='block my-2'>Edit</button>
+        )}
 
-            {addressIsValid && addressIsF1(address) && (
-              <p>The FIL address entered is invalid. Please check and try again.</p>
-            )}
+        {addressIsValid && addressIsF1(address) && (
+          <p>The FIL address entered is invalid. Please check and try again.</p>
+        )}
 
-            {!addressIsValid && (
-              <p>The FIL address entered is invalid. Please check and try again.</p>
-            )}
+        {!addressIsValid && (
+          <p>The FIL address entered is invalid. Please check and try again.</p>
+        )}
 
-            {hasAddressSaved
-              ? (
-              <button
-                type='submit'
-                className='block disabled:opacity-30'
-                disabled={!addressIsValid || !hasBalance}
-              >
+        {hasAddressSaved
+          ? (
+            <button
+              type='submit'
+              className='block disabled:opacity-30'
+              disabled={!addressIsValid || !hasBalance}
+            >
                 Transfer
-              </button>
-                )
-              : (
-              <button
-                type='submit'
-                className='block disabled:opacity-30'
-                disabled={!addressIsValid}
-              >
+            </button>
+          )
+          : (
+            <button
+              type='submit'
+              className='block disabled:opacity-30'
+              disabled={!addressIsValid}
+            >
                 Save
-              </button>
-                )}
-        </form>
+            </button>
+          )}
+      </form>
 
     </div>
   )

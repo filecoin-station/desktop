@@ -56,7 +56,7 @@ const Chart = ({ historicalRewards }: {historicalRewards: RewardsRecord[]}) => {
 
   return (
     <div>
-        <Line options={options} data={data} />
+      <Line options={options} data={data} />
     </div>
   )
 }

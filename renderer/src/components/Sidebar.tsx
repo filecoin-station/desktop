@@ -51,19 +51,19 @@ const Sidebar = () => {
         </button>
 
         <nav className='flex flex-col gap-2'>
-            {links.map(({ href, title, Icon }) => (
-              <NavLink
-                to={href}
-                key={href}
-                className={({ isActive }) =>
-                  `flex gap-2 items-center py-3.5 nav-button 
+          {links.map(({ href, title, Icon }) => (
+            <NavLink
+              to={href}
+              key={href}
+              className={({ isActive }) =>
+                `flex gap-2 items-center py-3.5 nav-button 
                   ${isOpen ? 'px-3' : 'px-3.5'} 
                   ${isActive ? 'active' : ''}`}
-              >
+            >
               <Icon />
               <span className={`uppercase text-body-3xs ${isOpen ? 'block' : 'hidden'}`}>{title}</span>
             </NavLink>
-            ))}
+          ))}
         </nav>
       </div>
     </section>

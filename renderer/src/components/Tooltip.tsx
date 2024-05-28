@@ -30,19 +30,19 @@ const Tooltip = ({
   return (
     <Root>
       <Trigger asChild>
-          {trigger}
+        {trigger}
       </Trigger>
       <Portal>
         <Content
-            className={contentClassName}
-            sideOffset={4}
-            onPointerDownOutside={(event: CustomEvent<{ originalEvent: PointerEvent }>) => {
-              if (keepOpenOnClick) event.preventDefault()
-            }}
-            {...contentProps}
+          className={contentClassName}
+          sideOffset={4}
+          onPointerDownOutside={(event: CustomEvent<{ originalEvent: PointerEvent }>) => {
+            if (keepOpenOnClick) event.preventDefault()
+          }}
+          {...contentProps}
         >
-            {content}
-            <Arrow height={8} width={10} className="fill-black" />
+          {content}
+          <Arrow height={8} width={10} className="fill-black" />
         </Content>
       </Portal>
     </Root>

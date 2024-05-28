@@ -36,8 +36,8 @@ const Button = <C extends ElementType = typeof DEFAULT_ELEMENT>({
 
   return (
     <Component {...props} className={className}>
-        {icon}
-        {children}
+      {icon}
+      {children}
     </Component>
   )
 }

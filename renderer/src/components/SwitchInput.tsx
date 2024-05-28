@@ -21,39 +21,39 @@ const SwitchInput = ({
 
   return (
     <div className='flex gap-5 items-center focus-within:ring-2 ring-slate-400 rounded-sm w-[84px]'>
-        <Root
-            id={id}
-            {...props}
-            className="w-[34px] h-5 bg-slate-400 rounded-full relative data-[state=checked]:bg-primary
+      <Root
+        id={id}
+        {...props}
+        className="w-[34px] h-5 bg-slate-400 rounded-full relative data-[state=checked]:bg-primary
                         outline-none cursor-default peer"
-            checked={checked}
-            onCheckedChange={onChange}
-        >
-            <Thumb className="block w-4 h-4 bg-white rounded-full shadow-switchButton
+        checked={checked}
+        onCheckedChange={onChange}
+      >
+        <Thumb className="block w-4 h-4 bg-white rounded-full shadow-switchButton
                             transition-transform duration-100 translate-x-0.5
                             will-change-transform data-[state=checked]:translate-x-4"
-            />
-        </Root>
-        <Text
-            as='label'
-            htmlFor={id}
-            font='mono'
-            size='xs'
-            color='secondary'
-            className='leading-none peer-data-[state=unchecked]:hidden'
-        >
+        />
+      </Root>
+      <Text
+        as='label'
+        htmlFor={id}
+        font='mono'
+        size='xs'
+        color='secondary'
+        className='leading-none peer-data-[state=unchecked]:hidden'
+      >
             Yes
-        </Text>
-        <Text
-            as='label'
-            htmlFor={id}
-            font='mono'
-            size='xs'
-            color='secondary'
-            className='leading-none peer-data-[state=checked]:hidden'
-        >
+      </Text>
+      <Text
+        as='label'
+        htmlFor={id}
+        font='mono'
+        size='xs'
+        color='secondary'
+        className='leading-none peer-data-[state=checked]:hidden'
+      >
             No
-        </Text>
+      </Text>
     </div>
   )
 }

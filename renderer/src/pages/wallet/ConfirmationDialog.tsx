@@ -19,13 +19,13 @@ const ConfirmationDialog = ({
 
   return (
     <div>
-        <p>Confirm</p>
-        <p>Send {formatFilValue(amount)} FIL to {truncateString(destination)}</p>
-        <div className='my-2 flex gap-4'>
-            <button type='button'onClick={closeDialog}>Cancel</button>
-            <button type='button'onClick={handleProceed}>Transfer</button>
+      <p>Confirm</p>
+      <p>Send {formatFilValue(amount)} FIL to {truncateString(destination)}</p>
+      <div className='my-2 flex gap-4'>
+        <button type='button'onClick={closeDialog}>Cancel</button>
+        <button type='button'onClick={handleProceed}>Transfer</button>
 
-        </div>
+      </div>
     </div>
   )
 }

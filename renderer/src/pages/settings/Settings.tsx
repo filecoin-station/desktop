@@ -78,19 +78,19 @@ const Settings = () => {
         </SettingsGroup>
         <SettingsGroup name='Security'>
           <SettingsGroupItem
-              title='Seed phrase'
-              description={`Export your seed phrase for safekeeping, 
+            title='Seed phrase'
+            description={`Export your seed phrase for safekeeping, 
               allowing you to recover your cryptocurrency assets if necessary.`}
-              input={
-                <Button
-                  type='button'
-                  variant='secondary'
-                  icon={<ExportIcon />}
-                  onClick={exportSeedPhrase}
-                >
+            input={
+              <Button
+                type='button'
+                variant='secondary'
+                icon={<ExportIcon />}
+                onClick={exportSeedPhrase}
+              >
                     Export seed phrase
-                </Button>
-              }
+              </Button>
+            }
           />
         </SettingsGroup>
       </div>

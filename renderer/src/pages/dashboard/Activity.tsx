@@ -7,12 +7,12 @@ const Activity = () => {
   return (
     <section className='w-1/3 flex flex-col gap-8'>
       <div className='border border-grayscale-300'>
-          <p>Total jobs completed</p>
-          <p>{totalJobs.toLocaleString()}</p>
+        <p>Total jobs completed</p>
+        <p>{totalJobs.toLocaleString()}</p>
       </div>
       <div className='border border-grayscale-300'>
-          <p>Activity</p>
-          <ActivityLog activities={activities} />
+        <p>Activity</p>
+        <ActivityLog activities={activities} />
       </div>
     </section>
   )

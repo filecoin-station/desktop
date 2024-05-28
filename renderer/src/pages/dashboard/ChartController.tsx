@@ -36,14 +36,14 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
       <div className='flex gap-4'>
         {timeRanges.map(value => (
           <button
-              type='button'
-              className={
-                `border px-2 uppercase ${value === timeRange ? 'border-black' : 'border-grayscale-400'}`
-              }
-              key={value}
-              onClick={() => setTimeRange(value)}
+            type='button'
+            className={
+              `border px-2 uppercase ${value === timeRange ? 'border-black' : 'border-grayscale-400'}`
+            }
+            key={value}
+            onClick={() => setTimeRange(value)}
           >
-              {value}
+            {value}
           </button>
         ))}
       </div>
