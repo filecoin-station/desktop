@@ -44,7 +44,7 @@ const Tooltip = ({
   }, [receivedOpen])
 
   return (
-    <Root open={open} onOpenChange={setOpen}>
+    <Root open={isOpen} onOpenChange={setIsOpen}>
       <Trigger asChild>
         {trigger}
       </Trigger>
