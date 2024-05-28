@@ -32,12 +32,15 @@ export class Grid {
   constructor ({
     canvas,
     container,
-    gridSize
+    gridSize,
+    force
   }: {
       canvas: HTMLCanvasElement;
       container: HTMLElement;
       gridSize: number;
+      force: number;
    }) {
+    this.force = force
     this.gridSize = gridSize
     this.canvas = canvas
     this.dashSize = Math.round(this.gridSize / 8)

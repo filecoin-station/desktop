@@ -1,9 +1,11 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Grid } from 'src/lib/grid'
 
 const GridCanvas = () => {
   const ref = useRef<HTMLCanvasElement>(null)
   const gridCanvas = useRef<Grid>()
+
+  const [force] = useState(0)
 
   function handleResize () {
     gridCanvas.current?.setup(ref.current?.parentElement || undefined)
@@ -14,7 +16,8 @@ const GridCanvas = () => {
       gridCanvas.current = new Grid({
         canvas: ref.current,
         container: ref.current.parentElement,
-        gridSize: 40
+        gridSize: 40,
+        force
       })
     }
 
