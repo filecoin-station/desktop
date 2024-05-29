@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { RewardsRecord } from 'src/hooks/StationRewards'
 import Chart from './Chart'
 import { Select, SelectItem } from 'src/components/Select'
-import { TabButton, TabButtonGroup } from 'src/components/TabButton'
+import { ToggleGroup, ToggleGroupButton } from 'src/components/ToggleGroup'
 
 const timeRanges = ['1d', '7d', '1m', '1y', 'all'] as const
 type TimeRange = typeof timeRanges[number]
@@ -45,17 +45,16 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
   return (
     <div className='p-5'>
       <div className='flex gap-4 mb-10'>
-        <TabButtonGroup>
+        <ToggleGroup onValueChange={(value: TimeRange) => setTimeRange(value)} defaultValue={timeRange}>
           {timeRanges.map(value => (
-            <TabButton
+            <ToggleGroupButton
               key={value}
-              selected={value === timeRange}
-              onClick={() => setTimeRange(value)}
+              value={value}
             >
               {value.toUpperCase()}
-            </TabButton>
+            </ToggleGroupButton>
           ))}
-        </TabButtonGroup>
+        </ToggleGroup>
         <Select label='Module' onValueChange={(value) => setModuleId(value)}>
           {moduleIdsInRange.map((id) => (
             <SelectItem
