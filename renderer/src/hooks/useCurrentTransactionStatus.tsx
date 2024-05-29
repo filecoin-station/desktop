@@ -5,12 +5,15 @@ const useCurrentTransactionStatus = (transaction?: FILTransactionProcessing) => 
   const [status, setStatus] = useState<'none' | 'processing' | 'complete'>('none')
   const [currentTransaction, setCurrentTransaction] = useState<FILTransactionProcessing>()
   const timeout = useRef<ReturnType<typeof setTimeout>>()
+  const statusRef = useRef<typeof status>('none')
+
+  statusRef.current = status
 
   useEffect(() => {
     if (transaction) {
       setStatus('processing')
       setCurrentTransaction(transaction)
-    } else if (!transaction && status === 'processing') {
+    } else if (!transaction && statusRef.current === 'processing') {
       setStatus('complete')
 
       timeout.current = setTimeout(() => {
@@ -22,7 +25,6 @@ const useCurrentTransactionStatus = (transaction?: FILTransactionProcessing) => 
     return () => {
       clearTimeout(timeout.current)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transaction])
 
   return {
