@@ -19,6 +19,9 @@
     "max-len": ["error", {
       "code": 115,
       "ignoreUrls": true
+    }],
+    "indent": ["error", 2, {
+      "SwitchCase": 1
     }]
   },
   "ignorePatterns": [
@@ -72,8 +75,7 @@
         "react/jsx-first-prop-new-line": "error",
         "react/jsx-max-props-per-line": ["error", { "maximum": 1, "when": "multiline" }],
         "react/jsx-indent-props": ["error", "first"],
-        "react/jsx-closing-bracket-location": "error",
-        "indent": ["error", 2]
+        "react/jsx-closing-bracket-location": "error"
       }
     }
   ]
