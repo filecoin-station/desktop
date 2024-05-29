@@ -8,7 +8,7 @@ import useAddressValidation from 'src/hooks/useAddressValidation'
 const DestinationAddressForm = ({
   editDestinationAddress
 }: {
-    editDestinationAddress: ReturnType<typeof useWallet>['editDestinationAddress'];
+  editDestinationAddress: ReturnType<typeof useWallet>['editDestinationAddress'];
 }) => {
   const { inputRef, validateOnChange, inputState } = useAddressValidation({ initialValid: false })
 

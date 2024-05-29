@@ -11,8 +11,8 @@ const EditDestinationAddressForm = ({
   destinationAddress,
   editDestinationAddress
 }: {
-    destinationAddress: ReturnType<typeof useWallet>['destinationFilAddress'];
-    editDestinationAddress: ReturnType<typeof useWallet>['editDestinationAddress'];
+  destinationAddress: ReturnType<typeof useWallet>['destinationFilAddress'];
+  editDestinationAddress: ReturnType<typeof useWallet>['editDestinationAddress'];
 }) => {
   const [editing, setEditing] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)

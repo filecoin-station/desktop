@@ -9,9 +9,9 @@ const ConfirmTransfer = ({
   hide,
   transferAllFundsToDestinationWallet
 }: {
-    walletBalance: Wallet['walletBalance'];
-    hide: () => void;
-    transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
+  walletBalance: Wallet['walletBalance'];
+  hide: () => void;
+  transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
 }) => {
   return (
     <BorderedBox className='relative flex flex-col gap-5 bg-white p-5 w-[80%] mx-auto mt-[170px] text-center'>

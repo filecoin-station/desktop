@@ -30,10 +30,10 @@ const BalanceControl = ({
   processingTransaction,
   transfer
 }: {
-    walletBalance?: string;
-    sendThreshold: number;
-    processingTransaction: Wallet['processingTransaction'];
-    transfer: () => void;
+  walletBalance?: string;
+  sendThreshold: number;
+  processingTransaction: Wallet['processingTransaction'];
+  transfer: () => void;
 }) => {
   const { currentTransaction } = useCurrentTransactionStatus(processingTransaction)
   const hasSufficientBalance = Number(walletBalance) >= sendThreshold
