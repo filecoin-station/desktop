@@ -1,7 +1,6 @@
 import { BigNumber, FilecoinNumber } from '@glif/filecoin-number'
 import { browseTransactionTracker } from './station-config'
 import { delegatedFromEthAddress, ethAddressFromDelegated, newFromString } from '@glif/filecoin-address'
-import { RewardsRecord } from 'src/hooks/StationRewards'
 
 export function truncateString (value: string, size = 6) {
   return `${value.slice(0, size)}...${value.slice(-size)}`
