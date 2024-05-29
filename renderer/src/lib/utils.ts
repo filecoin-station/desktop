@@ -46,15 +46,3 @@ export async function validateAddress (input: string) {
 export function addressIsF1 (address: string) {
   return address.startsWith('f1')
 }
-
-export function sumAllRewards (data: RewardsRecord['totalRewardsReceived']) {
-  return Object.values(data).reduce((acc, val) => acc + val, 0)
-}
-
-export function getRewardValue (data: RewardsRecord['totalRewardsReceived'], moduleId: string) {
-  if (moduleId === 'all') {
-    return sumAllRewards(data)
-  }
-
-  return data[moduleId]
-}

@@ -7,8 +7,7 @@ import {
   Filler
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { RewardsRecord } from 'src/hooks/StationRewards'
-import { getRewardValue } from 'src/lib/utils'
+import { RewardsRecord, sumAllRewards } from 'src/hooks/StationRewards'
 
 ChartJS.register(
   CategoryScale,
@@ -30,6 +29,14 @@ const options = {
     }
   }
 } as const
+
+function getRewardValue (data: RewardsRecord['totalRewardsReceived'], moduleId: string) {
+  if (moduleId === 'all') {
+    return sumAllRewards(data)
+  }
+
+  return data[moduleId]
+}
 
 const Chart = ({
   historicalRewards,

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getScheduledRewards } from 'src/lib/station-config'
-import { sumAllRewards } from 'src/lib/utils'
 import { mockData } from 'src/pages/dashboard/mockData'
 
 async function getHistoricalRewardsData () {
@@ -11,6 +10,10 @@ export type RewardsRecord = {
   timestamp: string;
   totalRewardsReceived: Record<string, number>;
   totalScheduledRewards: Record<string, number>;
+}
+
+export function sumAllRewards (data: RewardsRecord['totalRewardsReceived']) {
+  return Object.values(data).reduce((acc, val) => acc + val, 0)
 }
 
 const useStationRewards = () => {
