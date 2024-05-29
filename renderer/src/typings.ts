@@ -38,7 +38,7 @@ declare global {
         onEarningsChanged: (callback: (value: number) => void) => () => void;
         onReadyToUpdate: (callback: () => void) => () => void;
         onTransactionUpdate:
-          (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void) => () => void;
+        (callback: (allTransactions: (FILTransaction|FILTransactionProcessing)[]) => void) => () => void;
         onBalanceUpdate: (callback: (balance: string) => void) => () => void;
         onScheduledRewardsUpdate: (callback: (balance: string) => void) => () => void;
       };
