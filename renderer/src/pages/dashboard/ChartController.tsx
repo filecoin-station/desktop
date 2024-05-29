@@ -5,7 +5,7 @@ import { Select, SelectItem } from 'src/components/Select'
 import { ToggleGroup, ToggleGroupButton } from 'src/components/ToggleGroup'
 
 const timeRanges = ['1d', '7d', '1m', '1y', 'all'] as const
-type TimeRange = typeof timeRanges[number]
+export type TimeRange = typeof timeRanges[number]
 
 const timeRangeInDays = {
   '1d': 1,
@@ -26,7 +26,7 @@ function getDataInTimeRange (data: RewardsRecord[], timeRange: TimeRange) {
 }
 
 const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecord[]}) => {
-  const [timeRange, setTimeRange] = useState<TimeRange>('1m')
+  const [timeRange, setTimeRange] = useState<TimeRange>('7d')
   const [moduleId, setModuleId] = useState('all')
 
   const filteredHistoricalRewards = useMemo(
@@ -43,8 +43,8 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
     ), [filteredHistoricalRewards])
 
   return (
-    <div className='p-5'>
-      <div className='flex gap-4 mb-10'>
+    <div className=''>
+      <div className='flex gap-4 mb-10 p-5'>
         <ToggleGroup onValueChange={(value: TimeRange) => setTimeRange(value)} defaultValue={timeRange}>
           {timeRanges.map(value => (
             <ToggleGroupButton
@@ -71,7 +71,9 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
           ))}
         </Select>
       </div>
-      <Chart historicalRewards={filteredHistoricalRewards} moduleId={moduleId} />
+      <section className='p-2'>
+        <Chart historicalRewards={filteredHistoricalRewards} moduleId={moduleId} timeRange={timeRange} />
+      </section>
     </div>
   )
 }

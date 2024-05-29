@@ -14,7 +14,7 @@ const mockData: RewardsRecord[] = []
 const config = {
   recordsCount: 100,
   minReward: 0.05,
-  maxReward: 0.1,
+  maxReward: 0.01,
   payoutFrequency: 7
 }
 
