@@ -20,9 +20,8 @@
       "code": 115,
       "ignoreUrls": true
     }],
-    "indent": ["error", 2, {
-      "SwitchCase": 1
-    }]
+    "indent": "off",
+    "@typescript-eslint/indent": ["error", 2]
   },
   "ignorePatterns": [
     "assets/",
