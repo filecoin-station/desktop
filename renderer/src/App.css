@@ -61,6 +61,13 @@
     scrollbar-width: thin;
     scrollbar-color: #A0A1BA #F1F1F5;
   }
+
+  .no-overflow-text {
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+  }
 }
 
 @layer components {

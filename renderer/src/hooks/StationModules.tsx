@@ -32,7 +32,8 @@ const modules = {
     links: {
       github: 'https://github.com/filecoin-station/spark',
       docs: 'https://filspark.com/'
-    }
+    },
+    status: 'active'
   },
   voyager: {
     name: 'Voyager',
@@ -46,9 +47,12 @@ const modules = {
     links: {
       github: 'https://github.com/filecoin-station/voyager',
       docs: 'https://filstation.app/'
-    }
+    },
+    status: 'comingSoon'
   }
-}
+} as const
+
+export type Module = (typeof modules)[keyof typeof modules] & {id: string}
 
 export const useModules = () => {
   const [sparkStats] = useState<typeof modules.spark.stats>(modules.spark.stats)
@@ -71,6 +75,6 @@ export const useModules = () => {
   }
 
   return {
-    modules: Object.entries(modulesUpdated).map(([id, mod]) => ({ ...mod, id }))
+    modules: Object.entries(modulesUpdated).map(([id, mod]) => ({ ...mod, id })) as Module[]
   }
 }
