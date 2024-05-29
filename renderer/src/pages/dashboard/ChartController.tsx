@@ -25,11 +25,20 @@ function getDataInTimeRange (data: RewardsRecord[], timeRange: TimeRange) {
 
 const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecord[]}) => {
   const [timeRange, setTimeRange] = useState<TimeRange>('1m')
+  const [moduleId, setModuleId] = useState('all')
 
   const filteredHistoricalRewards = useMemo(
     () => getDataInTimeRange(historicalRewards, timeRange),
     [timeRange, historicalRewards]
   )
+
+  const moduleIdsInRange = useMemo(
+    () => filteredHistoricalRewards.reduce<string[]>(
+      (acc, record) => [
+        ...acc,
+        ...Object.keys(record.totalScheduledRewards).filter((id) => !acc.includes(id))
+      ], ['all']
+    ), [filteredHistoricalRewards])
 
   return (
     <div>
@@ -46,8 +55,15 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
             {value}
           </button>
         ))}
+        <label htmlFor="moduleSelect">Module:
+          <select name="moduleSelect" id="moduleSelect" onChange={(event) => setModuleId(event.target.value)}>
+            {moduleIdsInRange.map((id) => (
+              <option value={id} key={id}>{id}</option>
+            ))}
+          </select>
+        </label>
       </div>
-      <Chart historicalRewards={filteredHistoricalRewards} />
+      <Chart historicalRewards={filteredHistoricalRewards} moduleId={moduleId} />
     </div>
   )
 }

@@ -19,7 +19,7 @@ async function getSparkContractAddress () {
 }
 
 /* eslint-disable max-len */
-const modules = {
+export const modules = {
   spark: {
     name: 'Spark',
     description: 'With its array of tools, resources, and support, Spark empowers users to spark new ideas, projects, and solutions that harness the full potential of Filecoin\'s decentralized storage protocol.',
