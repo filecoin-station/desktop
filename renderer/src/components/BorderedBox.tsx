@@ -2,8 +2,8 @@ import classNames from 'classnames'
 import { ComponentPropsWithoutRef, ReactNode } from 'react'
 
 type BorderedBoxProps = ComponentPropsWithoutRef<'div'> & {
-    children: ReactNode;
-    isGrouped?: boolean;
+  children: ReactNode;
+  isGrouped?: boolean;
 }
 
 const BorderedBox = ({

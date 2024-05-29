@@ -4,10 +4,10 @@ import { ComponentPropsWithoutRef, ElementType, ReactNode } from 'react'
 const DEFAULT_ELEMENT = 'button'
 
 type ButtonOwnProps<C> = {
-    variant: 'primary' | 'secondary';
-    icon?: ReactNode;
-    as?: C;
-    children: ReactNode;
+  variant: 'primary' | 'secondary';
+  icon?: ReactNode;
+  as?: C;
+  children: ReactNode;
 }
 
 type ButtonProps<C extends ElementType = typeof DEFAULT_ELEMENT>

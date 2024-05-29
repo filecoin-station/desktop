@@ -5,13 +5,13 @@ import classNames from 'classnames'
 const DEFAULT_ELEMENT = 'span'
 
 type TextOwnProps<C> = {
-    size?: '3xs' | '2xs' | 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
-    font?: 'title' | 'body' | 'mono';
-    bold?: boolean;
-    color?: 'black' | 'secondary' | 'primary' | 'white';
-    uppercase?: boolean;
-    as?: C;
-    children: ReactNode;
+  size?: '3xs' | '2xs' | 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl';
+  font?: 'title' | 'body' | 'mono';
+  bold?: boolean;
+  color?: 'black' | 'secondary' | 'primary' | 'white';
+  uppercase?: boolean;
+  as?: C;
+  children: ReactNode;
 }
 
 type TextProps<C extends ElementType = typeof DEFAULT_ELEMENT>

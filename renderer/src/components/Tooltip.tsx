@@ -16,10 +16,10 @@ const Tooltip = ({
   keepOpenOnClick,
   ...contentProps
 }: {
-    content: ReactNode;
-    trigger: ReactNode;
-    size?: 's' | 'm';
-    keepOpenOnClick?: boolean;
+  content: ReactNode;
+  trigger: ReactNode;
+  size?: 's' | 'm';
+  keepOpenOnClick?: boolean;
 } & ContentProps) => {
   const contentClassName = classNames(
     sizeClassNames[size],

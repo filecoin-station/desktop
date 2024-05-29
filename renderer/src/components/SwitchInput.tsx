@@ -3,13 +3,13 @@ import Text from './Text'
 import { useId } from 'react'
 
 type SwitchInputProps = {
-    name: string;
-    defaultChecked?: boolean;
-    checked?: boolean;
-    disabled?: boolean;
-    required?: boolean;
-    value?: string;
-    onChange: (value: boolean) => void;
+  name: string;
+  defaultChecked?: boolean;
+  checked?: boolean;
+  disabled?: boolean;
+  required?: boolean;
+  value?: string;
+  onChange: (value: boolean) => void;
 }
 
 const SwitchInput = ({

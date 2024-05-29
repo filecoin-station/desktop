@@ -3,11 +3,11 @@ import { Root, Overlay, Portal, Content } from '@radix-ui/react-dialog'
 import { useLocation } from 'react-router-dom'
 
 type OpenDialogOptions = {
-    content: ReactNode;
+  content: ReactNode;
 }
 type DialogContextType = {
-    openDialog: (options: OpenDialogOptions) => void;
-    closeDialog: () => void;
+  openDialog: (options: OpenDialogOptions) => void;
+  closeDialog: () => void;
 }
 
 const DialogContext = createContext<DialogContextType>({} as DialogContextType)
