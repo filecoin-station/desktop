@@ -2,8 +2,8 @@ import classNames from 'classnames'
 import { ReactNode } from 'react'
 
 type TagProps = {
-    children: ReactNode;
-    type: 'primary' | 'secondary' | 'dashed';
+  children: ReactNode;
+  type: 'primary' | 'secondary' | 'dashed';
 }
 
 const typeClassName = {
@@ -23,7 +23,7 @@ const Tag = ({
 
   return (
     <div className={className}>
-        {children}
+      {children}
     </div>
   )
 }
