@@ -35,7 +35,7 @@ const BalanceControl = ({
     processingTransaction: Wallet['processingTransaction'];
     transfer: () => void;
 }) => {
-  const { status } = useCurrentTransactionStatus(processingTransaction)
+  const { currentTransaction } = useCurrentTransactionStatus(processingTransaction)
   const hasSufficientBalance = Number(walletBalance) >= sendThreshold
 
   return (
@@ -49,7 +49,7 @@ const BalanceControl = ({
           </Text>
         </div>
         <div className='h-[45%] flex flex-col'>
-          {status === 'none' && (
+          {!currentTransaction && (
             <TooltipWrapper hasTooltip={!hasSufficientBalance}>
               <Button
                 type='button'
@@ -61,12 +61,17 @@ const BalanceControl = ({
               </Button>
             </TooltipWrapper>
           )}
-          {status === 'processing' && (
+          {currentTransaction?.status === 'processing' && (
             <div className='flex gap-3 items-center mt-2'>
               <Text font='mono' size='2xs' className="text-slate-50">Sending...</Text>
             </div>
           )}
-          {status === 'complete' && (
+          {currentTransaction?.status === 'failed' && (
+            <div className='flex gap-3 items-center'>
+              <Text font='mono' size='2xs' className="text-slate-50">Failed</Text>
+            </div>
+          )}
+          {currentTransaction?.status === 'succeeded' && (
             <div className='flex gap-3 items-center'>
               <CheckmarkIcon className="text-slate-50" />
               <Text font='mono' size='2xs' className="text-slate-50">Sent</Text>
