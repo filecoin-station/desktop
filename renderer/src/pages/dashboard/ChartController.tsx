@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { RewardsRecord } from 'src/hooks/StationRewards'
 import Chart from './Chart'
+import { Select, SelectItem } from 'src/components/Select'
 
 const timeRanges = ['1d', '7d', '1m', '1y', 'all'] as const
 type TimeRange = typeof timeRanges[number]
@@ -41,7 +42,7 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
     ), [filteredHistoricalRewards])
 
   return (
-    <div>
+    <div className='p-5'>
       <div className='flex gap-4'>
         {timeRanges.map(value => (
           <button
@@ -55,13 +56,15 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
             {value}
           </button>
         ))}
-        <label htmlFor="moduleSelect">Module:
-          <select name="moduleSelect" id="moduleSelect" onChange={(event) => setModuleId(event.target.value)}>
-            {moduleIdsInRange.map((id) => (
-              <option value={id} key={id}>{id}</option>
-            ))}
-          </select>
-        </label>
+        <Select label='Module' onValueChange={(value) => setModuleId(value)}>
+          {moduleIdsInRange.map((id) => (
+            <SelectItem
+              label={id}
+              value={id}
+              key={id}
+            />
+          ))}
+        </Select>
       </div>
       <Chart historicalRewards={filteredHistoricalRewards} moduleId={moduleId} />
     </div>
