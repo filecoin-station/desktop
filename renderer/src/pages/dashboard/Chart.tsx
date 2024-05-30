@@ -6,81 +6,25 @@ import {
   LineElement,
   Filler,
   TimeScale,
-  TimeSeriesScale
+  TimeSeriesScale,
+  Tooltip
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { RewardsRecord, sumAllRewards } from 'src/hooks/StationRewards'
+import { RewardsRecord } from 'src/hooks/StationRewards'
+import { formatFilValue, getRewardValue } from 'src/lib/utils'
 import { TimeRange } from './ChartController'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { DatasetIndex, ExternalToltipHandler, formatTickDate, updateTooltipElement } from './chart'
+import Text from 'src/components/Text'
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   Filler,
-  TimeSeriesScale,
-  TimeScale,
   LineElement,
-  TimeSeriesScale
+  Tooltip
 )
-
-const options = {
-  responsive: true,
-  animation: false,
-  plugins: {
-    legend: {
-      display: false
-    },
-    title: {
-      display: false
-    }
-  }
-} as const
-
-function getRewardValue (data: RewardsRecord['totalRewardsReceived'], moduleId: string) {
-  if (moduleId === 'all') {
-    return sumAllRewards(data)
-  }
-
-  return data[moduleId]
-}
-
-const timeFormatters = {
-  daily: new Intl.DateTimeFormat('en-US', {
-    day: 'numeric', month: 'short'
-  }),
-  monthly: new Intl.DateTimeFormat('en-GB', {
-    month: 'short', year: '2-digit'
-  })
-}
-
-function formatDate (date: string, index: number, timeRange: TimeRange) {
-  if (timeRange === '7d') {
-    return timeFormatters.daily.format(new Date(date))
-  }
-
-  if (timeRange === '1m') {
-    return index % 4 === 0
-      ? timeFormatters.daily.format(new Date(date))
-      : ''
-  }
-
-  if (timeRange === '1y' || timeRange === 'all') {
-    const dateVal = new Date(date)
-
-    return dateVal.getDate() === 1 ? timeFormatters.monthly.format(dateVal) : ''
-  }
-
-  return timeFormatters.daily.format(new Date(date))
-}
-
-const yStepSizeForTimeRange = {
-  '1d': 0.1,
-  '7d': 0.1,
-  '1m': 0.3,
-  '1y': 0.7,
-  all: 1
-}
 
 const Chart = ({
   historicalRewards,
@@ -91,23 +35,45 @@ const Chart = ({
   timeRange: TimeRange;
   moduleId: string;
 }) => {
-  const labels = historicalRewards.map(record => new Date(record.timestamp).getTime())
-
   const [aspectRatio, setAspectRatio] = useState(2.55)
   const containerRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
 
   function updateAspectRatio () {
     if (containerRef.current) {
-      const parent = containerRef.current.getBoundingClientRect()
-      containerRef.current.style.width = `${parent.width}px`
-      containerRef.current.style.height = `${parent.height}px`
-      setAspectRatio(parent.width / parent.height)
+      const { width, height } = containerRef.current.getBoundingClientRect()
+      containerRef.current.style.width = `${width}px`
+      containerRef.current.style.height = `${height}px`
+      setAspectRatio(width / height)
     }
   }
+
+  const onTooltipUpdate = useCallback<ExternalToltipHandler>(({ tooltip }) => {
+    if (!tooltipRef.current) {
+      return
+    }
+
+    const [date] = tooltip.title
+    const totalReceived = tooltip.dataPoints[DatasetIndex.TotalReceived].raw as number
+    const scheduled = tooltip.dataPoints[DatasetIndex.Scheduled].raw as number
+    const { x, y } = tooltip.dataPoints[DatasetIndex.Scheduled].element
+
+    updateTooltipElement({
+      element: tooltipRef.current,
+      date,
+      totalReceived,
+      scheduled,
+      position: { x, y }
+    })
+
+    return true
+  }, [tooltipRef])
 
   useEffect(() => {
     updateAspectRatio()
   }, [])
+
+  const labels = historicalRewards.map(record => new Date(record.timestamp).getTime())
 
   return (
     <div ref={containerRef} className='relative'>
@@ -123,7 +89,16 @@ const Chart = ({
             },
             title: {
               display: false
+            },
+            tooltip: {
+              enabled: false,
+              external: onTooltipUpdate
+              // external: externalTooltipHandler
             }
+          },
+          interaction: {
+            intersect: false,
+            mode: 'index'
           },
           layout: {
             padding: 0,
@@ -132,7 +107,6 @@ const Chart = ({
           scales: {
             y: {
               ticks: {
-                stepSize: yStepSizeForTimeRange[timeRange],
                 font: {
                   family: 'SpaceMono, mono',
                   size: 12
@@ -146,7 +120,8 @@ const Chart = ({
               },
               grid: {
                 color: '#D9D9E4',
-                drawTicks: false
+                drawTicks: false,
+                drawOnChartArea: true
               }
             },
             x: {
@@ -168,7 +143,7 @@ const Chart = ({
                 maxRotation: 0,
                 autoSkip: false,
                 callback: function (val, index) {
-                  return formatDate(this.getLabelForValue(Number(val)), index, timeRange)
+                  return formatTickDate(this.getLabelForValue(Number(val)), index, timeRange)
                 }
               }
             }
@@ -181,6 +156,8 @@ const Chart = ({
               label: 'Total rewards received',
               data: historicalRewards.map(record => getRewardValue(record.totalRewardsReceived, moduleId)),
               borderColor: '#2A1CF7',
+              fill: 'start',
+              backgroundColor: '#b5b2f6',
               pointRadius: 0,
               stepped: true
             },
@@ -198,6 +175,26 @@ const Chart = ({
           ]
         }}
       />
+      <div
+        ref={tooltipRef}
+        className={'absolute top-0 left-0  transition-transform opacity-0'}
+      >
+        <div className='flex flex-col gap-3 bg-black border border-slate-400 p-3 rounded-lg -translate-x-[50%]'>
+          <Text data-date font="mono" size='3xs' color='secondary' className='date'> </Text>
+          <div>
+            <Text font="mono" size='3xs' color='secondary' className='mb-1 block'>
+              Total rewards received:
+            </Text>
+            <Text font="mono" size='xs' color='white' bold as='p' data-totalReceived> </Text>
+          </div>
+          <div>
+            <Text font="mono" size='3xs' color='secondary' className='mb-1 block'>
+              Rewards accrued:
+            </Text>
+            <Text font="mono" size='xs' color='white' bold as='p' data-scheduled> </Text>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
