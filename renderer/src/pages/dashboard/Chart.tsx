@@ -20,9 +20,11 @@ import {
   formatTickDate,
   hoverCrossLines,
   updateTooltipElement,
-  renderPayoutEvents
+  renderPayoutEvents,
+  isPayoutPoint
 } from './chart-utils'
 import ChartTooltip from './ChartTooltip'
+import FilecoinSymbol from 'src/assets/img/icons/filecoin.svg'
 
 ChartJS.register(
   CategoryScale,
@@ -53,11 +55,16 @@ const Chart = ({
     }
   }
 
-  const onTooltipUpdate = useCallback<ExternalToltipHandler>(({ tooltip }) => {
+  const onTooltipUpdate = useCallback<ExternalToltipHandler>(({ tooltip, chart }) => {
     if (!tooltipRef.current) {
       return
     }
     const { title, dataPoints, opacity } = tooltip
+
+    const isPayout = isPayoutPoint(
+      chart.data.datasets[datasetIndex.totalRewards].data as number[],
+      dataPoints[datasetIndex.totalRewards].dataIndex
+    )
 
     const totalReceived = dataPoints[datasetIndex.totalRewards].raw as number
     const scheduled = dataPoints[datasetIndex.scheduled].raw as number
@@ -69,7 +76,8 @@ const Chart = ({
       totalReceived,
       scheduled,
       position: { x, y },
-      opacity
+      opacity,
+      lightBg: isPayout
     })
   }, [tooltipRef])
 
@@ -82,6 +90,7 @@ const Chart = ({
   return (
     <div ref={containerRef} className='relative flex-1 max-w-full'>
       <ChartTooltip ref={tooltipRef} />
+      <img data-filecoinsymbol className='absolute opacity-0' src={FilecoinSymbol} alt="Filecoin symbol" />
       <Line
         options={{
           responsive: true,

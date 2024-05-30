@@ -10,23 +10,54 @@ const ChartTooltip = forwardRef<HTMLDivElement>(function (_, ref) {
 
       <div
         data-content
-        className="transition-transform duration-200 ease-linear"
+        className="transition-transform duration-200 ease-linear group"
       >
-        <div className={`flex flex-col gap-3 p-3 rounded-lg bg-black border border-slate-400 w-[200px]
-        -translate-x-[50%] -translate-y-[150%]`}
+        <div className={`flex flex-col gap-3 p-3 rounded-lg w-[200px] border transition-all
+        -translate-x-[50%] -translate-y-[130%] group-data-[light=false]:border-slate-400
+        group-data-[light=true]:bg-white group-data-[light=false]:bg-black
+        group-data-[light=true]:border-dashed group-data-[light=true]:border-primary`}
         >
-          <Text data-date font="mono" size='3xs' className='date text-slate-400'> </Text>
+          <Text
+            data-date
+            font="mono"
+            size='3xs'
+            className='group-data-[light=true]:text-slate-800 group-data-[light=false]:text-slate-400'
+          >{' '}
+          </Text>
           <div>
-            <Text font="mono" size='3xs' className='mb-1 block text-slate-400'>
+            <Text
+              font="mono"
+              size='3xs'
+              className='mb-1 block group-data-[light=true]:text-slate-800 group-data-[light=false]:text-slate-400'
+            >
               Total rewards received:
             </Text>
-            <Text font="mono" size='xs' color='white' bold as='p' data-totalreceived> </Text>
+            <Text
+              font="mono"
+              size='xs'
+              bold
+              data-totalreceived
+              className='group-data-[light=true]:text-slate-800 group-data-[light=false]:text-white block'
+            >{' '}
+            </Text>
           </div>
           <div>
-            <Text font="mono" size='3xs'className='mb-1 block text-slate-400'>
+            <Text
+              font="mono"
+              size='3xs'
+              className='mb-1 block group-data-[light=true]:text-slate-800 group-data-[light=false]:text-slate-400'
+            >
               Rewards accrued:
             </Text>
-            <Text font="mono" size='xs' color='white' bold as='p' data-scheduled> </Text>
+            <Text
+              font="mono"
+              size='xs'
+              color='white'
+              bold
+              data-scheduled
+              className='group-data-[light=true]:text-primary group-data-[light=false]:text-white block'
+            >{' '}
+            </Text>
           </div>
         </div>
       </div>

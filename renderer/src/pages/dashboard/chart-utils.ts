@@ -1,4 +1,4 @@
-import { PluginChartOptions, Plugin } from 'chart.js'
+import { PluginChartOptions, Plugin, ChartDataset, ChartTypeRegistry, Point, BubbleDataPoint } from 'chart.js'
 import { TimeRange } from './ChartController'
 import { formatFilValue } from 'src/lib/utils'
 
@@ -65,6 +65,14 @@ export function formatTickDate (date: string, index: number, timeRange: TimeRang
   return formatDate(date)
 }
 
+export function isPayoutPoint (allData: number[], index: number) {
+  if (index === 0) return false
+
+  const prevVal = allData[index - 1]
+
+  return prevVal < allData[index]
+}
+
 // Update custom tooltip content imperatively, as this the easiest
 // way to integrate with chart.js, and is more efficient for a
 // constantly updating element than using regular React practices
@@ -74,7 +82,8 @@ export function updateTooltipElement ({
   totalReceived,
   scheduled,
   position,
-  opacity
+  opacity,
+  lightBg
 }: {
   element: HTMLDivElement;
   date: string;
@@ -82,6 +91,7 @@ export function updateTooltipElement ({
   scheduled: number;
   position: {x: number; y: number};
   opacity: number;
+  lightBg?: boolean;
 }) {
   // Tooltip data provides an opacity value that is 0 when the
   // mouse has left the chart area; 1 when inside the chart
@@ -102,9 +112,11 @@ export function updateTooltipElement ({
       `${formatFilValue(totalReceived.toString())} FIL`
     )
     element.querySelector('[data-scheduled]')?.replaceChildren(
-      `${formatFilValue(scheduled.toString())} FIL`
+      `${formatFilValue(scheduled.toString())} ${lightBg ? 'PAY' : ''} FIL`
     )
     content.style.transform = `translate(${position.x}px, ${position.y}px)`
+
+    content.setAttribute('data-light', lightBg ? 'true' : 'false')
   }
 
   const indicator = element.querySelector<HTMLDivElement>('[data-indicator]')
@@ -120,7 +132,7 @@ export const hoverCrossLines: CustomPlugin = {
   afterDatasetsDraw (chart) {
     const { tooltip, ctx, chartArea } = chart
 
-    if (!tooltip?.dataPoints?.length) return
+    if (!tooltip?.dataPoints?.length || tooltip.opacity === 0) return
 
     const { x, y } = tooltip.dataPoints[datasetIndex.scheduled].element
 
@@ -141,14 +153,10 @@ export const renderPayoutEvents: CustomPlugin = {
   events: [],
   afterDatasetsDraw (chart) {
     const totalRewardsData = chart.data.datasets[datasetIndex.totalRewards].data as number[]
+    const imgElement = document.querySelector<HTMLImageElement>('[data-filecoinsymbol]')
 
     for (let index = 0; index < totalRewardsData.length; index++) {
-      if (index === 0) continue
-
-      const prevVal = totalRewardsData[index - 1]
-      const isPayoutPoint = prevVal < totalRewardsData[index]
-
-      if (isPayoutPoint) {
+      if (isPayoutPoint(totalRewardsData, index)) {
         const point = chart.getDatasetMeta(datasetIndex.totalRewards).data[index]
 
         // Ensure the line doesn't go out of bounds
@@ -163,12 +171,9 @@ export const renderPayoutEvents: CustomPlugin = {
         chart.ctx.lineTo(point.x, maxY)
         chart.ctx.stroke()
 
-        chart.ctx.strokeStyle = colors.totalRewardsLine
-        chart.ctx.setLineDash([0])
-        chart.ctx.beginPath()
-        chart.ctx.ellipse(point.x, maxY, 11, 11, Math.PI * 2, 0, 360, false)
-        chart.ctx.stroke()
-        chart.ctx.fill()
+        if (imgElement) {
+          chart.ctx.drawImage(imgElement, point.x - 12, maxY - 12)
+        }
       }
     }
   }

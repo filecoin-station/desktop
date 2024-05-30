@@ -45,14 +45,14 @@ const ActivityInfo = () => {
         </Text>
         <Text font='mono' size='s'>{totalJobs.toLocaleString()}</Text>
       </BorderedBox>
-      <div>
+      <div className='h-full max-h-[68vh] flex flex-col'>
         <BorderedBox className='py-4 px-5' isGrouped>
           <Text as='h3' font='mono' size='3xs' color='primary' uppercase>
               &#47;&#47; Activity ... :
           </Text>
         </BorderedBox>
         <BorderedBox
-          className='p-5 h-full  overflow-y-scroll custom-scrollbar max-h-[calc(100%_-_51px)]'
+          className='p-5 h-full overflow-y-scroll custom-scrollbar flex-1 max-h-full'
           isGrouped
         >
           {Object.entries(activitiesByDate).map(([date, log]) => (
