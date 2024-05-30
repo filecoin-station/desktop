@@ -25,7 +25,7 @@ export const fonts = {
 export const datasetIndex = {
   totalRewards: 0,
   scheduled: 1
-}
+} as const
 
 export const dateTimeFormatters = {
   daily: new Intl.DateTimeFormat(window.navigator.language, {
@@ -134,4 +134,43 @@ export const hoverCrossLines: CustomPlugin = {
     ctx.lineTo(x, chartArea.top + chartArea.height)
     ctx.stroke()
   }
+}
+
+export const renderPayoutEvents: CustomPlugin = {
+  id: 'renderPayoutEvents',
+  events: [],
+  afterDatasetsDraw (chart) {
+    const totalRewardsData = chart.data.datasets[datasetIndex.totalRewards].data as number[]
+
+    for (let index = 0; index < totalRewardsData.length; index++) {
+      if (index === 0) continue
+
+      const prevVal = totalRewardsData[index - 1]
+      const isPayoutPoint = prevVal < totalRewardsData[index]
+
+      if (isPayoutPoint) {
+        const point = chart.getDatasetMeta(datasetIndex.totalRewards).data[index]
+
+        // Ensure the line doesn't go out of bounds
+        const idealStrokeLength = 50
+        const maxY = Math.max(point.y - idealStrokeLength, chart.chartArea.top)
+
+        chart.ctx.fillStyle = '#fff'
+        chart.ctx.strokeStyle = colors.crossLine
+        chart.ctx.setLineDash([4, 4])
+        chart.ctx.beginPath()
+        chart.ctx.moveTo(point.x, point.y)
+        chart.ctx.lineTo(point.x, maxY)
+        chart.ctx.stroke()
+
+        chart.ctx.strokeStyle = colors.totalRewardsLine
+        chart.ctx.setLineDash([0])
+        chart.ctx.beginPath()
+        chart.ctx.ellipse(point.x, maxY, 11, 11, Math.PI * 2, 0, 360, false)
+        chart.ctx.stroke()
+        chart.ctx.fill()
+      }
+    }
+  }
+
 }

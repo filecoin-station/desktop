@@ -19,7 +19,8 @@ import {
   fonts,
   formatTickDate,
   hoverCrossLines,
-  updateTooltipElement
+  updateTooltipElement,
+  renderPayoutEvents
 } from './chart'
 import ChartTooltip from './ChartTooltip'
 
@@ -81,7 +82,7 @@ const Chart = ({
   const labels = historicalRewards.map(record => new Date(record.timestamp).getTime())
 
   return (
-    <div ref={containerRef} className='relative'>
+    <div ref={containerRef} className='relative '>
       <ChartTooltip ref={tooltipRef} />
       <Line
         options={{
@@ -186,7 +187,7 @@ const Chart = ({
             }
           ]
         }}
-        plugins={[hoverCrossLines]}
+        plugins={[hoverCrossLines, renderPayoutEvents]}
       />
 
     </div>
