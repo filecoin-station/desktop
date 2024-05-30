@@ -50,6 +50,10 @@
     margin-block-end: 0;
   }
 
+  canvas {
+    max-width: 100%;
+  }
+
   .app-bg {
     background-image: url('./assets/img/bg-pattern.svg');
     background-repeat: no-repeat;

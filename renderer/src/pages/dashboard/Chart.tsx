@@ -21,7 +21,7 @@ import {
   hoverCrossLines,
   updateTooltipElement,
   renderPayoutEvents
-} from './chart'
+} from './chart-utils'
 import ChartTooltip from './ChartTooltip'
 
 ChartJS.register(
@@ -47,10 +47,8 @@ const Chart = ({
   const tooltipRef = useRef<HTMLDivElement>(null)
 
   function updateAspectRatio () {
-    if (containerRef.current) {
-      const { width, height } = containerRef.current.getBoundingClientRect()
-      containerRef.current.style.width = `${width}px`
-      containerRef.current.style.height = `${height}px`
+    if (containerRef.current?.parentElement) {
+      const { width, height } = containerRef.current?.parentElement?.getBoundingClientRect()
       setAspectRatio(width / height)
     }
   }
@@ -82,7 +80,7 @@ const Chart = ({
   const labels = historicalRewards.map(record => new Date(record.timestamp).getTime())
 
   return (
-    <div ref={containerRef} className='relative '>
+    <div ref={containerRef} className='relative flex-1 max-w-full'>
       <ChartTooltip ref={tooltipRef} />
       <Line
         options={{

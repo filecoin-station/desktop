@@ -43,7 +43,7 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
     ), [filteredHistoricalRewards])
 
   return (
-    <div className=''>
+    <div className='flex-1 flex flex-col'>
       <div className='flex gap-4 p-5'>
         <ToggleGroup onValueChange={(value: TimeRange) => setTimeRange(value)} defaultValue={timeRange}>
           {timeRanges.map(value => (
@@ -71,7 +71,7 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
           ))}
         </Select>
       </div>
-      <section className='px-2'>
+      <section className='px-2 flex-1 flex' data-chartparent>
         <Chart historicalRewards={filteredHistoricalRewards} moduleId={moduleId} timeRange={timeRange} />
       </section>
     </div>
