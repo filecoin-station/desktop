@@ -5,17 +5,21 @@ import {
   PointElement,
   LineElement,
   Filler,
-  TimeScale,
-  TimeSeriesScale,
   Tooltip
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { RewardsRecord } from 'src/hooks/StationRewards'
-import { formatFilValue, getRewardValue } from 'src/lib/utils'
+import { getRewardValue } from 'src/lib/utils'
 import { TimeRange } from './ChartController'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { DatasetIndex, ExternalToltipHandler, formatTickDate, updateTooltipElement } from './chart'
-import Text from 'src/components/Text'
+import {
+  DatasetIndex,
+  ExternalToltipHandler,
+  formatTickDate,
+  hoverCrossLines,
+  updateTooltipElement
+} from './chart'
+import ChartTooltip from './ChartTooltip'
 
 ChartJS.register(
   CategoryScale,
@@ -52,21 +56,20 @@ const Chart = ({
     if (!tooltipRef.current) {
       return
     }
+    const { title, dataPoints, opacity } = tooltip
 
-    const [date] = tooltip.title
-    const totalReceived = tooltip.dataPoints[DatasetIndex.TotalReceived].raw as number
-    const scheduled = tooltip.dataPoints[DatasetIndex.Scheduled].raw as number
-    const { x, y } = tooltip.dataPoints[DatasetIndex.Scheduled].element
+    const totalReceived = dataPoints[DatasetIndex.TotalReceived].raw as number
+    const scheduled = dataPoints[DatasetIndex.Scheduled].raw as number
+    const { x, y } = dataPoints[DatasetIndex.Scheduled].element
 
     updateTooltipElement({
       element: tooltipRef.current,
-      date,
+      date: title?.[0],
       totalReceived,
       scheduled,
-      position: { x, y }
+      position: { x, y },
+      opacity
     })
-
-    return true
   }, [tooltipRef])
 
   useEffect(() => {
@@ -77,6 +80,7 @@ const Chart = ({
 
   return (
     <div ref={containerRef} className='relative'>
+      <ChartTooltip ref={tooltipRef} />
       <Line
         options={{
           responsive: true,
@@ -93,7 +97,6 @@ const Chart = ({
             tooltip: {
               enabled: false,
               external: onTooltipUpdate
-              // external: externalTooltipHandler
             }
           },
           interaction: {
@@ -127,8 +130,10 @@ const Chart = ({
             x: {
               grid: {
                 drawOnChartArea: false,
-                drawTicks: false
+                drawTicks: false,
+                z: 1
               },
+
               border: {
                 display: false
               },
@@ -147,6 +152,12 @@ const Chart = ({
                 }
               }
             }
+          },
+          datasets: {
+            line: {
+              pointHoverRadius: 0,
+              pointRadius: 0
+            }
           }
         }}
         data={{
@@ -158,7 +169,6 @@ const Chart = ({
               borderColor: '#2A1CF7',
               fill: 'start',
               backgroundColor: '#b5b2f6',
-              pointRadius: 0,
               stepped: true
             },
             {
@@ -174,27 +184,9 @@ const Chart = ({
             }
           ]
         }}
+        plugins={[hoverCrossLines]}
       />
-      <div
-        ref={tooltipRef}
-        className={'absolute top-0 left-0  transition-transform opacity-0'}
-      >
-        <div className='flex flex-col gap-3 bg-black border border-slate-400 p-3 rounded-lg -translate-x-[50%]'>
-          <Text data-date font="mono" size='3xs' color='secondary' className='date'> </Text>
-          <div>
-            <Text font="mono" size='3xs' color='secondary' className='mb-1 block'>
-              Total rewards received:
-            </Text>
-            <Text font="mono" size='xs' color='white' bold as='p' data-totalReceived> </Text>
-          </div>
-          <div>
-            <Text font="mono" size='3xs' color='secondary' className='mb-1 block'>
-              Rewards accrued:
-            </Text>
-            <Text font="mono" size='xs' color='white' bold as='p' data-scheduled> </Text>
-          </div>
-        </div>
-      </div>
+
     </div>
   )
 }

@@ -1,8 +1,9 @@
-import { PluginChartOptions } from 'chart.js'
+import { PluginChartOptions, ChartType, Plugin } from 'chart.js'
 import { TimeRange } from './ChartController'
 import { formatFilValue } from 'src/lib/utils'
 
 export type ExternalToltipHandler = PluginChartOptions<'line'>['plugins']['tooltip']['external']
+export type CustomPlugin = Plugin<'line', unknown>
 
 // At any given point, chart dataset points are held in an array,
 // 0 is totalReceived data, 1 is scheduled data
@@ -57,18 +58,25 @@ export function updateTooltipElement ({
   date,
   totalReceived,
   scheduled,
-  position
+  position,
+  opacity
 }: {
   element: HTMLDivElement;
   date: string;
   totalReceived: number;
   scheduled: number;
   position: {x: number; y: number};
+  opacity: number;
 }) {
+  if (opacity === 0) {
+    element.style.opacity = '0'
+    return
+  }
+
   element.querySelector('[data-date]')?.replaceChildren(
     formatDate(date)
   )
-  element.querySelector('[data-totalReceived]')?.replaceChildren(
+  element.querySelector('[data-totalreceived]')?.replaceChildren(
     `${formatFilValue(totalReceived.toString())} FIL`
   )
   element.querySelector('[data-scheduled]')?.replaceChildren(
@@ -77,4 +85,26 @@ export function updateTooltipElement ({
 
   element.style.opacity = '1'
   element.style.transform = `translate(${position.x}px, ${position.y}px)`
+}
+
+// Custom tooltip to draw cross lines at the tooltip point
+export const hoverCrossLines: CustomPlugin = {
+  id: 'hoverCrossLines',
+  afterDatasetsDraw (chart) {
+    const { tooltip, ctx, chartArea } = chart
+
+    if (!tooltip?.dataPoints?.length) return
+
+    const { x, y } = tooltip.dataPoints[DatasetIndex.Scheduled].element
+
+    ctx.strokeStyle = '#A0A1BA'
+    ctx.lineWidth = 1
+    ctx.setLineDash([4, 4])
+    ctx.beginPath()
+    ctx.moveTo(chartArea.left, y)
+    ctx.lineTo(chartArea.width + chartArea.left, y)
+    ctx.moveTo(x, chartArea.top)
+    ctx.lineTo(x, chartArea.top + chartArea.height)
+    ctx.stroke()
+  }
 }
