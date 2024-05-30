@@ -1,15 +1,30 @@
-import { PluginChartOptions, ChartType, Plugin } from 'chart.js'
+import { PluginChartOptions, Plugin } from 'chart.js'
 import { TimeRange } from './ChartController'
 import { formatFilValue } from 'src/lib/utils'
 
 export type ExternalToltipHandler = PluginChartOptions<'line'>['plugins']['tooltip']['external']
 export type CustomPlugin = Plugin<'line', unknown>
 
+export const colors = {
+  black: '#000',
+  xLine: '#D9D9E4',
+  xAxisText: '#5F5A73',
+  totalRewardsLine: '#2A1CF7',
+  totalRewardsBg: '#b5b2f6',
+  scheduledBg: '#dddcf5',
+  crossLine: '#A0A1BA'
+}
+
+export const fonts = {
+  body: 'SpaceGrotesk, serif',
+  mono: 'SpaceMono, mono'
+}
+
 // At any given point, chart dataset points are held in an array,
 // 0 is totalReceived data, 1 is scheduled data
-export enum DatasetIndex {
-  TotalReceived = 0,
-  Scheduled = 1
+export const datasetIndex = {
+  totalRewards: 0,
+  scheduled: 1
 }
 
 export const dateTimeFormatters = {
@@ -68,23 +83,35 @@ export function updateTooltipElement ({
   position: {x: number; y: number};
   opacity: number;
 }) {
+  // Tooltip data provides an opacity value that is 0 when the
+  // mouse has left the chart area; 1 when inside the chart
   if (opacity === 0) {
     element.style.opacity = '0'
     return
   }
 
-  element.querySelector('[data-date]')?.replaceChildren(
-    formatDate(date)
-  )
-  element.querySelector('[data-totalreceived]')?.replaceChildren(
-    `${formatFilValue(totalReceived.toString())} FIL`
-  )
-  element.querySelector('[data-scheduled]')?.replaceChildren(
-    `${formatFilValue(scheduled.toString())} FIL`
-  )
-
   element.style.opacity = '1'
-  element.style.transform = `translate(${position.x}px, ${position.y}px)`
+
+  const content = element.querySelector<HTMLDivElement>('[data-content]')
+
+  if (content) {
+    element.querySelector('[data-date]')?.replaceChildren(
+      formatDate(date)
+    )
+    element.querySelector('[data-totalreceived]')?.replaceChildren(
+      `${formatFilValue(totalReceived.toString())} FIL`
+    )
+    element.querySelector('[data-scheduled]')?.replaceChildren(
+      `${formatFilValue(scheduled.toString())} FIL`
+    )
+    content.style.transform = `translate(${position.x}px, ${position.y}px)`
+  }
+
+  const indicator = element.querySelector<HTMLDivElement>('[data-indicator]')
+
+  if (indicator) {
+    indicator.style.transform = `translate(${position.x}px, ${position.y}px)`
+  }
 }
 
 // Custom tooltip to draw cross lines at the tooltip point
@@ -95,9 +122,9 @@ export const hoverCrossLines: CustomPlugin = {
 
     if (!tooltip?.dataPoints?.length) return
 
-    const { x, y } = tooltip.dataPoints[DatasetIndex.Scheduled].element
+    const { x, y } = tooltip.dataPoints[datasetIndex.scheduled].element
 
-    ctx.strokeStyle = '#A0A1BA'
+    ctx.strokeStyle = colors.crossLine
     ctx.lineWidth = 1
     ctx.setLineDash([4, 4])
     ctx.beginPath()

@@ -13,8 +13,10 @@ import { getRewardValue } from 'src/lib/utils'
 import { TimeRange } from './ChartController'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
-  DatasetIndex,
+  datasetIndex,
   ExternalToltipHandler,
+  colors,
+  fonts,
   formatTickDate,
   hoverCrossLines,
   updateTooltipElement
@@ -58,9 +60,9 @@ const Chart = ({
     }
     const { title, dataPoints, opacity } = tooltip
 
-    const totalReceived = dataPoints[DatasetIndex.TotalReceived].raw as number
-    const scheduled = dataPoints[DatasetIndex.Scheduled].raw as number
-    const { x, y } = dataPoints[DatasetIndex.Scheduled].element
+    const totalReceived = dataPoints[datasetIndex.totalRewards].raw as number
+    const scheduled = dataPoints[datasetIndex.scheduled].raw as number
+    const { x, y } = dataPoints[datasetIndex.scheduled].element
 
     updateTooltipElement({
       element: tooltipRef.current,
@@ -111,18 +113,18 @@ const Chart = ({
             y: {
               ticks: {
                 font: {
-                  family: 'SpaceMono, mono',
+                  family: fonts.mono,
                   size: 12
                 },
                 padding: 10,
-                color: '#000'
+                color: colors.black
               },
               border: {
                 dash: [4, 4],
                 display: false
               },
               grid: {
-                color: '#D9D9E4',
+                color: colors.xLine,
                 drawTicks: false,
                 drawOnChartArea: true
               }
@@ -138,9 +140,9 @@ const Chart = ({
                 display: false
               },
               ticks: {
-                color: '#5F5A73',
+                color: colors.xAxisText,
                 font: {
-                  family: 'SpaceGrotesk, serif',
+                  family: fonts.body,
                   size: 12
                 },
                 align: 'center',
@@ -166,9 +168,9 @@ const Chart = ({
             {
               label: 'Total rewards received',
               data: historicalRewards.map(record => getRewardValue(record.totalRewardsReceived, moduleId)),
-              borderColor: '#2A1CF7',
+              borderColor: colors.totalRewardsLine,
               fill: 'start',
-              backgroundColor: '#b5b2f6',
+              backgroundColor: colors.totalRewardsBg,
               stepped: true
             },
             {
@@ -176,11 +178,11 @@ const Chart = ({
               data: historicalRewards.map(record =>
                 getRewardValue(record.totalScheduledRewards, moduleId) +
           getRewardValue(record.totalRewardsReceived, moduleId)),
-              borderColor: '#dddcf5',
+              borderColor: colors.scheduledBg,
               pointRadius: 0,
               tension: 0.4,
               fill: '-1',
-              backgroundColor: '#dddcf5'
+              backgroundColor: colors.scheduledBg
             }
           ]
         }}
