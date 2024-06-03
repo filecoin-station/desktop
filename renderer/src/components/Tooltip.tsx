@@ -1,34 +1,50 @@
 import { Root, Portal, Content, Arrow, Trigger } from '@radix-ui/react-tooltip'
 import classNames from 'classnames'
-import { ComponentProps, ReactNode } from 'react'
+import { ComponentProps, ReactNode, useEffect, useState } from 'react'
 
 const sizeClassNames = {
   s: 'py-1 px-2 w-fit text-body-xxs',
-  m: 'py-4 w-[232px] text-body-xs'
+  m: 'p-4 w-[232px] text-body-xs'
+}
+const bgClassNames = {
+  light: 'bg-white text-black',
+  dark: 'bg-black text-white'
 }
 
 type ContentProps = ComponentProps<typeof Content>
-
-const Tooltip = ({
-  content,
-  trigger,
-  size = 's',
-  keepOpenOnClick,
-  ...contentProps
-}: {
+type TooltipProps = ContentProps & {
+  open?: boolean;
   content: ReactNode;
   trigger: ReactNode;
   size?: 's' | 'm';
+  bg?: 'light' | 'dark';
   keepOpenOnClick?: boolean;
-} & ContentProps) => {
+}
+
+const Tooltip = ({
+  open: receivedOpen,
+  content,
+  trigger,
+  size = 's',
+  bg = 'dark',
+  keepOpenOnClick,
+  ...contentProps
+}: TooltipProps) => {
+  const [isOpen, setIsOpen] = useState(receivedOpen)
+
   const contentClassName = classNames(
     sizeClassNames[size],
-    `bg-black rounded select-none text-white pointer-events-none
+    bgClassNames[bg],
+    ` rounded select-none pointer-events-none z-10 max-w-[232px]
      data-[state=delayed-open]:animate-fadeIn data-[state=closed]:animate-fadeOut`
   )
 
+  useEffect(() => {
+    setIsOpen(receivedOpen)
+  }, [receivedOpen])
+
   return (
-    <Root>
+    <Root open={isOpen} onOpenChange={setIsOpen}>
       <Trigger asChild>
         {trigger}
       </Trigger>
@@ -42,7 +58,7 @@ const Tooltip = ({
           {...contentProps}
         >
           {content}
-          <Arrow height={8} width={10} className="fill-black" />
+          <Arrow height={8} width={10} className={bg === 'dark' ? 'fill-black' : 'fill-white'} />
         </Content>
       </Portal>
     </Root>

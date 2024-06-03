@@ -5,13 +5,19 @@ import BorderedBox from 'src/components/BorderedBox'
 import Text from 'src/components/Text'
 import Address from 'src/components/Address'
 import LinkOut from 'src/assets/img/icons/link-out.svg?react'
+import TransferWrapper from './TransferWrapper'
 
 const Wallet = () => {
   const {
     walletBalance,
     stationAddress,
     stationAddress0x,
-    walletTransactions
+    walletTransactions,
+    destinationFilAddress,
+    editDestinationAddress,
+    transferAllFundsToDestinationWallet,
+    processingTransaction,
+    dismissCurrentTransaction
   } = useWallet()
 
   return (
@@ -50,8 +56,15 @@ const Wallet = () => {
           </div>
         </section>
       </main>
-      <section className='w-1/2 bg-black h-screen'>
-      </section>
+      <TransferWrapper
+        walletBalance={walletBalance}
+        destinationFilAddress={destinationFilAddress}
+        editDestinationAddress={editDestinationAddress}
+        transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
+        stationAddress={stationAddress}
+        processingTransaction={processingTransaction}
+        dismissCurrentTransaction={dismissCurrentTransaction}
+      />
     </div>
   )
 }

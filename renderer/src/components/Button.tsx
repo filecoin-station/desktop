@@ -14,8 +14,8 @@ type ButtonProps<C extends ElementType = typeof DEFAULT_ELEMENT>
     = ButtonOwnProps<C> & ComponentPropsWithoutRef<C>
 
 const variantClassNames = {
-  primary: 'bg-primary text-white',
-  secondary: 'bg-slate-50 text-primary outline-1 outline-dashed outline-primary'
+  primary: 'py-2 px-6 bg-primary text-white disabled:text-slate-400',
+  secondary: 'py-2 px-6 bg-slate-50 text-primary outline-1 outline-dashed outline-primary disabled:text-blue-300'
 }
 
 const Button = <C extends ElementType = typeof DEFAULT_ELEMENT>({
@@ -28,8 +28,8 @@ const Button = <C extends ElementType = typeof DEFAULT_ELEMENT>({
   const Component = as || DEFAULT_ELEMENT
 
   const className = classNames(
-    `flex gap-2 items-center font-mono text-2xs py-2 px-6 rounded-[28px] 
-     focus:ring ring-slate-400 focus:outline-0`,
+    `flex gap-2 items-center font-mono text-2xs rounded-[28px] 
+     focus:ring ring-slate-400 focus:outline-0 disabled:cursor-not-allowed`,
     variantClassNames[variant],
     props.className
   )

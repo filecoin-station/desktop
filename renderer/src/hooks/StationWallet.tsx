@@ -16,7 +16,7 @@ import {
 } from 'src/typings'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
 
-interface Wallet {
+export interface Wallet {
   stationAddress: string;
   stationAddress0x: string;
   destinationFilAddress: string | undefined;
