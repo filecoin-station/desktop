@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
+import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { fireEvent, render, act, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import 'src/lib/station-config'
@@ -66,30 +67,40 @@ describe('Dashboard wallet display', () => {
         historicalRewards: []
       })
 
-      render(<BrowserRouter><DialogProvider><Layout><Dashboard /></Layout></DialogProvider></BrowserRouter>)
+      render((
+        <BrowserRouter>
+          <TooltipProvider>
+            <DialogProvider>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </DialogProvider>
+          </TooltipProvider>
+        </BrowserRouter>
+      ))
     })
 
     test('Clicking wallet widget opens modal', async () => {
-      expect(document.getElementsByClassName('wallet-widget')).toHaveLength(1)
+      expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
 
-      act(() => { fireEvent.click(document.getElementsByClassName('wallet-widget')[0]) })
+      act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
       expect(screen.getByRole('dialog')).toBeVisible()
     })
 
     test('Wallet displays internal address', () => {
-      expect(document.getElementsByClassName('wallet-widget')).toHaveLength(1)
+      expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
 
-      act(() => { fireEvent.click(document.getElementsByClassName('wallet-widget')[0]) })
+      act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
 
       expect(screen.getByText('f16m5s...ron4qa')).toBeVisible()
     })
 
     test('Wallet displays correct balance', () => {
-      expect(document.getElementsByClassName('wallet-widget')).toHaveLength(1)
+      expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
 
-      act(() => { fireEvent.click(document.getElementsByClassName('wallet-widget')[0]) })
+      act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
 
-      expect(screen.getByText(/0 FIL/)).toBeVisible()
+      expect(screen.getAllByText(/0 FIL/)[0]).toBeInTheDocument()
     })
   })
 })

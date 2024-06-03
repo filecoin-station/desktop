@@ -58,11 +58,20 @@ module.exports = {
         to: {
           opacity: 0
         }
+      },
+      spin: {
+        from: {
+          transform: 'rotate(0deg);'
+        },
+        to: {
+          transform: 'rotate(360deg);'
+        }
       }
     },
     animation: {
       fadeIn: 'fadeIn 200ms ease',
-      fadeOut: 'fadeOut 200ms ease'
+      fadeOut: 'fadeOut 200ms ease',
+      spin: 'spin 1s linear infinite'
     },
     colors: {
       white: '#fff',
