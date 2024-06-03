@@ -29,6 +29,7 @@ const RewardsInfo = ({
               trigger={
                 <i><InfoIcon className='text-primary relative -top-3' /></i>
               }
+              style={{ maxWidth: '230px' }}
               content={`This is the reward total you have accrued since your last payout. 
               Scheduled earning will be sent to your Station Wallet approximately once a month, 
               provided you have earned more than the payout threshold.`}
