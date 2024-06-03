@@ -10,8 +10,8 @@ const Select = ({
   children,
   ...rest
 }: {
-    label: string;
-    children: ReactNode;
+  label: string;
+  children: ReactNode;
 } & SelectRootProps) => {
   return (
     <Root {...rest}>

@@ -7,8 +7,8 @@ const RewardsInfo = ({
   totalRewardsReceived,
   scheduledRewards
 }: {
-    totalRewardsReceived: number;
-    scheduledRewards?: string;
+  totalRewardsReceived: number;
+  scheduledRewards?: string;
 }) => {
   return (
     <section className="flex justify-between">

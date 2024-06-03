@@ -29,12 +29,12 @@ const ActivityInfo = () => {
   const activitiesByDate = useMemo(() => activities
     .sort((x, y) => y.timestamp.getTime() - x.timestamp.getTime())
     .reduce<Record<string, Activity[]>>((groups, activity) => {
-      const date = dayjs(activity.timestamp).format('YYYY-MM-DD')
-      return {
-        ...groups,
-        [date]: groups[date] ? groups[date].concat(activity) : [activity]
-      }
-    }, {})
+    const date = dayjs(activity.timestamp).format('YYYY-MM-DD')
+    return {
+      ...groups,
+      [date]: groups[date] ? groups[date].concat(activity) : [activity]
+    }
+  }, {})
   , [activities])
 
   return (
