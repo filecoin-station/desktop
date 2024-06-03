@@ -87,9 +87,12 @@ class WalletBackend {
       await fs.readFile(join(__dirname, 'filforwarder-abi.json'), 'utf8'),
       this.provider
     ).connect(this.signer)
+    const SparkImpactEvaluator = await import(
+      '@filecoin-station/spark-impact-evaluator'
+    )
     this.meridian = new ethers.Contract(
-      '0x811765AccE724cD5582984cb35f5dE02d587CA12',
-      await fs.readFile(join(__dirname, 'meridian-abi.json'), 'utf8'),
+      SparkImpactEvaluator.ADDRESS,
+      SparkImpactEvaluator.ABI,
       this.provider
     )
 
