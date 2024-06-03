@@ -39,7 +39,7 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
       (acc, record) => [
         ...acc,
         ...Object.keys(record.totalScheduledRewards).filter((id) => !acc.includes(id))
-      ], ['all']
+      ], ['All modules']
     ), [filteredHistoricalRewards])
 
   return (
@@ -55,7 +55,13 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
             </ToggleGroupButton>
           ))}
         </ToggleGroup>
-        <Select label='Module' onValueChange={(value) => setModuleId(value)}>
+        <Select
+          label='Module'
+          onValueChange={(value) => {
+            setModuleId(value === 'All modules' ? 'all' : value)
+          }}
+          defaultValue='All modules'
+        >
           {moduleIdsInRange.map((id) => (
             <SelectItem
               label={id}
