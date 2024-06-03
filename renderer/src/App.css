@@ -78,7 +78,7 @@
       transform calc(0.3s * var(--factor)) ease, 
       padding calc(0.3s * var(--factor)) ease, 
       max-height calc(0.3s * var(--factor)) ease, 
-      background-color calc(0.3s * var(--factor)) calc(0.6s * var(--factor)) ease;
+      background-color calc(0.3s * var(--factor)) calc(0.3s * var(--factor)) ease;
   }
   
   .destination-address-form-info {
@@ -88,8 +88,12 @@
   .destination-address-form-input {
     transition: 
       transform calc(0.3s * var(--factor)) ease,
-      background-color calc(0.3s * var(--factor)) calc(0.6s * var(--factor)) ease,
-      color calc(0.3s * var(--factor)) calc(0.6s * var(--factor)) ease
+      background-color calc(0.3s * var(--factor)) calc(0.3s * var(--factor)) ease,
+      color calc(0.3s * var(--factor)) calc(0.3s * var(--factor)) ease
+  }
+
+  .balance-control {
+    transition: all 0.3s ease;
   }
 }
 

@@ -27,9 +27,10 @@ const TransferWrapper = ({
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
   dismissCurrentTransaction: Wallet['dismissCurrentTransaction'];
 }) => {
-  const [isShowingConfirm, setIsShowingConfirm] = useState(false)
+  /* const [isShowingConfirm, setIsShowingConfirm] = useState(false) */
+  const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)
 
-  const walletBalance = '0'
+  const walletBalance = '10'
   const [destinationFilAddress, editDestinationAddress] = useState('')
 
   return (
@@ -44,7 +45,9 @@ const TransferWrapper = ({
           )} */}
 
           <Transition
+            unmountOnEnd
             on={!destinationFilAddress}
+            onEnd={() => setIsShowingAddressEdit(true)}
             outClass='animate-addressFormMoveUp'
             className='absolute w-[80%] mx-auto left-0 right-0 top-[70%] -translate-y-[50%]'
           >
@@ -55,29 +58,39 @@ const TransferWrapper = ({
             />
           </Transition>
 
-          {/* {destinationFilAddress && (
+          {isShowingEditAddress && (
             <EditDestinationAddressForm
               destinationAddress={destinationFilAddress}
               editDestinationAddress={editDestinationAddress}
             />
-          )} */}
+          )}
 
-          {/* {destinationFilAddress && !isShowingConfirm && (
+          <Transition
+            on={isShowingEditAddress}
+            unmountOnEnd
+            className='absolute top-[65%] left-0 right-0 mx-auto -translate-y-[50%]'
+          >
             <BalanceControl
               walletBalance={walletBalance}
               sendThreshold={SEND_THRESHOLD}
               processingTransaction={processingTransaction}
-              transfer={() => setIsShowingConfirm(true)}
+              transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
+              /* transfer={() => setIsShowingConfirm(true)} */
             />
-          )}
+          </Transition>
 
-          {isShowingConfirm && (
+          {/* <Transition
+            on={isShowingConfirm}
+            unmountOnEnd
+            className='absolute top-[55%] left-0 right-0 mx-auto -translate-y-[50%]'
+          >
             <ConfirmTransfer
               walletBalance={walletBalance}
               transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
               hide={() => setIsShowingConfirm(false)}
             />
-          )} */}
+          </Transition> */}
+
         </>
       )}
 

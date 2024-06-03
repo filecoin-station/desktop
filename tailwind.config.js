@@ -80,8 +80,8 @@ module.exports = {
       fadeIn: 'fadeIn 200ms ease forwards',
       fadeOut: 'fadeOut 200ms ease forwards',
       spin: 'spin 1s linear infinite',
-      addressFormMoveUp: `addressFormMoveUp calc(0.8s * var(--factor)) 
-      calc(0.2s * var(--factor))
+      addressFormMoveUp: `addressFormMoveUp calc(0.7s * var(--factor)) 
+      calc(0.1s * var(--factor))
       cubic-bezier(0.87, 0, 0.13, 1) forwards`
     },
     colors: {

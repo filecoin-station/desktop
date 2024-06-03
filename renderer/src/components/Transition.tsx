@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { type ReactNode, useEffect, useState, useRef, ElementType, ComponentPropsWithoutRef } from 'react'
+import { type ReactNode, useEffect, useState, useRef, ElementType, ComponentPropsWithoutRef, TransitionEvent } from 'react'
 
 const DEFAULT_ELEMENT = 'div'
 
@@ -8,6 +8,7 @@ type TransitionOwnProps<C> = {
   on: boolean;
   delayIn?: number;
   unmountOnEnd?: boolean;
+  onEnd?: () => void;
   inClass?: string;
   outClass?: string;
   as?: C;
@@ -20,9 +21,10 @@ const Transition = <C extends ElementType = typeof DEFAULT_ELEMENT>({
   children,
   on,
   delayIn = 0,
-  unmountOnEnd,
+  unmountOnEnd = false,
   inClass = 'animate-fadeIn',
   outClass = 'animate-fadeOut',
+  onEnd,
   as,
   ...props
 }: TransitionProps<C>) => {
@@ -45,8 +47,20 @@ const Transition = <C extends ElementType = typeof DEFAULT_ELEMENT>({
     }
   }, [on, delayIn])
 
-  const onAnimationEnd = () => {
+  const onAnimationEnd = (event: AnimationEvent) => {
+    event.stopPropagation()
+
     if (!on && unmountOnEnd) {
+      onEnd?.()
+      setShouldRender(false)
+    }
+  }
+
+  const onTransitionEnd = (event: TransitionEvent) => {
+    event.stopPropagation()
+
+    if (!on && unmountOnEnd) {
+      onEnd?.()
       setShouldRender(false)
     }
   }
@@ -63,6 +77,7 @@ const Transition = <C extends ElementType = typeof DEFAULT_ELEMENT>({
           props.className
         )}
         onAnimationEnd={onAnimationEnd}
+        onTransitionEnd={onTransitionEnd}
       >
         {children}
       </Component>
