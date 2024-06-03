@@ -4,9 +4,7 @@ import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
 import { useState } from 'react'
-import ConfirmTransfer from './ConfirmTransfer'
 import Transition from 'src/components/Transition'
-import BorderedBox from 'src/components/BorderedBox'
 
 const SEND_THRESHOLD = 0.01
 
@@ -36,18 +34,14 @@ const TransferWrapper = ({
   return (
     <section
       className='w-1/2 bg-black relative flex flex-col overflow-hidden'
-      style={{ '--factor': 1 }}
+      style={{ '--factor': 5 }}
     >
       {stationAddress && (
         <>
-          {/* {!destinationFilAddress && (
-            <DestinationAddressForm editDestinationAddress={editDestinationAddress} />
-          )} */}
-
           <Transition
-            unmountOnEnd
             on={!destinationFilAddress}
-            onEnd={() => setIsShowingAddressEdit(true)}
+            unmountOnEnd
+            onUnmount={() => setIsShowingAddressEdit(true)}
             outClass='animate-addressFormMoveUp'
             className='absolute w-[80%] mx-auto left-0 right-0 top-[70%] -translate-y-[50%]'
           >
@@ -75,22 +69,8 @@ const TransferWrapper = ({
               sendThreshold={SEND_THRESHOLD}
               processingTransaction={processingTransaction}
               transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
-              /* transfer={() => setIsShowingConfirm(true)} */
             />
           </Transition>
-
-          {/* <Transition
-            on={isShowingConfirm}
-            unmountOnEnd
-            className='absolute top-[55%] left-0 right-0 mx-auto -translate-y-[50%]'
-          >
-            <ConfirmTransfer
-              walletBalance={walletBalance}
-              transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
-              hide={() => setIsShowingConfirm(false)}
-            />
-          </Transition> */}
-
         </>
       )}
 

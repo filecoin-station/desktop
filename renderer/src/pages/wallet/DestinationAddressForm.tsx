@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import TextInput from 'src/components/TextInput'
