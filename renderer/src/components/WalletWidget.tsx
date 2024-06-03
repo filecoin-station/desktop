@@ -29,6 +29,7 @@ const WalletWidget = () => {
     <div className='absolute top-5 right-9 flex gap-5 no-drag-area'>
       <TransactionStatusIndicator transaction={currentTransaction} />
       <button
+        data-testid='wallet-widget'
         type='button'
         onClick={handleClick}
         className={`flex items-center gap-3 text-black 
