@@ -14,7 +14,6 @@ const { join } = require('node:path')
 const { decode } = require('@glif/filecoin-address')
 const timers = require('node:timers/promises')
 const log = require('electron-log').scope('wallet-backend')
-const SparkImpactEvaluator = require('@filecoin-station/spark-impact-evaluator')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /**
@@ -88,6 +87,9 @@ class WalletBackend {
       await fs.readFile(join(__dirname, 'filforwarder-abi.json'), 'utf8'),
       this.provider
     ).connect(this.signer)
+    const SparkImpactEvaluator = await import(
+      '@filecoin-station/spark-impact-evaluator'
+    )
     this.meridian = new ethers.Contract(
       SparkImpactEvaluator.ADDRESS,
       SparkImpactEvaluator.ABI,
