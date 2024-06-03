@@ -2,11 +2,11 @@ import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import { formatFilValue } from 'src/lib/utils'
 import { Wallet } from 'src/hooks/StationWallet'
-import CheckmarkIcon from 'src/assets/img/icons/checkmark.svg?react'
 import useCurrentTransactionStatus from 'src/hooks/useCurrentTransactionStatus'
 import Tooltip from 'src/components/Tooltip'
 import { ReactNode, useState } from 'react'
 import Transition from 'src/components/Transition'
+import TransactionStatusIndicator from 'src/components/TransactionStatusIndicator'
 
 const TooltipWrapper = ({ children, hasTooltip }: {children: ReactNode; hasTooltip: boolean}) => {
   if (!hasTooltip) return children
@@ -46,7 +46,7 @@ const BalanceControl = ({
     <Transition
       on={!isShowingConfirm}
       inClass='w-[260px] h-[260px] border-slate-50 rounded-[130px] bg-black'
-      outClass='bg-white w-[80%] p-5 rounded-[8px] h-[132px]'
+      outClass='bg-white w-[80%] p-5 rounded-[8px] h-[132px] border-slate-400'
       className='border border-dashed mx-auto balance-control'
     >
       <div className={'h-full z-10 flex'}>
@@ -94,24 +94,28 @@ const BalanceControl = ({
             </Text>
           </div>
           <div className='h-[45%] flex flex-col'>
-            {!currentTransaction && (
-              <TooltipWrapper hasTooltip={!hasSufficientBalance}>
-                <Button
-                  type='button'
-                  variant='primary'
-                  onClick={() => setIsShowingConfirm(true)}
-                  disabled={!hasSufficientBalance}
-                >
+            {!currentTransaction
+              ? (
+                <TooltipWrapper hasTooltip={!hasSufficientBalance}>
+                  <Button
+                    type='button'
+                    variant='primary'
+                    onClick={() => setIsShowingConfirm(true)}
+                    disabled={!hasSufficientBalance}
+                  >
                 Transfer
-                </Button>
-              </TooltipWrapper>
-            )}
-            {currentTransaction?.status === 'processing' && (
+                  </Button>
+                </TooltipWrapper>
+              )
+              : <TransactionStatusIndicator transaction={currentTransaction} theme='dark' />
+            }
+            {/* {currentTransaction?.status !== 'processing' && (
               <div className='flex gap-3 items-center mt-2'>
                 <Text font='mono' size='2xs' className="text-slate-50">Sending...</Text>
               </div>
-            )}
-            {currentTransaction?.status === 'failed' && (
+            )} */}
+
+            {/* {currentTransaction?.status === 'failed' && (
               <div className='flex gap-3 items-center'>
                 <Text font='mono' size='2xs' className="text-slate-50">Failed</Text>
               </div>
@@ -121,7 +125,7 @@ const BalanceControl = ({
                 <CheckmarkIcon className="text-slate-50" />
                 <Text font='mono' size='2xs' className="text-slate-50">Sent</Text>
               </div>
-            )}
+            )} */}
           </div>
         </Transition>
       </div>

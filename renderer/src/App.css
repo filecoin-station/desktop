@@ -93,7 +93,11 @@
   }
 
   .balance-control {
-    transition: all 0.3s ease;
+    transition: 
+      width calc(0.4s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      height calc(0.4s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      border-radius calc(0.4s * var(--factor)) calc(0.1s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      background-color calc(0.4s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1);
   }
 }
 

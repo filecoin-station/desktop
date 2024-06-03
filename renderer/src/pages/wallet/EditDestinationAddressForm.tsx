@@ -35,6 +35,9 @@ const EditDestinationAddressForm = ({
     if (editing) {
       inputRef.current?.focus()
       inputRef.current?.setSelectionRange(0, inputRef.current.value.length)
+    } else {
+      inputRef.current?.setSelectionRange(0, 0)
+      inputRef.current?.blur()
     }
   }, [editing, inputRef])
 

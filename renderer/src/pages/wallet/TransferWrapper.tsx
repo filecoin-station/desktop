@@ -3,38 +3,34 @@ import { Wallet } from 'src/hooks/StationWallet'
 import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
-import { useState } from 'react'
+import { CSSProperties, useState } from 'react'
 import Transition from 'src/components/Transition'
 
 const SEND_THRESHOLD = 0.01
 
 const TransferWrapper = ({
-  // destinationFilAddress,
+  destinationFilAddress,
   stationAddress,
   processingTransaction,
-  // walletBalance,
-  // editDestinationAddress,
+  walletBalance,
+  editDestinationAddress,
   transferAllFundsToDestinationWallet,
   dismissCurrentTransaction
 }: {
-  // walletBalance: Wallet['walletBalance'];
-  // destinationFilAddress?: Wallet['destinationFilAddress'];
+  walletBalance: Wallet['walletBalance'];
+  destinationFilAddress?: Wallet['destinationFilAddress'];
   stationAddress?: Wallet['stationAddress'];
   processingTransaction : Wallet['processingTransaction'];
-  // editDestinationAddress:Wallet['editDestinationAddress'];
+  editDestinationAddress:Wallet['editDestinationAddress'];
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
   dismissCurrentTransaction: Wallet['dismissCurrentTransaction'];
 }) => {
-  /* const [isShowingConfirm, setIsShowingConfirm] = useState(false) */
   const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)
-
-  const walletBalance = '10'
-  const [destinationFilAddress, editDestinationAddress] = useState('')
 
   return (
     <section
       className='w-1/2 bg-black relative flex flex-col overflow-hidden'
-      style={{ '--factor': 5 }}
+      style={{ '--factor': 1 } as CSSProperties}
     >
       {stationAddress && (
         <>
@@ -48,7 +44,6 @@ const TransferWrapper = ({
             <DestinationAddressForm
               editDestinationAddress={editDestinationAddress}
               destinationFilAddress={destinationFilAddress}
-              shouldRender={!destinationFilAddress}
             />
           </Transition>
 
