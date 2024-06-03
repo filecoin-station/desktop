@@ -9,7 +9,7 @@ const Dashboard = (): JSX.Element => {
 
   return (
     <main
-      className='gap-5 px-9 mt-28 flex-1  grid grid-rows-[auto_1fr] grid-cols-[1fr_217px] pb-6 overflow-y-hidden'
+      className='gap-5 px-9 mt-28 flex-1  grid grid-rows-[auto_1fr] grid-cols-[1fr_217px] pb-6'
     >
       <BorderedBox className='flex-1 row-span-2 flex flex-col'>
         <RewardsInfo totalRewardsReceived={totalRewardsReceived} scheduledRewards={scheduledRewards} />

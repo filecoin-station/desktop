@@ -71,7 +71,7 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
           ))}
         </Select>
       </div>
-      <section className='px-2 flex-1 flex' data-chartparent>
+      <section className='px-2 flex-1 flex'>
         <Chart historicalRewards={filteredHistoricalRewards} moduleId={moduleId} timeRange={timeRange} />
       </section>
     </div>
