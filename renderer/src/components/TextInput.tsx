@@ -26,7 +26,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function ({
       'border-dashed border-white focus:outline-slate-400': variant === 'secondary' && !error,
       'border-solid border-red-400 focus:outline-red-400': variant === 'secondary' && error
     },
-    'py-2 text-body-s w-full peer'
+    'py-2 text-body-s w-full peer',
+    props.className
   )
 
   const borderClassName = classNames({
@@ -43,9 +44,9 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function ({
     <div>
       <input
         type="text"
-        className={inputClassName}
         ref={ref}
         {...props}
+        className={inputClassName}
       />
       {variant === 'primary' && (
         <div className={borderClassName}></div>

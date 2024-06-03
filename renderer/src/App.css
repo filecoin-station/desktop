@@ -72,6 +72,25 @@
     text-overflow: ellipsis;
     display: -webkit-box;
   }
+
+  .destination-address-form {
+    transition: 
+      transform calc(0.3s * var(--factor)) ease, 
+      padding calc(0.3s * var(--factor)) ease, 
+      max-height calc(0.3s * var(--factor)) ease, 
+      background-color calc(0.3s * var(--factor)) calc(0.6s * var(--factor)) ease;
+  }
+  
+  .destination-address-form-info {
+    transition: all calc(0.3s * var(--factor)) ease;
+  }
+  
+  .destination-address-form-input {
+    transition: 
+      transform calc(0.3s * var(--factor)) ease,
+      background-color calc(0.3s * var(--factor)) calc(0.6s * var(--factor)) ease,
+      color calc(0.3s * var(--factor)) calc(0.6s * var(--factor)) ease
+  }
 }
 
 @layer components {
