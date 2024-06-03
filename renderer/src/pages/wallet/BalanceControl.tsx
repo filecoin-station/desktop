@@ -12,6 +12,7 @@ const TooltipWrapper = ({ children, hasTooltip }: {children: ReactNode; hasToolt
 
   return (
     <Tooltip
+      style={{ maxWidth: '232px' }}
       content={`Once your rewards reach the minimum amount, you can transfer them. 
     Check back to see when you can make your next transfer.`}
       size='s'

@@ -35,7 +35,7 @@ const Tooltip = ({
   const contentClassName = classNames(
     sizeClassNames[size],
     bgClassNames[bg],
-    ` rounded select-none pointer-events-none z-10 max-w-[232px]
+    ` rounded select-none pointer-events-none z-10
      data-[state=delayed-open]:animate-fadeIn data-[state=closed]:animate-fadeOut`
   )
 
