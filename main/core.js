@@ -13,6 +13,7 @@ const { Activities } = require('./activities')
 const { Logs } = require('./logs')
 const split2 = require('split2')
 const { parseEther } = require('ethers/lib/utils')
+const { once } = require('node:events')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -43,7 +44,15 @@ async function setup (ctx) {
     }
   }
   await maybeMigrateFiles()
-  await start(ctx)
+}
+
+/**
+ * @param {Context} ctx
+ */
+async function run (ctx) {
+  while (true) {
+    await start(ctx)
+  }
 }
 
 /**
@@ -63,6 +72,7 @@ async function start (ctx) {
     },
     stdio: ['pipe', 'pipe', 'pipe', 'ipc']
   })
+  console.log('Core pid', childProcess.pid)
 
   assert(childProcess.stdout)
   childProcess.stdout.setEncoding('utf8')
@@ -119,36 +129,36 @@ async function start (ctx) {
     .pipe(split2())
     .on('data', line => logs.pushLine(line))
 
-  /** @type {string | null} */
-  let exitReason = null
+  const onBeforeQuit = () => childProcess.kill()
+  app.on('before-quit', onBeforeQuit)
 
-  app.on('before-quit', () => {
-    childProcess.kill()
-  })
+  const onceExited = once(childProcess, 'exit')
+  const onceClosed = once(childProcess, 'close')
 
-  childProcess.on('close', code => {
-    console.log(`Core closed all stdio with code ${code ?? '<no code>'}`)
+  const [exitCode, exitSignal] = await onceExited
+  app.removeListener('before-quit', onBeforeQuit)
+  const reason = exitSignal
+    ? `via signal ${exitSignal}`
+    : `with code: ${exitCode}`
+  const msg = `Core exited ${reason}`
+  console.log(msg)
+  const exitReason = exitSignal || exitCode ? reason : null
 
-    if (code === 2) {
-      // FIL_WALLET_ADDRESS did not pass our screening. There is not much
-      // we can do about that, there is no point in reporting this error
-      // to Sentry.
-      return
-    }
+  const [closeCode] = await onceClosed
+  console.log(`Core closed all stdio with code ${closeCode ?? '<no code>'}`)
 
-    Sentry.captureException('Core exited', scope => {
-      // Sentry UI can't show the full 100 lines
-      scope.setExtra('logs', logs.getLastLines(10))
-      scope.setExtra('reason', exitReason)
-      return scope
-    })
-  })
+  if (closeCode === 2) {
+    // FIL_WALLET_ADDRESS did not pass our screening. There is not much
+    // we can do about that, there is no point in reporting this error
+    // to Sentry.
+    throw new Error('Invalid Filecoin wallet address')
+  }
 
-  childProcess.on('exit', (code, signal) => {
-    const reason = signal ? `via signal ${signal}` : `with code: ${code}`
-    const msg = `Core exited ${reason}`
-    console.log(msg)
-    exitReason = signal || code ? reason : null
+  Sentry.captureException('Core exited', scope => {
+    // Sentry UI can't show the full 100 lines
+    scope.setExtra('logs', logs.getLastLines(10))
+    scope.setExtra('reason', exitReason)
+    return scope
   })
 }
 
@@ -176,6 +186,7 @@ async function maybeMigrateFiles () {
 
 module.exports = {
   setup,
+  run,
   isOnline: () => activities.isOnline(),
   getActivities: () => activities.get(),
   getTotalJobsCompleted: () => totalJobsCompleted

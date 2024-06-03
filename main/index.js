@@ -174,6 +174,8 @@ async function run () {
     await wallet.setup(ctx)
     await telemetry.setup()
     await core.setup(ctx)
+
+    await core.run(ctx)
   } catch (e) {
     handleError(e)
   }
