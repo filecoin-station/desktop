@@ -10,6 +10,7 @@ import { ROUTES } from 'src/lib/routes'
 import LinkOutIcon from 'src/assets/img/icons/link-out.svg?react'
 import CloseIcon from 'src/assets/img/icons/close.svg?react'
 import TransactionStatusIndicator from './TransactionStatusIndicator'
+import useCurrentTransactionStatus from 'src/hooks/useCurrentTransactionStatus'
 
 const WalletModal = () => {
   const {
@@ -19,6 +20,7 @@ const WalletModal = () => {
     processingTransaction
   } = useWallet()
   const { closeDialog } = useDialog()
+  const { currentTransaction } = useCurrentTransactionStatus(processingTransaction)
 
   return (
     <>
@@ -51,9 +53,9 @@ const WalletModal = () => {
           <Text as='p' font='mono' size='s' uppercase>
             {formatFilValue(walletBalance)} FIL
           </Text>
-          {processingTransaction
+          {currentTransaction
             ? (
-              <TransactionStatusIndicator transaction={processingTransaction} />
+              <TransactionStatusIndicator transaction={currentTransaction} />
             )
             : (
               <Button as={Link} to={ROUTES.wallet} variant='primary' className='ml-auto pt-1 pb-1'>

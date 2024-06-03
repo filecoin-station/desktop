@@ -1,4 +1,3 @@
-import useCurrentTransactionStatus from 'src/hooks/useCurrentTransactionStatus'
 import { FILTransactionProcessing } from '../../../shared/typings'
 import Text from './Text'
 import CheckmarkIcon from 'src/assets/img/icons/checkmark.svg?react'
@@ -26,27 +25,25 @@ const TransactionStatusIndicator = ({
 }: {
   transaction?: FILTransactionProcessing;
 }) => {
-  const { currentTransaction } = useCurrentTransactionStatus(transaction)
-
-  if (currentTransaction?.status === 'processing') {
+  if (transaction?.status === 'processing') {
     return (
       <StatusWrapper
         icon={<LoadingIcon className="text-primary animate-spin" />}
-        text={currentTransaction?.outgoing ? 'Sending...' : 'Receiving...'}
+        text={transaction?.outgoing ? 'Sending...' : 'Receiving...'}
       />
     )
   }
 
-  if (currentTransaction?.status === 'succeeded') {
+  if (transaction?.status === 'succeeded') {
     return (
       <StatusWrapper
         icon={<CheckmarkIcon className='text-white fill-primary' />}
-        text={currentTransaction?.outgoing ? 'Sent' : 'Received'}
+        text={transaction?.outgoing ? 'Sent' : 'Received'}
       />
     )
   }
 
-  if (currentTransaction?.status === 'failed') {
+  if (transaction?.status === 'failed') {
     return (
       <StatusWrapper
         icon={<WarningIcon className='text-red-400' />}

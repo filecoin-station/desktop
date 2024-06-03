@@ -7,10 +7,12 @@ import WalletModal from './WalletModal'
 import { ROUTES } from 'src/lib/routes'
 import TransactionStatusIndicator from './TransactionStatusIndicator'
 import { useLocation } from 'react-router-dom'
+import useCurrentTransactionStatus from 'src/hooks/useCurrentTransactionStatus'
 
 const WalletWidget = () => {
   const { openDialog } = useDialog()
   const { walletBalance, processingTransaction } = useWallet()
+  const { currentTransaction } = useCurrentTransactionStatus(processingTransaction)
   const { pathname } = useLocation()
 
   if (pathname === ROUTES.wallet) {
@@ -25,7 +27,7 @@ const WalletWidget = () => {
 
   return (
     <div className='absolute top-5 right-9 flex gap-5 no-drag-area'>
-      <TransactionStatusIndicator transaction={processingTransaction} />
+      <TransactionStatusIndicator transaction={currentTransaction} />
       <button
         type='button'
         onClick={handleClick}
