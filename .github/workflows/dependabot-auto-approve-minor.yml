@@ -28,6 +28,7 @@ jobs:
           - mocha
           - npm
           - jsdom
+          - '@filecoin-station/spark-impact-evaluator'
     steps:
       - name: Dependabot metadata
         id: metadata
