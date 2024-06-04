@@ -25,19 +25,19 @@ const TransferWrapper = ({
 }) => {
   const [destinationFilAddress, editDestinationAddress] = useState('')
   const [processingTransaction, setProcessingTransaction] = useState()
-  const [walletBalance, setWalletBalance] = useState('0.5')
+  const [walletBalance, setWalletBalance] = useState('1')
 
   function transferAllFundsToDestinationWallet () {
     setProcessingTransaction({ status: 'processing', outgoing: true })
 
     setTimeout(() => {
       setProcessingTransaction({ status: 'succeeded', outgoing: true })
-    }, 4000)
+    }, 18_000)
 
     setTimeout(() => {
       setProcessingTransaction(undefined)
       setWalletBalance('0')
-    }, 6000)
+    }, 18_000 + 6000)
   }
 
   const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)

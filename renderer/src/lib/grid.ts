@@ -158,6 +158,8 @@ export class Grid {
   renderMidLine () {
     this.ctx.lineWidth = 0.8
     this.ctx.strokeStyle = '#ffffff'
+    /* this.ctx.shadowColor = '#ffffff'
+    this.ctx.shadowBlur = 50 */
     this.ctx.beginPath()
     this.ctx.moveTo(this.midLine.x, this.warp.y)
     this.ctx.lineTo(this.midLine.x, this.midLine.y)
@@ -193,7 +195,7 @@ export class Grid {
 
   getCurveConfig (axis: 'x' | 'y', line: Line) {
     // Determine at what point the line will start bending
-    const bendOffset = this.warp.radius * 3
+    const bendOffset = this.warp.radius * 2.5
     const bendInStart = this.warp[axis] - bendOffset
     const bendOutEnd = this.warp[axis] + bendOffset
     const bendSize = 200 * Math.abs(line.ease)
