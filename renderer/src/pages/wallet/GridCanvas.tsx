@@ -2,15 +2,24 @@ import { useEffect, useRef, useState } from 'react'
 import { Wallet } from 'src/hooks/StationWallet'
 import { Grid } from 'src/lib/grid'
 
+const minWarp = 0
+const maxWarp = 300
+
+function getForceFromBalance (balance: number) {
+  console.log(balance * 300 / 0.8)
+  return balance * 260 / 0.8
+}
+
 const GridCanvas = ({
-  walletBalance
+  walletBalance,
+  destinationFilAddress
 }: {
   walletBalance: Wallet['walletBalance'];
+  destinationFilAddress: Wallet['destinationFilAddress'];
 }) => {
   const ref = useRef<HTMLCanvasElement>(null)
   const gridCanvas = useRef<Grid>()
-
-  const [force] = useState(0)
+  const balance = Number(walletBalance)
 
   function handleResize () {
     gridCanvas.current?.setup(ref.current?.parentElement || undefined)
@@ -22,16 +31,21 @@ const GridCanvas = ({
         canvas: ref.current,
         container: ref.current.parentElement,
         gridSize: 40,
-        force
+        force: 0
       })
       gridCanvas.current.renderGrid()
-      gridCanvas.current.tweenRender({ duration: 100, targetForce: 200, delay: 500 })
     }
 
     window.addEventListener('resize', handleResize)
 
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  useEffect(() => {
+    if (destinationFilAddress) {
+      gridCanvas.current?.tweenRender({ duration: 100, targetForce: getForceFromBalance(Number(walletBalance)), delay: 100 })
+    }
+  }, [destinationFilAddress, walletBalance])
 
   return (
     <canvas ref={ref} className='absolute opacity-0 animate-fadeIn'></canvas>

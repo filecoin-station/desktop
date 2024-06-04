@@ -9,12 +9,12 @@ import Transition from 'src/components/Transition'
 const SEND_THRESHOLD = 0.01
 
 const TransferWrapper = ({
-  stationAddress,
-  destinationFilAddress,
-  processingTransaction,
-  walletBalance,
-  editDestinationAddress,
-  transferAllFundsToDestinationWallet
+  stationAddress
+  // destinationFilAddress,
+  // processingTransaction,
+  // walletBalance,
+  // editDestinationAddress,
+  // transferAllFundsToDestinationWallet
 }: {
   walletBalance: Wallet['walletBalance'];
   destinationFilAddress?: Wallet['destinationFilAddress'];
@@ -23,6 +23,23 @@ const TransferWrapper = ({
   editDestinationAddress:Wallet['editDestinationAddress'];
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
 }) => {
+  const [destinationFilAddress, editDestinationAddress] = useState('')
+  const [processingTransaction, setProcessingTransaction] = useState()
+  const [walletBalance, setWalletBalance] = useState('0.5')
+
+  function transferAllFundsToDestinationWallet () {
+    setProcessingTransaction({ status: 'processing', outgoing: true })
+
+    setTimeout(() => {
+      setProcessingTransaction({ status: 'succeeded', outgoing: true })
+    }, 4000)
+
+    setTimeout(() => {
+      setProcessingTransaction(undefined)
+      setWalletBalance('0')
+    }, 6000)
+  }
+
   const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)
   const inTransition = useRef(false)
 
