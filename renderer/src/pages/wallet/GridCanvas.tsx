@@ -42,8 +42,12 @@ const GridCanvas = ({
   }, [])
 
   useEffect(() => {
-    if (destinationFilAddress) {
-      gridCanvas.current?.tweenRender({ duration: 100, targetForce: getForceFromBalance(Number(walletBalance)), delay: 100 })
+    if (destinationFilAddress && gridCanvas.current) {
+      gridCanvas.current.tweenRender({
+        duration: 100,
+        targetForce: getForceFromBalance(Number(walletBalance)),
+        delay: 500
+      })
     }
   }, [destinationFilAddress, walletBalance])
 

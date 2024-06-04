@@ -25,73 +25,73 @@ export class Grid {
   ctx: CanvasRenderingContext2D
   height = 0
   width = 0
-  gridSize: number
-  dashSize: number
+  gridSize = 40
+  dashSize = Math.round(this.gridSize / 8)
   rows: Line[] = []
   cols : Line[] = []
   target = { x: 0, y: 0 }
-  warp = { x: 0, y: 550, radius: 80, linesAffected: 8 }
-  force = 200
+  warp = { x: 0, y: 550, radius: 90, linesAffected: 10 }
+  midLine = { x: 0, y: 0 }
+  force = 0
 
   constructor ({
     canvas,
-    container,
-    gridSize,
-    force
+    container
   }: {
     canvas: HTMLCanvasElement;
     container: HTMLElement;
-    gridSize: number;
-    force: number;
   }) {
-    this.force = force
-    this.gridSize = gridSize
     this.canvas = canvas
-    this.dashSize = Math.round(this.gridSize / 8)
     this.ctx = this.canvas.getContext('2d')!
-
     this.setup(container)
   }
 
   setup (container?: HTMLElement) {
     if (!container) return
 
-    this.calcSize(container)
-    this.calcPositions()
-    this.setupCanvasStyles()
-  }
-
-  calcSize (container: HTMLElement) {
+    // Ensure the canvas is crisp using device pixel ratio
+    // https://gist.github.com/callumlocke/cc258a193839691f60dd
     const dPr = window.devicePixelRatio
     this.width = container.clientWidth
     this.height = container.clientHeight
-
-    // Ensure the canvas is crisp
     this.canvas.width = this.width * dPr
     this.canvas.height = this.height * dPr
     this.canvas.style.width = `${this.width}px`
     this.canvas.style.height = `${this.height}px`
-    this.ctx = this.canvas.getContext('2d')!
     this.ctx.scale(dPr, dPr)
+
+    this.ctx = this.canvas.getContext('2d')!
+    this.ctx.imageSmoothingQuality = 'high'
+    this.ctx.imageSmoothingEnabled = true
+    this.ctx.setLineDash([this.dashSize])
+
+    this.calcPositions()
   }
 
   calcPositions () {
-    this.target = { x: this.width / 2, y: 10 * this.height / 100 }
-    this.warp.x = this.width / 2
-    this.warp.y = 70 * this.height / 100
+    this.target = {
+      x: this.percent(50, 'x'),
+      y: this.percent(10, 'y')
+    }
+    this.warp.x = this.percent(50, 'x')
+    this.warp.y = this.percent(70, 'y')
+    this.midLine.x = this.percent(50, 'x')
+    this.midLine.y = this.percent(70, 'y')
   }
 
-  setupCanvasStyles () {
-    this.ctx.imageSmoothingQuality = 'high'
-    this.ctx.imageSmoothingEnabled = true
-    this.ctx.fillStyle = '#F1F1F5'
-    this.ctx.lineWidth = 0.5
-    this.ctx.setLineDash([this.dashSize])
+  // Get the point of the grid that matches a percentage of x / y
+  percent (val: number, axis: 'y' | 'x') {
+    return val * (axis === 'x' ? this.width : this.height) / 100
   }
 
-  getAdjustedGridSize () {
-    const rowCount = Math.floor(this.height / this.gridSize)
-    let colCount = Math.floor(this.width / this.gridSize)
+  // Get the amount of lines within a given size
+  lineCount (val: number) {
+    return Math.floor(val / this.gridSize)
+  }
+
+  getAdjustedGridConfig () {
+    const rowCount = this.lineCount(this.height)
+    let colCount = this.lineCount(this.width)
 
     // Ensure the number of columns is odd, so we can have 1 central line
     if (colCount % 2 === 0) {
@@ -113,20 +113,21 @@ export class Grid {
     }
   }
 
-  lineCount (val: number) {
-    return Math.floor(val / this.gridSize)
+  calcGridLines () {
+    const config = this.getAdjustedGridConfig()
+    this.cols = this.calcDimensionLines('col', config)
+    this.rows = this.calcDimensionLines('row', config)
   }
 
-  calcGridLines () {
-    const size = this.getAdjustedGridSize()
-
+  calcDimensionLines (dimension: 'row' | 'col', config: ReturnType<typeof this.getAdjustedGridConfig>) {
     let acc = 0
+    const isRow = dimension === 'row'
 
-    this.cols = new Array(size.colCount).fill(null).map((_, index) => {
-      const xPoint = index * this.gridSize + size.colOffsetX
-      const nthFromCenter = this.lineCount(Math.abs(this.warp.x - xPoint))
+    return new Array(config[isRow ? 'rowCount' : 'colCount']).fill(null).map((_, index) => {
+      const point = index * this.gridSize + config[isRow ? 'rowOffsetY' : 'colOffsetX']
+      const nthFromCenter = this.lineCount(Math.abs(this.warp[isRow ? 'y' : 'x'] - point))
 
-      const isPastHalfway = index > size.warpCenterColIdx
+      const isPastHalfway = index > config[isRow ? 'warpCenterRowIdx' : 'warpCenterColIdx']
       const deform = Math.abs(nthFromCenter) < this.warp.linesAffected
       let ease = 0
 
@@ -139,45 +140,14 @@ export class Grid {
       acc = accEase
 
       return {
-        x1: xPoint,
-        y1: 0,
-        x2: xPoint,
-        y2: this.height,
-        cp1x: xPoint,
-        cp1y: this.warp.y,
-        cp2x: xPoint,
-        cp2y: this.warp.y,
-        deform,
-        ease,
-        nthFromCenter
-      }
-    })
-
-    this.rows = new Array(size.rowCount).fill(null).map((_, index) => {
-      const yPoint = index * this.gridSize + size.rowOffsetY
-      const nthFromCenter = this.lineCount(Math.abs(this.warp.y - yPoint))
-
-      const isPastHalfway = index > size.warpCenterRowIdx
-      const deform = Math.abs(nthFromCenter) < this.warp.linesAffected
-      let ease = 0
-
-      const progress = isPastHalfway
-        ? (this.warp.linesAffected - nthFromCenter - 1) / this.warp.linesAffected
-        : (this.warp.linesAffected - nthFromCenter) / this.warp.linesAffected
-
-      const accEase = easeInOutCubic(progress)
-      ease = accEase - acc
-      acc = accEase
-
-      return {
-        x1: size.rowOffsetX,
-        y1: yPoint,
-        x2: this.canvas.width,
-        y2: yPoint,
-        cp1x: this.warp.x,
-        cp1y: yPoint,
-        cp2x: this.warp.x,
-        cp2y: yPoint,
+        x1: isRow ? config.rowOffsetX : point,
+        y1: isRow ? point : 0,
+        x2: isRow ? this.canvas.width : point,
+        y2: isRow ? point : this.height,
+        cp1x: isRow ? this.warp.x : point,
+        cp1y: isRow ? point : this.warp.y,
+        cp2x: isRow ? this.warp.x : point,
+        cp2y: isRow ? point : this.warp.y,
         deform,
         ease,
         nthFromCenter
@@ -186,12 +156,11 @@ export class Grid {
   }
 
   renderMidLine () {
-    const midX = this.width / 2
     this.ctx.lineWidth = 0.8
     this.ctx.strokeStyle = '#ffffff'
     this.ctx.beginPath()
-    this.ctx.moveTo(midX, this.target.y + 20)
-    this.ctx.lineTo(midX, this.warp.y)
+    this.ctx.moveTo(this.midLine.x, this.warp.y)
+    this.ctx.lineTo(this.midLine.x, this.midLine.y)
     this.ctx.stroke()
   }
 
@@ -209,6 +178,7 @@ export class Grid {
   renderTargetCircles () {
     this.ctx.lineWidth = 0.8
     this.ctx.strokeStyle = '#ffffff'
+    this.ctx.fillStyle = '#ffffff'
     this.ctx.setLineDash([4])
     this.ctx.beginPath()
     this.circle(this.target.x, this.target.y, 4)
@@ -222,13 +192,15 @@ export class Grid {
   }
 
   getCurveConfig (axis: 'x' | 'y', line: Line) {
-    const bendOffset = this.warp.radius * 2.5
+    // Determine at what point the line will start bending
+    const bendOffset = this.warp.radius * 3
     const bendInStart = this.warp[axis] - bendOffset
     const bendOutEnd = this.warp[axis] + bendOffset
+    const bendSize = 200 * Math.abs(line.ease)
     const bendFollow = (this.force / 20) * line.ease
 
-    const apply = line.ease * this.force
-    const bendSize = 100 * Math.abs(line.ease)
+    //
+    const warpApply = line.ease * this.force
 
     return {
       bendInStart,
@@ -238,114 +210,59 @@ export class Grid {
       bendOutStart: bendOutEnd - bendSize,
       bendOutCp: bendOutEnd - bendSize / 2,
       bendOutEnd,
-      apply
+      warpApply
     }
   }
 
   renderGrid () {
-    this.calcGridLines()
     this.ctx.lineWidth = 0.5
     this.ctx.strokeStyle = '#FFFFFF66'
+    this.calcGridLines()
+    this.renderDimension(this.rows, 'row')
+    this.renderDimension(this.cols, 'col')
+  }
 
-    this.cols.forEach((col) => {
+  renderDimension (line: Line[], dimension: 'row' | 'col') {
+    const isRow = dimension === 'row'
+
+    line.forEach((item) => {
       this.ctx.beginPath()
-      this.ctx.moveTo(col.x1, col.y1)
+      this.ctx.moveTo(item.x1, item.y1)
 
-      if (col.deform) {
-        const config = this.getCurveConfig('y', col)
+      if (item.deform) {
+        const config = this.getCurveConfig(isRow ? 'x' : 'y', item)
         // line
-        // this.ctx.lineTo(col.x1, config.bendInStart)
-        // this.ctx.strokeStyle = 'lightblue'
-        this.ctx.stroke()
-
-        // curve in
-        // this.ctx.beginPath()
-        // this.ctx.moveTo(col.x1, config.bendInStart)
-        // this.ctx.strokeStyle = 'yellow'
-        this.ctx.quadraticCurveTo(
-          col.x1,
-          config.bendInCp,
-          col.x1 + config.bendFollow,
-          config.bendInEnd
+        this.ctx.lineTo(
+          isRow ? config.bendInStart : item.x1,
+          isRow ? item.y1 : config.bendInStart
         )
-        // this.ctx.stroke()
-
-        // deform
-        // this.ctx.beginPath()
-        // this.ctx.moveTo(col.x1 + config.bendFollow,
-        //   config.bendInEnd)
-        // this.ctx.strokeStyle = 'hotpink'
-        this.ctx.bezierCurveTo(
-          col.cp1x + config.apply,
-          col.cp1y,
-          col.cp1x + config.apply,
-          col.cp2y,
-          col.x2 + config.bendFollow,
-          config.bendOutStart
-        )
-        // this.ctx.stroke()
-
-        // curve out
-        // this.ctx.strokeStyle = 'yellow'
-        // this.ctx.beginPath()
-        // this.ctx.moveTo(col.x2 + config.bendFollow,
-        //   config.bendOutStart)
-        this.ctx.quadraticCurveTo(
-          col.x2,
-          config.bendOutCp,
-          col.x2,
-          config.bendOutEnd
-        )
-        // this.ctx.stroke()
-        // line
-        // this.ctx.beginPath()
-        // this.ctx.moveTo(col.x2,
-        //   config.bendOutEnd)
-        // this.ctx.strokeStyle = 'red'
-        this.ctx.lineTo(col.x2, col.y2)
-      } else {
-        this.ctx.lineTo(col.x2, col.y2)
-      }
-
-      this.ctx.stroke()
-    })
-    this.rows.forEach((row) => {
-      this.ctx.beginPath()
-      this.ctx.moveTo(row.x1, row.y1)
-
-      if (row.deform) {
-        const config = this.getCurveConfig('x', row)
-
-        // line
-        this.ctx.lineTo(config.bendInStart, row.y1)
-
         // curve in
         this.ctx.quadraticCurveTo(
-          config.bendInCp,
-          row.y1,
-          config.bendInEnd,
-          row.y1 + config.bendFollow
+          isRow ? config.bendInCp : item.x1,
+          isRow ? item.y1 : config.bendInCp,
+          isRow ? config.bendInEnd : item.x1 + config.bendFollow,
+          isRow ? item.y1 + config.bendFollow : config.bendInEnd
         )
         // deform
         this.ctx.bezierCurveTo(
-          row.cp1x,
-          row.cp1y + config.apply,
-          row.cp2x,
-          row.cp2y + config.apply,
-          config.bendOutStart,
-          row.y2 + config.bendFollow
+          isRow ? item.cp1x : item.cp1x + config.warpApply,
+          isRow ? item.cp1y + config.warpApply : item.cp1y,
+          isRow ? item.cp2x : item.cp1x + config.warpApply,
+          isRow ? item.cp2y + config.warpApply : item.cp2y,
+          isRow ? config.bendOutStart : item.x2 + config.bendFollow,
+          isRow ? item.y2 + config.bendFollow : config.bendOutStart
         )
         // curve out
         this.ctx.quadraticCurveTo(
-          config.bendOutCp,
-          row.y2,
-          config.bendOutEnd,
-          row.y2
+          isRow ? config.bendOutCp : item.x2,
+          isRow ? item.y2 : config.bendOutCp,
+          isRow ? config.bendOutEnd : item.x2,
+          isRow ? item.y2 : config.bendOutEnd
         )
         // line
-        this.ctx.lineTo(row.x2, row.y2)
+        this.ctx.lineTo(item.x2, item.y2)
       } else {
-        this.ctx.lineTo(row.x2, row.y2)
+        this.ctx.lineTo(item.x2, item.y2)
       }
 
       this.ctx.stroke()
@@ -353,7 +270,8 @@ export class Grid {
   }
 
   tweenRenderFrame (args: {
-    diff: number;
+    forceDiff: number;
+    midLineYDiff: number;
     duration: number;
     acc: number;
     frame: number;
@@ -366,7 +284,10 @@ export class Grid {
     const accEase = easeOutCirc(progress)
     const ease = accEase - args.acc
     args.acc = accEase
-    this.force += ease * args.diff
+
+    this.force += ease * args.forceDiff
+    this.midLine.y -= ease * args.midLineYDiff
+
     args.frame++
 
     this.ctx.clearRect(0, 0, this.width, this.height)
@@ -388,7 +309,8 @@ export class Grid {
   }) {
     setTimeout(() => {
       this.tweenRenderFrame({
-        diff: targetForce - this.force,
+        forceDiff: targetForce - this.force,
+        midLineYDiff: this.midLine.y - (this.target.y + 20),
         duration,
         acc: 0,
         frame: 0
