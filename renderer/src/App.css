@@ -70,7 +70,7 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
+    display: -webkit-box;    
   }
 
   .destination-address-form {
@@ -94,10 +94,14 @@
 
   .balance-control {
     transition: 
-      width calc(0.4s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
-      height calc(0.4s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
-      border-radius calc(0.4s * var(--factor)) calc(0.1s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
-      background-color calc(0.4s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1);
+      width calc(0.3s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      height calc(0.3s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      border-radius calc(0.3s * var(--factor)) calc(0.1s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      background-color calc(0.2s * var(--factor)) ease;
+  }
+
+  .balance-control-wrapper {
+    animation: fadeIn 500ms 200ms ease-in forwards;
   }
 }
 

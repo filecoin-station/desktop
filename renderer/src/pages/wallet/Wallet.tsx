@@ -16,8 +16,7 @@ const Wallet = () => {
     destinationFilAddress,
     editDestinationAddress,
     transferAllFundsToDestinationWallet,
-    processingTransaction,
-    dismissCurrentTransaction
+    processingTransaction
   } = useWallet()
 
   return (
@@ -26,7 +25,7 @@ const Wallet = () => {
         <section className='flex flex-col gap-5 h-full mb-9'>
           <BorderedBox className='p-5 flex flex-col gap-2'>
             <Text font='mono' size='3xs' color='primary' uppercase>
-                        &#47;&#47; Station wallet balance ... :
+              &#47;&#47; Station wallet balance ... :
             </Text>
             <Text font='mono' size='s'>{formatFilValue(walletBalance)}{' '}FIL</Text>
           </BorderedBox>
@@ -47,7 +46,7 @@ const Wallet = () => {
           <div className='flex-1 flex flex-col'>
             <BorderedBox className='p-5 flex flex-col gap-2' isGrouped>
               <Text font='mono' size='3xs' color='primary' uppercase>
-                            &#47;&#47; Transaction history ... :
+                &#47;&#47; Transaction history ... :
               </Text>
             </BorderedBox>
             <BorderedBox className='p-5 flex flex-col gap-2 flex-1' isGrouped>
@@ -63,7 +62,6 @@ const Wallet = () => {
         transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
         stationAddress={stationAddress}
         processingTransaction={processingTransaction}
-        dismissCurrentTransaction={dismissCurrentTransaction}
       />
     </div>
   )

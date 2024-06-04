@@ -2,20 +2,22 @@ import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import TextInput from 'src/components/TextInput'
 import Transition from 'src/components/Transition'
-import useWallet from 'src/hooks/StationWallet'
+import { Wallet } from 'src/hooks/StationWallet'
 import useAddressValidation from 'src/hooks/useAddressValidation'
 
 const DestinationAddressForm = ({
-  editDestinationAddress,
+  onSave,
   destinationFilAddress
 }: {
-  editDestinationAddress: ReturnType<typeof useWallet>['editDestinationAddress'];
-  destinationFilAddress: ReturnType<typeof useWallet>['destinationFilAddress'];
+  onSave: (value: string) => void;
+  destinationFilAddress: Wallet['destinationFilAddress'];
 }) => {
   const { inputRef, validateOnChange, inputState } = useAddressValidation({ initialValid: false })
 
   function handleSubmit () {
-    editDestinationAddress(inputRef.current?.value)
+    if (inputRef.current) {
+      onSave(inputRef.current.value)
+    }
   }
 
   const hasAddressSaved = !!destinationFilAddress
@@ -42,20 +44,20 @@ const DestinationAddressForm = ({
         variant={hasAddressSaved ? 'secondary' : 'primary'}
         placeholder='Destination address'
         name='destinationAddress'
-        className='destination-address-form-input text-center'
+        className='destination-address-form-input '
         onChange={validateOnChange}
         error={inputState.error}
       />
 
       <Transition
         on={!hasAddressSaved}
-        inClass='h-[40px] mt-5'
+        inClass='h-[46px] mt-5'
         outClass='h-[0]'
-        className='overflow-hidden destination-address-form-info'
+        className='flex overflow-hidden destination-address-form-info'
       >
         <Button
           variant='primary'
-          className='w-fit mx-auto mt-auto'
+          className='w-fit m-auto'
           disabled={!inputState.isValid}
           onClick={handleSubmit}
         >

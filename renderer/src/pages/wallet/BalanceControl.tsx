@@ -45,8 +45,8 @@ const BalanceControl = ({
   return (
     <Transition
       on={!isShowingConfirm}
-      inClass='w-[260px] h-[260px] border-slate-50 rounded-[130px] bg-black'
-      outClass='bg-white w-[80%] p-5 rounded-[8px] h-[132px] border-slate-400'
+      inClass='w-[260px] h-[260px] rounded-[130px] border-slate-50 bg-black'
+      outClass='bg-white w-[500px] max-w-[80%] p-5 rounded-[8px] h-[132px]'
       className='border border-dashed mx-auto balance-control'
     >
       <div className={'h-full z-10 flex'}>
@@ -94,38 +94,19 @@ const BalanceControl = ({
             </Text>
           </div>
           <div className='h-[45%] flex flex-col'>
-            {!currentTransaction
-              ? (
-                <TooltipWrapper hasTooltip={!hasSufficientBalance}>
-                  <Button
-                    type='button'
-                    variant='primary'
-                    onClick={() => setIsShowingConfirm(true)}
-                    disabled={!hasSufficientBalance}
-                  >
+            {!currentTransaction && (
+              <TooltipWrapper hasTooltip={!hasSufficientBalance}>
+                <Button
+                  type='button'
+                  variant='primary'
+                  onClick={() => setIsShowingConfirm(true)}
+                  disabled={!hasSufficientBalance}
+                >
                 Transfer
-                  </Button>
-                </TooltipWrapper>
-              )
-              : <TransactionStatusIndicator transaction={currentTransaction} theme='dark' />
-            }
-            {/* {currentTransaction?.status !== 'processing' && (
-              <div className='flex gap-3 items-center mt-2'>
-                <Text font='mono' size='2xs' className="text-slate-50">Sending...</Text>
-              </div>
-            )} */}
-
-            {/* {currentTransaction?.status === 'failed' && (
-              <div className='flex gap-3 items-center'>
-                <Text font='mono' size='2xs' className="text-slate-50">Failed</Text>
-              </div>
+                </Button>
+              </TooltipWrapper>
             )}
-            {currentTransaction?.status === 'succeeded' && (
-              <div className='flex gap-3 items-center'>
-                <CheckmarkIcon className="text-slate-50" />
-                <Text font='mono' size='2xs' className="text-slate-50">Sent</Text>
-              </div>
-            )} */}
+            <TransactionStatusIndicator transaction={currentTransaction} theme='dark' />
           </div>
         </Transition>
       </div>
