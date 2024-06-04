@@ -1,19 +1,23 @@
 type Line = {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    cp1x: number;
-    cp1y: number;
-    cp2x: number;
-    cp2y: number;
-    deform: boolean;
-    ease: number;
-    nthFromCenter: number;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  cp1x: number;
+  cp1y: number;
+  cp2x: number;
+  cp2y: number;
+  deform: boolean;
+  ease: number;
+  nthFromCenter: number;
 }
 
 function easeInOutCubic (x: number): number {
   return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2
+}
+
+function easeOutCirc (x: number): number {
+  return Math.sqrt(1 - Math.pow(x - 1, 2))
 }
 
 export class Grid {
@@ -35,11 +39,11 @@ export class Grid {
     gridSize,
     force
   }: {
-      canvas: HTMLCanvasElement;
-      container: HTMLElement;
-      gridSize: number;
-      force: number;
-   }) {
+    canvas: HTMLCanvasElement;
+    container: HTMLElement;
+    gridSize: number;
+    force: number;
+  }) {
     this.force = force
     this.gridSize = gridSize
     this.canvas = canvas
@@ -55,10 +59,6 @@ export class Grid {
     this.calcSize(container)
     this.calcPositions()
     this.setupCanvasStyles()
-    this.calcGridLines()
-    this.renderGrid()
-    this.renderMidLine()
-    this.renderTargetCircles()
   }
 
   calcSize (container: HTMLElement) {
@@ -84,11 +84,9 @@ export class Grid {
   setupCanvasStyles () {
     this.ctx.imageSmoothingQuality = 'high'
     this.ctx.imageSmoothingEnabled = true
-    this.ctx.strokeStyle = '#FFFFFF66'
     this.ctx.fillStyle = '#F1F1F5'
     this.ctx.lineWidth = 0.5
     this.ctx.setLineDash([this.dashSize])
-    this.ctx.translate(0.5, 0.5)
   }
 
   getAdjustedGridSize () {
@@ -209,6 +207,8 @@ export class Grid {
   }
 
   renderTargetCircles () {
+    this.ctx.lineWidth = 0.8
+    this.ctx.strokeStyle = '#ffffff'
     this.ctx.setLineDash([4])
     this.ctx.beginPath()
     this.circle(this.target.x, this.target.y, 4)
@@ -243,6 +243,10 @@ export class Grid {
   }
 
   renderGrid () {
+    this.calcGridLines()
+    this.ctx.lineWidth = 0.5
+    this.ctx.strokeStyle = '#FFFFFF66'
+
     this.cols.forEach((col) => {
       this.ctx.beginPath()
       this.ctx.moveTo(col.x1, col.y1)
@@ -346,7 +350,49 @@ export class Grid {
 
       this.ctx.stroke()
     })
+  }
 
-    this.ctx.translate(-0.5, -0.5)
+  tweenRenderFrame (args: {
+    diff: number;
+    duration: number;
+    acc: number;
+    frame: number;
+  }) {
+    if (args.frame === args.duration) {
+      return
+    }
+
+    const progress = args.frame * 100 / args.duration / 100
+    const accEase = easeOutCirc(progress)
+    const ease = accEase - args.acc
+    args.acc = accEase
+    this.force += ease * args.diff
+    args.frame++
+
+    this.ctx.clearRect(0, 0, this.width, this.height)
+    this.renderTargetCircles()
+    this.renderMidLine()
+    this.renderGrid()
+
+    requestAnimationFrame(() => this.tweenRenderFrame(args))
+  }
+
+  tweenRender ({
+    targetForce,
+    duration,
+    delay = 0
+  }: {
+    targetForce: number;
+    duration: number;
+    delay?: number;
+  }) {
+    setTimeout(() => {
+      this.tweenRenderFrame({
+        diff: targetForce - this.force,
+        duration,
+        acc: 0,
+        frame: 0
+      })
+    }, delay)
   }
 }

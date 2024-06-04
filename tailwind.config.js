@@ -91,6 +91,7 @@ module.exports = {
     },
     animation: {
       fadeIn: 'fadeIn 200ms ease forwards',
+      fadeInGrid: 'fadeIn 300ms 200ms ease forwards',
       fadeOut: 'fadeOut 200ms ease forwards',
       spin: 'spin 1s linear infinite',
       moveGridBlur: 'moveGridBlur 3s 1s linear infinite',

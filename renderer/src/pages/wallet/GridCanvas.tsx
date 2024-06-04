@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { Wallet } from 'src/hooks/StationWallet'
 import { Grid } from 'src/lib/grid'
 
-const GridCanvas = () => {
+const GridCanvas = ({
+  walletBalance
+}: {
+  walletBalance: Wallet['walletBalance'];
+}) => {
   const ref = useRef<HTMLCanvasElement>(null)
   const gridCanvas = useRef<Grid>()
 
@@ -19,6 +24,8 @@ const GridCanvas = () => {
         gridSize: 40,
         force
       })
+      gridCanvas.current.renderGrid()
+      gridCanvas.current.tweenRender({ duration: 100, targetForce: 200, delay: 500 })
     }
 
     window.addEventListener('resize', handleResize)
@@ -27,7 +34,7 @@ const GridCanvas = () => {
   }, [])
 
   return (
-    <canvas ref={ref} className='absolute'></canvas>
+    <canvas ref={ref} className='absolute opacity-0 animate-fadeIn'></canvas>
   )
 }
 
