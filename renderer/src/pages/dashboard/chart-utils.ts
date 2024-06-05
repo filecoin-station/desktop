@@ -128,7 +128,7 @@ export function updateTooltipElement ({
   // Tooltip data provides an opacity value that is 0 when the
   // mouse has left the chart area; 1 when inside the chart
   if (opacity === 0) {
-    element.style.opacity = '1'
+    element.style.opacity = '0'
     return
   }
 
@@ -168,7 +168,7 @@ export const hoverCrossLines: CustomPlugin = {
   afterDatasetsDraw (chart) {
     const { tooltip, ctx, chartArea } = chart
 
-    if (!tooltip?.dataPoints?.length /* || tooltip.opacity === 0 */) return
+    if (!tooltip?.dataPoints?.length || tooltip.opacity === 0) return
 
     const { x, y } = tooltip.dataPoints[datasetIndex.scheduled].element
 
@@ -185,6 +185,7 @@ export const hoverCrossLines: CustomPlugin = {
 }
 
 // Custom plugin to draw Filecoin symbols over payout day positions on chart
+// Runs once, after dataset lines are drawn
 export const renderPayoutEvents: CustomPlugin = {
   id: 'renderPayoutEvents',
   events: [],
