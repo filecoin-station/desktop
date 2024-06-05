@@ -70,8 +70,8 @@ const Chart = ({
   }
 
   return (
-    <div>
-      <Line options={options} data={data} />
+    <div className='relative w-[70vw] h-[64vh]'>
+      <Line options={options} data={data}/>
     </div>
   )
 }

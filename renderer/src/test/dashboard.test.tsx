@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import {
   getActivities,
@@ -9,12 +9,12 @@ import {
   getStationWalletBalance,
   getStationWalletTransactionsHistory
 } from 'src/lib/station-config'
-import { BrowserRouter } from 'react-router-dom'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import useWallet from 'src/hooks/StationWallet'
 import useStationActivity from 'src/hooks/StationActivity'
 import { Activity } from '../../../shared/typings'
 import useStationRewards from 'src/hooks/StationRewards'
+import { renderApp } from './utils'
 
 const activities: Activity[] = [{
   id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
@@ -47,6 +47,13 @@ vi.mock('src/hooks/StationWallet')
 vi.mock('src/hooks/StationActivity')
 vi.mock('src/hooks/StationRewards')
 vi.mock('src/lib/station-config')
+
+vi.stubGlobal('electron', {
+  stationEvents: {
+    onReadyToUpdate: () => () => null
+  },
+  getUpdaterStatus: () => false
+})
 
 describe('Dashboard page', () => {
   beforeEach(() => {
@@ -88,7 +95,7 @@ describe('Dashboard page', () => {
         historicalRewards: []
       })
 
-      render(<BrowserRouter><Dashboard /></BrowserRouter>)
+      renderApp(<Dashboard />)
     })
 
     test('display jobs counter', () => {
@@ -160,7 +167,7 @@ describe('Dashboard page', () => {
         activities
       })
 
-      render(<BrowserRouter><Dashboard /></BrowserRouter>)
+      renderApp(<Dashboard />)
     })
 
     test('subscribes and listens the activity logger', () => {

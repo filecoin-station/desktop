@@ -1,30 +1,20 @@
-import useStationRewards from 'src/hooks/StationRewards'
-import { formatFilValue } from 'src/lib/utils'
-import Activity from 'src/pages/dashboard/Activity'
+import BorderedBox from 'src/components/BorderedBox'
+import ActivityInfo from './ActivityInfo'
 import ChartController from './ChartController'
+import useStationRewards from 'src/hooks/StationRewards'
+import RewardsInfo from './RewardsInfo'
 
 const Dashboard = (): JSX.Element => {
   const { historicalRewards, totalRewardsReceived, scheduledRewards } = useStationRewards()
 
   return (
-    <div className='flex gap-8'>
-      <section className='w-2/3 border border-grayscale-300'>
-        <div className='flex flex-wrap justify-between'>
-          <div>
-            <p>Total rewards received</p>
-            <p>{totalRewardsReceived} FIL</p>
-          </div>
-          <div>
-            <p>Next payout</p>
-            <p>{formatFilValue(scheduledRewards)} FIL</p>
-          </div>
-          <div className='w-full my-4'>
-            <ChartController historicalRewards={historicalRewards} />
-          </div>
-        </div>
-      </section>
-      <Activity />
-    </div>
+    <main className='flex items-start gap-5 px-9 mt-28 flex-1'>
+      <BorderedBox className='flex-1'>
+        <RewardsInfo totalRewardsReceived={totalRewardsReceived} scheduledRewards={scheduledRewards} />
+        <ChartController historicalRewards={historicalRewards} />
+      </BorderedBox>
+      <ActivityInfo />
+    </main>
   )
 }
 
