@@ -86,7 +86,7 @@ test.describe.serial('Application launch', async () => {
 
   test('wait for "SPARK started." activity log', async () => {
     await mainWindow.waitForSelector(
-      'div.activity-log p:has-text("SPARK started")',
+      'div.activity-log span:has-text("SPARK started")',
       { timeout: 1000 * TIMEOUT_MULTIPLIER }
     )
   })

@@ -52,7 +52,7 @@ const ActivityInfo = () => {
           </Text>
         </BorderedBox>
         <BorderedBox
-          className='p-5 h-full overflow-y-scroll custom-scrollbar flex-1 max-h-full'
+          className='p-5 h-full overflow-y-scroll custom-scrollbar flex-1 max-h-full activity-log'
           isGrouped
         >
           {Object.entries(activitiesByDate).map(([date, log]) => (
