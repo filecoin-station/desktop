@@ -75,6 +75,16 @@ module.exports = {
           top: '30%'
         }
       },
+      fradeFromBlue: {
+        from: {
+          background: '#E9EFFF',
+          color: '#2a1cf7'
+        },
+        to: {
+          background: 'transparent',
+          color: '#000'
+        }
+      },
       moveGridBlur: {
         from: {
           top: '70%'
@@ -97,7 +107,8 @@ module.exports = {
       infinite`,
       addressFormMoveUp: `addressFormMoveUp calc(0.7s * var(--factor)) 
       calc(0.1s * var(--factor))
-      cubic-bezier(0.87, 0, 0.13, 1) forwards`
+      cubic-bezier(0.87, 0, 0.13, 1) forwards`,
+      fradeFromBlue: 'fradeFromBlue 6s cubic-bezier(0.64, 0, 0.78, 0)'
     },
     colors: {
       white: '#fff',

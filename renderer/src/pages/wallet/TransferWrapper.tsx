@@ -24,6 +24,26 @@ const TransferWrapper = ({
   editDestinationAddress:Wallet['editDestinationAddress'];
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
 }) => {
+<<<<<<< HEAD
+=======
+  /* const [destinationFilAddress, editDestinationAddress] = useState('')
+  const [processingTransaction, setProcessingTransaction] = useState()
+  const [walletBalance, setWalletBalance] = useState('1')
+
+  function transferAllFundsToDestinationWallet () {
+    setProcessingTransaction({ status: 'processing', outgoing: true })
+
+    setTimeout(() => {
+      setProcessingTransaction({ status: 'succeeded', outgoing: true })
+    }, 18_000)
+
+    setTimeout(() => {
+      setProcessingTransaction(undefined)
+      setWalletBalance('0')
+    }, 18_000 + 6000)
+  } */
+
+>>>>>>> 5cb2c86 (highlight latest tx)
   const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)
   const inTransition = useRef(false)
 
