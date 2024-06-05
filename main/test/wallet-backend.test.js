@@ -53,7 +53,13 @@ describe('Wallet Backend', function () {
       this.timeout(120_000)
 
       await backend.setup(TEST_SEED_PHRASE)
-      await pRetry(() => backend.fetchAllTransactions(), { retries: 10 })
+      await pRetry(() => backend.fetchAllTransactions(), {
+        retries: 10,
+        onFailedAttempt: err => {
+          console.error(err)
+          console.error('Retrying...')
+        }
+      })
       assert.notStrictEqual(backend.transactions.length, 0, 'has transactions')
       for (const tx of backend.transactions) {
         assert.notStrictEqual(
