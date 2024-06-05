@@ -4,31 +4,35 @@ import {
   LinearScale,
   PointElement,
   LineElement,
-  Filler
+  Filler,
+  Tooltip
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { RewardsRecord, sumAllRewards } from 'src/hooks/StationRewards'
+import { TimeRange } from './ChartController'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  ExternalToltipHandler,
+  colors,
+  fonts,
+  formatTickDate,
+  hoverCrossLines,
+  updateTooltipElement,
+  renderPayoutEvents,
+  getTooltipValues,
+  chartPadding
+} from './chart-utils'
+import ChartTooltip from './ChartTooltip'
+import FilecoinSymbol from 'src/assets/img/icons/filecoin.svg'
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   Filler,
-  LineElement
+  LineElement,
+  Tooltip
 )
-
-const options = {
-  responsive: true,
-  animation: false,
-  plugins: {
-    legend: {
-      display: false
-    },
-    title: {
-      display: false
-    }
-  }
-} as const
 
 function getRewardValue (data: RewardsRecord['totalRewardsReceived'], moduleId: string) {
   if (moduleId === 'all') {
@@ -40,38 +44,173 @@ function getRewardValue (data: RewardsRecord['totalRewardsReceived'], moduleId: 
 
 const Chart = ({
   historicalRewards,
+  timeRange,
   moduleId
 }: {
   historicalRewards: RewardsRecord[];
+  timeRange: TimeRange;
   moduleId: string;
 }) => {
-  const labels = historicalRewards.map(record => new Date(record.timestamp).toDateString())
+  const [aspectRatio, setAspectRatio] = useState<number>()
+  const containerRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
 
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: 'Total rewards received',
-        data: historicalRewards.map(record => getRewardValue(record.totalRewardsReceived, moduleId)),
-        borderColor: '#777',
-        stepped: true
-      },
-      {
-        label: 'Scheduled rewards',
-        data: historicalRewards.map(record =>
+  const chartData = useMemo(() =>
+    historicalRewards.reduce<{
+      labels: number[];
+      totalRewards: number[];
+      scheduled: number[];
+    }>(
+      (acc, record) => {
+        acc.labels.push(new Date(record.timestamp).getTime())
+        acc.totalRewards.push(getRewardValue(record.totalRewardsReceived, moduleId))
+        acc.scheduled.push(
           getRewardValue(record.totalScheduledRewards, moduleId) +
-          getRewardValue(record.totalRewardsReceived, moduleId)),
-        borderColor: '#ddd',
-        border: false,
-        fill: '-1',
-        backgroundColor: '#ddd'
-      }
-    ]
+          getRewardValue(record.totalRewardsReceived, moduleId)
+        )
+
+        return acc
+      }, {
+        labels: [],
+        totalRewards: [],
+        scheduled: []
+      })
+  , [historicalRewards, moduleId])
+
+  const onTooltipUpdate = useCallback<ExternalToltipHandler>((args) => {
+    if (!tooltipRef.current) {
+      return
+    }
+
+    updateTooltipElement({
+      element: tooltipRef.current,
+      ...getTooltipValues(args)
+    })
+  }, [tooltipRef])
+
+  function handleResize () {
+    // chartjs options accepts an aspect ratio option, which must be calculated
+    // based on the parent element
+    if (containerRef.current?.parentElement) {
+      const { width, height } = containerRef.current?.parentElement.getBoundingClientRect()
+      setAspectRatio(width / height)
+    }
   }
 
+  useEffect(() => {
+    handleResize()
+  }, [])
+
   return (
-    <div className='relative w-[70vw] h-[64vh]'>
-      <Line options={options} data={data}/>
+    <div ref={containerRef} className='relative flex-1 max-w-full flex items-center'>
+      <ChartTooltip ref={tooltipRef} />
+      <img data-filecoinsymbol className='absolute opacity-0' src={FilecoinSymbol} alt="Filecoin symbol" />
+      {aspectRatio
+        ? (
+          <Line
+            options={{
+              responsive: true,
+              onResize: handleResize,
+              aspectRatio,
+              animation: false,
+              plugins: {
+                legend: {
+                  display: true
+                },
+                title: {
+                  display: false
+                },
+                tooltip: {
+                  enabled: false,
+                  external: onTooltipUpdate
+                }
+              },
+              interaction: {
+                intersect: false,
+                mode: 'index'
+              },
+              layout: {
+                padding: chartPadding,
+                autoPadding: false
+              },
+              scales: {
+                y: {
+                  ticks: {
+                    font: {
+                      family: fonts.mono,
+                      size: 12
+                    },
+                    padding: 10,
+                    color: colors.black
+                  },
+                  border: {
+                    dash: [4, 4],
+                    display: false
+                  },
+                  grid: {
+                    color: colors.xLine,
+                    drawTicks: false,
+                    drawOnChartArea: true
+                  }
+                },
+                x: {
+                  grid: {
+                    drawOnChartArea: false,
+                    drawTicks: false,
+                    z: 1
+                  },
+                  border: {
+                    display: false
+                  },
+                  ticks: {
+                    color: colors.xAxisText,
+                    font: {
+                      family: fonts.body,
+                      size: 12
+                    },
+                    align: 'center',
+                    padding: 20,
+                    maxRotation: 0,
+                    autoSkip: false,
+                    callback: function (val, index) {
+                      return formatTickDate(this.getLabelForValue(Number(val)), index, timeRange)
+                    }
+                  }
+                }
+              },
+              datasets: {
+                line: {
+                  pointHoverRadius: 0,
+                  pointRadius: 0
+                }
+              }
+            }}
+            data={{
+              labels: chartData.labels,
+              datasets: [
+                {
+                  label: 'Total rewards received',
+                  data: chartData.totalRewards,
+                  borderColor: colors.totalRewardsLine,
+                  fill: 'start',
+                  backgroundColor: colors.totalRewardsBg,
+                  stepped: true
+                },
+                {
+                  label: 'Scheduled rewards',
+                  data: chartData.scheduled,
+                  borderColor: colors.scheduledBg,
+                  pointRadius: 0,
+                  tension: 0.4,
+                  fill: '-1',
+                  backgroundColor: colors.scheduledBg
+                }
+              ]
+            }}
+            plugins={[hoverCrossLines, renderPayoutEvents]}
+          />
+        )
+        : null}
     </div>
   )
 }

@@ -38,20 +38,23 @@ const ActivityInfo = () => {
   , [activities])
 
   return (
-    <section className='flex flex-col gap-2 w-[217px]'>
+    <>
       <BorderedBox className='p-5'>
         <Text as='h3' font='mono' size='3xs' color='primary' uppercase className='mb-3'>
             &#47;&#47; Jobs completed ... :
         </Text>
         <Text font='mono' size='s'>{totalJobs.toLocaleString()}</Text>
       </BorderedBox>
-      <div>
+      <div className='h-full max-h-[68vh] flex flex-col'>
         <BorderedBox className='py-4 px-5' isGrouped>
           <Text as='h3' font='mono' size='3xs' color='primary' uppercase>
               &#47;&#47; Activity ... :
           </Text>
         </BorderedBox>
-        <BorderedBox className='p-5 h-full max-h-[60vh] overflow-y-scroll custom-scrollbar' isGrouped>
+        <BorderedBox
+          className='p-5 h-full overflow-y-scroll custom-scrollbar flex-1 max-h-full'
+          isGrouped
+        >
           {Object.entries(activitiesByDate).map(([date, log]) => (
             <div key={date}>
               <Text size='2xs' color='secondary'>{date}</Text>
@@ -60,7 +63,7 @@ const ActivityInfo = () => {
           ))}
         </BorderedBox>
       </div>
-    </section>
+    </>
   )
 }
 
