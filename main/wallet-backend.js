@@ -29,7 +29,7 @@ const log = require('electron-log').scope('wallet-backend')
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 // eslint-disable-next-line max-len
-const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3MTc0OTk3MTgsImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.1COrxNiDQado0s5Rb2yxL-GNFTCbtYnXQGCQcVnm9hjRaMk6rhgesfRP_Um_B09NcQY02oWpk0y75njBkDwp5A'
+const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3MjI3Njk5NjYsImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.N8jLM3xyNuHOGarXaLaat7dSsbHKQGHU_WW6hBK-zwvYV-8ifCDUMQU1zJhlw90UU7m4ZrxCFTnB8LbeVtVwxQ'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 async function noop () {}
@@ -87,9 +87,12 @@ class WalletBackend {
       await fs.readFile(join(__dirname, 'filforwarder-abi.json'), 'utf8'),
       this.provider
     ).connect(this.signer)
+    const SparkImpactEvaluator = await import(
+      '@filecoin-station/spark-impact-evaluator'
+    )
     this.meridian = new ethers.Contract(
-      '0x811765AccE724cD5582984cb35f5dE02d587CA12',
-      await fs.readFile(join(__dirname, 'meridian-abi.json'), 'utf8'),
+      SparkImpactEvaluator.ADDRESS,
+      SparkImpactEvaluator.ABI,
       this.provider
     )
 
