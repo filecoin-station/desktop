@@ -2,7 +2,6 @@ import Button from 'src/components/Button'
 import Text from 'src/components/Text'
 import { formatFilValue } from 'src/lib/utils'
 import { Wallet } from 'src/hooks/StationWallet'
-import useCurrentTransactionStatus from 'src/hooks/useCurrentTransactionStatus'
 import Tooltip from 'src/components/Tooltip'
 import { ReactNode, useState } from 'react'
 import Transition from 'src/components/Transition'
@@ -38,8 +37,6 @@ const BalanceControl = ({
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
 }) => {
   const [isShowingConfirm, setIsShowingConfirm] = useState(false)
-
-  const { currentTransaction } = useCurrentTransactionStatus(processingTransaction)
   const hasSufficientBalance = Number(walletBalance) >= sendThreshold
 
   return (
@@ -94,7 +91,7 @@ const BalanceControl = ({
             </Text>
           </div>
           <div className='h-[45%] flex flex-col'>
-            {!currentTransaction && (
+            {!processingTransaction && (
               <TooltipWrapper hasTooltip={!hasSufficientBalance}>
                 <Button
                   type='button'
@@ -106,7 +103,7 @@ const BalanceControl = ({
                 </Button>
               </TooltipWrapper>
             )}
-            <TransactionStatusIndicator transaction={currentTransaction} theme='dark' />
+            <TransactionStatusIndicator transaction={processingTransaction} theme='dark' />
           </div>
         </Transition>
       </div>
