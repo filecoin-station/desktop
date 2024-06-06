@@ -14,7 +14,9 @@ const DestinationAddressForm = ({
 }) => {
   const { inputRef, validateOnChange, inputState } = useAddressValidation({ initialValid: false })
 
-  function handleSubmit () {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault()
+
     if (inputRef.current) {
       onSave(inputRef.current.value)
     }
@@ -24,6 +26,8 @@ const DestinationAddressForm = ({
 
   return (
     <Transition
+      as='form'
+      onSubmit={handleSubmit}
       on={!hasAddressSaved}
       outClass='bg-black scale-95 p-[1px] border-0'
       inClass='bg-white max-h-[208px] border-slate-400 p-5'
@@ -59,7 +63,7 @@ const DestinationAddressForm = ({
           variant='primary'
           className='w-fit m-auto'
           disabled={!inputState.isValid}
-          onClick={handleSubmit}
+          type='submit'
         >
           Save
         </Button>
