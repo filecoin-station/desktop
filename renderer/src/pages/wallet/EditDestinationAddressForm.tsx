@@ -6,6 +6,7 @@ import EditIcon from 'src/assets/img/icons/edit.svg?react'
 import Button from 'src/components/Button'
 import useAddressValidation from 'src/hooks/useAddressValidation'
 import Tooltip from 'src/components/Tooltip'
+import Transition from 'src/components/Transition'
 
 const EditDestinationAddressForm = ({
   destinationAddress,
@@ -34,60 +35,62 @@ const EditDestinationAddressForm = ({
     if (editing) {
       inputRef.current?.focus()
       inputRef.current?.setSelectionRange(0, inputRef.current.value.length)
+    } else {
+      inputRef.current?.setSelectionRange(0, 0)
+      inputRef.current?.blur()
     }
   }, [editing, inputRef])
 
   return (
-    <div className="flex flex-col gap-3 w-[80%] mx-auto mt-[200px] z-10">
-      <Text uppercase font="mono" size="3xs" className='text-slate-50'>Destination address</Text>
+    <div className='absolute left-0 right-0 mx-auto top-[30%] scale-95 -translate-y-[50%]'>
+      <div className="flex flex-col w-[80%] max-w-[600px] mx-auto z-10">
+        <Transition on className='absolute -top-[32px]'>
+          <Text uppercase font="mono" size="3xs" className='text-slate-50'>Destination address</Text>
+        </Transition>
 
-      <div className='relative'>
-        <Tooltip
-          bg='light'
-          open={showTooltip}
-          trigger={<div className='absolute h-0 bottom-0 w-full'></div>}
-          content="Saved"
-          side='bottom'
-        />
-        {editing
-          ? (
-            <TextInput
-              ref={inputRef}
-              variant='secondary'
-              defaultValue={destinationAddress}
-              onChange={validateOnChange}
-              error={inputState.error}
-            />
-          )
-          : (
-            <div className='border border-dashed border-slate-400 p-[10px] rounded-[4px] text-center bg-black'>
-              <Text size="xs" className='text-slate-100 leading-6'>{destinationAddress}</Text>
-            </div>
-          )}
+        <div className='relative'>
+          <Tooltip
+            bg='light'
+            open={showTooltip}
+            trigger={<div className='absolute h-0 bottom-0 w-full'></div>}
+            content="Saved"
+            side='bottom'
+          />
+          <TextInput
+            ref={inputRef}
+            variant='secondary'
+            defaultValue={destinationAddress}
+            onChange={validateOnChange}
+            error={inputState.error}
+            disabled={!editing}
+          />
+          <Transition on className='absolute right-0 -bottom-12'>
+            {editing
+              ? (
+                <Button
+                  variant='primary'
+                  type='button'
+                  className='ml-auto py-[4px]'
+                  onClick={handleSave}
+                  disabled={!inputState.isValid}
+                >
+                  Save
+                </Button>
+              )
+              : (
+                <button
+                  type='button'
+                  className='py-1 px-2 flex items-center gap-2 text-white focus-visible:outline-slate-400'
+                  onClick={() => setEditing(true)}
+                >
+                  <EditIcon />
+                  <Text size="xs" bold color='white'>Edit</Text>
+                </button>
+              )}
+          </Transition>
+        </div>
+
       </div>
-
-      {editing
-        ? (
-          <Button
-            variant='primary'
-            type='button'
-            className='ml-auto py-[4px]'
-            onClick={handleSave}
-            disabled={!inputState.isValid}
-          >
-            Save
-          </Button>
-        )
-        : (
-          <button
-            type='button'
-            className='ml-auto flex items-center gap-2 text-white focus-visible:outline-slate-400'
-            onClick={() => setEditing(true)}
-          >
-            <EditIcon />
-            <Text size="xs" bold color='white'>Edit</Text>
-          </button>
-        )}
     </div>
   )
 }

@@ -66,12 +66,37 @@ module.exports = {
         to: {
           transform: 'rotate(360deg);'
         }
+      },
+      addressFormMoveUp: {
+        from: {
+          top: '70%'
+        },
+        to: {
+          top: '30%'
+        }
+      },
+      moveGridBlur: {
+        from: {
+          top: '70%'
+        },
+        '50%': {
+          top: '10%',
+          scale: 1
+        },
+        '100%': {
+          top: '10%',
+          scale: 0
+        }
       }
     },
     animation: {
-      fadeIn: 'fadeIn 200ms ease',
-      fadeOut: 'fadeOut 200ms ease',
-      spin: 'spin 1s linear infinite'
+      fadeIn: 'fadeIn 200ms ease forwards',
+      fadeOut: 'fadeOut 200ms ease forwards',
+      spin: 'spin 1s linear infinite',
+      moveGridBlur: 'moveGridBlur 3s 1s linear infinite',
+      addressFormMoveUp: `addressFormMoveUp calc(0.7s * var(--factor)) 
+      calc(0.1s * var(--factor))
+      cubic-bezier(0.87, 0, 0.13, 1) forwards`
     },
     colors: {
       white: '#fff',

@@ -3,19 +3,18 @@ import { Wallet } from 'src/hooks/StationWallet'
 import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
-import { useState } from 'react'
-import ConfirmTransfer from './ConfirmTransfer'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
+import Transition from 'src/components/Transition'
 
 const SEND_THRESHOLD = 0.01
 
 const TransferWrapper = ({
-  destinationFilAddress,
   stationAddress,
+  destinationFilAddress,
   processingTransaction,
   walletBalance,
   editDestinationAddress,
-  transferAllFundsToDestinationWallet,
-  dismissCurrentTransaction
+  transferAllFundsToDestinationWallet
 }: {
   walletBalance: Wallet['walletBalance'];
   destinationFilAddress?: Wallet['destinationFilAddress'];
@@ -23,41 +22,62 @@ const TransferWrapper = ({
   processingTransaction : Wallet['processingTransaction'];
   editDestinationAddress:Wallet['editDestinationAddress'];
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
-  dismissCurrentTransaction: Wallet['dismissCurrentTransaction'];
 }) => {
-  const [isShowingConfirm, setIsShowingConfirm] = useState(false)
+  const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)
+  const inTransition = useRef(false)
+
+  useEffect(() => {
+    if (destinationFilAddress && !inTransition.current) {
+      setIsShowingAddressEdit(true)
+    }
+  }, [destinationFilAddress])
 
   return (
-    <section className='w-1/2 bg-black relative flex flex-col'>
+    <section
+      className='w-1/2 bg-black relative flex flex-col overflow-hidden'
+      style={{ '--factor': 1 } as CSSProperties}
+    >
+
       {stationAddress && (
         <>
-          {!destinationFilAddress && (
-            <DestinationAddressForm editDestinationAddress={editDestinationAddress} />
-          )}
+          <Transition
+            on={!destinationFilAddress}
+            unmountOnEnd
+            onUnmount={() => {
+              inTransition.current = false
+              setIsShowingAddressEdit(true)
+            }}
+            outClass='animate-addressFormMoveUp'
+            className='absolute w-[80%] max-w-[600px] mx-auto left-0 right-0 top-[70%] -translate-y-[50%]'
+          >
+            <DestinationAddressForm
+              onSave={(value) => {
+                inTransition.current = true
+                editDestinationAddress(value)
+              }}
+              destinationFilAddress={destinationFilAddress}
+            />
+          </Transition>
 
-          {destinationFilAddress && (
+          {isShowingEditAddress && (
             <EditDestinationAddressForm
               destinationAddress={destinationFilAddress}
               editDestinationAddress={editDestinationAddress}
             />
           )}
 
-          {destinationFilAddress && !isShowingConfirm && (
+          <Transition
+            on={isShowingEditAddress}
+            unmountOnEnd
+            className='absolute top-[70%] left-0 right-0 mx-auto -translate-y-[50%] balance-control-wrapper'
+          >
             <BalanceControl
               walletBalance={walletBalance}
               sendThreshold={SEND_THRESHOLD}
               processingTransaction={processingTransaction}
-              transfer={() => setIsShowingConfirm(true)}
-            />
-          )}
-
-          {isShowingConfirm && (
-            <ConfirmTransfer
-              walletBalance={walletBalance}
               transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
-              hide={() => setIsShowingConfirm(false)}
             />
-          )}
+          </Transition>
         </>
       )}
 

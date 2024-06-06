@@ -10,8 +10,8 @@ type TextInputProps = {
 
 const variantClassNames = {
   primary: `text-black placeholder:text-secondary focus:outline-none rounded-sm 
-  focus:placeholder-shown:ring-2 focus:placeholder-shown:ring-slate-400`,
-  secondary: `px-5 text-white placeholder:text-white border bg-black text-center
+  placeholder-shown:focus-visible:ring-2 placeholder-shown:focus-visible:ring-slate-400`,
+  secondary: `px-5 text-white placeholder:text-white border bg-black
   focus:ring-0 ring-0 focus:outline-1 rounded-[4px]`
 }
 
@@ -26,13 +26,14 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function ({
       'border-dashed border-white focus:outline-slate-400': variant === 'secondary' && !error,
       'border-solid border-red-400 focus:outline-red-400': variant === 'secondary' && error
     },
-    'py-2 text-body-s w-full peer'
+    'py-2 text-body-s w-full peer',
+    props.className
   )
 
   const borderClassName = classNames({
     'border-slate-400 peer-hover:border-black peer-focus:border-black': !error,
     'border-red-400 peer-hover:border-red peer-focus:border-red': error
-  }, 'w-full border-b')
+  }, 'w-full border-b absolute top-full')
 
   const errorClassName = classNames({
     'mt-2': variant === 'primary',
@@ -41,15 +42,17 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(function ({
 
   return (
     <div>
-      <input
-        type="text"
-        className={inputClassName}
-        ref={ref}
-        {...props}
-      />
-      {variant === 'primary' && (
-        <div className={borderClassName}></div>
-      )}
+      <label className='relative block'>
+        <input
+          type="text"
+          ref={ref}
+          {...props}
+          className={inputClassName}
+        />
+        {variant === 'primary' && (
+          <div className={borderClassName}></div>
+        )}
+      </label>
       {error && (
         <div className={errorClassName}>
           <WarningIcon className='w-4 h-4 mt-[1px]' />

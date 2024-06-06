@@ -70,7 +70,38 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
+    display: -webkit-box;    
+  }
+
+  .destination-address-form {
+    transition: 
+      transform calc(0.3s * var(--factor)) ease, 
+      padding calc(0.3s * var(--factor)) ease, 
+      max-height calc(0.3s * var(--factor)) ease, 
+      background-color calc(0.3s * var(--factor)) calc(0.3s * var(--factor)) ease;
+  }
+  
+  .destination-address-form-info {
+    transition: all calc(0.3s * var(--factor)) ease;
+  }
+  
+  .destination-address-form-input {
+    transition: 
+      transform calc(0.3s * var(--factor)) ease,
+      background-color calc(0.3s * var(--factor)) calc(0.3s * var(--factor)) ease,
+      color calc(0.3s * var(--factor)) calc(0.3s * var(--factor)) ease
+  }
+
+  .balance-control {
+    transition: 
+      width calc(0.3s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      height calc(0.3s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      border-radius calc(0.3s * var(--factor)) calc(0.1s * var(--factor)) cubic-bezier(0.25, 1, 0.5, 1),
+      background-color calc(0.2s * var(--factor)) ease;
+  }
+
+  .balance-control-wrapper {
+    animation: fadeIn 500ms 200ms ease-in forwards;
   }
 }
 
