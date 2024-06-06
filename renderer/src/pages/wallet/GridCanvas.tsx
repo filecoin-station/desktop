@@ -10,11 +10,11 @@ function getForceFromBalance (balance: number) {
 const GridCanvas = ({
   walletBalance,
   destinationFilAddress,
-  transaction
+  processingTransaction
 }: {
   walletBalance: Wallet['walletBalance'];
   destinationFilAddress: Wallet['destinationFilAddress'];
-  transaction?: FILTransactionProcessing;
+  processingTransaction?: FILTransactionProcessing;
 }) => {
   const ref = useRef<HTMLCanvasElement>(null)
   const gridCanvas = useRef<Grid>()
@@ -55,7 +55,7 @@ const GridCanvas = ({
   return (
     <>
       <canvas ref={ref} className='absolute opacity-0 animate-fadeIn'></canvas>
-      {transaction?.status === 'processing' && (
+      {processingTransaction?.status === 'processing' && (
         <div className={`absolute w-[70px] aspect-square animate-moveGridBlur 
         top-[50%] right-0 left-0 m-auto rounded-full
         bg-white mix-blend-overlay blur`}

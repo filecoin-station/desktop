@@ -5,6 +5,7 @@ import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
 import { CSSProperties, useRef, useState } from 'react'
 import Transition from 'src/components/Transition'
+import GridCanvas from './GridCanvas'
 
 const SEND_THRESHOLD = 0.01
 
@@ -31,7 +32,11 @@ const TransferWrapper = ({
       className='w-1/2 bg-black relative flex flex-col overflow-hidden'
       style={{ '--factor': 1 } as CSSProperties}
     >
-
+      <GridCanvas
+        walletBalance={walletBalance}
+        destinationFilAddress={destinationFilAddress}
+        processingTransaction={processingTransaction}
+      />
       {stationAddress && (
         <>
           <Transition
