@@ -53,7 +53,7 @@ const TransferWrapper = ({
               setIsShowingAddressEdit(true)
             }}
             outClass='animate-addressFormMoveUp'
-            className='absolute w-[80%] max-w-[600px] mx-auto left-0 right-0 top-[70%] -translate-y-[50%]'
+            className='absolute w-[80%] max-w-[480px] mx-auto left-0 right-0 top-[70%] -translate-y-[50%]'
           >
             <DestinationAddressForm
               onSave={(value) => {
