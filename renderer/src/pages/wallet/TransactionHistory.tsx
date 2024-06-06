@@ -7,32 +7,42 @@ import ReceiveIcon from 'src/assets/img/icons/receive.svg?react'
 import classNames from 'classnames'
 import stationIllustration from 'src/assets/img/station-illustration.png'
 import LinkOut from 'src/assets/img/icons/link-out.svg?react'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const TransactionHistory = ({
   walletTransactions = []
 }: {
   walletTransactions: Array<FILTransaction>;
 }) => {
-  const isInitialRender = useRef(true)
+  const [completeTransactions, setCompleteTransactions] = useState<
+  Array<FILTransaction & { isNew?: boolean }>
+  >()
+  const list = useRef<string[]>()
 
   useEffect(() => {
-    if (walletTransactions.length) {
-      isInitialRender.current = false
+    const complete = walletTransactions?.filter(tx => tx.status !== 'processing')
+
+    if (complete.length !== list.current?.length) {
+      setCompleteTransactions(complete?.map(tx => ({
+        ...tx,
+        isNew: list.current && !list.current.includes(tx.hash) && !!completeTransactions
+      })))
     }
-  }, [walletTransactions])
+  }, [walletTransactions, completeTransactions])
+
+  list.current = completeTransactions?.map(tx => tx.hash) || []
 
   return (
     <div className='flex flex-col h-[300px] overflow-y-scroll custom-scrollbar'>
-      {walletTransactions?.length > 0
-        ? walletTransactions?.map((transaction, idx) => (
+      {completeTransactions && completeTransactions?.length > 0
+        ? completeTransactions?.map((transaction) => (
           <button
             type='button'
             onClick={() => openExplorerLink(transaction.hash)}
             key={transaction.hash}
             className={classNames({
-              'pr-4': walletTransactions && walletTransactions?.length > 5,
-              'animate-fradeFromBlue': !isInitialRender.current && idx === 0
+              'pr-4': completeTransactions?.length > 5,
+              'animate-fradeFromBlue': transaction.isNew
             }, 'flex gap-4 text-left px-5 py-2 group hover:bg-slate-100')}
           >
             <div className="text-inherit">
