@@ -1,3 +1,5 @@
+import { easeInOutCubic, easeOutCirc } from './grid-utils'
+
 type Line = {
   x1: number;
   y1: number;
@@ -12,14 +14,6 @@ type Line = {
   nthFromCenter: number;
 }
 
-function easeInOutCubic (x: number): number {
-  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2
-}
-
-function easeOutCirc (x: number): number {
-  return Math.sqrt(1 - Math.pow(x - 1, 2))
-}
-
 export class Grid {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
@@ -30,7 +24,7 @@ export class Grid {
   rows: Line[] = []
   cols : Line[] = []
   target = { x: 0, y: 0 }
-  warp = { x: 0, y: 550, radius: 90, linesAffected: 10 }
+  warp = { x: 0, y: 0, radius: 90, linesAffected: 10 }
   midLine = { x: 0, y: 0 }
   force = 0
 
@@ -42,8 +36,13 @@ export class Grid {
     container: HTMLElement;
   }) {
     this.canvas = canvas
-    this.ctx = this.canvas.getContext('2d')!
+    this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D
     this.setup(container)
+  }
+
+  updateWarp (config: Record<string, number>) {
+    this.warp.linesAffected = config.linesAffected
+    this.warp.radius = config.radius
   }
 
   setup (container?: HTMLElement) {
@@ -60,7 +59,7 @@ export class Grid {
     this.canvas.style.height = `${this.height}px`
     this.ctx.scale(dPr, dPr)
 
-    this.ctx = this.canvas.getContext('2d')!
+    // this.ctx = this.canvas.getContext('2d')!
     this.ctx.imageSmoothingQuality = 'high'
     this.ctx.imageSmoothingEnabled = true
     this.ctx.setLineDash([this.dashSize])
@@ -158,15 +157,13 @@ export class Grid {
   renderMidLine () {
     this.ctx.lineWidth = 0.8
     this.ctx.strokeStyle = '#ffffff'
-    /* this.ctx.shadowColor = '#ffffff'
-    this.ctx.shadowBlur = 50 */
     this.ctx.beginPath()
     this.ctx.moveTo(this.midLine.x, this.warp.y)
     this.ctx.lineTo(this.midLine.x, this.midLine.y)
     this.ctx.stroke()
   }
 
-  circle (x: number, y: number, size: number) {
+  renderCricle (x: number, y: number, size: number) {
     this.ctx.ellipse(
       x,
       y,
@@ -183,13 +180,13 @@ export class Grid {
     this.ctx.fillStyle = '#ffffff'
     this.ctx.setLineDash([4])
     this.ctx.beginPath()
-    this.circle(this.target.x, this.target.y, 4)
+    this.renderCricle(this.target.x, this.target.y, 4)
     this.ctx.fill()
     this.ctx.beginPath()
-    this.circle(this.target.x, this.target.y, 8)
+    this.renderCricle(this.target.x, this.target.y, 8)
     this.ctx.stroke()
     this.ctx.beginPath()
-    this.circle(this.target.x, this.target.y, 20)
+    this.renderCricle(this.target.x, this.target.y, 20)
     this.ctx.stroke()
   }
 
@@ -201,9 +198,6 @@ export class Grid {
     const bendSize = 200 * Math.abs(line.ease)
     const bendFollow = (this.force / 20) * line.ease
 
-    //
-    const warpApply = line.ease * this.force
-
     return {
       bendInStart,
       bendInEnd: bendInStart + bendSize,
@@ -212,11 +206,12 @@ export class Grid {
       bendOutStart: bendOutEnd - bendSize,
       bendOutCp: bendOutEnd - bendSize / 2,
       bendOutEnd,
-      warpApply
+      warpApply: line.ease * this.force
     }
   }
 
   renderGrid () {
+    this.ctx.clearRect(0, 0, this.width, this.height)
     this.ctx.lineWidth = 0.5
     this.ctx.strokeStyle = '#FFFFFF66'
     this.calcGridLines()
@@ -271,6 +266,29 @@ export class Grid {
     })
   }
 
+  // Transition between 2 states, transitioning the force value
+  // and revealing the midLine
+  tweenRender ({
+    targetForce,
+    duration,
+    delay = 0
+  }: {
+    targetForce: number;
+    duration: number;
+    delay?: number;
+  }) {
+    setTimeout(() => {
+      this.tweenRenderFrame({
+        forceDiff: targetForce - this.force,
+        midLineYDiff: this.midLine.y - (this.target.y + 20),
+        duration,
+        acc: 0,
+        frame: 0
+      })
+    }, delay)
+  }
+
+  // Handle each transition frame, applying easing
   tweenRenderFrame (args: {
     forceDiff: number;
     midLineYDiff: number;
@@ -298,25 +316,5 @@ export class Grid {
     this.renderGrid()
 
     requestAnimationFrame(() => this.tweenRenderFrame(args))
-  }
-
-  tweenRender ({
-    targetForce,
-    duration,
-    delay = 0
-  }: {
-    targetForce: number;
-    duration: number;
-    delay?: number;
-  }) {
-    setTimeout(() => {
-      this.tweenRenderFrame({
-        forceDiff: targetForce - this.force,
-        midLineYDiff: this.midLine.y - (this.target.y + 20),
-        duration,
-        acc: 0,
-        frame: 0
-      })
-    }, delay)
   }
 }

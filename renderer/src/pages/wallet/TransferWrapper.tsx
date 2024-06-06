@@ -3,7 +3,7 @@ import { Wallet } from 'src/hooks/StationWallet'
 import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
-import { CSSProperties, useRef, useState } from 'react'
+import { CSSProperties, useEffect, useRef, useState } from 'react'
 import Transition from 'src/components/Transition'
 import GridCanvas from './GridCanvas'
 
@@ -26,6 +26,12 @@ const TransferWrapper = ({
 }) => {
   const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)
   const inTransition = useRef(false)
+
+  useEffect(() => {
+    if (destinationFilAddress && !inTransition.current) {
+      setIsShowingAddressEdit(true)
+    }
+  }, [destinationFilAddress])
 
   return (
     <section

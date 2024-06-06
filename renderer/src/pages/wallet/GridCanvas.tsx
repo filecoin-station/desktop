@@ -2,10 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Wallet } from 'src/hooks/StationWallet'
 import { Grid } from 'src/lib/grid'
 import { FILTransactionProcessing } from '../../../../shared/typings'
-
-function getForceFromBalance (balance: number) {
-  return balance * 260 / 1.3
-}
+import { getGridConfigForBalance } from 'src/lib/grid-utils'
 
 const GridCanvas = ({
   walletBalance,
@@ -17,23 +14,23 @@ const GridCanvas = ({
   processingTransaction?: FILTransactionProcessing;
 }) => {
   const ref = useRef<HTMLCanvasElement>(null)
-  const gridCanvas = useRef<Grid>()
+  const grid = useRef<Grid>()
 
   // On resize, run setup again to correct positioning
   function handleResize () {
-    gridCanvas.current?.setup(ref.current?.parentElement || undefined)
-    gridCanvas.current?.renderGrid()
+    grid.current?.setup(ref.current?.parentElement || undefined)
+    grid.current?.renderGrid()
   }
 
   useEffect(() => {
-    if (!gridCanvas.current && ref.current?.parentElement) {
-      // Initial canvas setup
-      gridCanvas.current = new Grid({
+    // Initial canvas setup, should only run once
+    if (!grid.current && ref.current?.parentElement) {
+      grid.current = new Grid({
         canvas: ref.current,
         container: ref.current.parentElement
       })
-
-      gridCanvas.current.renderGrid()
+      grid.current.updateWarp(getGridConfigForBalance(Number(walletBalance)))
+      grid.current.renderGrid()
     }
 
     window.addEventListener('resize', handleResize)
@@ -41,16 +38,19 @@ const GridCanvas = ({
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Adjust warping to balance
   useEffect(() => {
-    if (destinationFilAddress) {
-      gridCanvas.current?.tweenRender({
+    // Adjust warping to balance
+    if (destinationFilAddress && !processingTransaction) {
+      const config = getGridConfigForBalance(Number(walletBalance))
+
+      grid.current?.updateWarp(config)
+      grid.current?.tweenRender({
         duration: 100,
-        targetForce: getForceFromBalance(Number(walletBalance)),
+        targetForce: config.force,
         delay: 500
       })
     }
-  }, [destinationFilAddress, walletBalance])
+  }, [destinationFilAddress, walletBalance, processingTransaction])
 
   return (
     <>
