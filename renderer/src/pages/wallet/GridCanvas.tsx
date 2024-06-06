@@ -4,6 +4,10 @@ import { Grid } from 'src/lib/grid'
 import { FILTransactionProcessing } from '../../../../shared/typings'
 import { getGridConfigForBalance } from 'src/lib/grid-utils'
 
+// Initialize grid outside component lifecycle,
+// so it persists between navigations
+const grid = new Grid()
+
 const GridCanvas = ({
   walletBalance,
   destinationFilAddress,
@@ -14,23 +18,24 @@ const GridCanvas = ({
   processingTransaction?: FILTransactionProcessing;
 }) => {
   const ref = useRef<HTMLCanvasElement>(null)
-  const grid = useRef<Grid>()
 
   // On resize, run setup again to correct positioning
   function handleResize () {
-    grid.current?.setup(ref.current?.parentElement || undefined)
-    grid.current?.renderGrid()
+    if (!ref.current?.parentElement) return
+
+    grid.setCanvas({
+      canvas: ref.current,
+      container: ref.current.parentElement
+    })
+    grid.renderGrid()
   }
 
   useEffect(() => {
-    // Initial canvas setup, should only run once
-    if (!grid.current && ref.current?.parentElement) {
-      grid.current = new Grid({
+    if (ref.current?.parentElement) {
+      grid.setCanvas({
         canvas: ref.current,
         container: ref.current.parentElement
       })
-      grid.current.updateWarp(getGridConfigForBalance(Number(walletBalance)))
-      grid.current.renderGrid()
     }
 
     window.addEventListener('resize', handleResize)
@@ -39,18 +44,19 @@ const GridCanvas = ({
   }, [])
 
   useEffect(() => {
-    // Adjust warping to balance
-    if (destinationFilAddress && !processingTransaction) {
-      const config = getGridConfigForBalance(Number(walletBalance))
-
-      grid.current?.updateWarp(config)
-      grid.current?.tweenRender({
-        duration: 100,
-        targetForce: config.force,
-        delay: 500
-      })
+    if (!destinationFilAddress) {
+      return
     }
-  }, [destinationFilAddress, walletBalance, processingTransaction])
+
+    const config = getGridConfigForBalance(Number(walletBalance))
+    const isFirstRender = grid.force === 0
+    grid.updateWarp(config)
+    grid.tweenRender({
+      duration: 100,
+      targetForce: config.force,
+      delay: isFirstRender ? 500 : 0
+    })
+  }, [destinationFilAddress, walletBalance])
 
   return (
     <>

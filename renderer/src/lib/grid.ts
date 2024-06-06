@@ -15,8 +15,8 @@ type Line = {
 }
 
 export class Grid {
-  canvas: HTMLCanvasElement
-  ctx: CanvasRenderingContext2D
+  canvas = undefined as unknown as HTMLCanvasElement
+  ctx = undefined as unknown as CanvasRenderingContext2D
   height = 0
   width = 0
   gridSize = 40
@@ -28,7 +28,7 @@ export class Grid {
   midLine = { x: 0, y: 0 }
   force = 0
 
-  constructor ({
+  setCanvas ({
     canvas,
     container
   }: {
@@ -37,16 +37,6 @@ export class Grid {
   }) {
     this.canvas = canvas
     this.ctx = canvas.getContext('2d') as CanvasRenderingContext2D
-    this.setup(container)
-  }
-
-  updateWarp (config: Record<string, number>) {
-    this.warp.linesAffected = config.linesAffected
-    this.warp.radius = config.radius
-  }
-
-  setup (container?: HTMLElement) {
-    if (!container) return
 
     // Ensure the canvas is crisp using device pixel ratio
     // https://gist.github.com/callumlocke/cc258a193839691f60dd
@@ -76,6 +66,11 @@ export class Grid {
     this.warp.y = this.percent(70, 'y')
     this.midLine.x = this.percent(50, 'x')
     this.midLine.y = this.percent(70, 'y')
+  }
+
+  updateWarp (config: Record<string, number>) {
+    this.warp.linesAffected = config.linesAffected
+    this.warp.radius = config.radius
   }
 
   // Get the point of the grid that matches a percentage of x / y
@@ -211,7 +206,6 @@ export class Grid {
   }
 
   renderGrid () {
-    this.ctx.clearRect(0, 0, this.width, this.height)
     this.ctx.lineWidth = 0.5
     this.ctx.strokeStyle = '#FFFFFF66'
     this.calcGridLines()
@@ -277,15 +271,22 @@ export class Grid {
     duration: number;
     delay?: number;
   }) {
-    setTimeout(() => {
-      this.tweenRenderFrame({
-        forceDiff: targetForce - this.force,
-        midLineYDiff: this.midLine.y - (this.target.y + 20),
-        duration,
-        acc: 0,
-        frame: 0
-      })
-    }, delay)
+    const args = {
+      forceDiff: targetForce - this.force,
+      midLineYDiff: this.midLine.y - (this.target.y + 20),
+      duration,
+      acc: 0,
+      frame: 0
+    }
+
+    if (delay) {
+      this.renderGrid()
+      setTimeout(() => {
+        this.tweenRenderFrame(args)
+      }, delay)
+    } else {
+      this.tweenRenderFrame(args)
+    }
   }
 
   // Handle each transition frame, applying easing
