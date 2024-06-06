@@ -49,7 +49,6 @@ export class Grid {
     this.canvas.style.height = `${this.height}px`
     this.ctx.scale(dPr, dPr)
 
-    // this.ctx = this.canvas.getContext('2d')!
     this.ctx.imageSmoothingQuality = 'high'
     this.ctx.imageSmoothingEnabled = true
     this.ctx.setLineDash([this.dashSize])
