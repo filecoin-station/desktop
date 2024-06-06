@@ -209,7 +209,7 @@ async function transferAllFundsToDestinationWallet () {
   try {
     await transferAllFunds(to)
   } finally {
-    await updateBalance()
+    await refreshState()
   }
 }
 
