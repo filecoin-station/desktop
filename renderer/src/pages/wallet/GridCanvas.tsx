@@ -4,7 +4,6 @@ import { Grid } from 'src/lib/grid'
 import { FILTransactionProcessing } from '../../../../shared/typings'
 
 function getForceFromBalance (balance: number) {
-  console.log(balance * 260 / 5)
   return balance * 260 / 1.3
 }
 

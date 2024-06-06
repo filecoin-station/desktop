@@ -3,18 +3,18 @@ import { Wallet } from 'src/hooks/StationWallet'
 import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
-import { CSSProperties, useEffect, useRef, useState } from 'react'
+import { CSSProperties, useRef, useState } from 'react'
 import Transition from 'src/components/Transition'
 
 const SEND_THRESHOLD = 0.01
 
 const TransferWrapper = ({
-  stationAddress
-  // destinationFilAddress,
-  // processingTransaction,
-  // walletBalance,
-  // editDestinationAddress,
-  // transferAllFundsToDestinationWallet
+  stationAddress,
+  destinationFilAddress,
+  processingTransaction,
+  walletBalance,
+  editDestinationAddress,
+  transferAllFundsToDestinationWallet
 }: {
   walletBalance: Wallet['walletBalance'];
   destinationFilAddress?: Wallet['destinationFilAddress'];
@@ -23,31 +23,8 @@ const TransferWrapper = ({
   editDestinationAddress:Wallet['editDestinationAddress'];
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
 }) => {
-  const [destinationFilAddress, editDestinationAddress] = useState('')
-  const [processingTransaction, setProcessingTransaction] = useState()
-  const [walletBalance, setWalletBalance] = useState('1')
-
-  function transferAllFundsToDestinationWallet () {
-    setProcessingTransaction({ status: 'processing', outgoing: true })
-
-    setTimeout(() => {
-      setProcessingTransaction({ status: 'succeeded', outgoing: true })
-    }, 18_000)
-
-    setTimeout(() => {
-      setProcessingTransaction(undefined)
-      setWalletBalance('0')
-    }, 18_000 + 6000)
-  }
-
   const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)
   const inTransition = useRef(false)
-
-  useEffect(() => {
-    if (destinationFilAddress && !inTransition.current) {
-      setIsShowingAddressEdit(true)
-    }
-  }, [destinationFilAddress])
 
   return (
     <section
