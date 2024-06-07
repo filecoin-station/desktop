@@ -80,6 +80,7 @@ const TransferWrapper = ({
               walletBalance={walletBalance}
               sendThreshold={SEND_THRESHOLD}
               processingTransaction={processingTransaction}
+              destinationFilAddress={destinationFilAddress}
               transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
             />
           </Transition>

@@ -30,7 +30,7 @@ const WalletWidget = () => {
         data-testid='wallet-widget'
         type='button'
         onClick={handleClick}
-        className={`flex items-center gap-3 text-black no-drag-area
+        className={`flex items-center gap-3 text-black no-drag-area z-10
         focus-visible:outline-slate-400 focus:outline-slate-400 p-1`}
       >
         <WalletIcon />
