@@ -15,7 +15,7 @@ import SaveIcon from 'src/assets/img/icons/save.svg?react'
 import ExportIcon from 'src/assets/img/icons/export.svg?react'
 
 const Settings = () => {
-  const [isOpenAtLoginChecked, setIsOpenAtLoginChecked] = useState(true)
+  const [isOpenAtLoginChecked, setIsOpenAtLoginChecked] = useState<boolean>()
 
   const updateIsOpenAtLogin = async () => setIsOpenAtLoginChecked(await isOpenAtLogin())
 
@@ -38,6 +38,7 @@ const Settings = () => {
           <SettingsGroupItem
             title='Start at login'
             input={
+              isOpenAtLoginChecked !== undefined &&
               <SwitchInput
                 name="openAtLogin"
                 onChange={handleClick}
