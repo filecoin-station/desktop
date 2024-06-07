@@ -3,7 +3,7 @@ import Text from 'src/components/Text'
 import useStationActivity from 'src/hooks/StationActivity'
 import WarningIcon from 'src/assets/img/icons/warning.svg?react'
 import JobIcon from 'src/assets/img/icons/job.svg?react'
-import { Activity } from '../../../../shared/typings'
+import { Activity } from 'shared/typings'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Wallet } from 'src/hooks/StationWallet'
 import { Grid, getGridConfigForBalance } from 'src/lib/grid'
-import { FILTransactionProcessing } from '../../../../shared/typings'
+import { FILTransactionProcessing } from 'shared/typings'
 
 // Initialize grid outside component lifecycle,
 // so it persists between navigations
