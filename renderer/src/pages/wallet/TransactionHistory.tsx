@@ -18,20 +18,20 @@ const TransactionHistory = ({
   const [completeTransactions, setCompleteTransactions] = useState<
   Array<FILTransaction & { isNew?: boolean }>
   >()
-  const list = useRef<string[]>()
+  const transactionsRef = useRef<string[]>()
 
   useEffect(() => {
     const complete = walletTransactions?.filter(tx => tx.status !== 'processing')
 
-    if (complete?.length !== list.current?.length) {
-      setCompleteTransactions(complete?.map((tx, idx) => ({
+    if (complete?.length !== transactionsRef.current?.length) {
+      setCompleteTransactions(complete?.map((tx) => ({
         ...tx,
-        isNew: list.current && !list.current.includes(tx.hash) && !!completeTransactions
+        isNew: transactionsRef.current && !transactionsRef.current.includes(tx.hash) && !!completeTransactions
       })))
     }
   }, [walletTransactions, completeTransactions])
 
-  list.current = completeTransactions?.map(tx => tx.hash) || []
+  transactionsRef.current = completeTransactions?.map(tx => tx.hash) || []
 
   return (
     <Transition
