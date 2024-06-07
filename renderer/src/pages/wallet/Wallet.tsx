@@ -50,7 +50,7 @@ const Wallet = () => {
               </Text>
             </BorderedBox>
             <BorderedBox className='flex flex-col gap-2 flex-1' isGrouped>
-              <TransactionHistory walletTransactions={walletTransactions || []} />
+              <TransactionHistory walletTransactions={walletTransactions} />
             </BorderedBox>
           </div>
         </section>

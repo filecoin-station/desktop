@@ -8,11 +8,12 @@ import classNames from 'classnames'
 import stationIllustration from 'src/assets/img/station-illustration.png'
 import LinkOut from 'src/assets/img/icons/link-out.svg?react'
 import { useEffect, useRef, useState } from 'react'
+import Transition from 'src/components/Transition'
 
 const TransactionHistory = ({
-  walletTransactions = []
+  walletTransactions
 }: {
-  walletTransactions: Array<FILTransaction>;
+  walletTransactions?: Array<FILTransaction>;
 }) => {
   const [completeTransactions, setCompleteTransactions] = useState<
   Array<FILTransaction & { isNew?: boolean }>
@@ -22,8 +23,8 @@ const TransactionHistory = ({
   useEffect(() => {
     const complete = walletTransactions?.filter(tx => tx.status !== 'processing')
 
-    if (complete.length !== list.current?.length) {
-      setCompleteTransactions(complete?.map(tx => ({
+    if (complete?.length !== list.current?.length) {
+      setCompleteTransactions(complete?.map((tx, idx) => ({
         ...tx,
         isNew: list.current && !list.current.includes(tx.hash) && !!completeTransactions
       })))
@@ -33,7 +34,10 @@ const TransactionHistory = ({
   list.current = completeTransactions?.map(tx => tx.hash) || []
 
   return (
-    <div className='flex flex-col h-[300px] overflow-y-scroll custom-scrollbar'>
+    <Transition
+      on={!!walletTransactions}
+      className='flex flex-col h-[300px] overflow-y-scroll custom-scrollbar'
+    >
       {completeTransactions && completeTransactions?.length > 0
         ? completeTransactions?.map((transaction) => (
           <button
@@ -86,7 +90,7 @@ const TransactionHistory = ({
             </Text>
           </div>
         )}
-    </div>
+    </Transition>
   )
 }
 
