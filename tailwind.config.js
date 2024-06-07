@@ -93,7 +93,8 @@ module.exports = {
       fadeIn: 'fadeIn 200ms ease forwards',
       fadeOut: 'fadeOut 200ms ease forwards',
       spin: 'spin 1s linear infinite',
-      moveGridBlur: 'moveGridBlur 3s 1s linear infinite',
+      moveGridBlur: `moveGridBlur 3s 1s cubic-bezier(0.33, 1, 0.68, 1) 
+      infinite`,
       addressFormMoveUp: `addressFormMoveUp calc(0.7s * var(--factor)) 
       calc(0.1s * var(--factor))
       cubic-bezier(0.87, 0, 0.13, 1) forwards`

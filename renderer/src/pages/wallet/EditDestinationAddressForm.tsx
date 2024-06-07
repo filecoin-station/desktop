@@ -43,7 +43,7 @@ const EditDestinationAddressForm = ({
 
   return (
     <div className='absolute left-0 right-0 mx-auto top-[30%] scale-95 -translate-y-[50%]'>
-      <div className="flex flex-col w-[80%] max-w-[600px] mx-auto z-10">
+      <div className="flex flex-col w-[80%] max-w-[480px] mx-auto z-10">
         <Transition on className='absolute -top-[32px]'>
           <Text uppercase font="mono" size="3xs" className='text-slate-50'>Destination address</Text>
         </Transition>

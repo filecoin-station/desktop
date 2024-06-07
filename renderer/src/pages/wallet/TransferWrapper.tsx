@@ -5,6 +5,7 @@ import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import Transition from 'src/components/Transition'
+import GridCanvas from './GridCanvas'
 
 const SEND_THRESHOLD = 0.01
 
@@ -37,7 +38,11 @@ const TransferWrapper = ({
       className='w-1/2 bg-black relative flex flex-col overflow-hidden'
       style={{ '--factor': 1 } as CSSProperties}
     >
-
+      <GridCanvas
+        walletBalance={walletBalance}
+        destinationFilAddress={destinationFilAddress}
+        processingTransaction={processingTransaction}
+      />
       {stationAddress && (
         <>
           <Transition
@@ -48,7 +53,7 @@ const TransferWrapper = ({
               setIsShowingAddressEdit(true)
             }}
             outClass='animate-addressFormMoveUp'
-            className='absolute w-[80%] max-w-[600px] mx-auto left-0 right-0 top-[70%] -translate-y-[50%]'
+            className='absolute w-[80%] max-w-[480px] mx-auto left-0 right-0 top-[70%] -translate-y-[50%]'
           >
             <DestinationAddressForm
               onSave={(value) => {

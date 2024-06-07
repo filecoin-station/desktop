@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { formatFilValue, truncateString } from 'src/lib/utils'
-import { FILTransaction } from '../../../../shared/typings'
+import { FILTransaction } from 'shared/typings'
 import Text from 'src/components/Text'
 import SendIcon from 'src/assets/img/icons/send.svg?react'
 import ReceiveIcon from 'src/assets/img/icons/receive.svg?react'
