@@ -256,7 +256,7 @@ export class Grid {
       }
 
       this.ctx.stroke()
-    })
+    }
   }
 
   // Transition between 2 states, transitioning the force value
