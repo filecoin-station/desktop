@@ -257,6 +257,17 @@ export class Grid {
     }
   }
 
+  clear () {
+    this.ctx.clearRect(0, 0, this.width, this.height)
+  }
+
+  renderAll () {
+    this.clear()
+    this.renderGrid()
+    this.renderTargetCircles()
+    this.renderMidLine()
+  }
+
   // Transition between 2 states, transitioning the force value
   // and revealing the midLine
   tweenRender ({
@@ -277,7 +288,7 @@ export class Grid {
     }
 
     if (delay) {
-      this.renderGrid()
+      this.renderAll()
       setTimeout(() => {
         this.tweenRenderFrame(args)
       }, delay)
@@ -308,10 +319,7 @@ export class Grid {
 
     args.frame++
 
-    this.ctx.clearRect(0, 0, this.width, this.height)
-    this.renderTargetCircles()
-    this.renderMidLine()
-    this.renderGrid()
+    this.renderAll()
 
     requestAnimationFrame(() => this.tweenRenderFrame(args))
   }

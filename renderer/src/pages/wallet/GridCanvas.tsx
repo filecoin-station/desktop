@@ -30,7 +30,7 @@ const GridCanvas = ({
   }
 
   useEffect(() => {
-    if (ref.current?.parentElement) {
+    if (ref.current?.parentElement && !grid.canvas?.isConnected) {
       grid.setCanvas({
         canvas: ref.current,
         container: ref.current.parentElement
@@ -44,17 +44,18 @@ const GridCanvas = ({
 
   useEffect(() => {
     if (!destinationFilAddress) {
-      return
+      grid.clear()
+      grid.renderGrid()
+    } else {
+      const config = getGridConfigForBalance(Number(walletBalance))
+      const isFirstRender = grid.force === 0
+      grid.updateWarp(config)
+      grid.tweenRender({
+        duration: 100,
+        targetForce: config.force,
+        delay: isFirstRender ? 500 : 0
+      })
     }
-
-    const config = getGridConfigForBalance(Number(walletBalance))
-    const isFirstRender = grid.force === 0
-    grid.updateWarp(config)
-    grid.tweenRender({
-      duration: 100,
-      targetForce: config.force,
-      delay: isFirstRender ? 500 : 0
-    })
   }, [destinationFilAddress, walletBalance])
 
   return (
