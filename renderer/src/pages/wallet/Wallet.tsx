@@ -21,7 +21,7 @@ const Wallet = () => {
 
   return (
     <div className='w-full flex'>
-      <main className='px-9 mt-28 flex flex-col flex-1'>
+      <main className='px-9 mt-28 flex flex-col flex-1 animate-fadeIn'>
         <section className='flex flex-col gap-5 h-full mb-9'>
           <BorderedBox className='p-5 flex flex-col gap-2'>
             <Text font='mono' size='3xs' color='primary' uppercase>

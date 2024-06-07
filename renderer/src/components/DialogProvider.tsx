@@ -37,10 +37,10 @@ export const DialogProvider = ({ children }: {children: ReactNode}) => {
 
       <Root open={isOpen} onOpenChange={setIsOpen}>
         <Portal>
-          <Overlay className='fixed inset-0 bg-[#00000055] backdrop-blur' data-dialog-overlay />
+          <Overlay className='fixed inset-0 bg-[#00000055] backdrop-blur animate-fadeIn' data-dialog-overlay />
           <Content
             className='fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[450px]
-                translate-x-[-50%] translate-y-[-50%] z-10'
+                translate-x-[-50%] translate-y-[-50%] z-10 animate-fadeIn'
           >
             {content}
           </Content>

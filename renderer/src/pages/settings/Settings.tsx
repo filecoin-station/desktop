@@ -33,7 +33,7 @@ const Settings = () => {
       <header className='mb-9'>
         <Text as='h1' font='mono' size='xs' color='primary' uppercase>&#47;&#47; Settings ... :</Text>
       </header>
-      <div className='flex flex-col gap-7'>
+      <div className='flex flex-col gap-7 animate-fadeIn'>
         <SettingsGroup name='General'>
           <SettingsGroupItem
             title='Start at login'
