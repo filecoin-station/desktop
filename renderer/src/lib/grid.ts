@@ -215,7 +215,7 @@ export class Grid {
   renderDimension (line: Line[], dimension: 'row' | 'col') {
     const isRow = dimension === 'row'
 
-    line.forEach((item) => {
+    for (const item of line) {
       this.ctx.beginPath()
       this.ctx.moveTo(item.x1, item.y1)
 
