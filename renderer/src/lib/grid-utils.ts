@@ -15,7 +15,7 @@ const maxWarpForce = 700
 // Determine warp properties for a given balance. This uses an
 // easing function to return a bigger increment in warp for lower balances
 export function getGridConfigForBalance (balance: number) {
-  const progress = balance * 100 / maxFIL / 100
+  const progress = balance / maxFIL
 
   const config = {
     force: easeOutCirc(progress) * maxWarpForce,
