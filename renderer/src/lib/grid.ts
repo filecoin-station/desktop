@@ -62,7 +62,7 @@ export class Grid {
     this.warp.x = this.percent(50, 'x')
     this.warp.y = this.percent(70, 'y')
     this.midLine.x = this.percent(50, 'x')
-    this.midLine.y = this.percent(70, 'y')
+    this.midLine.y = this.percent(10, 'y')
   }
 
   updateWarp (config: Record<string, number>) {
@@ -279,6 +279,7 @@ export class Grid {
     duration: number;
     delay?: number;
   }) {
+    this.midLine.y = this.warp.y
     const args = {
       forceDiff: targetForce - this.force,
       midLineYDiff: this.midLine.y - (this.target.y + 20),
