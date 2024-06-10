@@ -55,6 +55,21 @@ async function run (ctx) {
   }
 }
 
+let lastCrashReportedAt = 0
+/**
+ * @param {unknown} err
+ * @param {any} scopeFn
+ */
+function maybeReportErrorToSentry (err, scopeFn) {
+  const now = Date.now()
+  if (now - lastCrashReportedAt < 4 /* HOURS */ * 3600_000) return
+  lastCrashReportedAt = now
+  console.error(
+    'Reporting the problem to Sentry for inspection by the Station team.'
+  )
+  Sentry.captureException(err, scopeFn)
+}
+
 /**
  * @param {Context} ctx
  */
@@ -154,9 +169,9 @@ async function start (ctx) {
     throw new Error('Invalid Filecoin wallet address')
   }
 
-  Sentry.captureException('Core exited', scope => {
+  maybeReportErrorToSentry('Core exited', (/** @type {any} */ scope) => {
     // Sentry UI can't show the full 100 lines
-    scope.setExtra('logs', logs.getLastLines(10))
+    scope.setExtra('logs', logs.getLastLines(20))
     scope.setExtra('reason', exitReason)
     return scope
   })
