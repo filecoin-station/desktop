@@ -36,7 +36,7 @@ const TransactionHistory = ({
   return (
     <Transition
       on={!!walletTransactions}
-      className='flex flex-col h-[300px] overflow-y-scroll custom-scrollbar'
+      className='absolute inset-0 top-2 flex flex-col h-[98%] overflow-y-scroll custom-scrollbar'
     >
       {completeTransactions && completeTransactions?.length > 0
         ? completeTransactions?.map((transaction) => (
@@ -80,8 +80,8 @@ const TransactionHistory = ({
           </button>
         ))
         : (
-          <div className='flex flex-col items-center text-center flex-1'>
-            <figure className='flex flex-1'>
+          <div className='flex flex-col items-center justify-center text-center flex-1'>
+            <figure className='flex mb-[5%]'>
               <img src={stationIllustration} alt='Station' className='m-auto' />
             </figure>
             <Text as="p" size='m' bold className='mb-1'>No transfers yet</Text>

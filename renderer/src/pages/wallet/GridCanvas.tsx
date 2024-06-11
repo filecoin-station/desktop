@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { Wallet } from 'src/hooks/StationWallet'
 import { Grid, getGridConfigForBalance } from 'src/lib/grid'
 import { FILTransactionProcessing } from 'shared/typings'
@@ -19,18 +19,24 @@ const GridCanvas = ({
   const ref = useRef<HTMLCanvasElement>(null)
 
   // On resize, run setup again to correct positioning
-  function handleResize () {
+  const handleResize = useCallback(() => {
     if (!ref.current?.parentElement) return
 
     grid.setCanvas({
       canvas: ref.current,
       container: ref.current.parentElement
     })
-    grid.renderGrid()
-  }
+
+    if (!destinationFilAddress) {
+      grid.clear()
+      grid.renderGrid()
+    } else {
+      grid.renderAll()
+    }
+  }, [destinationFilAddress])
 
   useEffect(() => {
-    if (ref.current?.parentElement) {
+    if (ref.current?.parentElement && !grid.canvas?.isConnected) {
       grid.setCanvas({
         canvas: ref.current,
         container: ref.current.parentElement
@@ -40,21 +46,22 @@ const GridCanvas = ({
     window.addEventListener('resize', handleResize)
 
     return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  }, [handleResize])
 
   useEffect(() => {
     if (!destinationFilAddress) {
-      return
+      grid.clear()
+      grid.renderGrid()
+    } else {
+      const config = getGridConfigForBalance(Number(walletBalance))
+      const isFirstRender = grid.force === 0
+      grid.updateWarp(config)
+      grid.tweenRender({
+        duration: 100,
+        targetForce: config.force,
+        delay: isFirstRender ? 500 : 0
+      })
     }
-
-    const config = getGridConfigForBalance(Number(walletBalance))
-    const isFirstRender = grid.force === 0
-    grid.updateWarp(config)
-    grid.tweenRender({
-      duration: 100,
-      targetForce: config.force,
-      delay: isFirstRender ? 500 : 0
-    })
   }, [destinationFilAddress, walletBalance])
 
   return (

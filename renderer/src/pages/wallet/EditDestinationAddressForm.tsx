@@ -19,10 +19,19 @@ const EditDestinationAddressForm = ({
   const [showTooltip, setShowTooltip] = useState(false)
   const { inputRef, validateOnChange, inputState } = useAddressValidation({ initialValid: true })
 
-  const handleSave = () => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault()
+
+    if (!editing) {
+      setEditing(true)
+
+      return
+    }
+
     editDestinationAddress(inputRef.current?.value)
     setEditing(false)
     setShowTooltip(true)
+    inputRef.current?.blur()
 
     const timeout = setTimeout(() => {
       setShowTooltip(false)
@@ -34,16 +43,15 @@ const EditDestinationAddressForm = ({
   useEffect(() => {
     if (editing) {
       inputRef.current?.focus()
-      inputRef.current?.setSelectionRange(0, inputRef.current.value.length)
+      inputRef.current?.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length)
     } else {
-      inputRef.current?.setSelectionRange(0, 0)
       inputRef.current?.blur()
     }
   }, [editing, inputRef])
 
   return (
     <div className='absolute left-0 right-0 mx-auto top-[30%] scale-95 -translate-y-[50%]'>
-      <div className="flex flex-col w-[80%] max-w-[480px] mx-auto z-10">
+      <form onSubmit={handleSubmit} className="flex flex-col w-[80%] max-w-[480px] mx-auto z-10">
         <Transition on className='absolute -top-[32px]'>
           <Text uppercase font="mono" size="3xs" className='text-slate-50'>Destination address</Text>
         </Transition>
@@ -64,33 +72,36 @@ const EditDestinationAddressForm = ({
             error={inputState.error}
             disabled={!editing}
           />
-          <Transition on className='absolute right-0 -bottom-12'>
-            {editing
-              ? (
+
+          {editing
+            ? (
+              <Transition on className='absolute right-0 top-[125%]'>
                 <Button
                   variant='primary'
-                  type='button'
+                  type='submit'
                   className='ml-auto py-[4px]'
-                  onClick={handleSave}
                   disabled={!inputState.isValid}
                 >
                   Save
                 </Button>
-              )
-              : (
+              </Transition>
+            )
+            : (
+              <Transition on className='absolute right-0 top-[130%]'>
                 <button
-                  type='button'
-                  className='py-1 px-2 flex items-center gap-2 text-white focus-visible:outline-slate-400'
+                  type='submit'
+                  className='py-[2px] flex items-center gap-2 text-white focus-visible:outline-slate-400'
                   onClick={() => setEditing(true)}
                 >
                   <EditIcon />
                   <Text size="xs" bold color='white'>Edit</Text>
                 </button>
-              )}
-          </Transition>
+              </Transition>
+            )}
+
         </div>
 
-      </div>
+      </form>
     </div>
   )
 }

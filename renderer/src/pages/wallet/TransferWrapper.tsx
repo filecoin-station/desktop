@@ -35,7 +35,7 @@ const TransferWrapper = ({
 
   return (
     <section
-      className='w-1/2 bg-black relative flex flex-col overflow-hidden'
+      className='row-span-2 col-start-2 bg-black relative flex flex-col overflow-hidden'
       style={{ '--factor': 1 } as CSSProperties}
     >
       <GridCanvas
@@ -80,6 +80,7 @@ const TransferWrapper = ({
               walletBalance={walletBalance}
               sendThreshold={SEND_THRESHOLD}
               processingTransaction={processingTransaction}
+              destinationFilAddress={destinationFilAddress}
               transferAllFundsToDestinationWallet={transferAllFundsToDestinationWallet}
             />
           </Transition>

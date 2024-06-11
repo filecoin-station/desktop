@@ -15,7 +15,7 @@ import SaveIcon from 'src/assets/img/icons/save.svg?react'
 import ExportIcon from 'src/assets/img/icons/export.svg?react'
 
 const Settings = () => {
-  const [isOpenAtLoginChecked, setIsOpenAtLoginChecked] = useState(true)
+  const [isOpenAtLoginChecked, setIsOpenAtLoginChecked] = useState<boolean>()
 
   const updateIsOpenAtLogin = async () => setIsOpenAtLoginChecked(await isOpenAtLogin())
 
@@ -33,11 +33,12 @@ const Settings = () => {
       <header className='mb-9'>
         <Text as='h1' font='mono' size='xs' color='primary' uppercase>&#47;&#47; Settings ... :</Text>
       </header>
-      <div className='flex flex-col gap-7'>
+      <div className='flex flex-col gap-7 animate-fadeIn'>
         <SettingsGroup name='General'>
           <SettingsGroupItem
             title='Start at login'
             input={
+              isOpenAtLoginChecked !== undefined &&
               <SwitchInput
                 name="openAtLogin"
                 onChange={handleClick}

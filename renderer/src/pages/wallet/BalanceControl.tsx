@@ -1,6 +1,6 @@
 import Button from 'src/components/Button'
 import Text from 'src/components/Text'
-import { formatFilValue } from 'src/lib/utils'
+import { formatFilValue, truncateString } from 'src/lib/utils'
 import { Wallet } from 'src/hooks/StationWallet'
 import Tooltip from 'src/components/Tooltip'
 import { ReactNode, useState } from 'react'
@@ -29,11 +29,13 @@ const BalanceControl = ({
   walletBalance = '',
   sendThreshold,
   processingTransaction,
+  destinationFilAddress,
   transferAllFundsToDestinationWallet
 }: {
   walletBalance?: string;
   sendThreshold: number;
   processingTransaction: Wallet['processingTransaction'];
+  destinationFilAddress: Wallet['destinationFilAddress'];
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
 }) => {
   const [isShowingConfirm, setIsShowingConfirm] = useState(false)
@@ -54,7 +56,8 @@ const BalanceControl = ({
           className='flex flex-col gap-5 text-center m-auto'
         >
           <Text as="p" size='s'>
-                Send <strong>{formatFilValue(walletBalance)}</strong> to the destination address?
+              Send <strong>{formatFilValue(walletBalance)} FIL</strong> to {' '}
+            <strong>{truncateString(destinationFilAddress || '')}</strong>?
           </Text>
           <div className='flex gap-5 justify-center'>
             <Button

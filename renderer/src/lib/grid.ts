@@ -62,7 +62,7 @@ export class Grid {
     this.warp.x = this.percent(50, 'x')
     this.warp.y = this.percent(70, 'y')
     this.midLine.x = this.percent(50, 'x')
-    this.midLine.y = this.percent(70, 'y')
+    this.midLine.y = this.percent(10, 'y')
   }
 
   updateWarp (config: Record<string, number>) {
@@ -257,6 +257,17 @@ export class Grid {
     }
   }
 
+  clear () {
+    this.ctx.clearRect(0, 0, this.width, this.height)
+  }
+
+  renderAll () {
+    this.clear()
+    this.renderGrid()
+    this.renderTargetCircles()
+    this.renderMidLine()
+  }
+
   // Transition between 2 states, transitioning the force value
   // and revealing the midLine
   tweenRender ({
@@ -268,6 +279,7 @@ export class Grid {
     duration: number;
     delay?: number;
   }) {
+    this.midLine.y = this.warp.y
     const args = {
       forceDiff: targetForce - this.force,
       midLineYDiff: this.midLine.y - (this.target.y + 20),
@@ -277,7 +289,7 @@ export class Grid {
     }
 
     if (delay) {
-      this.renderGrid()
+      this.renderAll()
       setTimeout(() => {
         this.tweenRenderFrame(args)
       }, delay)
@@ -308,10 +320,7 @@ export class Grid {
 
     args.frame++
 
-    this.ctx.clearRect(0, 0, this.width, this.height)
-    this.renderTargetCircles()
-    this.renderMidLine()
-    this.renderGrid()
+    this.renderAll()
 
     requestAnimationFrame(() => this.tweenRenderFrame(args))
   }

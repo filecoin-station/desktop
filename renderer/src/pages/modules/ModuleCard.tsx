@@ -37,7 +37,7 @@ const moduleStatus = {
 
 const ModuleCard = ({ module }: {module: Module}) => {
   return (
-    <div className='bg-slate-50 border border-dashed border-slate-400 rounded-xl'>
+    <div className='bg-slate-50 border border-dashed border-slate-400 rounded-xl animate-fadeIn'>
       <div className='h-[276px] flex border-b border-dashed border-slate-400'>
         <div className='py-9 px-5 flex flex-col gap-3 justify-between'>
           <Text as='h2' size="l" font='mono'>{module.name}</Text>
@@ -49,7 +49,8 @@ const ModuleCard = ({ module }: {module: Module}) => {
           </div>
         </div>
         <figure
-          className='flex w-[140px] py-9 px-5 border-l border-dashed border-slate-400 bg-white rounded-tr-xl'
+          className='flex w-[140px] shrink-0 py-9 px-5 border-l border-dashed border-slate-400 bg-white
+          rounded-tr-xl'
         >
           <img src={module.logo} alt={`${module.name}'s logo`} className='max-w-[100px] m-auto' />
         </figure>
