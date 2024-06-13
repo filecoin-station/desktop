@@ -4,11 +4,10 @@ import Chart from './Chart'
 import { Select, SelectItem } from 'src/components/Select'
 import { ToggleGroup, ToggleGroupButton } from 'src/components/ToggleGroup'
 
-const timeRanges = ['1d', '7d', '1m', '1y', 'all'] as const
+const timeRanges = ['7d', '1m', '1y', 'all'] as const
 export type TimeRange = typeof timeRanges[number]
 
 const timeRangeInDays = {
-  '1d': 1,
   '7d': 7,
   '1m': 31,
   '1y': 365
