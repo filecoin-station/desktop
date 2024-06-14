@@ -1,9 +1,34 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getScheduledRewards } from 'src/lib/station-config'
-import { mockData } from 'src/pages/dashboard/mockData'
+import useWallet from 'src/hooks/StationWallet'
 
-async function getHistoricalRewardsData () {
-  return mockData
+type StatsResponse = {
+  day: string;
+  scheduled_rewards: string;
+}[]
+
+async function getHistoricalRewardsData (address: string) {
+  const res = await fetch(
+    'https://stats.filspark.com/participants/scheduled-rewards/daily' +
+      `?address=${address}` +
+      '&from=2024-01-01' +
+      `&to=${new Date().toISOString().split('T')[0]}`
+  )
+  const stats = await res.json() as StatsResponse
+  return stats.map(stat => ({
+    timestamp: new Date(stat.day).toISOString(),
+    totalRewardsReceived: {
+      spark: 0,
+      voyager: 0
+    },
+    totalScheduledRewards: {
+      spark: Number(
+        (BigInt(stat.scheduled_rewards) / 1_000_000_000_000_000_000n)
+          .toString()
+      ),
+      voyager: 0
+    }
+  }))
 }
 
 export type RewardsRecord = {
@@ -17,6 +42,7 @@ export function sumAllRewards (data: RewardsRecord['totalRewardsReceived']) {
 }
 
 const useStationRewards = () => {
+  const wallet = useWallet()
   const [scheduledRewards, setScheduledRewards] = useState<string>()
   const [historicalRewards, setHistoricalRewards] = useState<RewardsRecord[]>([])
 
@@ -27,11 +53,15 @@ const useStationRewards = () => {
 
   useEffect(() => {
     async function loadStoredInfo () {
-      setHistoricalRewards(await getHistoricalRewardsData())
+      if (wallet.stationAddress0x) {
+        setHistoricalRewards(
+          await getHistoricalRewardsData(wallet.stationAddress0x)
+        )
+      }
       setScheduledRewards(await getScheduledRewards())
     }
     loadStoredInfo()
-  }, [])
+  }, [wallet.stationAddress0x])
 
   useEffect(() => {
     const unsubscribeOnScheduledRewardsUpdate = window.electron.stationEvents.onScheduledRewardsUpdate(balance => {
