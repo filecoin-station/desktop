@@ -7,16 +7,12 @@ type StatsResponse = {
   scheduled_rewards: string;
 }[]
 
-const formatDate = (date: Date) => {
-  return date.toISOString().split('T')[0]
-}
-
 async function getHistoricalRewardsData (address: string) {
-  const to = new Date()
-  const from = new Date(new Date().setDate(to.getDate() - 100))
   const res = await fetch(
     'https://stats.filspark.com/participants/scheduled-rewards/daily' +
-      `?address=${address}&from=${formatDate(from)}&to=${formatDate(to)}`
+      `?address=${address}` +
+      '&from=2024-01-01' +
+      `&to=${new Date().toISOString().split('T')[0]}`
   )
   const stats = await res.json() as StatsResponse
   return stats.map(stat => ({
