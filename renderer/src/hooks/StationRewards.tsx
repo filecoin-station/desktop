@@ -9,10 +9,8 @@ type StatsResponse = {
 
 async function getHistoricalRewardsData (address: string) {
   const res = await fetch(
-    'https://stats.filspark.com/participants/scheduled-rewards/daily' +
-      `?address=${address}` +
-      '&from=2024-01-01' +
-      `&to=${new Date().toISOString().split('T')[0]}`
+    `https://stats.filspark.com/participant/${address}/scheduled-rewards` +
+      `?from=2024-01-01&to=${new Date().toISOString().split('T')[0]}`
   )
   const stats = await res.json() as StatsResponse
   return stats.map(stat => ({
