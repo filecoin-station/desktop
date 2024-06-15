@@ -21,9 +21,9 @@ async function getHistoricalRewardsData (address: string) {
     },
     totalScheduledRewards: {
       spark: Number(
-        (BigInt(stat.scheduled_rewards) / 1_000_000_000_000_000_000n)
+        (BigInt(stat.scheduled_rewards) / 1_000_000_000_000_000n)
           .toString()
-      ),
+      ) / 1000,
       voyager: 0
     }
   }))
