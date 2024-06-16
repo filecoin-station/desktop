@@ -51,11 +51,18 @@ const useStationRewards = () => {
 
   useEffect(() => {
     async function loadStoredInfo () {
-      if (wallet.stationAddress0x) {
-        setHistoricalRewards(
-          await getHistoricalRewardsData(wallet.stationAddress0x)
-        )
-      }
+      if (!wallet.stationAddress0x) return
+      setHistoricalRewards(
+        await getHistoricalRewardsData(wallet.stationAddress0x)
+      )
+    }
+    loadStoredInfo()
+    const id = setInterval(loadStoredInfo, 60 * 60 * 1000)
+    return () => clearInterval(id)
+  }, [wallet.stationAddress0x])
+
+  useEffect(() => {
+    async function loadStoredInfo () {
       setScheduledRewards(await getScheduledRewards())
     }
     loadStoredInfo()
