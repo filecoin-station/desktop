@@ -58,7 +58,11 @@ const useStationRewards = () => {
     }
     loadStoredInfo()
     const id = setInterval(loadStoredInfo, 60 * 60 * 1000)
-    return () => clearInterval(id)
+    document.addEventListener('visibilitychange', loadStoredInfo)
+    return () => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', loadStoredInfo)
+    }
   }, [wallet.stationAddress0x])
 
   useEffect(() => {
