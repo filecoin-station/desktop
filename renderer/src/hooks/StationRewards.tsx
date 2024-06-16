@@ -2,23 +2,19 @@ import { useEffect, useMemo, useState } from 'react'
 import { getScheduledRewards } from 'src/lib/station-config'
 import useWallet from 'src/hooks/StationWallet'
 
-type StatsResponse = {
+type ScheduledRewardsResponse = {
   day: string;
   scheduled_rewards: string;
 }[]
 
-async function getHistoricalRewardsData (address: string) {
+async function getHistoricalScheduledRewards (address: string) {
   const res = await fetch(
     `https://stats.filspark.com/participant/${address}/scheduled-rewards` +
       `?from=2024-01-01&to=${new Date().toISOString().split('T')[0]}`
   )
-  const stats = await res.json() as StatsResponse
+  const stats = await res.json() as ScheduledRewardsResponse
   return stats.map(stat => ({
     timestamp: new Date(stat.day).toISOString(),
-    totalRewardsReceived: {
-      spark: 0,
-      voyager: 0
-    },
     totalScheduledRewards: {
       spark: Number(
         (BigInt(stat.scheduled_rewards) / 1_000_000_000_000_000n)
@@ -27,6 +23,59 @@ async function getHistoricalRewardsData (address: string) {
       voyager: 0
     }
   }))
+}
+
+type RewardTransfersResponse = {
+  day: string;
+  amount: string;
+}[]
+
+async function getHistoricalRewardTransfers (address: string) {
+  const res = await fetch(
+    `https://stats.filspark.com/participant/${address}/reward-transfers` +
+      `?from=2024-01-01&to=${new Date().toISOString().split('T')[0]}`
+  )
+  const stats = await res.json() as RewardTransfersResponse
+  return stats.map(stat => ({
+    timestamp: new Date(stat.day).toISOString(),
+    totalRewardsReceived: {
+      spark: Number(
+        (BigInt(stat.amount) / 1_000_000_000_000_000n)
+          .toString()
+      ) / 1_000,
+      voyager: 0
+    }
+  }))
+}
+
+async function getHistoricalRewardsData (address: string) {
+  const [scheduledRewards, rewardTransfers] = await Promise.all([
+    getHistoricalScheduledRewards(address),
+    getHistoricalRewardTransfers(address)
+  ])
+  const stats = scheduledRewards.map(stat => ({
+    ...stat,
+    totalRewardsReceived: {
+      spark: 0,
+      voyager: 0
+    }
+  }))
+  for (const stat of rewardTransfers) {
+    const existingStat = stats.find(s => s.timestamp === stat.timestamp)
+    if (existingStat) {
+      existingStat.totalRewardsReceived = stat.totalRewardsReceived
+    } else {
+      stats.push({
+        ...stat,
+        totalScheduledRewards: {
+          spark: 0,
+          voyager: 0
+        }
+      })
+    }
+  }
+  stats.sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+  return stats
 }
 
 export type RewardsRecord = {
