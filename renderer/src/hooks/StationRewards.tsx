@@ -57,7 +57,7 @@ const useStationRewards = () => {
       )
     }
     loadStoredInfo()
-    const id = setInterval(loadStoredInfo, 60 * 60 * 1000)
+    const id = setInterval(loadStoredInfo, 20 * 60 * 1000)
     document.addEventListener('visibilitychange', loadStoredInfo)
     return () => {
       clearInterval(id)
