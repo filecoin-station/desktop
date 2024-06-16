@@ -51,7 +51,7 @@ const useStationRewards = () => {
 
   useEffect(() => {
     async function loadStoredInfo () {
-      if (!wallet.stationAddress0x) return
+      if (!wallet.stationAddress0x || document.hidden) return
       setHistoricalRewards(
         await getHistoricalRewardsData(wallet.stationAddress0x)
       )
