@@ -242,7 +242,7 @@ class WalletBackend {
         }
       )
       const body = /** @type {BeryxTransactionsResponse} */ (await res.json())
-      const tx = body.transactions.find(tx => tx.tx_type !== 'Fee')
+      const tx = body.transactions?.find(tx => tx.tx_type !== 'Fee')
       if (tx) {
         return tx.tx_cid
       }
