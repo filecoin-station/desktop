@@ -10,7 +10,7 @@ As the app UI is becoming more complex, more groupings are necessary in order to
 
 ## Decision
 
-We should adopt the following structure:
+We are adopting the following structure:
 ```
 src/
     pages/
