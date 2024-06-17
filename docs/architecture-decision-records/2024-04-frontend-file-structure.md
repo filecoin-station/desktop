@@ -5,7 +5,7 @@
 
 ## Context
 
-As the app UI becomes more complex, it makes sense to define a convention on how to organize components / routes.
+As the app UI is becoming more complex, more groupings are necessary in order to keep the amount of components per file / folder sensibly small.
 
 
 ## Decision
