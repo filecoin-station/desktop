@@ -100,11 +100,22 @@ const useStationRewards = () => {
 
   useEffect(() => {
     async function loadStoredInfo () {
-      if (wallet.stationAddress0x) {
-        setHistoricalRewards(
-          await getHistoricalRewardsData(wallet.stationAddress0x)
-        )
-      }
+      if (!wallet.stationAddress0x || document.hidden) return
+      setHistoricalRewards(
+        await getHistoricalRewardsData(wallet.stationAddress0x)
+      )
+    }
+    loadStoredInfo()
+    const id = setInterval(loadStoredInfo, 20 * 60 * 1000)
+    document.addEventListener('visibilitychange', loadStoredInfo)
+    return () => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', loadStoredInfo)
+    }
+  }, [wallet.stationAddress0x])
+
+  useEffect(() => {
+    async function loadStoredInfo () {
       setScheduledRewards(await getScheduledRewards())
     }
     loadStoredInfo()
