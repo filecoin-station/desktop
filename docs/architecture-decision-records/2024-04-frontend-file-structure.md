@@ -24,7 +24,7 @@ src/
         ...
 ```
 
-- Each route should have it's own directory inside `pages`
+- Each route should have its own directory inside `pages`
 - Each route directory should have an entrypoint component with the name of the route (ex: `/dashboard` -> `Dashboard.tsx`)
 - Alongside the entrypoint component, place any component that is specific to that route.
 - In the `components` directory, place common UI components, such as `Text`, `Button`, `Modal`, etc.
