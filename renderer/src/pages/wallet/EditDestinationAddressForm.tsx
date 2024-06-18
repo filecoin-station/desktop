@@ -71,6 +71,7 @@ const EditDestinationAddressForm = ({
             onChange={validateOnChange}
             error={inputState.error}
             disabled={!editing}
+            spellCheck={false}
           />
 
           {editing

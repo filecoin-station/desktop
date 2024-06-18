@@ -3,7 +3,7 @@ import Text from 'src/components/Text'
 
 const ChartTooltip = forwardRef<HTMLDivElement>(function (_, ref) {
   return (
-    <div ref={ref} className='absolute top-0 left-0 pointer-events-none opacity-0'>
+    <div ref={ref} className='absolute top-0 left-0 pointer-events-none opacity-0 z-10'>
       <div data-indicator className='relative w-5 h-5'>
         <div className={`w-2 h-2 rounded-full bg-primary absolute inset-0
         -translate-x-[50%] -translate-y-[50%]`}

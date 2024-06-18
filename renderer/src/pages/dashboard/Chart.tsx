@@ -151,7 +151,8 @@ const Chart = ({
                     color: colors.xLine,
                     drawTicks: false,
                     drawOnChartArea: true
-                  }
+                  },
+                  min: 0
                 },
                 x: {
                   grid: {
