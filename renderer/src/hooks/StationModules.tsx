@@ -123,7 +123,7 @@ export const modules = {
       github: 'https://github.com/filecoin-station/voyager',
       docs: 'https://filstation.app/'
     },
-    status: 'comingSoon'
+    status: 'ended'
   }
 } as const
 

@@ -25,13 +25,9 @@ const moduleStatus = {
     tagStatus: 'primary',
     text: 'Active'
   },
-  deprecated: {
+  ended: {
     tagStatus: 'secondary',
-    text: 'Deprecated'
-  },
-  comingSoon: {
-    tagStatus: 'dashed',
-    text: 'Starting soon'
+    text: 'Ended'
   }
 } as const
 
