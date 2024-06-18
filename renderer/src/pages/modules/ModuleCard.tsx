@@ -59,11 +59,15 @@ const ModuleCard = ({ module }: {module: Module}) => {
         <div className='w-3/5 flex flex-col gap-5'>
           <div className='flex flex-col'>
             <Text font='mono' size="3xs" color='primary' uppercase>&#47;&#47; Rewards given ... :</Text>
-            <Text font='mono' size="xs">{module.stats.totalRewards} FIL</Text>
+            <Text font='mono' size="xs">
+              {module.stats.totalRewards
+                ? `${module.stats.totalRewards} FIL`
+                : (<sub>coming soon</sub>)}
+            </Text>
           </div>
           <div className='flex flex-col'>
             <Text font='mono' size="3xs" color='primary' uppercase>&#47;&#47; # Jobs done ... :</Text>
-            <Text font='mono' size="xs">{module.stats.totalJobs}</Text>
+            <Text font='mono' size="xs">{module.stats.totalJobs || (<sub>coming soon</sub>)}</Text>
           </div>
         </div>
         <div className='flex flex-col gap-6 w-2/5'>
