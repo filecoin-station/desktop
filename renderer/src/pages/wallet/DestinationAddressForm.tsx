@@ -51,6 +51,7 @@ const DestinationAddressForm = ({
         className='destination-address-form-input '
         onChange={validateOnChange}
         error={inputState.error}
+        spellCheck={false}
       />
 
       <Transition
