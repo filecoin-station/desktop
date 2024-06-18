@@ -56,8 +56,8 @@ const ModuleCard = ({ module }: {module: Module}) => {
           <div className='flex flex-col'>
             <Text font='mono' size="3xs" color='primary' uppercase>&#47;&#47; Rewards given ... :</Text>
             <Text font='mono' size="xs">
-              {module.stats.totalRewards
-                ? `${module.stats.totalRewards} FIL`
+              {module.stats.rewardsEnabled
+                ? `${module.stats.totalRewards || '...'} FIL`
                 : (<sub>coming soon</sub>)}
             </Text>
           </div>

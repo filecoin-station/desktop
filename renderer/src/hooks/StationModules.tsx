@@ -102,7 +102,8 @@ export const modules = {
     logo: SparkLogo,
     stats: {
       totalJobs: 0, // TODO: Get this from spark-stats once available
-      totalRewards: 0
+      totalRewards: 0,
+      rewardsEnabled: true
     },
     links: {
       github: 'https://github.com/filecoin-station/spark',
@@ -117,7 +118,8 @@ export const modules = {
     logo: SaturnLogo,
     stats: {
       totalJobs: 0, // TODO: Updater after data export
-      totalRewards: 0 // TODO: Update after airdrop
+      totalRewards: 0, // TODO: Update after airdrop
+      rewardsEnabled: false
     },
     links: {
       github: 'https://github.com/filecoin-station/voyager',
