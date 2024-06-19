@@ -5,7 +5,8 @@ import {
   PointElement,
   LineElement,
   Filler,
-  Tooltip
+  Tooltip,
+  Chart as ChartType
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import { RewardsRecord, sumAllRewards } from 'src/hooks/StationRewards'
@@ -88,7 +89,7 @@ const Chart = ({
     })
   }, [tooltipRef])
 
-  function handleResize () {
+  function setupAspectRatio () {
     // chartjs options accepts an aspect ratio option, which must be calculated
     // based on the parent element
     if (containerRef.current?.parentElement) {
@@ -97,8 +98,15 @@ const Chart = ({
     }
   }
 
+  const onResize: ChartType['options']['onResize'] = (chart) => {
+    if (containerRef.current?.parentElement) {
+      const { width, height } = containerRef.current?.parentElement.getBoundingClientRect()
+      chart.resize(width, height)
+    }
+  }
+
   useEffect(() => {
-    handleResize()
+    setupAspectRatio()
   }, [])
 
   return (
@@ -108,9 +116,11 @@ const Chart = ({
       {aspectRatio
         ? (
           <Line
+            className='absolute w-full h-full inset-0'
             options={{
               responsive: true,
-              onResize: handleResize,
+              maintainAspectRatio: false,
+              onResize,
               aspectRatio,
               animation: false,
               plugins: {
