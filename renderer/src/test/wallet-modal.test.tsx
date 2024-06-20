@@ -1,15 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { TooltipProvider } from '@radix-ui/react-tooltip'
-import { fireEvent, render, act, screen } from '@testing-library/react'
+import { fireEvent, act, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import 'src/lib/station-config'
-import { BrowserRouter } from 'react-router-dom'
 import Dashboard from 'src/pages/dashboard/Dashboard'
-import Layout from 'src/components/Layout'
-import { DialogProvider } from 'src/components/DialogProvider'
 import useStationActivity from 'src/hooks/StationActivity'
 import useWallet from 'src/hooks/StationWallet'
 import useStationRewards from 'src/hooks/StationRewards'
+import { renderApp, stubGlobalElectron } from './helpers.test'
 
 const mockedSetDestinationWalletAddress = vi.fn()
 
@@ -27,80 +24,57 @@ vi.mock('src/hooks/StationWallet')
 vi.mock('src/hooks/StationActivity')
 vi.mock('src/hooks/StationRewards')
 
+stubGlobalElectron()
+
 describe('Dashboard wallet display', () => {
-  describe('Wallet modal empty state', () => {
-    beforeEach(() => {
-      vi.clearAllMocks()
+  beforeEach(() => {
+    vi.clearAllMocks()
 
-      vi.stubGlobal('electron', {
-        stationEvents: {
-          onActivityLogged: vi.fn(),
-          onEarningsChanged: vi.fn(),
-          onJobProcessed: vi.fn(),
-          onReadyToUpdate: vi.fn(),
-          onTransactionUpdate: vi.fn(),
-          onBalanceUpdate: vi.fn(),
-          onScheduledRewardsUpdate: vi.fn()
-        },
-        getUpdaterStatus: vi.fn(async () => ({ readyToUpdate: false }))
-      })
-
-      vi.mocked(useWallet).mockReturnValue({
-        stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-        stationAddress0x: '0x000000000000000000000000000000000000dEaD',
-        destinationFilAddress: '',
-        walletBalance: '0',
-        walletTransactions: [],
-        editDestinationAddress: (value?: string) => null,
-        processingTransaction: undefined,
-        dismissCurrentTransaction: () => ({}),
-        transferAllFundsToDestinationWallet: async () => undefined
-      })
-
-      vi.mocked(useStationActivity).mockReturnValue({
-        totalJobs: 0,
-        activities: []
-      })
-      vi.mocked(useStationRewards).mockReturnValue({
-        totalRewardsReceived: 1,
-        scheduledRewards: undefined,
-        historicalRewards: []
-      })
-
-      render((
-        <BrowserRouter>
-          <TooltipProvider>
-            <DialogProvider>
-              <Layout>
-                <Dashboard />
-              </Layout>
-            </DialogProvider>
-          </TooltipProvider>
-        </BrowserRouter>
-      ))
+    vi.mocked(useWallet).mockReturnValue({
+      stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+      stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+      destinationFilAddress: '',
+      walletBalance: '0',
+      walletTransactions: [],
+      editDestinationAddress: (value?: string) => null,
+      processingTransaction: undefined,
+      dismissCurrentTransaction: () => ({}),
+      transferAllFundsToDestinationWallet: async () => undefined
     })
 
-    test('Clicking wallet widget opens modal', async () => {
-      expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
-
-      act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
-      expect(screen.getByRole('dialog')).toBeVisible()
+    vi.mocked(useStationActivity).mockReturnValue({
+      totalJobs: 0,
+      activities: []
+    })
+    vi.mocked(useStationRewards).mockReturnValue({
+      totalRewardsReceived: 1,
+      scheduledRewards: undefined,
+      historicalRewards: []
     })
 
-    test('Wallet displays internal address', () => {
-      expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
+    renderApp(<Dashboard />)
+  })
 
-      act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
+  test('Clicking wallet widget opens modal', async () => {
+    expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
 
-      expect(screen.getByText('f16m5s...ron4qa')).toBeVisible()
-    })
+    act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
+    expect(screen.getByRole('dialog')).toBeVisible()
+  })
 
-    test('Wallet displays correct balance', () => {
-      expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
+  test('Wallet displays internal address', () => {
+    expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
 
-      act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
+    act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
 
-      expect(screen.getAllByText(/0 FIL/)[0]).toBeInTheDocument()
-    })
+    expect(screen.getByText('f16m5s...ron4qa')).toBeVisible()
+  })
+
+  test('Wallet displays correct balance', () => {
+    expect(screen.getByTestId('wallet-widget')).toBeInTheDocument()
+
+    act(() => { fireEvent.click(screen.getByTestId('wallet-widget')) })
+
+    expect(screen.getAllByText(/0 FIL/)[0]).toBeInTheDocument()
   })
 })

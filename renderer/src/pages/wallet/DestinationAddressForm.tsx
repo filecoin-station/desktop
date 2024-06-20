@@ -33,6 +33,7 @@ const DestinationAddressForm = ({
       inClass='bg-white max-h-[208px] border-slate-400 p-5'
       className={`flex flex-col overflow-hidden
       border border-dashed rounded-lg destination-address-form`}
+      data-testid="destination-address-form"
     >
       <Transition
         on={!hasAddressSaved}
@@ -52,6 +53,7 @@ const DestinationAddressForm = ({
         onChange={validateOnChange}
         error={inputState.error}
         spellCheck={false}
+        data-testid="destination-address-form-input"
       />
 
       <Transition
