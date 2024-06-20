@@ -15,33 +15,7 @@ import useStationActivity from 'src/hooks/StationActivity'
 import { Activity } from '../../../shared/typings'
 import useStationRewards from 'src/hooks/StationRewards'
 import { stubGlobalElectron, renderApp } from './helpers.test'
-
-const activities: Activity[] = [{
-  id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
-  timestamp: new Date(166386083297),
-  source: 'Saturn',
-  type: 'info',
-  message: 'Saturn node exited with code: 2'
-}]
-const addToActivities = () => {
-  activities.push({
-    id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c3',
-    timestamp: new Date(166386083298),
-    source: 'Saturn',
-    type: 'info',
-    message: 'Saturn node exited with code: 2'
-  })
-}
-
-let totalJobs = 100
-const setTotalJobs = () => {
-  totalJobs = 200
-}
-
-let scheduledRewards = '100'
-const setScheduledRewards = () => {
-  scheduledRewards = '200'
-}
+import { useEffect, useState } from 'react'
 
 vi.mock('src/hooks/StationWallet')
 vi.mock('src/hooks/StationActivity')
@@ -86,7 +60,7 @@ describe('Dashboard page', () => {
       })
       vi.mocked(useStationRewards).mockReturnValue({
         totalRewardsReceived: 1,
-        scheduledRewards,
+        scheduledRewards: '100',
         historicalRewards: []
       })
 
@@ -106,39 +80,10 @@ describe('Dashboard page', () => {
     })
   })
 
-  /* describe('Populated', () => {
-    const onActivityLogged = vi.fn((callback) => {
-      const value = [{
-        id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
-        timestamp: 166386083297,
-        source: 'Saturn',
-        type: 'info',
-        message: 'Saturn node exited with code: 2'
-      },
-      {
-        id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39f7',
-        timestamp: 166386083497,
-        source: 'Saturn',
-        type: 'info',
-        message: 'Some random message for testing'
-      }]
-      setTimeout(() => act(() => callback(value)))
-      return () => ({})
-    })
-
-    const onScheduledRewardsUpdate = vi.fn((callback) => {
-      const value = 200
-      setTimeout(() => { act(() => callback(value)) })
-      return () => ({})
-    })
-
-    const onJobProcessed = vi.fn((callback) => {
-      const value = 200
-      setTimeout(() => { act(() => callback(value)) })
-      return () => ({})
-    })
-
+  describe('Populated', () => {
     beforeEach(() => {
+      vi.useFakeTimers()
+
       vi.mocked(useWallet).mockReturnValue({
         stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
         stationAddress0x: '0x000000000000000000000000000000000000dEaD',
@@ -151,41 +96,105 @@ describe('Dashboard page', () => {
         processingTransaction: undefined
       })
 
-      vi.mocked(useStationRewards).mockReturnValue({
-        totalRewardsReceived: 1,
-        scheduledRewards,
-        historicalRewards: []
+      vi.mocked(useStationRewards).mockImplementation(() => {
+        const [mockedRewards, setMockedRewards] = useState(0)
+
+        useEffect(() => {
+          setTimeout(() => {
+            setMockedRewards(10)
+          }, 100)
+        }, [])
+
+        return {
+          totalRewardsReceived: mockedRewards,
+          scheduledRewards: '100',
+          historicalRewards: []
+        }
       })
 
-      vi.mocked(useStationActivity).mockReturnValue({
-        totalJobs,
-        activities
+      vi.mocked(useStationActivity).mockImplementation(() => {
+        const [mockedActivities, setMockedActivities] = useState<Activity[]>([])
+        const [mockedJobs, setMockedJobs] = useState(100)
+
+        useEffect(() => {
+          setTimeout(() => {
+            setMockedJobs(200)
+            setMockedActivities([
+              {
+                id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39c2',
+                timestamp: new Date(166386083297),
+                source: 'Saturn',
+                type: 'info',
+                message: 'Saturn node exited with code: 2'
+              },
+              {
+                id: 'bb9d9a61-75e0-478d-9dd8-aa74756c39f7',
+                timestamp: new Date(166386083497),
+                source: 'Saturn',
+                type: 'info',
+                message: 'Some random message for testing'
+              }
+            ])
+          }, 100)
+        }, [])
+
+        return {
+          totalJobs: mockedJobs,
+          activities: mockedActivities
+        }
       })
 
       renderApp(<Dashboard />)
     })
 
-    test('subscribes and listens the activity logger', () => {
-      onActivityLogged(addToActivities)
-      waitFor(() => {
-        expect(onActivityLogged).toBeCalledTimes(1)
-      }, { timeout: 10 })
-      waitFor(() => { expect(document.getElementsByClassName('activity-item').length).toBe(2) }, { timeout: 3000 })
+    afterEach(() => {
+      vi.clearAllTimers()
+      vi.useRealTimers()
     })
 
-    test('subscribes and listens the jobs counter', () => {
-      onJobProcessed(setTotalJobs)
-      waitFor(() => { expect(onJobProcessed).toBeCalledTimes(1) }, { timeout: 10 })
-      waitFor(() => { expect((screen.getByTitle('total jobs')).textContent).toBe('200') }, { timeout: 1000 })
+    test('subscribes and listens the activity logger', async () => {
+      expect(screen.queryAllByTestId('activity-item').length).toBe(0)
+
+      act(() => {
+        vi.runAllTimers()
+      })
+
+      vi.clearAllTimers()
+      vi.useRealTimers()
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('activity-item').length).toBe(2)
+      })
     })
 
-    test('subscribes and listens the earnings counter', () => {
-      onScheduledRewardsUpdate(setScheduledRewards)
-      waitFor(() => { expect(onScheduledRewardsUpdate).toBeCalledTimes(1) }, { timeout: 10 })
-      waitFor(
-        () => { expect((screen.getByTitle('scheduled rewards')).textContent).toBe('200FIL') },
-        { timeout: 1000 }
-      )
+    test('subscribes and listens the jobs counter', async () => {
+      expect(screen.getByTestId('jobs-counter').textContent).toBe('100')
+
+      act(() => {
+        vi.runAllTimers()
+      })
+
+      vi.clearAllTimers()
+      vi.useRealTimers()
+
+      await waitFor(() => {
+        expect(screen.getByTestId('jobs-counter').textContent).toBe('200')
+      })
     })
-  }) */
+
+    test('subscribes and listens the earnings counter', async () => {
+      expect(screen.getByTestId('earnings-counter').textContent).toBe('0 FIL')
+
+      act(() => {
+        vi.runAllTimers()
+      })
+
+      vi.clearAllTimers()
+      vi.useRealTimers()
+
+      await waitFor(() => {
+        expect(screen.getByTestId('earnings-counter').textContent).toBe('10 FIL')
+      })
+    })
+  })
 })
