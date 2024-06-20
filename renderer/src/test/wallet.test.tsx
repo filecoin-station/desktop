@@ -2,7 +2,7 @@ import { act, fireEvent, screen, waitFor } from '@testing-library/react'
 import useWallet from 'src/hooks/StationWallet'
 import { truncateString } from 'src/lib/utils'
 import { describe, expect, test, vi } from 'vitest'
-import { renderApp, stubGlobalElectron } from './helpers.test'
+import { renderApp, stubGlobalElectron } from './helpers'
 import Wallet from 'src/pages/wallet/Wallet'
 import { useEffect, useState } from 'react'
 

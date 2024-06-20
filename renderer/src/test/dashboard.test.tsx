@@ -14,7 +14,7 @@ import useWallet from 'src/hooks/StationWallet'
 import useStationActivity from 'src/hooks/StationActivity'
 import { Activity } from '../../../shared/typings'
 import useStationRewards from 'src/hooks/StationRewards'
-import { stubGlobalElectron, renderApp } from './helpers.test'
+import { stubGlobalElectron, renderApp } from './helpers'
 import { useEffect, useState } from 'react'
 
 vi.mock('src/hooks/StationWallet')

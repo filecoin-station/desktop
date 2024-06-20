@@ -6,7 +6,7 @@ import Dashboard from 'src/pages/dashboard/Dashboard'
 import useStationActivity from 'src/hooks/StationActivity'
 import useWallet from 'src/hooks/StationWallet'
 import useStationRewards from 'src/hooks/StationRewards'
-import { renderApp, stubGlobalElectron } from './helpers.test'
+import { renderApp, stubGlobalElectron } from './helpers'
 
 const mockedSetDestinationWalletAddress = vi.fn()
 
