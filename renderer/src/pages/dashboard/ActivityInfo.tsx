@@ -9,7 +9,7 @@ import { useMemo } from 'react'
 
 const ActivityItem = ({ activity }: {activity: Activity}) => {
   return (
-    <div className="flex gap-[10px] py-2" key={activity.id}>
+    <div className="flex gap-[10px] py-2" key={activity.id} data-testid="activity-item">
       {activity.type === 'info'
         ? <JobIcon className="btn-icon-primary-small icon-primary" />
         : <WarningIcon className="btn-icon-primary-small icon-error" />}
@@ -43,7 +43,7 @@ const ActivityInfo = () => {
         <Text as='h3' font='mono' size='3xs' color='primary' uppercase className='mb-3'>
             &#47;&#47; Jobs completed ... :
         </Text>
-        <Text font='mono' size='s'>{totalJobs.toLocaleString()}</Text>
+        <Text font='mono' size='s' data-testid="jobs-counter">{totalJobs.toLocaleString()}</Text>
       </BorderedBox>
       <div className='h-full flex flex-col relative'>
         <BorderedBox className='py-4 px-5' isGrouped>
