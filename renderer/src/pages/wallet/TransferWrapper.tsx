@@ -35,6 +35,7 @@ const TransferWrapper = ({
 
   return (
     <section
+      data-testid="transfer-wrapper"
       className='row-span-2 col-start-2 bg-black relative flex flex-col overflow-hidden'
       style={{ '--factor': 1 } as CSSProperties}
     >
@@ -54,6 +55,7 @@ const TransferWrapper = ({
             }}
             outClass='animate-addressFormMoveUp'
             className='absolute w-[80%] max-w-[480px] mx-auto left-0 right-0 top-[70%] -translate-y-[50%]'
+            data-testid="destination-address-form-wrapper"
           >
             <DestinationAddressForm
               onSave={(value) => {

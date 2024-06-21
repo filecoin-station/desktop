@@ -47,6 +47,7 @@ const BalanceControl = ({
       inClass='w-[260px] h-[260px] rounded-[130px] border-slate-50 bg-black'
       outClass='bg-white w-[500px] max-w-[80%] p-5 rounded-[8px] h-[132px]'
       className='border border-dashed mx-auto balance-control'
+      data-testid='balance-control'
     >
       <div className={'h-full z-10 flex'}>
         <Transition

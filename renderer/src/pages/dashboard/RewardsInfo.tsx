@@ -16,7 +16,7 @@ const RewardsInfo = ({
         <Text as="p" font='mono' size='3xs' color='primary' uppercase>
             &#47;&#47; Total rewards received ... :
         </Text>
-        <Text as='p' font='mono' size='xl'>
+        <Text as='p' font='mono' size='xl' data-testid="earnings-counter">
           {formatFilValue(totalRewardsReceived.toString())}{' '}FIL
         </Text>
       </div>
