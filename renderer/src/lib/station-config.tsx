@@ -72,6 +72,10 @@ export function showTermsOfService (): void {
   return window.electron.stationConfig.openExternalURL('https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4')
 }
 
+export function openDocsLink () {
+  return window.electron.stationConfig.openExternalURL('https://docs.filstation.app/your-station-wallet')
+}
+
 export function toggleOpenAtLogin () {
   return window.electron.stationConfig.toggleOpenAtLogin()
 }
