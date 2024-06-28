@@ -6,6 +6,7 @@ import EditDestinationAddressForm from './EditDestinationAddressForm'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import Transition from 'src/components/Transition'
 import GridCanvas from './GridCanvas'
+import { openDocsLink } from 'src/lib/station-config'
 
 const SEND_THRESHOLD = 0.01
 
@@ -20,8 +21,8 @@ const TransferWrapper = ({
   walletBalance: Wallet['walletBalance'];
   destinationFilAddress?: Wallet['destinationFilAddress'];
   stationAddress?: Wallet['stationAddress'];
-  processingTransaction : Wallet['processingTransaction'];
-  editDestinationAddress:Wallet['editDestinationAddress'];
+  processingTransaction: Wallet['processingTransaction'];
+  editDestinationAddress: Wallet['editDestinationAddress'];
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
 }) => {
   const [isShowingEditAddress, setIsShowingAddressEdit] = useState(false)
@@ -90,7 +91,15 @@ const TransferWrapper = ({
       )}
 
       <footer className='relative text-center mb-9 mt-auto'>
-        <Text size='xs' color='white' bold as="a" href="https://docs.filstation.app/your-station-wallet">
+        <Text
+          size='xs'
+          color='white'
+          bold
+          as="button"
+          type='button'
+          onClick={() => openDocsLink()}
+          className='focus-visible:outline-slate-400'
+        >
           Learn more about your Station wallet
         </Text>
       </footer>

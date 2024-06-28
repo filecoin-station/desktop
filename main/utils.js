@@ -25,6 +25,7 @@ const allowedURLs = [
 ].map(str => new URL(str))
 
 const allowedURLsRegEx = [
+  /https:\/\/docs.filstation.app\/.*$/,
   /https:\/\/beryx.zondax.ch\/v1\/search\/fil\/mainnet\/address\/.*$/
 ].map(str => new RegExp(str))
 
