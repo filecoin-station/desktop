@@ -75,6 +75,13 @@ async function getHistoricalRewardsData (address: string) {
     }
   }
   stats.sort((a, b) => a.timestamp.localeCompare(b.timestamp))
+
+  let currentTotalSparkRewards = 0
+  for (const stat of stats) {
+    currentTotalSparkRewards += stat.totalRewardsReceived.spark
+    stat.totalRewardsReceived.spark = currentTotalSparkRewards
+  }
+
   return stats
 }
 
