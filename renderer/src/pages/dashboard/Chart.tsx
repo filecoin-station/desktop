@@ -65,10 +65,7 @@ const Chart = ({
       (acc, record) => {
         acc.labels.push(new Date(record.timestamp).getTime())
         acc.totalRewards.push(getRewardValue(record.totalRewardsReceived, moduleId))
-        acc.scheduled.push(
-          getRewardValue(record.totalScheduledRewards, moduleId) +
-          getRewardValue(record.totalRewardsReceived, moduleId)
-        )
+        acc.scheduled.push(getRewardValue(record.totalScheduledRewards, moduleId))
 
         return acc
       }, {
