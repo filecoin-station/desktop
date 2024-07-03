@@ -1,7 +1,7 @@
 'use strict'
 
 const { app, dialog } = require('electron')
-const { join, dirname } = require('node:path')
+const { join } = require('node:path')
 const { fork } = require('node:child_process')
 const wallet = require('./wallet')
 const assert = require('node:assert')
