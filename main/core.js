@@ -107,7 +107,7 @@ async function start (ctx) {
         if (!line.includes('failed to detect network')) {
           Sentry.captureException(err)
         }
-        log.error(err)
+        log.error(format('Cannot parse Core stdout:', err))
         return
       }
       switch (event.type) {
@@ -135,7 +135,7 @@ async function start (ctx) {
           const err = new Error(
             `Unknown Station Core event type "${event.type}": ${line}`
           )
-          log.error(err)
+          log.error(format(err))
           Sentry.captureException(err)
         }
       }
