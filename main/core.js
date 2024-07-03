@@ -90,7 +90,7 @@ async function start (ctx) {
     },
     stdio: ['pipe', 'pipe', 'pipe', 'ipc']
   })
-  log.info(format('Core pid: %s', childProcess.pid))
+  log.info(format('Core pid:', childProcess.pid))
 
   assert(childProcess.stdout)
   childProcess.stdout.setEncoding('utf8')
