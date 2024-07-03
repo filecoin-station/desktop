@@ -1,7 +1,7 @@
 'use strict'
 
 const { app, dialog } = require('electron')
-const { join, dirname } = require('node:path')
+const { join } = require('node:path')
 const { fork } = require('node:child_process')
 const wallet = require('./wallet')
 const assert = require('node:assert')
@@ -43,7 +43,6 @@ async function setup (ctx) {
       await fs.writeFile(filePath, logs.get())
     }
   }
-  await maybeMigrateFiles()
 }
 
 /**
@@ -175,28 +174,6 @@ async function start (ctx) {
     scope.setExtra('reason', exitReason)
     return scope
   })
-}
-
-async function maybeMigrateFiles () {
-  const oldSaturnDir = join(consts.LEGACY_CACHE_HOME, 'saturn')
-  const newSaturnDir = join(consts.CACHE_ROOT, 'modules', 'saturn-l2-node')
-  try {
-    await fs.stat(newSaturnDir)
-    return
-  } catch {}
-  try {
-    await fs.stat(oldSaturnDir)
-  } catch {
-    return
-  }
-  console.log(
-    'Migrating files from %s to %s',
-    oldSaturnDir,
-    newSaturnDir
-  )
-  await fs.mkdir(dirname(newSaturnDir), { recursive: true })
-  await fs.rename(oldSaturnDir, newSaturnDir)
-  console.log('Migration complete')
 }
 
 module.exports = {
