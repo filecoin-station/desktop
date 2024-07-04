@@ -14,6 +14,9 @@ const { Logs } = require('./logs')
 const split2 = require('split2')
 const { parseEther } = require('ethers/lib/utils')
 const { once } = require('node:events')
+const { format } = require('node:util')
+
+const log = require('electron-log').scope('core')
 
 /** @typedef {import('./typings').Context} Context */
 
@@ -22,7 +25,7 @@ const { once } = require('node:events')
 const corePath = app.isPackaged
   ? join(process.resourcesPath, 'core', 'bin', 'station.js')
   : join(__dirname, '..', 'core', 'bin', 'station.js')
-console.log('Core binary: %s', corePath)
+log.info(format('Core binary: %s', corePath))
 
 const logs = new Logs()
 const activities = new Activities()
@@ -63,7 +66,7 @@ function maybeReportErrorToSentry (err, scopeFn) {
   const now = Date.now()
   if (now - lastCrashReportedAt < 4 /* HOURS */ * 3600_000) return
   lastCrashReportedAt = now
-  console.error(
+  log.error(
     'Reporting the problem to Sentry for inspection by the Station team.'
   )
   Sentry.captureException(err, scopeFn)
@@ -73,7 +76,7 @@ function maybeReportErrorToSentry (err, scopeFn) {
  * @param {Context} ctx
  */
 async function start (ctx) {
-  console.log('Starting Core...')
+  log.info('Starting Core...')
 
   const childProcess = fork(corePath, ['--json'], {
     env: {
@@ -86,7 +89,7 @@ async function start (ctx) {
     },
     stdio: ['pipe', 'pipe', 'pipe', 'ipc']
   })
-  console.log('Core pid', childProcess.pid)
+  log.info(format('Core pid:', childProcess.pid))
 
   assert(childProcess.stdout)
   childProcess.stdout.setEncoding('utf8')
@@ -103,7 +106,7 @@ async function start (ctx) {
         if (!line.includes('failed to detect network')) {
           Sentry.captureException(err)
         }
-        console.error(err)
+        log.error(format('Cannot parse Core stdout:', err))
         return
       }
       switch (event.type) {
@@ -131,7 +134,7 @@ async function start (ctx) {
           const err = new Error(
             `Unknown Station Core event type "${event.type}": ${line}`
           )
-          console.error(err)
+          log.error(format(err))
           Sentry.captureException(err)
         }
       }
@@ -155,11 +158,11 @@ async function start (ctx) {
     ? `via signal ${exitSignal}`
     : `with code: ${exitCode}`
   const msg = `Core exited ${reason}`
-  console.log(msg)
+  log.info(msg)
   const exitReason = exitSignal || exitCode ? reason : null
 
   const [closeCode] = await onceClosed
-  console.log(`Core closed all stdio with code ${closeCode ?? '<no code>'}`)
+  log.info(`Core closed all stdio with code ${closeCode ?? '<no code>'}`)
 
   if (closeCode === 2) {
     // FIL_WALLET_ADDRESS did not pass our screening. There is not much
