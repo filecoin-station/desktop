@@ -100,6 +100,8 @@ const useStationRewards = () => {
   const [scheduledRewards, setScheduledRewards] = useState<string>()
   const [historicalRewards, setHistoricalRewards] = useState<RewardsRecord[]>([])
 
+  console.log({historicalRewards})
+
   const totalRewardsReceived = useMemo(
     () => sumAllRewards(historicalRewards.at(-1)?.totalRewardsReceived || {}),
     [historicalRewards]
@@ -123,7 +125,10 @@ const useStationRewards = () => {
 
   useEffect(() => {
     async function loadStoredInfo () {
-      setScheduledRewards(await getScheduledRewards())
+      const sched = await getScheduledRewards()
+      console.log('----')
+      console.log(`Scheduled: ${sched}`)
+      setScheduledRewards(sched)
     }
     loadStoredInfo()
   }, [wallet.stationAddress0x])

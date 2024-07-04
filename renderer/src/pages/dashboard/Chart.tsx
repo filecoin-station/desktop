@@ -67,6 +67,8 @@ const Chart = ({
         acc.totalRewards.push(getRewardValue(record.totalRewardsReceived, moduleId))
         acc.scheduled.push(getRewardValue(record.totalScheduledRewards, moduleId))
 
+        console.log(`Chart point: ${getRewardValue(record.totalScheduledRewards, moduleId)}`)
+
         return acc
       }, {
         labels: [],
