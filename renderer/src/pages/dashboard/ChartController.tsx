@@ -44,11 +44,17 @@ const ChartController = ({ historicalRewards }: {historicalRewards: RewardsRecor
   return (
     <div className='flex-1 flex flex-col'>
       <div className='flex gap-4 p-5'>
-        <ToggleGroup onValueChange={(value: TimeRange) => setTimeRange(value)} defaultValue={timeRange}>
+        <ToggleGroup
+          onValueChange={(value: TimeRange) => {
+            if (value) setTimeRange(value)
+          }}
+          defaultValue={timeRange}
+        >
           {timeRanges.map(value => (
             <ToggleGroupButton
               key={value}
               value={value}
+              disabled={value === timeRange}
             >
               {value.toUpperCase()}
             </ToggleGroupButton>
