@@ -13,8 +13,16 @@ const RewardsInfo = ({
   return (
     <section className="flex justify-between">
       <div className='p-5 flex flex-col gap-2'>
-        <Text as="p" font='mono' size='3xs' color='primary' uppercase>
-            &#47;&#47; Total rewards received ... :
+        <Text as="p" font='mono' size='3xs' color='primary' uppercase className='flex'>
+            &#47;&#47; REWARDS RECEIVED SINCE JUNE 13TH 2024 ... :
+          <Tooltip
+            trigger={
+              <i><InfoIcon className='text-primary relative -top-3' /></i>
+            }
+            style={{ maxWidth: '230px' }}
+            content={`At the moment, rewards from before June 13th 2024 are not
+              included in this dashboard. Data will be backfilled soon.`}
+          />
         </Text>
         <Text as='p' font='mono' size='xl' data-testid="earnings-counter">
           {formatFilValue(totalRewardsReceived.toString())}{' '}FIL
