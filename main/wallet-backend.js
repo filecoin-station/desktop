@@ -14,6 +14,7 @@ const { join } = require('node:path')
 const { decode } = require('@glif/filecoin-address')
 const timers = require('node:timers/promises')
 const log = require('electron-log').scope('wallet-backend')
+const { format } = require('node:util')
 
 /** @typedef {import('./typings').WalletSeed} WalletSeed */
 /**
@@ -106,7 +107,16 @@ class WalletBackend {
     const service = 'filecoin-station-wallet-0x'
     let seed
     if (!this.disableKeytar) {
-      seed = await keytar.getPassword(service, 'seed')
+      log.info('Reading the seed phrase from the keychain...')
+      try {
+        seed = await keytar.getPassword(service, 'seed')
+      } catch (err) {
+        throw new Error(
+          'Cannot read the seed phrase - did the user grant access?',
+          { cause: err }
+        )
+      }
+
       if (seed) {
         return { seed, isNew: false }
       }
@@ -219,7 +229,7 @@ class WalletBackend {
       this.onTransactionUpdate()
       return cid
     } catch (err) {
-      log.error(err)
+      log.error(format('Cannot submit transaction:', err))
       transaction.status = 'failed'
       this.onTransactionUpdate()
       throw err
