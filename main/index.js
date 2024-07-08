@@ -30,6 +30,7 @@ const { ipcMain } = require('electron/main')
 const os = require('os')
 const core = require('./core')
 const wallet = require('./wallet')
+const settings = require('./settings')
 const serve = require('electron-serve')
 const { setupAppMenu } = require('./app-menu')
 const setupTray = require('./tray')
@@ -37,6 +38,7 @@ const setupUI = require('./ui')
 const setupUpdater = require('./updater')
 const Sentry = require('@sentry/node')
 const telemetry = require('./telemetry')
+const { validateExternalURL } = require('./utils')
 
 const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
@@ -123,6 +125,9 @@ const ctx = {
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
   saveModuleLogsAs: () => { throw new Error('never get here') },
+  toggleOpenAtLogin: () => { throw new Error('never get here') },
+  isOpenAtLogin: () => { throw new Error('never get here') },
+  exportSeedPhrase: () => { throw new Error('never get here') },
   showUI: () => { throw new Error('never get here') },
   isShowingUI: false,
   loadWebUIFromDist: serve({
@@ -131,9 +136,10 @@ const ctx = {
   restartToUpdate: () => { throw new Error('never get here') },
   openReleaseNotes: () => { throw new Error('never get here') },
   getUpdaterStatus: () => { throw new Error('never get here') },
-  browseTransactionTracker: (/** @type {string} */ transactionHash) => { shell.openExternal(`https://beryx.zondax.ch/v1/search/fil/mainnet/address/${transactionHash}`) },
-  showTermsOfService: () => { shell.openExternal('https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4') },
-  openBeryx: () => { shell.openExternal('https://beryx.io/') },
+  openExternalURL: (/** @type {string} */ url) => {
+    validateExternalURL(url)
+    shell.openExternal(url)
+  },
   transactionUpdate: (transactions) => {
     ipcMain.emit(ipcMainEvents.TRANSACTION_UPDATE, transactions)
   },
@@ -174,6 +180,7 @@ async function run () {
     await wallet.setup(ctx)
     await telemetry.setup()
     await core.setup(ctx)
+    await settings.setup(ctx)
 
     await core.run(ctx)
   } catch (e) {

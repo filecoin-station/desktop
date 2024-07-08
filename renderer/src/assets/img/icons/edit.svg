@@ -1,4 +1,1 @@
-<svg version="1.1" id="icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="26px" height="26px" viewBox="0 0 32 32" xml:space="preserve" fill="#C3CAD9">
-  <path d="M2 26h28v2H2Z" />
-  <path d="M25.4,9c0.8-0.8,0.8-2,0-2.8c0,0,0,0,0,0l-3.6-3.6c-0.8-0.8-2-0.8-2.8,0c0,0,0,0,0,0l-15,15V24h6.4L25.4,9z M20.4,4L24,7.6  l-3,3L17.4,7L20.4,4z M6,22v-3.6l10-10l3.6,3.6l-10,10H6z" />
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd" d="M13 1.293 17.707 6l-8.5 8.5H4.5V9.793l8.5-8.5ZM10.707 5 14 8.293 16.293 6 13 2.707 10.707 5Zm2.586 4L10 5.707l-4.5 4.5V13.5h3.293l4.5-4.5ZM18 17v1H2v-1h16Z" clip-rule="evenodd"/></svg>

@@ -72,13 +72,28 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     (_events, _args) => ctx.getUpdaterStatus()
   )
   ipcMain.handle(
-    'station:browseTransactionTracker',
-    (_events, transactionHash) => ctx.browseTransactionTracker(transactionHash)
+    'station:openExternalURL',
+    (_events, url) => ctx.openExternalURL(url)
   )
-  ipcMain.handle('station:openBeryx', () => ctx.openBeryx())
   ipcMain.handle(
-    'station:showTermsOfService',
-    (_events) => ctx.showTermsOfService()
+    'station:toggleOpenAtLogin',
+    (_events) => ctx.toggleOpenAtLogin()
+  )
+  ipcMain.handle(
+    'station:isOpenAtLogin',
+    (_events) => ctx.isOpenAtLogin()
+  )
+  ipcMain.handle(
+    'station:exportSeedPhrase',
+    (_events) => ctx.exportSeedPhrase()
+  )
+  ipcMain.handle(
+    'station:saveModuleLogsAs',
+    (_events) => ctx.saveModuleLogsAs()
+  )
+  ipcMain.handle(
+    'station:checkForUpdates',
+    (_events) => ctx.manualCheckForUpdates()
   )
 }
 

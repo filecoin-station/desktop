@@ -1,135 +1,182 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { fireEvent, render, waitFor, act } from '@testing-library/react'
-import '@testing-library/jest-dom'
-import '../lib/station-config'
-import { BrowserRouter } from 'react-router-dom'
-import Dashboard from '../pages/Dashboard'
+import { act, fireEvent, screen, waitFor } from '@testing-library/react'
+import useWallet from 'src/hooks/StationWallet'
+import { truncateString } from 'src/lib/utils'
+import { describe, expect, test, vi } from 'vitest'
+import { renderApp, stubGlobalElectron } from './helpers'
+import Wallet from 'src/pages/wallet/Wallet'
+import { useEffect, useState } from 'react'
 
-const mockedSetDestinationWalletAddress = vi.fn()
+vi.mock('src/hooks/StationWallet')
+vi.mock('src/pages/wallet/GridCanvas')
 
-vi.mock('../lib/station-config', () => ({
-  getStationWalletBalance: () => Promise.resolve(0),
-  getStationWalletTransactionsHistory: () => Promise.resolve([]),
-  getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
-  getDestinationWalletAddress: () => Promise.resolve(''),
-  setDestinationWalletAddress: () => mockedSetDestinationWalletAddress,
-  getScheduledRewards: () => Promise.resolve('0.0'),
-  getActivities: () => Promise.resolve([]),
-  openBeryx: () => Promise.resolve()
-}))
+const mockTransfer = vi.fn()
 
-describe('Dashboard wallet display', () => {
-  describe('Wallet modal empty state', () => {
-    const onActivityLogged = vi.fn((callback) => () => ({}))
-    const onEarningsChanged = vi.fn((callback) => () => ({}))
-    const onJobProcessed = vi.fn((callback) => () => ({}))
-    const onReadyToUpdate = vi.fn((callback) => () => ({}))
-    const onTransactionUpdate = vi.fn((callback) => () => ({}))
-    const onBalanceUpdate = vi.fn((callback) => () => ({}))
-    const onScheduledRewardsUpdate = vi.fn((callback) => () => ({}))
+stubGlobalElectron()
 
+describe('Transfer page', () => {
+  describe('Wallet info', () => {
     beforeEach(() => {
-      vi.clearAllMocks()
-      vi.mock('../hooks/StationWallet', async () => {
+      vi.mocked(useWallet).mockReturnValue({
+        stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+        stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+        destinationFilAddress: '',
+        walletBalance: '0',
+        walletTransactions: [],
+        editDestinationAddress: (value?: string) => null,
+        dismissCurrentTransaction: () => ({}),
+        transferAllFundsToDestinationWallet: async () => undefined,
+        processingTransaction: undefined
+      })
+
+      renderApp(<Wallet />)
+    })
+
+    test('Displays wallet info', () => {
+      expect(screen.getByText(truncateString('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'))).toBeInTheDocument()
+      expect(screen.getByText(truncateString('0x000000000000000000000000000000000000dEaD'))).toBeInTheDocument()
+    })
+  })
+
+  describe('Fill in destination address', () => {
+    beforeEach(() => {
+      vi.mocked(useWallet).mockImplementation(() => {
+        const [destinationFilAddress, setDestinationFilAddress] = useState('')
+
+        function editDestinationAddress (value?: string) {
+          act(() => setDestinationFilAddress(value || ''))
+        }
+
         return {
-          default: () => {
-            let destination = ''
-            return {
-              stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-              stationAddress0x: '0x000000000000000000000000000000000000dEaD',
-              destinationFilAddress: destination,
-              walletBalance: 0,
-              walletTransactions: [],
-              editDestinationAddress: (value: string) => { destination = value },
-              currentTransaction: undefined,
-              dismissCurrentTransaction: () => ({})
-            }
-          }
+          stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+          stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+          destinationFilAddress,
+          walletBalance: '0',
+          walletTransactions: [],
+          editDestinationAddress,
+          dismissCurrentTransaction: () => ({}),
+          transferAllFundsToDestinationWallet: async () => undefined,
+          processingTransaction: undefined
         }
       })
 
-      vi.mock('../hooks/StationActivity', async () => {
+      renderApp(<Wallet />)
+    })
+
+    test('If destination address not set, show address form', () => {
+      expect(screen.getByTestId('destination-address-form')).toBeInTheDocument()
+      expect(screen.queryAllByTestId('balance-control').length).toBe(0)
+    })
+
+    test('Filling destination address input shows balance control', async () => {
+      const value = '0x000000000000000000000000000000000000dEaD'
+
+      act(() => {
+        fireEvent.change(screen.getByTestId('destination-address-form-input'), {
+          target: { value }
+        })
+      })
+
+      await waitFor(() => {
+        expect(screen.getByTestId('destination-address-form-input')).toHaveValue(value)
+      })
+
+      act(() => {
+        fireEvent.submit(screen.getByTestId('destination-address-form'))
+      })
+
+      act(() => {
+        fireEvent.animationEnd(screen.getByTestId('destination-address-form-wrapper'))
+      })
+
+      await waitFor(() => {
+        expect(screen.getByTestId('balance-control')).toBeInTheDocument()
+      })
+    })
+  })
+
+  describe('Transfer funds', () => {
+    beforeEach(() => {
+      vi.useFakeTimers()
+
+      vi.mocked(useWallet).mockImplementation(() => {
+        const [balance, setBalance] = useState('0')
+
+        useEffect(() => {
+          setTimeout(() => (
+            setBalance('2')
+          ), 500)
+        }, [])
+
         return {
-          default: () => ({
-            totalJobs: 0,
-            totalEarnings: 0,
-            activities: []
-          })
+          stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+          stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+          destinationFilAddress: '0x000000000000000000000000000000000000dEaD',
+          walletBalance: balance,
+          walletTransactions: [],
+          editDestinationAddress: () => null,
+          dismissCurrentTransaction: () => ({}),
+          transferAllFundsToDestinationWallet: mockTransfer,
+          processingTransaction: undefined
         }
       })
 
-      Object.defineProperty(window, 'electron', {
-        writable: true,
-        value: {
-          stationEvents: {
-            onActivityLogged,
-            onEarningsChanged,
-            onJobProcessed,
-            onReadyToUpdate,
-            onTransactionUpdate,
-            onBalanceUpdate,
-            onScheduledRewardsUpdate
-          },
-          getUpdaterStatus: vi.fn(() => new Promise((resolve, reject) => ({})))
-        }
+      renderApp(<Wallet />)
+    })
+
+    afterEach(() => {
+      vi.clearAllTimers()
+      vi.useRealTimers()
+    })
+
+    test('If balance below threshold, disable transfer button. Enable otherwise', async () => {
+      expect(screen.getByText('Transfer')).toBeDisabled()
+
+      act(() => {
+        vi.runAllTimers()
       })
-      render(<BrowserRouter><Dashboard /></BrowserRouter>)
+
+      vi.clearAllTimers()
+      vi.useRealTimers()
+
+      expect(screen.getByText('Transfer')).toBeEnabled()
     })
 
-    test('Wallet curtain opens on click widget and closes on click background shadow', () => {
-      expect(document.getElementsByClassName('wallet-widget')).toHaveLength(1)
+    test('Clicking transfer shows confirmation step', async () => {
+      act(() => {
+        vi.runAllTimers()
+      })
 
-      expect(document.getElementsByClassName('modal-bg')).toHaveLength(1)
-      expect(document.getElementsByClassName('modal-bg')[0]).toHaveClass('invisible')
-      expect(document.getElementsByClassName('modal-content')).toHaveLength(1)
-      expect(document.getElementsByClassName('modal-content')[0]).toHaveClass('invisible')
+      vi.clearAllTimers()
+      vi.useRealTimers()
 
-      act(() => { fireEvent.click(document.getElementsByClassName('wallet-widget')[0]) })
-      expect(document.getElementsByClassName('modal-bg')[0]).not.toHaveClass('invisible')
-      expect(document.getElementsByClassName('modal-content')[0]).not.toHaveClass('invisible')
+      act(() => {
+        fireEvent.click(screen.getByText('Transfer'))
+      })
 
-      act(() => { fireEvent.click(document.getElementsByClassName('modal-bg')[0]) })
-      expect(document.getElementsByClassName('modal-bg')[0]).toHaveClass('invisible')
-      expect(document.getElementsByClassName('modal-content')[0]).toHaveClass('invisible')
+      const cancel = await screen.findByText('Cancel')
+
+      expect(cancel).toBeInTheDocument()
     })
 
-    test('Wallet displays internal address', () => {
-      expect(document.getElementsByClassName('station-address')[0]).toHaveTextContent('f16m5s . . . ron4qa')
-    })
+    test('Clicking confirm triggers send', async () => {
+      act(() => {
+        vi.runAllTimers()
+      })
 
-    test('Wallet displays empty destination address', () => {
-      expect(document.getElementsByClassName('destination-address')[0]).toHaveValue('')
-    })
+      vi.clearAllTimers()
+      vi.useRealTimers()
 
-    test('Wallet displays correct balance', () => {
-      expect(document.getElementsByClassName('wallet-balance')[0].textContent).toBe('0FIL')
-    })
+      act(() => {
+        fireEvent.click(screen.getByText('Transfer'))
+      })
 
-    test('Wallet withdraws disabled', () => {
-      expect(document.getElementsByClassName('destination-address')[0]).toHaveValue('')
-      expect(document.getElementsByClassName('wallet-transfer-start')[0]).toBeDisabled()
-      expect(document.getElementsByClassName('wallet-transfer-tooltip')[0]).toBeVisible()
-    })
+      await screen.findByText('Cancel')
 
-    test('Wallet displays onboarding', () => {
-      expect(document.getElementsByClassName('wallet-onboarding')[0]).toHaveClass('visible')
-      expect(document.getElementsByClassName('wallet-history')[0]).toHaveClass('invisible')
-      expect(document.getElementsByClassName('wallet-transaction').length).toBe(0)
-    })
+      act(() => {
+        fireEvent.click(screen.getAllByText('Transfer')[0])
+      })
 
-    test('Wallet setup destination address', () => {
-      act(() => fireEvent.click(document.getElementsByClassName('address-edit')[0]))
-      waitFor(() => expect(document.getElementsByClassName('submit-address')[0]).toBeDisabled())
-      act(() =>
-        fireEvent.change(document.getElementsByClassName('destination-address')[0], {
-          target: { value: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg' }
-        }))
-      expect(
-        document.getElementsByClassName('destination-address')[0]
-      ).toHaveValue('f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg')
-      expect(document.getElementsByClassName('submit-address')[0]).not.toBeDisabled()
-      act(() => fireEvent.click(document.getElementsByClassName('submit-address')[0]))
-      waitFor(() => { expect(mockedSetDestinationWalletAddress).toHaveBeenCalledOnce() })
+      expect(mockTransfer).toHaveBeenCalled()
     })
   })
 })

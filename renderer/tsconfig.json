@@ -19,6 +19,11 @@
       "vite/client",
       "vite-plugin-svgr/client",
     ],
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["src/*"],
+      "shared/*": ["../shared/*"],
+    }
   },
   "include": ["src"],
 }

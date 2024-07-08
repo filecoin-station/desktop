@@ -32,6 +32,7 @@ backend.transactions = loadStoredEntries()
 /** @type {Context | null} */
 let ctx = null
 let balance = loadBalance()
+let isTransactionProcessing = false
 
 /**
  * @param {Context} _ctx
@@ -62,10 +63,12 @@ async function refreshState () {
   } catch (err) {
     log.error('Cannot update scheduled rewards:', err)
   }
-  try {
-    await updateBalance()
-  } catch (err) {
-    log.error('Cannot update balance:', err)
+  if (!isTransactionProcessing) {
+    try {
+      await updateBalance()
+    } catch (err) {
+      log.error('Cannot update balance:', err)
+    }
   }
   if (ctx?.isShowingUI) {
     try {
@@ -186,11 +189,14 @@ function sendTransactionsToUI () {
 async function transferAllFunds (to) {
   assert(ctx)
 
+  isTransactionProcessing = true
   try {
     const cid = await backend.transferFunds(to, balance)
     console.log({ cid })
   } catch (err) {
     log.error('Transferring funds', err)
+  } finally {
+    isTransactionProcessing = false
   }
 }
 
@@ -203,7 +209,7 @@ async function transferAllFundsToDestinationWallet () {
   try {
     await transferAllFunds(to)
   } finally {
-    await updateBalance()
+    await refreshState()
   }
 }
 

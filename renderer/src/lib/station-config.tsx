@@ -1,4 +1,4 @@
-import { Activity, FILTransaction, FILTransactionProcessing } from '../typings'
+import { Activity, FILTransaction, FILTransactionProcessing } from 'src/typings'
 import pDebounce from 'p-debounce'
 
 export async function getOnboardingCompleted (): Promise<boolean> {
@@ -57,13 +57,41 @@ export async function transferAllFundsToDestinationWallet (): Promise<void> {
 }
 
 export function browseTransactionTracker (transactionHash: string): void {
-  return window.electron.stationConfig.browseTransactionTracker(transactionHash)
+  return window.electron.stationConfig.openExternalURL(`https://beryx.zondax.ch/v1/search/fil/mainnet/address/${transactionHash}`)
+}
+
+export function openExternalURL (url: string): void {
+  return window.electron.stationConfig.openExternalURL(url)
 }
 
 export function openBeryx (): void {
-  return window.electron.openBeryx()
+  return window.electron.stationConfig.openExternalURL('https://beryx.io/')
 }
 
 export function showTermsOfService (): void {
-  return window.electron.stationConfig.showTermsOfService()
+  return window.electron.stationConfig.openExternalURL('https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4')
+}
+
+export function openDocsLink () {
+  return window.electron.stationConfig.openExternalURL('https://docs.filstation.app/your-station-wallet')
+}
+
+export function toggleOpenAtLogin () {
+  return window.electron.stationConfig.toggleOpenAtLogin()
+}
+
+export function isOpenAtLogin () {
+  return window.electron.stationConfig.isOpenAtLogin()
+}
+
+export function exportSeedPhrase () {
+  return window.electron.stationConfig.exportSeedPhrase()
+}
+
+export function saveModuleLogsAs () {
+  return window.electron.stationConfig.saveModuleLogsAs()
+}
+
+export function checkForUpdates () {
+  return window.electron.stationConfig.checkForUpdates()
 }

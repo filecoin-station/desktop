@@ -1,52 +1,46 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 
-import '../lib/station-config'
-import Onboarding from '../pages/Onboarding'
+import { getOnboardingCompleted, setOnboardingCompleted, showTermsOfService } from 'src/lib/station-config'
+import Onboarding from 'src/pages/onboarding/Onboarding'
 import { BrowserRouter } from 'react-router-dom'
 
-const mockedUsedNavigate = vi.fn()
+const mocks = vi.hoisted(() => {
+  return {
+    useNavigate: vi.fn()
+  }
+})
+
+vi.mock('src/lib/station-config')
 vi.mock('react-router-dom', async () => {
-  const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
+  const router = await vi.importActual('react-router-dom')
+
   return {
     ...router,
-    useNavigate: () => mockedUsedNavigate
+    useNavigate: () => mocks.useNavigate
   }
 })
 
 describe('Welcome page test', () => {
   beforeEach(() => {
-    vi.restoreAllMocks()
+    vi.clearAllMocks()
   })
 
   describe('User has completed the onboarding previously', () => {
     beforeAll(() => {
-      vi.mock('../lib/station-config', () => {
-        return {
-          setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(true),
-          showTermsOfService: () => Promise.resolve(undefined)
-        }
-      })
-
-      vi.mock('react-router-dom', async () => {
-        const router: typeof import('react-router-dom') = await vi.importActual('react-router-dom')
-        return {
-          ...router,
-          useNavigate: () => mockedUsedNavigate
-        }
-      })
+      vi.mocked(setOnboardingCompleted).mockReturnValue(Promise.resolve(undefined))
+      vi.mocked(getOnboardingCompleted).mockReturnValue(Promise.resolve(true))
+      vi.mocked(showTermsOfService).mockReturnValue(undefined)
     })
 
     beforeEach(() => {
-      vi.clearAllMocks()
-      render(<BrowserRouter> <Onboarding /></BrowserRouter >)
+      render(<BrowserRouter><Onboarding /></BrowserRouter >)
     })
 
     test('Redirects to dashboard directly if user is onboarded', async () => {
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })
+      await waitFor(() => expect(mocks.useNavigate).toHaveBeenCalledTimes(1), { timeout: 3000 })
       await waitFor(
-        () => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }),
+        () => expect(mocks.useNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }),
         { timeout: 3000 }
       )
     })
@@ -54,17 +48,12 @@ describe('Welcome page test', () => {
 
   describe('User has not completed the onboarding', () => {
     beforeAll(() => {
-      vi.mock('../lib/station-config', () => {
-        return {
-          setOnboardingCompleted: () => Promise.resolve(undefined),
-          getOnboardingCompleted: (status: boolean) => Promise.resolve(false),
-          showTermsOfService: () => Promise.resolve(undefined)
-        }
-      })
+      vi.mocked(setOnboardingCompleted).mockReturnValue(Promise.resolve(undefined))
+      vi.mocked(getOnboardingCompleted).mockReturnValue(Promise.resolve(false))
+      vi.mocked(showTermsOfService).mockReturnValue(undefined)
     })
 
     beforeEach(() => {
-      vi.clearAllMocks()
       render(<BrowserRouter> <Onboarding /></BrowserRouter >)
     })
 
@@ -103,7 +92,7 @@ describe('Welcome page test', () => {
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByText(/Continue/i)) }))
       await waitFor(() => act(() => { fireEvent.click(screen.getByTitle(/Accept/i)) }))
-      await waitFor(() => expect(mockedUsedNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }))
+      await waitFor(() => expect(mocks.useNavigate).toHaveBeenCalledWith('/dashboard', { replace: true }))
     })
   })
 })

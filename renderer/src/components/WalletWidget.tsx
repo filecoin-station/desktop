@@ -1,52 +1,41 @@
-import { FC, useEffect, useState } from 'react'
-import useWallet from '../hooks/StationWallet'
-import { FilecoinNumber, BigNumber } from '@glif/filecoin-number'
+import useWallet from 'src/hooks/StationWallet'
+import WalletIcon from 'src/assets/img/icons/wallet.svg?react'
+import { useDialog } from './DialogProvider'
+import { formatFilValue } from 'src/lib/utils'
+import Text from './Text'
+import WalletModal from './WalletModal'
+import { ROUTES } from 'src/lib/routes'
+import TransactionStatusIndicator from './TransactionStatusIndicator'
+import { useLocation } from 'react-router-dom'
 
-import WalletIcon from '../assets/img/icons/wallet.svg?react'
-import WalletTransactionStatusWidget from './WalletTransactionStatusWidget'
-import { FILTransactionProcessing } from '../typings'
+const WalletWidget = () => {
+  const { openDialog } = useDialog()
+  const { walletBalance, processingTransaction } = useWallet()
+  const { pathname } = useLocation()
 
-interface WalletWidgetProps {
-  onClick: () => void;
-}
+  if (pathname === ROUTES.wallet) {
+    return null
+  }
 
-const WalletWidget: FC<WalletWidgetProps> = ({ onClick }) => {
-  const { walletBalance, processingTransaction, dismissCurrentTransaction } = useWallet()
-  const [displayTransition, setDisplayTransaction] = useState<FILTransactionProcessing|undefined>(undefined)
-
-  useEffect(() => {
-    if (processingTransaction !== undefined) {
-      setDisplayTransaction(processingTransaction)
-    }
-  }, [processingTransaction])
+  function handleClick () {
+    openDialog({
+      content: <WalletModal />
+    })
+  }
 
   return (
-    <div className="wallet-widget cursor-pointer" onClick={() => { onClick(); dismissCurrentTransaction() }}>
-      <div className='flex items-center '>
-        <WalletIcon />
-        <span className="text-right mx-3" title="wallet">
-          <span className='font-bold'>
-            {new FilecoinNumber(String(walletBalance), 'fil')
-              .decimalPlaces(3, BigNumber.ROUND_DOWN)
-              .toString()}
-          </span>
-          {' '}
-          FIL
-        </span>
-        <button type="button" className="cursor-pointer" title="logout">
-          <span className="text-primary underline underline-offset-8">Open Wallet</span>
-        </button>
-      </div>
-      <div
-        className={`
-          transition duration-1000 ease-in-out opacity-0 ${processingTransaction ? 'opacity-100' : 'opacity-0'}
-        `}
-        onTransitionEnd={() => !processingTransaction && setDisplayTransaction(undefined)}
+    <div className='absolute top-5 right-9 flex gap-5'>
+      <TransactionStatusIndicator transaction={processingTransaction} />
+      <button
+        data-testid='wallet-widget'
+        type='button'
+        onClick={handleClick}
+        className={`flex items-center gap-3 text-black no-drag-area z-10
+        focus-visible:outline-slate-400 focus:outline-slate-400 p-1`}
       >
-        {displayTransition && (
-          <WalletTransactionStatusWidget processingTransaction={displayTransition} renderBackground={true} />
-        )}
-      </div>
+        <WalletIcon />
+        <Text font='mono' size='xs' bold className="text-black">{formatFilValue(walletBalance)} FIL</Text>
+      </button>
     </div>
   )
 }

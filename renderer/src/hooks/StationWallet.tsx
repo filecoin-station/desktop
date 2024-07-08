@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import {
   getDestinationWalletAddress,
   setDestinationWalletAddress,
@@ -6,17 +6,16 @@ import {
   getStationWalletBalance,
   getStationWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
-} from '../lib/station-config'
+} from 'src/lib/station-config'
 import {
   FILTransaction,
   FILTransactionProcessing,
-  FILTransactionStatus,
   isFILTransactionConfirmed,
   isFILTransactionProcessing
-} from '../typings'
+} from 'src/typings'
 import { ethAddressFromDelegated } from '@glif/filecoin-address'
 
-interface Wallet {
+export interface Wallet {
   stationAddress: string;
   stationAddress0x: string;
   destinationFilAddress: string | undefined;
@@ -30,41 +29,41 @@ interface Wallet {
 
 const useWallet = (): Wallet => {
   const [stationAddress, setStationAddress] = useState<string>('')
-  const [destinationFilAddress, setDestinationFilAddress] = useState<string | undefined>()
-  const [walletBalance, setWalletBalance] = useState<string | undefined>()
-  const [walletTransactions, setWalletTransactions] = useState<FILTransaction[] | undefined>()
-  const [processingTransaction, setCurrentTransaction] = useState<FILTransactionProcessing | undefined>()
+  const [destinationFilAddress, setDestinationFilAddress] = useState<string>()
+  const [walletBalance, setWalletBalance] = useState<string>()
+  const [walletTransactions, setWalletTransactions] = useState<FILTransaction[]>()
+  const [processingTransaction, setProcessingTransaction] = useState<FILTransactionProcessing>()
+
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const processingTxRef = useRef<typeof processingTransaction>()
+  processingTxRef.current = processingTransaction
 
   const setTransactions = useCallback((
-    processing: FILTransactionProcessing | undefined,
-    confirmed: FILTransaction[]
+    transactions: (FILTransaction | FILTransactionProcessing)[]
   ) => {
+    const { processing, confirmed } = splitWalletTransactions(transactions)
+
+    setWalletTransactions(confirmed)
+
     if (
-      processingTransaction &&
-      isFILTransactionProcessing(processingTransaction) &&
+      processingTxRef.current &&
+      isFILTransactionProcessing(processingTxRef.current) &&
       !processing
     ) {
-      const status: FILTransactionStatus =
-        confirmed.find(tx => tx.hash === processingTransaction.hash)
-          ? 'succeeded'
-          : 'failed'
-      const newCurrentTransaction = {
-        ...processingTransaction,
-        status
-      }
-      setCurrentTransaction(newCurrentTransaction)
+      const wasSuccessful = confirmed.find(tx => tx.hash === processingTxRef.current?.hash)
+      setProcessingTransaction({
+        ...processingTxRef.current,
+        status: wasSuccessful ? 'succeeded' : 'failed'
+      })
       setTimeout(() => {
-        setCurrentTransaction(tx =>
-          tx === newCurrentTransaction
-            ? undefined
-            : tx
-        )
+        setProcessingTransaction(undefined)
       }, 10_000)
     } else if (processing) {
-      setCurrentTransaction(processing)
+      setProcessingTransaction(processing)
+      clearTimeout(timeoutRef.current)
     }
     setWalletTransactions(confirmed)
-  }, [processingTransaction])
+  }, [])
 
   const editDestinationAddress = async (address: string | undefined) => {
     await setDestinationWalletAddress(address)
@@ -73,9 +72,11 @@ const useWallet = (): Wallet => {
 
   const dismissCurrentTransaction = () => {
     if (processingTransaction && processingTransaction.status !== 'processing') {
-      setCurrentTransaction(undefined)
+      setProcessingTransaction(undefined)
     }
   }
+
+  // Load initial data
 
   useEffect(() => {
     const loadStoredInfo = async () => {
@@ -100,38 +101,21 @@ const useWallet = (): Wallet => {
 
   useEffect(() => {
     const loadStoredInfo = async () => {
-      const { processing, confirmed } = splitWalletTransactions(
-        await getStationWalletTransactionsHistory()
-      )
-      setTransactions(processing, confirmed)
+      setTransactions(await getStationWalletTransactionsHistory())
     }
     loadStoredInfo()
   }, [setTransactions])
 
-  useEffect(() => {
-    const updateWalletTransactionsArray = (transactions: (FILTransaction|FILTransactionProcessing)[]) => {
-      const { processing, confirmed } = splitWalletTransactions(transactions)
-      setTransactions(processing, confirmed)
-    }
+  // Subscribe to events
 
+  useEffect(() => {
     const unsubscribeOnTransactionUpdate = window.electron.stationEvents.onTransactionUpdate(
-      updateWalletTransactionsArray
+      setTransactions
     )
     return () => {
       unsubscribeOnTransactionUpdate()
     }
   }, [setTransactions])
-
-  useEffect(() => {
-    const updateWalletBalance = (balance: string) => {
-      setWalletBalance(balance)
-    }
-
-    const unsubscribeOnBalanceUpdate = window.electron.stationEvents.onBalanceUpdate(updateWalletBalance)
-    return () => {
-      unsubscribeOnBalanceUpdate()
-    }
-  }, [])
 
   useEffect(() => {
     const unsubscribeOnBalanceUpdate = window.electron.stationEvents.onBalanceUpdate(balance => {

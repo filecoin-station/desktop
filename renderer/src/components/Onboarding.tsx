@@ -1,8 +1,8 @@
 import { FC, useState } from 'react'
-import Back from './../assets/img/icons/arrow-left.svg?react'
-import Page from './../assets/img/icons/paginator-page.svg?react'
-import CurrentPage from './../assets/img/icons/paginator-current.svg?react'
-import { showTermsOfService } from '../lib/station-config'
+import Back from 'src/assets/img/icons/arrow-left.svg?react'
+import Page from 'src/assets/img/icons/paginator-page.svg?react'
+import CurrentPage from 'src/assets/img/icons/paginator-current.svg?react'
+import { showTermsOfService } from 'src/lib/station-config'
 
 interface FooterProps {
   page: number;
