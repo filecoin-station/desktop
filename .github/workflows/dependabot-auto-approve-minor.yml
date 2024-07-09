@@ -29,6 +29,7 @@ jobs:
           - npm
           - jsdom
           - '@filecoin-station/spark-impact-evaluator'
+          - '@radix-ui/'
     steps:
       - name: Dependabot metadata
         id: metadata
