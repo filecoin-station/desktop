@@ -114,7 +114,7 @@ export const modules = {
   },
   voyager: {
     name: 'Voyager',
-    description: 'Module Y empowers users to spark new ideas, projects, and solutions that harness the full potential of Filecoin\'s decentralized storage protocol.',
+    description: 'Voyager tests retrievability of content stored on the Saturn decentralized CDN, which is revolutionizing Web3 content delivery. ',
     contractAddress: '0xc524b83bf85021e674a7c9f18f5381179fabaf6c',
     logo: SaturnLogo,
     logoBackgroundColor: 'black',
@@ -125,7 +125,7 @@ export const modules = {
     },
     links: {
       github: 'https://github.com/filecoin-station/voyager',
-      docs: 'https://filstation.app/'
+      docs: 'https://saturn.tech/'
     },
     status: 'ended'
   }
