@@ -45,9 +45,10 @@ const ModuleCard = ({ module }: {module: Module}) => {
           </div>
         </div>
         <figure
-          className='flex w-[140px] shrink-0 py-9 px-5 border-l border-dashed border-slate-400 bg-white
-          rounded-tr-xl'
-          style={{ backgroundColor: module.logoBackgroundColor }}
+          className={
+            `flex w-[140px] shrink-0 py-9 px-5 border-l border-dashed border-slate-400
+            bg-${module.logoBackgroundColor} rounded-tr-xl
+          `}
         >
           <img src={module.logo} alt={`${module.name}'s logo`} className='max-w-[100px] m-auto' />
         </figure>
