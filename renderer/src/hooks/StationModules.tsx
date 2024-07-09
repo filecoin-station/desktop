@@ -97,7 +97,7 @@ async function getSparkTotalRewards () {
 export const modules = {
   spark: {
     name: 'Spark',
-    description: 'With its array of tools, resources, and support, Spark empowers users to spark new ideas, projects, and solutions that harness the full potential of Filecoin\'s decentralized storage protocol.',
+    description: 'Spark is a trustless protocol for sampling retrievals from Filecoin Storage Providers. Spark aims to drive improvements in the retrievability of data stored on Filecoin.',
     contractAddress: '0x8460766Edc62B525fc1FA4D628FC79229dC73031',
     logo: SparkLogo,
     logoBackgroundColor: 'white',
