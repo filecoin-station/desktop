@@ -98,7 +98,7 @@ export const modules = {
   spark: {
     name: 'Spark',
     description: 'With its array of tools, resources, and support, Spark empowers users to spark new ideas, projects, and solutions that harness the full potential of Filecoin\'s decentralized storage protocol.',
-    contractAddress: '0x',
+    contractAddress: '0x8460766Edc62B525fc1FA4D628FC79229dC73031',
     logo: SparkLogo,
     stats: {
       totalJobs: 0, // TODO: Get this from spark-stats once available
