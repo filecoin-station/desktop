@@ -21,7 +21,6 @@ jobs:
           - '@glif/'
           - '@filecoin-station/core'
           - npm
-          - undici
           - ejs
           - '@electron/notarize'
           - braces
