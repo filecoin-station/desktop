@@ -100,6 +100,7 @@ export const modules = {
     description: 'With its array of tools, resources, and support, Spark empowers users to spark new ideas, projects, and solutions that harness the full potential of Filecoin\'s decentralized storage protocol.',
     contractAddress: '0x8460766Edc62B525fc1FA4D628FC79229dC73031',
     logo: SparkLogo,
+    logoBackgroundColor: 'inherit',
     stats: {
       totalJobs: 0, // TODO: Get this from spark-stats once available
       totalRewards: 0,
@@ -116,6 +117,7 @@ export const modules = {
     description: 'Module Y empowers users to spark new ideas, projects, and solutions that harness the full potential of Filecoin\'s decentralized storage protocol.',
     contractAddress: '0xc524b83bf85021e674a7c9f18f5381179fabaf6c',
     logo: SaturnLogo,
+    logoBackgroundColor: 'black',
     stats: {
       totalJobs: 0, // TODO: Updater after data export
       totalRewards: 0, // TODO: Update after airdrop
