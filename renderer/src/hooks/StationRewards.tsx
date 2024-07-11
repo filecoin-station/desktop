@@ -159,7 +159,9 @@ const useStationRewards = () => {
     todayRewards = {
       timestamp: new Date().toISOString(),
       totalRewardsReceived: {
-        spark: 0,
+        spark: historicalRewardsWithLiveToday[
+          historicalRewardsWithLiveToday.length - 1
+        ]?.totalRewardsReceived.spark || 0,
         voyager: 0
       },
       totalScheduledRewards: {
@@ -167,9 +169,6 @@ const useStationRewards = () => {
         voyager: 0
       }
     }
-    todayRewards.totalRewardsReceived.spark = historicalRewardsWithLiveToday[
-      historicalRewardsWithLiveToday.length - 1
-    ]?.totalRewardsReceived.spark || 0
     historicalRewardsWithLiveToday.push(todayRewards)
   }
   todayRewards.totalScheduledRewards.spark = Number(scheduledRewards || 0)
