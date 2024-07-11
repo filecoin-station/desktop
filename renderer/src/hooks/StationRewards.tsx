@@ -17,8 +17,7 @@ async function getHistoricalScheduledRewards (address: string) {
   return stats.map(stat => ({
     timestamp: new Date(stat.day).toISOString(),
     totalScheduledRewards: {
-      spark:
-      Number(
+      spark: Number(
         (BigInt(stat.scheduled_rewards) / 1_000_000_000_000_000n)
           .toString()
       ) / 1_000,
