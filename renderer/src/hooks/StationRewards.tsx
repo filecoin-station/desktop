@@ -139,6 +139,34 @@ const useStationRewards = () => {
     }
   }, [])
 
+  const historicalRewardsWithLiveToday = [...historicalRewards]
+  let todayRewards = historicalRewardsWithLiveToday[
+    historicalRewardsWithLiveToday.length - 1
+  ]
+  if (
+    !todayRewards ||
+    new Date(todayRewards.timestamp).getDate() !== new Date().getDate() ||
+    new Date(todayRewards.timestamp).getMonth() !== new Date().getMonth() ||
+    new Date(todayRewards.timestamp).getFullYear() !== new Date().getFullYear()
+  ) {
+    todayRewards = {
+      timestamp: new Date().toISOString(),
+      totalRewardsReceived: {
+        spark: 0,
+        voyager: 0
+      },
+      totalScheduledRewards: {
+        spark: 0,
+        voyager: 0
+      }
+    }
+    todayRewards.totalRewardsReceived.spark = historicalRewardsWithLiveToday[
+      historicalRewardsWithLiveToday.length - 1
+    ]?.totalRewardsReceived.spark || 0
+    historicalRewardsWithLiveToday.push(todayRewards)
+  }
+  todayRewards.totalScheduledRewards.spark = Number(scheduledRewards || 0)
+
   return {
     historicalRewards,
     scheduledRewards,
