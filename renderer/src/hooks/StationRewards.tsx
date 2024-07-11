@@ -174,7 +174,7 @@ const useStationRewards = () => {
   todayRewards.totalScheduledRewards.spark = Number(scheduledRewards || 0)
 
   return {
-    historicalRewards,
+    historicalRewards: historicalRewardsWithLiveToday,
     scheduledRewards,
     totalRewardsReceived
   }
