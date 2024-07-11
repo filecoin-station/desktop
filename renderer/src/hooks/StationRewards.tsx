@@ -128,6 +128,8 @@ const useStationRewards = () => {
       setScheduledRewards(await getScheduledRewards())
     }
     loadStoredInfo()
+    const id = setInterval(loadStoredInfo, 60 * 60 * 1000)
+    return () => clearInterval(id)
   }, [wallet.stationAddress0x])
 
   useEffect(() => {
