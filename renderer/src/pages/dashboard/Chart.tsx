@@ -49,6 +49,7 @@ const Chart = ({
   moduleId
 }: {
   historicalRewards: RewardsRecord[];
+  scheduledRewards: string;
   timeRange: TimeRange;
   moduleId: string;
 }) => {

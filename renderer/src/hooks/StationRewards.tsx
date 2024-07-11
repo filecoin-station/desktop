@@ -8,15 +8,17 @@ type ScheduledRewardsResponse = {
 }[]
 
 async function getHistoricalScheduledRewards (address: string) {
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
   const res = await fetch(
     `https://stats.filspark.com/participant/${address}/scheduled-rewards` +
-      `?from=2024-01-01&to=${new Date().toISOString().split('T')[0]}`
+      `?from=2024-01-01&to=${yesterday.toISOString().split('T')[0]}`
   )
   const stats = await res.json() as ScheduledRewardsResponse
   return stats.map(stat => ({
     timestamp: new Date(stat.day).toISOString(),
     totalScheduledRewards: {
-      spark: Number(
+      spark:
+      Number(
         (BigInt(stat.scheduled_rewards) / 1_000_000_000_000_000n)
           .toString()
       ) / 1_000,
