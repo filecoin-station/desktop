@@ -146,32 +146,31 @@ const useStationRewards = () => {
     }
   }, [])
 
-  const historicalRewardsWithLiveToday = [...historicalRewards]
-  let todayRewards = historicalRewardsWithLiveToday[
-    historicalRewardsWithLiveToday.length - 1
-  ]
-  if (
-    !todayRewards ||
-    new Date(todayRewards.timestamp).getDate() !== new Date().getDate() ||
-    new Date(todayRewards.timestamp).getMonth() !== new Date().getMonth() ||
-    new Date(todayRewards.timestamp).getFullYear() !== new Date().getFullYear()
-  ) {
-    todayRewards = {
-      timestamp: new Date().toISOString(),
-      totalRewardsReceived: {
-        spark: historicalRewardsWithLiveToday[
-          historicalRewardsWithLiveToday.length - 1
-        ]?.totalRewardsReceived.spark || 0,
-        voyager: 0
-      },
-      totalScheduledRewards: {
-        spark: 0,
-        voyager: 0
+  const historicalRewardsWithLiveToday = useMemo(() => {
+    const rewards = [...historicalRewards]
+    let todayRewards = rewards[rewards.length - 1]
+    if (
+      !todayRewards ||
+      new Date(todayRewards.timestamp).getDate() !== new Date().getDate() ||
+      new Date(todayRewards.timestamp).getMonth() !== new Date().getMonth() ||
+      new Date(todayRewards.timestamp).getFullYear() !== new Date().getFullYear()
+    ) {
+      todayRewards = {
+        timestamp: new Date().toISOString(),
+        totalRewardsReceived: {
+          spark: rewards[rewards.length - 1]?.totalRewardsReceived.spark || 0,
+          voyager: 0
+        },
+        totalScheduledRewards: {
+          spark: 0,
+          voyager: 0
+        }
       }
+      rewards.push(todayRewards)
     }
-    historicalRewardsWithLiveToday.push(todayRewards)
-  }
-  todayRewards.totalScheduledRewards.spark = Number(scheduledRewards || 0)
+    todayRewards.totalScheduledRewards.spark = Number(scheduledRewards || 0)
+    return rewards
+  }, [historicalRewards, scheduledRewards])
 
   return {
     historicalRewards: historicalRewardsWithLiveToday,
