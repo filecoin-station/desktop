@@ -193,7 +193,7 @@ describe('Dashboard page', () => {
       vi.useRealTimers()
 
       await waitFor(() => {
-        expect(screen.getByTestId('earnings-counter').textContent).toBe('10 FIL')
+        expect(screen.getByTestId('earnings-counter').textContent).toBe('10.000 FIL')
       })
     })
   })
