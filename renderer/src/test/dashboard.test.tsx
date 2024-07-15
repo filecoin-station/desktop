@@ -72,7 +72,7 @@ describe('Dashboard page', () => {
     })
 
     test('displays earnings counter null', () => {
-      expect(screen.getByTestId('earnings-counter').textContent).toBe('1 FIL')
+      expect(screen.getByTestId('earnings-counter').textContent).toBe('1.000 FIL')
     })
 
     test('displays empty activity log', () => {
@@ -183,7 +183,7 @@ describe('Dashboard page', () => {
     })
 
     test('subscribes and listens the earnings counter', async () => {
-      expect(screen.getByTestId('earnings-counter').textContent).toBe('0 FIL')
+      expect(screen.getByTestId('earnings-counter').textContent).toBe('0.000 FIL')
 
       act(() => {
         vi.runAllTimers()
@@ -193,7 +193,7 @@ describe('Dashboard page', () => {
       vi.useRealTimers()
 
       await waitFor(() => {
-        expect(screen.getByTestId('earnings-counter').textContent).toBe('10 FIL')
+        expect(screen.getByTestId('earnings-counter').textContent).toBe('10.000 FIL')
       })
     })
   })
