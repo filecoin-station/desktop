@@ -8,10 +8,10 @@ export function truncateString (value: string, size = 6) {
 
 export function formatFilValue (value = '') {
   const str = new FilecoinNumber(String(value), 'fil')
-    .decimalPlaces(3, BigNumber.ROUND_DOWN)
+    .decimalPlaces(6, BigNumber.ROUND_DOWN)
     .toString()
   const [whole, decimal = ''] = str.split('.')
-  return `${whole}.${decimal.padEnd(3, '0')}`
+  return `${whole}.${decimal.padEnd(6, '0')}`
 }
 
 export function openExplorerLink (hash?: string) {
