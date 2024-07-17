@@ -6,6 +6,7 @@ import Tooltip from 'src/components/Tooltip'
 import { ReactNode, useState } from 'react'
 import Transition from 'src/components/Transition'
 import TransactionStatusIndicator from 'src/components/TransactionStatusIndicator'
+import classNames from 'classnames'
 
 const TooltipWrapper = ({ children, hasTooltip }: {children: ReactNode; hasTooltip: boolean}) => {
   if (!hasTooltip) return children
@@ -90,7 +91,14 @@ const BalanceControl = ({
           className='m-auto flex flex-col gap-5 items-center justify-center h-full'
         >
           <div className='flex flex-col justify-end h-[55%]'>
-            <Text font="mono" size="xl" bold className="text-slate-50">
+            <Text
+              font="mono"
+              size="xl"
+              bold
+              className={classNames('text-slate-50 text-center',
+                formatFilValue(walletBalance).length > 8 ? 'text-[1.85rem]' : 'text-[2rem]'
+              )}
+            >
               {formatFilValue(walletBalance)} FIL
             </Text>
           </div>
