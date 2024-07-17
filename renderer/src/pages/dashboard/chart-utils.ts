@@ -218,16 +218,4 @@ export const renderPayoutEvents: CustomPlugin = {
       }
     }
   }
-
-}
-
-export const timeRangeDataWarning = (timeRange: TimeRange) => {
-  const ranges = {
-    '7d': 'in the past 7 days',
-    '1m': 'in the past month',
-    '1y': 'in the past year',
-    all: 'yet'
-  }
-
-  return `It seems you have no rewards accrued ${ranges[timeRange]}`
 }
