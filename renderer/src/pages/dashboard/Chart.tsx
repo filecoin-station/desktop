@@ -22,7 +22,7 @@ import {
   renderPayoutEvents,
   getTooltipValues,
   chartPadding,
-  timeRangeDesc
+  timeRangeDataWarning
 } from './chart-utils'
 import ChartTooltip from './ChartTooltip'
 import FilecoinSymbol from 'src/assets/img/icons/filecoin.svg'
@@ -114,7 +114,7 @@ const Chart = ({
       {!hasDataInRange && (
         <div className='absolute inset-0 mb-6 flex items-center justify-center'>
           <p className='text-slate-400 text-sm'>
-            It seems you have no rewards accrued in the {timeRangeDesc[timeRange]}
+            {timeRangeDataWarning(timeRange)}
           </p>
         </div>
       )}
