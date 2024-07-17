@@ -21,7 +21,8 @@ import {
   updateTooltipElement,
   renderPayoutEvents,
   getTooltipValues,
-  chartPadding
+  chartPadding,
+  timeRangeDesc
 } from './chart-utils'
 import ChartTooltip from './ChartTooltip'
 import FilecoinSymbol from 'src/assets/img/icons/filecoin.svg'
@@ -55,6 +56,8 @@ const Chart = ({
   const [aspectRatio, setAspectRatio] = useState<number>()
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
+
+  const hasDataInRange = historicalRewards.length > 0
 
   const chartData = useMemo(() =>
     historicalRewards.reduce<{
@@ -108,6 +111,13 @@ const Chart = ({
 
   return (
     <div ref={containerRef} className='relative flex-1 max-w-full flex items-center'>
+      {!hasDataInRange && (
+        <div className='absolute inset-0 mb-6 flex items-center justify-center'>
+          <p className='text-slate-400 text-sm'>
+            It seems you have no rewards accrued in the {timeRangeDesc[timeRange]}
+          </p>
+        </div>
+      )}
       <ChartTooltip ref={tooltipRef} />
       <img data-filecoinsymbol className='absolute opacity-0' src={FilecoinSymbol} alt="Filecoin symbol" />
       {aspectRatio
@@ -157,7 +167,7 @@ const Chart = ({
                   grid: {
                     color: colors.xLine,
                     drawTicks: false,
-                    drawOnChartArea: true
+                    drawOnChartArea: hasDataInRange
                   },
                   min: 0
                 },

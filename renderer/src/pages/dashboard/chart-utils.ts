@@ -220,3 +220,10 @@ export const renderPayoutEvents: CustomPlugin = {
   }
 
 }
+
+export const timeRangeDesc: Record<TimeRange, string> = {
+  '7d': 'past 7 days',
+  '1m': 'past month',
+  '1y': 'past year',
+  all: ''
+}
