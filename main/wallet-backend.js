@@ -163,7 +163,7 @@ class WalletBackend {
       assert(this.signer)
       assert(this.filForwarder)
 
-      const amountMinusGas = amount.sub(ethers.utils.parseEther('0.1'))
+      const amountMinusGas = amount.sub(ethers.utils.parseEther('0.01'))
       log.info('filForwarder.forward()', {
         to,
         amountMinusGas: amountMinusGas.toString()
