@@ -113,7 +113,7 @@ const Chart = ({
       {!hasDataInRange && (
         <div className='absolute inset-0 mb-6 flex items-center justify-center'>
           <p className='text-slate-400 text-sm'>
-            It seems you have no rewards accrued in the selected period
+            You have accrued no rewards in the selected period
           </p>
         </div>
       )}
