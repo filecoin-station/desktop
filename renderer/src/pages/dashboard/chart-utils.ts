@@ -218,5 +218,4 @@ export const renderPayoutEvents: CustomPlugin = {
       }
     }
   }
-
 }

@@ -56,6 +56,8 @@ const Chart = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
 
+  const hasDataInRange = historicalRewards.length > 0
+
   const chartData = useMemo(() =>
     historicalRewards.reduce<{
       labels: number[];
@@ -108,6 +110,13 @@ const Chart = ({
 
   return (
     <div ref={containerRef} className='relative flex-1 max-w-full flex items-center'>
+      {!hasDataInRange && (
+        <div className='absolute inset-0 mb-6 flex items-center justify-center'>
+          <p className='text-slate-400 text-sm'>
+            You have accrued no rewards in the selected period
+          </p>
+        </div>
+      )}
       <ChartTooltip ref={tooltipRef} />
       <img data-filecoinsymbol className='absolute opacity-0' src={FilecoinSymbol} alt="Filecoin symbol" />
       {aspectRatio
@@ -157,7 +166,7 @@ const Chart = ({
                   grid: {
                     color: colors.xLine,
                     drawTicks: false,
-                    drawOnChartArea: true
+                    drawOnChartArea: hasDataInRange
                   },
                   min: 0
                 },
