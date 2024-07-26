@@ -8,9 +8,10 @@ type ScheduledRewardsResponse = {
 }[]
 
 async function getHistoricalScheduledRewards (address: string) {
+  const yesterday = new Date(new Date().setDate(new Date().getDate() - 1))
   const res = await fetch(
     `https://stats.filspark.com/participant/${address}/scheduled-rewards` +
-      `?from=2024-01-01&to=${new Date().toISOString().split('T')[0]}`
+      `?from=2024-01-01&to=${yesterday.toISOString().split('T')[0]}`
   )
   const stats = await res.json() as ScheduledRewardsResponse
   return stats.map(stat => ({
@@ -123,9 +124,16 @@ const useStationRewards = () => {
 
   useEffect(() => {
     async function loadStoredInfo () {
+      if (document.hidden) return
       setScheduledRewards(await getScheduledRewards())
     }
     loadStoredInfo()
+    const id = setInterval(() => loadStoredInfo(), 60 * 60 * 1000)
+    document.addEventListener('visibilitychange', loadStoredInfo)
+    return () => {
+      clearInterval(id)
+      document.removeEventListener('visibilitychange', loadStoredInfo)
+    }
   }, [wallet.stationAddress0x])
 
   useEffect(() => {
@@ -137,8 +145,34 @@ const useStationRewards = () => {
     }
   }, [])
 
+  const historicalRewardsWithLiveToday = useMemo(() => {
+    const rewards = [...historicalRewards]
+    let todayRewards = rewards[rewards.length - 1]
+    if (
+      !todayRewards ||
+      new Date(todayRewards.timestamp).getDate() !== new Date().getDate() ||
+      new Date(todayRewards.timestamp).getMonth() !== new Date().getMonth() ||
+      new Date(todayRewards.timestamp).getFullYear() !== new Date().getFullYear()
+    ) {
+      todayRewards = {
+        timestamp: new Date().toISOString(),
+        totalRewardsReceived: {
+          spark: rewards[rewards.length - 1]?.totalRewardsReceived.spark || 0,
+          voyager: 0
+        },
+        totalScheduledRewards: {
+          spark: 0,
+          voyager: 0
+        }
+      }
+      rewards.push(todayRewards)
+    }
+    todayRewards.totalScheduledRewards.spark = Number(scheduledRewards || 0)
+    return rewards
+  }, [historicalRewards, scheduledRewards])
+
   return {
-    historicalRewards,
+    historicalRewards: historicalRewardsWithLiveToday,
     scheduledRewards,
     totalRewardsReceived
   }
