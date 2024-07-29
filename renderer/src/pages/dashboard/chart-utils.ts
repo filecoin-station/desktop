@@ -149,7 +149,7 @@ export function updateTooltipElement ({
     element.querySelector('[data-scheduled]')?.replaceChildren(
       isPayout
         ? `${formatFilValue(payoutValue.toString())} FIL`
-        : `${formatFilValue(scheduled.toString())} FIL`
+        : `${formatFilValue((scheduled - totalReceived).toString())} FIL`
     )
     content.setAttribute('data-ispayout', isPayout ? 'true' : 'false')
     content.style.transform = `translate(${position.x}px, ${position.y}px)`
