@@ -64,11 +64,17 @@ const Chart = ({
       totalRewards: number[];
       scheduled: number[];
     }>(
-      (acc, record) => {
+      (acc, record, index) => {
         acc.labels.push(new Date(record.timestamp).getTime())
         acc.totalRewards.push(getRewardValue(record.totalRewardsReceived, moduleId))
-        acc.scheduled.push(getRewardValue(record.totalScheduledRewards, moduleId))
-
+        const isPayout = index > 0 && getRewardValue(record.totalRewardsReceived, moduleId) >
+          getRewardValue(historicalRewards[index - 1].totalRewardsReceived, moduleId)
+        acc.scheduled.push(
+          isPayout
+            ? getRewardValue(record.totalScheduledRewards, moduleId)
+            : getRewardValue(record.totalScheduledRewards, moduleId) +
+              getRewardValue(record.totalRewardsReceived, moduleId)
+        )
         return acc
       }, {
         labels: [],
@@ -76,6 +82,7 @@ const Chart = ({
         scheduled: []
       })
   , [historicalRewards, moduleId])
+  console.log(chartData)
 
   const onTooltipUpdate = useCallback<ExternalToltipHandler>((args) => {
     if (!tooltipRef.current) {
