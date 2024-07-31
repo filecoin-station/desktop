@@ -57,7 +57,7 @@ const Chart = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
 
-  const hasDataInRange = historicalRewards.length > 0
+  const hasDataInRange = historicalRewards.length > 1
 
   const chartData = useMemo(() =>
     historicalRewards.reduce<{
