@@ -14,6 +14,14 @@ export function formatFilValue (value = '') {
   return `${whole}.${decimal.padEnd(6, '0')}`
 }
 
+export function formattedFilToBigInt (value: string) {
+  return BigInt(Number(value) * 1e18)
+}
+
+export function bigIntFilToNumber (value: bigint) {
+  return Number(value) / 1e18
+}
+
 export function openExplorerLink (hash?: string) {
   if (hash) browseTransactionTracker(hash)
 }

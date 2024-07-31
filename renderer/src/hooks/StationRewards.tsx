@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getScheduledRewards } from 'src/lib/station-config'
 import useWallet from 'src/hooks/StationWallet'
+import { formattedFilToBigInt } from 'src/lib/utils'
 
 type ScheduledRewardsResponse = {
   day: string;
@@ -17,11 +18,8 @@ async function getHistoricalScheduledRewards (address: string) {
   return stats.map(stat => ({
     timestamp: new Date(stat.day).toISOString(),
     totalScheduledRewards: {
-      spark: Number(
-        (BigInt(stat.scheduled_rewards) / 1_000_000_000_000_000n)
-          .toString()
-      ) / 1_000,
-      voyager: 0
+      spark: BigInt(stat.scheduled_rewards),
+      voyager: 0n
     }
   }))
 }
@@ -40,11 +38,8 @@ async function getHistoricalRewardTransfers (address: string) {
   return stats.map(stat => ({
     timestamp: new Date(stat.day).toISOString(),
     totalRewardsReceived: {
-      spark: Number(
-        (BigInt(stat.amount) / 1_000_000_000_000_000n)
-          .toString()
-      ) / 1_000,
-      voyager: 0
+      spark: BigInt(stat.amount),
+      voyager: 0n
     }
   }))
 }
@@ -57,8 +52,8 @@ async function getHistoricalRewardsData (address: string) {
   const stats = scheduledRewards.map(stat => ({
     ...stat,
     totalRewardsReceived: {
-      spark: 0,
-      voyager: 0
+      spark: 0n,
+      voyager: 0n
     }
   }))
   for (const stat of rewardTransfers) {
@@ -69,15 +64,15 @@ async function getHistoricalRewardsData (address: string) {
       stats.push({
         ...stat,
         totalScheduledRewards: {
-          spark: 0,
-          voyager: 0
+          spark: 0n,
+          voyager: 0n
         }
       })
     }
   }
   stats.sort((a, b) => a.timestamp.localeCompare(b.timestamp))
 
-  let currentTotalSparkRewards = 0
+  let currentTotalSparkRewards = 0n
   for (const stat of stats) {
     currentTotalSparkRewards += stat.totalRewardsReceived.spark
     stat.totalRewardsReceived.spark = currentTotalSparkRewards
@@ -88,17 +83,17 @@ async function getHistoricalRewardsData (address: string) {
 
 export type RewardsRecord = {
   timestamp: string;
-  totalRewardsReceived: Record<string, number>;
-  totalScheduledRewards: Record<string, number>;
+  totalRewardsReceived: Record<string, bigint>;
+  totalScheduledRewards: Record<string, bigint>;
 }
 
 export function sumAllRewards (data: RewardsRecord['totalRewardsReceived']) {
-  return Object.values(data).reduce((acc, val) => acc + val, 0)
+  return Object.values(data).reduce((acc, val) => acc + val, 0n)
 }
 
 const useStationRewards = () => {
   const wallet = useWallet()
-  const [scheduledRewards, setScheduledRewards] = useState<string>()
+  const [scheduledRewards, setScheduledRewards] = useState<bigint>()
   const [historicalRewards, setHistoricalRewards] = useState<RewardsRecord[]>([])
 
   const totalRewardsReceived = useMemo(
@@ -125,7 +120,7 @@ const useStationRewards = () => {
   useEffect(() => {
     async function loadStoredInfo () {
       if (document.hidden) return
-      setScheduledRewards(await getScheduledRewards())
+      setScheduledRewards(formattedFilToBigInt(await getScheduledRewards()))
     }
     loadStoredInfo()
     const id = setInterval(() => loadStoredInfo(), 60 * 60 * 1000)
@@ -138,7 +133,7 @@ const useStationRewards = () => {
 
   useEffect(() => {
     const unsubscribeOnScheduledRewardsUpdate = window.electron.stationEvents.onScheduledRewardsUpdate(balance => {
-      setScheduledRewards(balance)
+      setScheduledRewards(formattedFilToBigInt(balance))
     })
     return () => {
       unsubscribeOnScheduledRewardsUpdate()
@@ -157,17 +152,19 @@ const useStationRewards = () => {
       todayRewards = {
         timestamp: new Date().toISOString(),
         totalRewardsReceived: {
-          spark: rewards[rewards.length - 1]?.totalRewardsReceived.spark || 0,
-          voyager: 0
+          spark: rewards[rewards.length - 1]?.totalRewardsReceived.spark || 0n,
+          voyager: 0n
         },
         totalScheduledRewards: {
-          spark: 0,
-          voyager: 0
+          spark: 0n,
+          voyager: 0n
         }
       }
       rewards.push(todayRewards)
     }
-    todayRewards.totalScheduledRewards.spark = Number(scheduledRewards || 0)
+    todayRewards.totalScheduledRewards.spark = scheduledRewards
+      ? BigInt(scheduledRewards)
+      : 0n
     return rewards
   }, [historicalRewards, scheduledRewards])
 
