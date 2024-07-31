@@ -83,7 +83,6 @@ const Chart = ({
         scheduled: []
       })
   , [historicalRewards, moduleId])
-  console.log(chartData)
 
   const onTooltipUpdate = useCallback<ExternalToltipHandler>((args) => {
     if (!tooltipRef.current) {
