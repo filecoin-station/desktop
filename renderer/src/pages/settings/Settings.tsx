@@ -81,7 +81,7 @@ const Settings = () => {
         </SettingsGroup>
         <SettingsGroup name='Security'>
           <SettingsGroupItem
-            title='Export'
+            title='Backup'
             description={`Export your seed phrase for safekeeping, 
               allowing you to recover your cryptocurrency assets if necessary.`}
             input={
@@ -96,7 +96,7 @@ const Settings = () => {
             }
           />
           <SettingsGroupItem
-            title='Import'
+            title='Restore'
             description={'Import your seed phrase from a previous export.'}
             input={
               <Button
