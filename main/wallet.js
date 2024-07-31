@@ -1,5 +1,6 @@
 'use strict'
 
+const { app } = require('electron')
 const electronLog = require('electron-log')
 const assert = require('assert')
 const { getDestinationWalletAddress } = require('./station-config')
@@ -262,6 +263,8 @@ async function getSeedPhrase () {
  */
 async function setSeedPhrase (seed) {
   await backend.setSeedPhrase(seed)
+  app.relaunch()
+  app.exit(0)
 }
 
 /**
