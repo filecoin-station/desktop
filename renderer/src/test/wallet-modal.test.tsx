@@ -47,7 +47,7 @@ describe('Dashboard wallet display', () => {
       activities: []
     })
     vi.mocked(useStationRewards).mockReturnValue({
-      totalRewardsReceived: 1,
+      totalRewardsReceived: BigInt(1e18),
       scheduledRewards: undefined,
       historicalRewards: []
     })
