@@ -59,8 +59,8 @@ describe('Dashboard page', () => {
         activities: []
       })
       vi.mocked(useStationRewards).mockReturnValue({
-        totalRewardsReceived: 1,
-        scheduledRewards: '100',
+        totalRewardsReceived: BigInt(1e18),
+        scheduledRewards: BigInt(100 * 1e18),
         historicalRewards: []
       })
 
@@ -97,17 +97,17 @@ describe('Dashboard page', () => {
       })
 
       vi.mocked(useStationRewards).mockImplementation(() => {
-        const [mockedRewards, setMockedRewards] = useState(0)
+        const [mockedRewards, setMockedRewards] = useState(0n)
 
         useEffect(() => {
           setTimeout(() => {
-            setMockedRewards(10)
+            setMockedRewards(BigInt(10 * 1e18))
           }, 100)
         }, [])
 
         return {
           totalRewardsReceived: mockedRewards,
-          scheduledRewards: '100',
+          scheduledRewards: BigInt(100 * 1e18),
           historicalRewards: []
         }
       })

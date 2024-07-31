@@ -25,6 +25,7 @@ import {
 } from './chart-utils'
 import ChartTooltip from './ChartTooltip'
 import FilecoinSymbol from 'src/assets/img/icons/filecoin.svg'
+import { bigIntFilToNumber } from 'src/lib/utils'
 
 ChartJS.register(
   CategoryScale,
@@ -37,10 +38,10 @@ ChartJS.register(
 
 function getRewardValue (data: RewardsRecord['totalRewardsReceived'], moduleId: string) {
   if (moduleId === 'all') {
-    return sumAllRewards(data)
+    return bigIntFilToNumber(sumAllRewards(data))
   }
 
-  return data[moduleId]
+  return bigIntFilToNumber(data[moduleId])
 }
 
 const Chart = ({
