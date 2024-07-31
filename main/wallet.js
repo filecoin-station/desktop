@@ -257,6 +257,14 @@ async function getSeedPhrase () {
 }
 
 /**
+ * @param {string} seed
+ * @returns {Promise<void>}
+ */
+async function setSeedPhrase (seed) {
+  await backend.setSeedPhrase(seed)
+}
+
+/**
  * @param {string | ethers.utils.Bytes} message
  * @returns {Promise<string>}
  */
@@ -276,5 +284,6 @@ module.exports = {
   signMessage,
   transferAllFundsToDestinationWallet,
   getTransactionsForUI,
-  getSeedPhrase
+  getSeedPhrase,
+  setSeedPhrase
 }
