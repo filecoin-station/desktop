@@ -131,6 +131,7 @@ class WalletBackend {
    * @param {string} seed
    */
   async setSeedPhrase (seed) {
+    ethers.Wallet.fromMnemonic(seed)
     if (!this.disableKeytar) {
       await keytar.setPassword(this.keytarService, 'seed', seed)
     }
