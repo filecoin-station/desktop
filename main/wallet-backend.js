@@ -2,7 +2,14 @@
 
 const keytar = require('keytar')
 const { strict: assert } = require('node:assert')
-const { ethers } = require('ethers')
+const {
+  JsonRpcProvider,
+  Wallet,
+  FetchRequest,
+  Contract,
+  parseEther,
+  formatUnits
+} = require('ethers')
 const {
   delegatedFromEthAddress,
   ethAddressFromDelegated,
@@ -27,6 +34,7 @@ const { format } = require('node:util')
 /** @typedef {
   import('./typings').FILTransactionProcessing
 } FILTransactionProcessing */
+/** @typedef {import('ethers').HDNodeWallet} HDNodeWallet */
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 // eslint-disable-next-line max-len
@@ -48,9 +56,9 @@ class WalletBackend {
     disableKeytar = DISABLE_KEYTAR,
     onTransactionUpdate = noop
   } = {}) {
-    /** @type {ethers.providers.JsonRpcProvider | null} */
+    /** @type {JsonRpcProvider | null} */
     this.provider = null
-    /** @type {ethers.Wallet | null} */
+    /** @type {HDNodeWallet | null} */
     this.signer = null
     /** @type {`0x${string}` | null} */
     this.address = null
@@ -73,17 +81,19 @@ class WalletBackend {
     } else {
       ({ seed, isNew } = await this.getSeedPhrase())
     }
-    this.provider = new ethers.providers.JsonRpcProvider({
-      url: 'https://api.node.glif.io/rpc/v0',
-      headers: {
-        Authorization: 'Bearer VOeqfEFbUjr/vnvYSwbohKuilNkdmD/4tI3gXzV7f3g='
-      }
-    })
-    this.signer = ethers.Wallet.fromMnemonic(seed).connect(this.provider)
+    const fetchRequest = new FetchRequest(
+      'https://api.node.glif.io/rpc/v1'
+    )
+    fetchRequest.setHeader(
+      'Authorization',
+      'Bearer VOeqfEFbUjr/vnvYSwbohKuilNkdmD/4tI3gXzV7f3g='
+    )
+    this.provider = new JsonRpcProvider(fetchRequest)
+    this.signer = Wallet.fromPhrase(seed).connect(this.provider)
     this.address = /** @type {any} */(this.signer.address)
     assert(this.address !== null)
     this.addressDelegated = delegatedFromEthAddress(this.address, CoinType.MAIN)
-    this.filForwarder = new ethers.Contract(
+    this.filForwarder = new Contract(
       '0x2b3ef6906429b580b7b2080de5ca893bc282c225',
       await fs.readFile(join(__dirname, 'filforwarder-abi.json'), 'utf8'),
       this.provider
@@ -91,7 +101,7 @@ class WalletBackend {
     const SparkImpactEvaluator = await import(
       '@filecoin-station/spark-impact-evaluator'
     )
-    this.meridian = new ethers.Contract(
+    this.meridian = new Contract(
       SparkImpactEvaluator.ADDRESS,
       SparkImpactEvaluator.ABI,
       this.provider
@@ -122,7 +132,9 @@ class WalletBackend {
       }
     }
 
-    seed = ethers.Wallet.createRandom().mnemonic.phrase
+    const mnemonic = Wallet.createRandom().mnemonic
+    assert(mnemonic)
+    seed = mnemonic.phrase
     if (!this.disableKeytar) {
       await keytar.setPassword(service, 'seed', seed)
     }
@@ -130,13 +142,14 @@ class WalletBackend {
   }
 
   async fetchBalance () {
-    assert(this.signer)
-    return await this.signer.getBalance()
+    assert(this.provider)
+    assert(this.address)
+    return await this.provider.getBalance(this.address)
   }
 
   /**
    * @param {string} to
-   * @param {ethers.BigNumber} amount
+   * @param {bigint} amount
    * @returns {Promise<string>}
    */
   async transferFunds (to, amount) {
@@ -155,7 +168,7 @@ class WalletBackend {
 
   /**
    * @param {`f1${string}`} to
-   * @param {ethers.BigNumber} amount
+   * @param {bigint} amount
    * @returns {Promise<string>}
    */
   async transferFundsToF1Address (to, amount) {
@@ -163,7 +176,7 @@ class WalletBackend {
       assert(this.signer)
       assert(this.filForwarder)
 
-      const amountMinusGas = amount.sub(ethers.utils.parseEther('0.01'))
+      const amountMinusGas = amount - parseEther('0.01')
       log.info('filForwarder.forward()', {
         to,
         amountMinusGas: amountMinusGas.toString()
@@ -177,14 +190,14 @@ class WalletBackend {
 
   /**
    * @param {`0x${string}`} to
-   * @param {ethers.BigNumber} amount
+   * @param {bigint} amount
    * @returns {Promise<string>}
    */
   async transferFundsToEthAddress (to, amount) {
     return await this.runTransaction(to, amount, async () => {
       assert(this.signer)
 
-      const amountMinusGas = amount.sub(ethers.utils.parseEther('0.01'))
+      const amountMinusGas = amount - parseEther('0.01')
       log.info('sendTransaction()', {
         to,
         amount: amount.toString(),
@@ -199,7 +212,7 @@ class WalletBackend {
 
   /**
    * @param {`f1${string}` | `0x${string}`} to
-   * @param {ethers.BigNumber} amount
+   * @param {bigint} amount
    * @param {function} fn
    * @returns {Promise<string>}
    */
@@ -211,7 +224,7 @@ class WalletBackend {
       timestamp: new Date().getTime(),
       status: 'processing',
       outgoing: true,
-      amount: ethers.utils.formatUnits(amount, 18),
+      amount: formatUnits(amount, 18),
       address: startsWithF1(to)
         ? to
         : delegatedFromEthAddress(to, CoinType.MAIN)
@@ -306,7 +319,7 @@ class WalletBackend {
         height: message.height,
         hash: message.tx_cid,
         outgoing: message.tx_from === this.addressDelegated,
-        amount: ethers.utils.formatUnits(BigInt(message.amount), 18),
+        amount: formatUnits(BigInt(message.amount), 18),
         address: message.tx_from === this.addressDelegated
           ? message.tx_to
           : message.tx_from,
@@ -333,7 +346,7 @@ class WalletBackend {
   }
 
   /**
-   * @returns {Promise<ethers.BigNumber>}
+   * @returns {Promise<bigint>}
    */
   async fetchScheduledRewards () {
     assert(this.address, 'address')
@@ -342,7 +355,7 @@ class WalletBackend {
       return await this.meridian.rewardsScheduledFor(this.address)
     } catch (/** @type {any} */ err) {
       log.error('Cannot fetch scheduled rewards:', err)
-      return ethers.BigNumber.from(0)
+      return 0n
     }
   }
 }

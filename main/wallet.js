@@ -139,7 +139,7 @@ async function _updateScheduledRewards () {
 }
 
 /**
- * @param {BigInt} scheduledRewards
+ * @param {bigint} scheduledRewards
  */
 async function setScheduledRewards (scheduledRewards) {
   walletStore.set('scheduled_rewards', `0x${scheduledRewards.toString(16)}`)
@@ -231,7 +231,7 @@ function loadStoredEntries () {
 }
 
 /**
- * @returns {BigInt}
+ * @returns {bigint}
  */
 function loadBalance () {
   return BigInt(
