@@ -7,8 +7,7 @@ const timers = require('node:timers/promises')
 const { format } = require('node:util')
 const Store = require('electron-store')
 const { WalletBackend } = require('./wallet-backend')
-const { ethers } = require('ethers')
-const { formatEther } = require('ethers/lib/utils')
+const { formatEther, formatUnits } = require('ethers')
 
 /** @typedef {import('./typings').Context} Context */
 /** @typedef {import('./typings').FILTransaction} FILTransaction */
@@ -83,7 +82,7 @@ async function refreshState () {
  * @returns {string}
  */
 function getBalance () {
-  return ethers.utils.formatUnits(balance, 18)
+  return formatUnits(balance, 18)
 }
 
 /**
@@ -116,8 +115,8 @@ async function updateBalance () {
 async function _updateBalance () {
   assert(ctx)
   balance = await backend.fetchBalance()
-  walletStore.set('balance_0x', balance.toHexString())
-  ctx.balanceUpdate(ethers.utils.formatUnits(balance, 18))
+  walletStore.set('balance_0x', balance.toString(16))
+  ctx.balanceUpdate(formatUnits(balance, 18))
 }
 
 /** @type {Promise<void>|undefined} */
@@ -140,10 +139,10 @@ async function _updateScheduledRewards () {
 }
 
 /**
- * @param {ethers.BigNumber} scheduledRewards
+ * @param {BigInt} scheduledRewards
  */
 async function setScheduledRewards (scheduledRewards) {
-  walletStore.set('scheduled_rewards', scheduledRewards.toHexString())
+  walletStore.set('scheduled_rewards', `0x${scheduledRewards.toString(16)}`)
 }
 
 function listTransactions () {
@@ -232,17 +231,17 @@ function loadStoredEntries () {
 }
 
 /**
- * @returns {ethers.BigNumber}
+ * @returns {BigInt}
  */
 function loadBalance () {
-  return ethers.BigNumber.from(
+  return BigInt(
     // A workaround to fix false TypeScript errors
     /** @type {string} */ (walletStore.get('balance_0x', '0x0'))
   )
 }
 
 function loadScheduledRewards () {
-  return ethers.BigNumber.from(
+  return BigInt(
     // A workaround to fix false TypeScript errors
     /** @type {string} */ (walletStore.get('scheduled_rewards', '0x0'))
   )
@@ -257,7 +256,7 @@ async function getSeedPhrase () {
 }
 
 /**
- * @param {string | ethers.utils.Bytes} message
+ * @param {string} message
  * @returns {Promise<string>}
  */
 async function signMessage (message) {
