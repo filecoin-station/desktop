@@ -45,7 +45,7 @@
     "@glif/filecoin-message": "^3.0.5",
     "@glif/filecoin-number": "^3.0.3",
     "@glif/filecoin-wallet-provider": "^3.0.8",
-    "@influxdata/influxdb-client": "^1.34.0",
+    "@influxdata/influxdb-client": "^1.35.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-switch": "^1.1.0",
