@@ -8,7 +8,6 @@ import dayjs from 'dayjs'
 import { useMemo } from 'react'
 
 const ActivityItem = ({ activity }: {activity: Activity}) => {
-  console.log({ activity })
   return (
     <div className="flex gap-[10px] py-2" key={activity.id} data-testid="activity-item">
       {activity.type === 'info'
