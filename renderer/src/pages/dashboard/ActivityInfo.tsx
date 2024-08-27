@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 import { useMemo } from 'react'
 
 const ActivityItem = ({ activity }: {activity: Activity}) => {
+  console.log({ activity })
   return (
     <div className="flex gap-[10px] py-2" key={activity.id} data-testid="activity-item">
       {activity.type === 'info'
@@ -16,7 +17,7 @@ const ActivityItem = ({ activity }: {activity: Activity}) => {
 
       <div className='flex-1 relative top-[1px] flex flex-col gap-1'>
         <Text size='2xs' >{activity.message}</Text>
-        <Text size='2xs' color='secondary'>{dayjs(activity.timestamp).format('HH:MM')}</Text>
+        <Text size='2xs' color='secondary'>{dayjs(activity.timestamp).format('HH:mm')}</Text>
       </div>
 
     </div>
