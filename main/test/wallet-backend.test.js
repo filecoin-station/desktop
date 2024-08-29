@@ -2,17 +2,8 @@
 
 const { WalletBackend } = require('../wallet-backend')
 const assert = require('assert').strict
-const { ethers } = require('ethers')
 
 const { TEST_SEED_PHRASE } = process.env
-
-const randomSeed = () => {
-  const wallet = ethers.Wallet.createRandom()
-  const seed = wallet.mnemonic.phrase
-  console.log('Using randomly-generated wallet address', wallet.address)
-  console.log('SEED:', seed)
-  return seed
-}
 
 describe('Wallet Backend', function () {
   const backend = new WalletBackend({ disableKeytar: true })
