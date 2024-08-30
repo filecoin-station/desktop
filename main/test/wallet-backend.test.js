@@ -2,17 +2,8 @@
 
 const { WalletBackend } = require('../wallet-backend')
 const assert = require('assert').strict
-const { ethers } = require('ethers')
 
 const { TEST_SEED_PHRASE } = process.env
-
-const randomSeed = () => {
-  const wallet = ethers.Wallet.createRandom()
-  const seed = wallet.mnemonic.phrase
-  console.log('Using randomly-generated wallet address', wallet.address)
-  console.log('SEED:', seed)
-  return seed
-}
 
 describe('Wallet Backend', function () {
   const backend = new WalletBackend({ disableKeytar: true })
@@ -69,21 +60,5 @@ describe('Wallet Backend', function () {
         )
       }
     })
-  })
-
-  describe('fetchScheduledRewards()', function () {
-    it(
-      'fetches rewards scheduled for disbursement',
-      /** @this {Mocha.Test} */ async function () {
-        this.timeout(60_000)
-        // We need a new wallet that doesn't have any scheduled rewards
-        await backend.setup(randomSeed())
-        const amount = await pRetry(
-          () => backend.fetchScheduledRewards(),
-          { retries: 10 }
-        )
-        assert.strictEqual(amount.toBigInt(), 0n)
-      }
-    )
   })
 })

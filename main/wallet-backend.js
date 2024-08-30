@@ -331,20 +331,6 @@ class WalletBackend {
     this.transactions = transactions
     this.onTransactionUpdate()
   }
-
-  /**
-   * @returns {Promise<ethers.BigNumber>}
-   */
-  async fetchScheduledRewards () {
-    assert(this.address, 'address')
-    assert(this.meridian, 'meridian client')
-    try {
-      return await this.meridian.rewardsScheduledFor(this.address)
-    } catch (/** @type {any} */ err) {
-      log.error('Cannot fetch scheduled rewards:', err)
-      return ethers.BigNumber.from(0)
-    }
-  }
 }
 
 module.exports = {
