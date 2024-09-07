@@ -78,17 +78,21 @@ function maybeReportErrorToSentry (err, scopeFn) {
 async function start (ctx) {
   log.info('Starting Core...')
 
-  const childProcess = fork(corePath, ['--json'], {
-    env: {
-      ...process.env,
-      FIL_WALLET_ADDRESS: await wallet.getAddress(),
-      PASSPHRASE: await wallet.signMessage('station core passhprase'),
-      CACHE_ROOT: consts.CACHE_ROOT,
-      STATE_ROOT: consts.STATE_ROOT,
-      DEPLOYMENT_TYPE: 'station-desktop'
-    },
-    stdio: ['pipe', 'pipe', 'pipe', 'ipc']
-  })
+  const childProcess = fork(
+    corePath,
+    ['--json', '--recreateStationIdOnError'],
+    {
+      env: {
+        ...process.env,
+        FIL_WALLET_ADDRESS: await wallet.getAddress(),
+        PASSPHRASE: await wallet.signMessage('station core passhprase'),
+        CACHE_ROOT: consts.CACHE_ROOT,
+        STATE_ROOT: consts.STATE_ROOT,
+        DEPLOYMENT_TYPE: 'station-desktop'
+      },
+      stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+    }
+  )
   log.info(format('Core pid:', childProcess.pid))
 
   assert(childProcess.stdout)
