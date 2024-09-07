@@ -16,7 +16,7 @@ const ActivityItem = ({ activity }: {activity: Activity}) => {
 
       <div className='flex-1 relative top-[1px] flex flex-col gap-1'>
         <Text size='2xs' >{activity.message}</Text>
-        <Text size='2xs' color='secondary'>{dayjs(activity.timestamp).format('HH:MM')}</Text>
+        <Text size='2xs' color='secondary'>{dayjs(activity.timestamp).format('HH:mm')}</Text>
       </div>
 
     </div>

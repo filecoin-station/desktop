@@ -30,7 +30,7 @@ const { format } = require('node:util')
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 // eslint-disable-next-line max-len
-const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3MjI3Njk5NjYsImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.N8jLM3xyNuHOGarXaLaat7dSsbHKQGHU_WW6hBK-zwvYV-8ifCDUMQU1zJhlw90UU7m4ZrxCFTnB8LbeVtVwxQ'
+const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3Mjg4MzkxODUsImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.8noTsb2FC7lSutB72EFIWiZQrqQut7hlltaJ8322361UeVT_TziVJjg7Q5QQJIDT7v6inQ-snXFVFQ7aSMvmIw'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 async function noop () {}
@@ -330,20 +330,6 @@ class WalletBackend {
     // Update state
     this.transactions = transactions
     this.onTransactionUpdate()
-  }
-
-  /**
-   * @returns {Promise<ethers.BigNumber>}
-   */
-  async fetchScheduledRewards () {
-    assert(this.address, 'address')
-    assert(this.meridian, 'meridian client')
-    try {
-      return await this.meridian.rewardsScheduledFor(this.address)
-    } catch (/** @type {any} */ err) {
-      log.error('Cannot fetch scheduled rewards:', err)
-      return ethers.BigNumber.from(0)
-    }
   }
 }
 
