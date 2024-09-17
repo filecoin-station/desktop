@@ -170,9 +170,9 @@ const useStationRewards = () => {
     let todayRewards = rewards[rewards.length - 1]
     if (
       !todayRewards ||
-      new Date(todayRewards.timestamp).getDate() !== new Date().getDate() ||
-      new Date(todayRewards.timestamp).getMonth() !== new Date().getMonth() ||
-      new Date(todayRewards.timestamp).getFullYear() !== new Date().getFullYear()
+      Number(todayRewards.timestamp.split('T')[0].split('-')[2]) !== new Date().getDate() ||
+      Number(todayRewards.timestamp.split('T')[0].split('-')[1]) - 1 !== new Date().getMonth() ||
+      Number(todayRewards.timestamp.split('T')[0].split('-')[0]) !== new Date().getFullYear()
     ) {
       todayRewards = {
         timestamp: new Date().toISOString(),

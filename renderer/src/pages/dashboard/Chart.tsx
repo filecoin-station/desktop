@@ -72,7 +72,7 @@ const Chart = ({
           getRewardValue(historicalRewards[index - 1].totalRewardsReceived, moduleId)
         acc.scheduled.push(
           isPayout
-            ? getRewardValue(record.totalScheduledRewards, moduleId)
+            ? getRewardValue(record.totalRewardsReceived, moduleId)
             : getRewardValue(record.totalScheduledRewards, moduleId) +
               getRewardValue(record.totalRewardsReceived, moduleId)
         )
