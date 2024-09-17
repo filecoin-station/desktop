@@ -120,8 +120,8 @@ export const modules = {
     logoBackgroundColor: 'black',
     stats: {
       totalJobs: 0, // TODO: Updater after data export
-      totalRewards: 0, // TODO: Update after airdrop
-      rewardsEnabled: false
+      totalRewards: 1359.54,
+      rewardsEnabled: true
     },
     links: {
       github: 'https://github.com/filecoin-station/voyager',
