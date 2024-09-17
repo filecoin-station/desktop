@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { getScheduledRewards } from 'src/lib/station-config'
 import useWallet from 'src/hooks/StationWallet'
 import { formattedFilToBigInt } from 'src/lib/utils'
+import { voyagerAirdrop } from './voyagerAirdrop'
 
 type ScheduledRewardsResponse = {
   day: string;
@@ -70,12 +71,36 @@ async function getHistoricalRewardsData (address: string) {
       })
     }
   }
+  if (Object.keys(voyagerAirdrop).includes(address)) {
+    const timestamp = new Date('2024-09-17').toISOString()
+    const existingStat = stats.find(s => s.timestamp === timestamp)
+    if (existingStat) {
+      existingStat.totalRewardsReceived.voyager = voyagerAirdrop[address]
+    } else {
+      stats.push({
+        timestamp,
+        totalRewardsReceived: {
+          spark: 0n,
+          voyager: voyagerAirdrop[address]
+        },
+        totalScheduledRewards: {
+          spark: 0n,
+          voyager: 0n
+        }
+      })
+    }
+  }
   stats.sort((a, b) => a.timestamp.localeCompare(b.timestamp))
 
-  let currentTotalSparkRewards = 0n
+  const currentTotalRewards = {
+    spark: 0n,
+    voyager: 0n
+  }
   for (const stat of stats) {
-    currentTotalSparkRewards += stat.totalRewardsReceived.spark
-    stat.totalRewardsReceived.spark = currentTotalSparkRewards
+    currentTotalRewards.spark += stat.totalRewardsReceived.spark
+    currentTotalRewards.voyager += stat.totalRewardsReceived.voyager
+    stat.totalRewardsReceived.spark = currentTotalRewards.spark
+    stat.totalRewardsReceived.voyager = currentTotalRewards.voyager
   }
 
   return stats
