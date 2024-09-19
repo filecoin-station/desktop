@@ -178,7 +178,7 @@ const useStationRewards = () => {
         timestamp: new Date().toISOString(),
         totalRewardsReceived: {
           spark: rewards[rewards.length - 1]?.totalRewardsReceived.spark || 0n,
-          voyager: 0n
+          voyager: rewards[rewards.length - 1]?.totalRewardsReceived.voyager || 0n
         },
         totalScheduledRewards: {
           spark: 0n,
