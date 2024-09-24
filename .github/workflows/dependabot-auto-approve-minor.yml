@@ -31,6 +31,7 @@ jobs:
           - '@filecoin-station/spark-impact-evaluator'
           - '@radix-ui/'
           - undici
+          - rollup
     steps:
       - name: Dependabot metadata
         id: metadata
