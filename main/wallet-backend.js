@@ -160,17 +160,34 @@ class WalletBackend {
    */
   async transferFundsToF1Address (to, amount) {
     return await this.runTransaction(to, amount, async () => {
+      assert(this.provider)
       assert(this.signer)
       assert(this.filForwarder)
 
-      const amountMinusGas = amount.sub(ethers.utils.parseEther('0.01'))
+      const [gasPrice, gasEstimate] = await Promise.all([
+        this.provider.getGasPrice(),
+        this.filForwarder.estimateGas.forward(
+          decode(to).bytes,
+          { value: ethers.BigNumber.from(0) }
+        )
+      ])
+      const gasEstimateWithBuffer = gasEstimate.mul(ethers.BigNumber.from(2))
+      const gasEstimateWithBufferInAttoFil = gasEstimateWithBuffer.mul(gasPrice)
+      log.info('gas estimate', {
+        gasPrice: gasPrice.toString(),
+        gasEstimate: gasEstimate.toString(),
+        gasEstimateWithBuffer: gasEstimateWithBuffer.toString(),
+        gasEstimateWithBufferInAttoFil:
+          gasEstimateWithBufferInAttoFil.toString()
+      })
+      const amountToSend = amount.sub(gasEstimateWithBufferInAttoFil)
       log.info('filForwarder.forward()', {
         to,
-        amountMinusGas: amountMinusGas.toString()
+        amountToSend: amountToSend.toString()
       })
       return await this.filForwarder.forward(
         decode(to).bytes,
-        { value: amountMinusGas }
+        { value: amountToSend }
       )
     })
   }
