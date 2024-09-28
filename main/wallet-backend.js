@@ -164,23 +164,26 @@ class WalletBackend {
       assert(this.signer)
       assert(this.filForwarder)
 
-      const [gasPrice, gasEstimate] = await Promise.all([
-        this.provider.getGasPrice(),
+      const [feeData, gasEstimate] = await Promise.all([
+        this.provider.getFeeData(),
         this.filForwarder.estimateGas.forward(
           decode(to).bytes,
           { value: ethers.BigNumber.from(0) }
         )
       ])
-      const gasEstimateWithBuffer = gasEstimate.mul(ethers.BigNumber.from(2))
-      const gasEstimateWithBufferInAttoFil = gasEstimateWithBuffer.mul(gasPrice)
+      assert(feeData.gasPrice)
+      assert(feeData.maxFeePerGas)
+      const totalGasDeductionInAttoFil = gasEstimate
+        .mul(feeData.maxFeePerGas)
+        .mul(ethers.BigNumber.from(15))
+        .div(ethers.BigNumber.from(10))
       log.info('gas estimate', {
-        gasPrice: gasPrice.toString(),
+        gasPrice: feeData.gasPrice.toString(),
+        maxFeePerGas: feeData.maxFeePerGas.toString(),
         gasEstimate: gasEstimate.toString(),
-        gasEstimateWithBuffer: gasEstimateWithBuffer.toString(),
-        gasEstimateWithBufferInAttoFil:
-          gasEstimateWithBufferInAttoFil.toString()
+        totalGasDeductionInAttoFil: totalGasDeductionInAttoFil.toString()
       })
-      const amountToSend = amount.sub(gasEstimateWithBufferInAttoFil)
+      const amountToSend = amount.sub(totalGasDeductionInAttoFil)
       log.info('filForwarder.forward()', {
         to,
         amountToSend: amountToSend.toString()
