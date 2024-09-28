@@ -175,8 +175,8 @@ class WalletBackend {
       assert(feeData.maxFeePerGas)
       const totalGasDeductionInAttoFil = gasEstimate
         .mul(feeData.maxFeePerGas)
-        .mul(ethers.BigNumber.from(15))
-        .div(ethers.BigNumber.from(10))
+        .mul(ethers.BigNumber.from(3))
+        .div(ethers.BigNumber.from(2))
       log.info('gas estimate', {
         gasPrice: feeData.gasPrice.toString(),
         maxFeePerGas: feeData.maxFeePerGas.toString(),
