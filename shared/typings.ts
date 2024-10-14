@@ -1,4 +1,4 @@
-import { ActivityEvent } from '@filecoin-station/core'
+import { ActivityEvent } from '@filecoin-station/core/dist/lib/activity'
 
 export type FILTransactionStatus = 'succeeded' | 'processing' | 'failed'
 
