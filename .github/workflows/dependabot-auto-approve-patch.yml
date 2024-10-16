@@ -24,6 +24,7 @@ jobs:
           - ejs
           - '@electron/notarize'
           - braces
+          - 'chart.js'
     steps:
       - name: Dependabot metadata
         id: metadata
