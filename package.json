@@ -86,7 +86,7 @@
     "@testing-library/react": "^16.0.1",
     "@types/mocha": "^10.0.9",
     "@types/node-fetch": "^2.6.11",
-    "@types/react": "^18.3.11",
+    "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/split2": "^4.2.3",
     "@types/tmp": "^0.2.6",
