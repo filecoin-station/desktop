@@ -23,7 +23,7 @@
     "clean": "shx rm -rf dist/",
     "build": "run-s clean build:*",
     "build:webui": "vite build",
-    "package": "shx rm -rf dist/ && run-s build && electron-builder --publish onTag"
+    "package": "shx rm -rf dist/ && run-s build && electron-builder --publish=onTag"
   },
   "repository": {
     "type": "git",
