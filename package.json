@@ -122,7 +122,7 @@
     "tmp": "^0.2.3",
     "typescript": "^5.6.3",
     "vite": "^5.4.10",
-    "vite-tsconfig-paths": "^4.3.2",
+    "vite-tsconfig-paths": "^5.1.0",
     "vitest": "^2.0.1",
     "xvfb-maybe": "^0.2.1"
   },
