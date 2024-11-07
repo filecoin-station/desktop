@@ -23,7 +23,14 @@ const walletStore = new Store({
 
 const backend = new WalletBackend({
   async onTransactionUpdate () {
-    walletStore.set('transactions_0x', backend.transactions)
+    walletStore.set(
+      'transactions_0x',
+      backend.transactions
+        // Don't persist new transactions that don't yet have a hash, as on
+        // an app restart these can't be consolidated with the ones returned
+        // by the API.
+        .filter(tx => tx.hash)
+    )
     sendTransactionsToUI()
   }
 })
