@@ -92,11 +92,9 @@ jobs:
 
       - name: Test end-to-end (Linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: nick-fields/retry@v3.0.0
+        uses: Wandalen/wretry.action@v3.7.3
         with:
           command: xvfb-run -a npm run test:e2e
-          max_attempts: 2
-          timeout_minutes: 10
       - name: Test end-to-end (Windows / macOS)
         if: ${{ matrix.os != 'ubuntu-latest' }}
         uses: Wandalen/wretry.action@v3.7.3
