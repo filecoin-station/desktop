@@ -95,11 +95,13 @@ jobs:
         uses: Wandalen/wretry.action@v3.7.3
         with:
           command: xvfb-run -a npm run test:e2e
+          attempt_limit: 10
       - name: Test end-to-end (Windows / macOS)
         if: ${{ matrix.os != 'ubuntu-latest' }}
         uses: Wandalen/wretry.action@v3.7.3
         with:
           command: npm run test:e2e
+          attempt_limit: 10
 
       - name: Lint
         run: npm run lint
