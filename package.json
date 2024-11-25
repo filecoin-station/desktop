@@ -120,7 +120,7 @@
     "shx": "^0.3.4",
     "tailwindcss": "^3.4.15",
     "tmp": "^0.2.3",
-    "typescript": "^5.6.3",
+    "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^2.0.1",
