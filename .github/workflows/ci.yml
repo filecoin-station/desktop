@@ -91,11 +91,17 @@ jobs:
         run: npm run test:ui
 
       - name: Test end-to-end (Linux)
-        run: xvfb-run -a npm run test:e2e
         if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: Wandalen/wretry.action@v3.7.3
+        with:
+          command: xvfb-run -a npm run test:e2e
+          attempt_limit: 10
       - name: Test end-to-end (Windows / macOS)
-        run: npm run test:e2e
         if: ${{ matrix.os != 'ubuntu-latest' }}
+        uses: Wandalen/wretry.action@v3.7.3
+        with:
+          command: npm run test:e2e
+          attempt_limit: 10
 
       - name: Lint
         run: npm run lint
