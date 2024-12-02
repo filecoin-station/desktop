@@ -6,7 +6,7 @@ import Text from './Text'
 import WalletModal from './WalletModal'
 import { ROUTES } from 'src/lib/routes'
 import TransactionStatusIndicator from './TransactionStatusIndicator'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 const WalletWidget = () => {
   const { openDialog } = useDialog()

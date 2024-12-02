@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router'
 import { ROUTES } from 'src/lib/routes'
 import HomeIcon from 'src/assets/img/icons/home.svg?react'
 import ModulesIcon from 'src/assets/img/icons/modules.svg?react'

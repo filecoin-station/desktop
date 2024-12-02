@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 
 import { getOnboardingCompleted, setOnboardingCompleted, showTermsOfService } from 'src/lib/station-config'
 import Onboarding from 'src/pages/onboarding/Onboarding'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 
 const mocks = vi.hoisted(() => {
   return {
@@ -12,8 +12,8 @@ const mocks = vi.hoisted(() => {
 })
 
 vi.mock('src/lib/station-config')
-vi.mock('react-router-dom', async () => {
-  const router = await vi.importActual('react-router-dom')
+vi.mock('react-router', async () => {
+  const router = await vi.importActual('react-router')
 
   return {
     ...router,

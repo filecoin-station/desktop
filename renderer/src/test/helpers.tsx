@@ -1,7 +1,7 @@
 import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { render } from '@testing-library/react'
 import { ReactNode } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import { DialogProvider } from 'src/components/DialogProvider'
 import Layout from 'src/components/Layout'
 import { vi } from 'vitest'
