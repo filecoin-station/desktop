@@ -24,7 +24,7 @@ jobs:
           - '@playwright/'
           - playwright
           - '@vitejs/plugin-react'
-          - react-router-dom
+          - react-router
           - mocha
           - npm
           - jsdom

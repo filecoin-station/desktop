@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { getOnboardingCompleted, setOnboardingCompleted } from 'src/lib/station-config'
 import Onboarding from 'src/components/Onboarding'
 import StationLogoLight from 'src/assets/img/station-logo-light.svg?react'

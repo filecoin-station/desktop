@@ -1,6 +1,6 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react'
 import { Root, Overlay, Portal, Content } from '@radix-ui/react-dialog'
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router'
 
 type OpenDialogOptions = {
   content: ReactNode;
