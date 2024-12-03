@@ -15,7 +15,7 @@ export function formatFilValue (value = '') {
 }
 
 export function formattedFilToBigInt (value: string) {
-  return BigInt(Number(value) * 1e18)
+  return BigInt(Math.floor(Number(value) * 1e18))
 }
 
 export function bigIntFilToNumber (value: bigint) {
