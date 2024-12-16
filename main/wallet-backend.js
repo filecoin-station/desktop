@@ -30,7 +30,7 @@ const { format } = require('node:util')
 
 const DISABLE_KEYTAR = process.env.DISABLE_KEYTAR === 'true'
 // eslint-disable-next-line max-len
-const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3MzQwODgzNTksImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.Fx-sg_JmYNy3g6pPk1ehpcUSdO1NSMCPRFgH0Gzvd3XPqOG1phAHIMHhN0fckBV2WundBO7YhBAUl-NaMrzGbA'
+const BERYX_TOKEN = 'eyJhbGciOiJFUzI1NiIsImtpZCI6ImtleS1iZXJ5eC0wMDEiLCJ0eXAiOiJKV1QifQ.eyJyb2xlcyI6W10sImlzcyI6IlpvbmRheCIsImF1ZCI6WyJiZXJ5eCJdLCJleHAiOjE3Mzk1MjQ4MTQsImp0aSI6Ikp1bGlhbiBHcnViZXIsanVsaWFuQGp1bGlhbmdydWJlci5jb20ifQ.cgZJTmcri3yEf39MsC2HPqUjLsRRXxiZa5M-hN6xVjJTPv8PAWzKZC29sW9DEiaKWaDGFjimqcpdlYVjDjD36w'
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 async function noop () {}
