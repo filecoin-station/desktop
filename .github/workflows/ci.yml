@@ -35,9 +35,11 @@ jobs:
         with:
           node-version: 'lts/*'
     
-      - name: Install libsecret
+      - name: Set up ubuntu
         if: matrix.os == 'ubuntu-latest'
-        run: sudo apt-get install -y libsecret-1-dev
+        run: |
+          sudo apt-get install -y libsecret-1-dev
+          sudo sysctl kernel.unprivileged_userns_clone=1
 
       - name: Cache bigger downloads
         uses: actions/cache@v4
