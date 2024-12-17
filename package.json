@@ -11,7 +11,7 @@
     "lint:fix": "eslint --fix . && prettier --write .",
     "test": "run-s build:* && run-s test:*",
     "test:backend": "mocha",
-    "test:e2e": "xvfb-maybe cross-env NODE_ENV=test playwright test 'test/e2e/.*.test.js'",
+    "test:e2e": "xvfb-maybe cross-env NODE_ENV=test DEBUG=pw:browser* playwright test'test/e2e/.*.test.js'",
     "test:ui": "npm run vitest",
     "vitestpreview": "vite preview",
     "vitest": "vitest run",
