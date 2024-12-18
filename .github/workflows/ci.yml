@@ -55,6 +55,12 @@ jobs:
         run: npm ci --prefer-offline --no-audit --progress=false
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Fix ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo chown root node_modules/electron/dist/chrome-sandbox
+          chmod 4755 node_modules/electron/dist/chrome-sandbox
 
       - name: Build
         run: npm run build
