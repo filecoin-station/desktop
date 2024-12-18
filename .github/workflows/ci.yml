@@ -39,7 +39,6 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get install -y libsecret-1-dev
-          sudo sysctl kernel.unprivileged_userns_clone=1
 
       - name: Cache bigger downloads
         uses: actions/cache@v4
