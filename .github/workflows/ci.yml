@@ -34,6 +34,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
+    
+      - name: Set up ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get install -y libsecret-1-dev
 
       - name: Cache bigger downloads
         uses: actions/cache@v4
@@ -49,6 +54,12 @@ jobs:
         run: npm ci --prefer-offline --no-audit --progress=false
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Fix ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo chown root node_modules/electron/dist/chrome-sandbox
+          sudo chmod 4755 node_modules/electron/dist/chrome-sandbox
 
       - name: Build
         run: npm run build
