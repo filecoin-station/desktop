@@ -32,6 +32,7 @@ jobs:
           - '@radix-ui/'
           - undici
           - rollup
+          - graphql
     steps:
       - name: Dependabot metadata
         id: metadata
