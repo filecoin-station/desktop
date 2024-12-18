@@ -60,7 +60,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo chown root node_modules/electron/dist/chrome-sandbox
-          chmod 4755 node_modules/electron/dist/chrome-sandbox
+          sudo chmod 4755 node_modules/electron/dist/chrome-sandbox
 
       - name: Build
         run: npm run build
