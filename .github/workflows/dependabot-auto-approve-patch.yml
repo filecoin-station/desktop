@@ -27,6 +27,7 @@ jobs:
           - 'chart.js'
           - p-retry
           - nanoid
+          - w3name
     steps:
       - name: Dependabot metadata
         id: metadata
