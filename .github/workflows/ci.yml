@@ -103,13 +103,13 @@ jobs:
 
       - name: Test end-to-end (Linux)
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: Wandalen/wretry.action@v3.7.3
+        uses: Wandalen/wretry.action@v3.8.0
         with:
           command: xvfb-run -a npm run test:e2e
           attempt_limit: 10
       - name: Test end-to-end (Windows / macOS)
         if: ${{ matrix.os != 'ubuntu-latest' }}
-        uses: Wandalen/wretry.action@v3.7.3
+        uses: Wandalen/wretry.action@v3.8.0
         with:
           command: npm run test:e2e
           attempt_limit: 10
