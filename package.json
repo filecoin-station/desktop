@@ -53,7 +53,7 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "@sentry/node": "^8.48.0",
     "@sentry/react": "^8.48.0",
-    "@sentry/tracing": "^7.114.0",
+    "@sentry/tracing": "^7.120.3",
     "chart.js": "^4.4.7",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.13",
