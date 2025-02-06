@@ -33,6 +33,7 @@ jobs:
           - undici
           - rollup
           - graphql
+          - electron-log
     steps:
       - name: Dependabot metadata
         id: metadata
