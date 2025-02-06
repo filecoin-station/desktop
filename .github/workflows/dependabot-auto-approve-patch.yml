@@ -27,6 +27,7 @@ jobs:
           - p-retry
           - nanoid
           - w3name
+          - electron
     steps:
       - name: Dependabot metadata
         id: metadata
