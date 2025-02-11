@@ -13,7 +13,7 @@ import Dashboard from 'src/pages/dashboard/Dashboard'
 import useWallet from 'src/hooks/CheckerWallet'
 import useCheckerActivity from 'src/hooks/CheckerActivity'
 import { Activity } from '../../../shared/typings'
-import useCheckerRewards from 'src/hooks/Rewards'
+import useCheckerRewards from 'src/hooks/CheckerRewards'
 import { stubGlobalElectron, renderApp } from './helpers'
 import { useEffect, useState } from 'react'
 

@@ -9,7 +9,7 @@ import {
   Chart as ChartType
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
-import { RewardsRecord, sumAllRewards } from 'src/hooks/Rewards'
+import { RewardsRecord, sumAllRewards } from 'src/hooks/CheckerRewards'
 import { TimeRange } from './ChartController'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {

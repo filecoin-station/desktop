@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { RewardsRecord } from 'src/hooks/Rewards'
+import { RewardsRecord } from 'src/hooks/CheckerRewards'
 import Chart from './Chart'
 import { Select, SelectItem } from 'src/components/Select'
 import { ToggleGroup, ToggleGroupButton } from 'src/components/ToggleGroup'

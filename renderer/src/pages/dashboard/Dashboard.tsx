@@ -1,7 +1,7 @@
 import BorderedBox from 'src/components/BorderedBox'
 import ActivityInfo from './ActivityInfo'
 import ChartController from './ChartController'
-import useCheckerRewards from 'src/hooks/Rewards'
+import useCheckerRewards from 'src/hooks/CheckerRewards'
 import RewardsInfo from './RewardsInfo'
 import { bigIntFilToNumber } from 'src/lib/utils'
 

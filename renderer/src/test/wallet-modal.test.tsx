@@ -5,7 +5,7 @@ import 'src/lib/checker-config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import useCheckerActivity from 'src/hooks/CheckerActivity'
 import useWallet from 'src/hooks/CheckerWallet'
-import useCheckerRewards from 'src/hooks/Rewards'
+import useCheckerRewards from 'src/hooks/CheckerRewards'
 import { renderApp, stubGlobalElectron } from './helpers'
 
 const mockedSetDestinationWalletAddress = vi.fn()
