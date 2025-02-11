@@ -47,7 +47,7 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.invoke('checker:toggleOpenAtLogin'),
     isOpenAtLogin: () => ipcRenderer.invoke('checker:isOpenAtLogin'),
     exportSeedPhrase: () => ipcRenderer.invoke('checker:exportSeedPhrase'),
-    saveModuleLogsAs: () => ipcRenderer.invoke('checker:saveModuleLogsAs'),
+    saveSubnetLogsAs: () => ipcRenderer.invoke('checker:saveSubnetLogsAs'),
     checkForUpdates: () => ipcRenderer.invoke('checker:checkForUpdates')
   },
   checkerEvents: {

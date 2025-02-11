@@ -88,8 +88,8 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     (_events) => ctx.exportSeedPhrase()
   )
   ipcMain.handle(
-    'checker:saveModuleLogsAs',
-    (_events) => ctx.saveModuleLogsAs()
+    'checker:saveSubnetLogsAs',
+    (_events) => ctx.saveSubnetLogsAs()
   )
   ipcMain.handle(
     'checker:checkForUpdates',

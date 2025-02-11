@@ -88,8 +88,8 @@ export function exportSeedPhrase () {
   return window.electron.checkerConfig.exportSeedPhrase()
 }
 
-export function saveModuleLogsAs () {
-  return window.electron.checkerConfig.saveModuleLogsAs()
+export function saveSubnetLogsAs () {
+  return window.electron.checkerConfig.saveSubnetLogsAs()
 }
 
 export function checkForUpdates () {

@@ -4,7 +4,7 @@ import {
   checkForUpdates,
   exportSeedPhrase,
   isOpenAtLogin,
-  saveModuleLogsAs,
+  saveSubnetLogsAs,
   toggleOpenAtLogin
 } from 'src/lib/checker-config'
 import SettingsGroup, { SettingsGroupItem } from './SettingsGroup'
@@ -61,8 +61,8 @@ const Settings = () => {
             }
           />
           <SettingsGroupItem
-            title='Module logs'
-            description={`Saving module logs in the Station app helps users track 
+            title='Subnet logs'
+            description={`Saving subnet logs in the Station app helps users track 
             and diagnose issues, providing insights into the performance of individual 
             components for effective troubleshooting.`}
             input={
@@ -70,9 +70,9 @@ const Settings = () => {
                 type='button'
                 variant='secondary'
                 icon={<SaveIcon />}
-                onClick={saveModuleLogsAs}
+                onClick={saveSubnetLogsAs}
               >
-                  Save module logs as...
+                  Save subnet logs as...
               </Button>
             }
           />

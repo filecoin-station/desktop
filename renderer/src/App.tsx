@@ -9,7 +9,7 @@ import { ROUTES } from 'src/lib/routes'
 import Layout from 'src/components/Layout'
 import Settings from 'src/pages/settings/Settings'
 import Wallet from 'src/pages/wallet/Wallet'
-import Modules from 'src/pages/modules/Modules'
+import Subnets from 'src/pages/subnets/Subnets'
 import { DialogProvider } from './components/DialogProvider'
 import { TooltipProvider } from '@radix-ui/react-tooltip'
 
@@ -34,7 +34,7 @@ const App = ():JSX.Element => {
                       <Route path={ROUTES.dashboard} element={<Dashboard />} />
                       <Route path={ROUTES.wallet} element={<Wallet />} />
                       <Route path={ROUTES.settings} element={<Settings />} />
-                      <Route path={ROUTES.modules} element={<Modules />} />
+                      <Route path={ROUTES.subnets} element={<Subnets />} />
                     </Routes>
                   </Layout>
                 }

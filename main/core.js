@@ -35,9 +35,9 @@ let totalJobsCompleted = 0
  * @param {Context} ctx
  */
 async function setup (ctx) {
-  ctx.saveModuleLogsAs = async () => {
+  ctx.saveSubnetLogsAs = async () => {
     const opts = {
-      defaultPath: `checker-modules-${(new Date()).getTime()}.log`
+      defaultPath: `checker-subnets-${(new Date()).getTime()}.log`
     }
     // The dialog might not show if the UI is hidden
     ctx.showUI()

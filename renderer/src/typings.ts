@@ -29,7 +29,7 @@ declare global {
         toggleOpenAtLogin: () => void;
         isOpenAtLogin: () => Promise<boolean>;
         exportSeedPhrase: () => void;
-        saveModuleLogsAs: () => void;
+        saveSubnetLogsAs: () => void;
         checkForUpdates: () => void;
       };
       events: {

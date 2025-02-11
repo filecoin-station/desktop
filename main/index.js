@@ -124,7 +124,7 @@ const ctx = {
   getWalletBalance: () => wallet.getBalance(),
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
-  saveModuleLogsAs: () => { throw new Error('never get here') },
+  saveSubnetLogsAs: () => { throw new Error('never get here') },
   toggleOpenAtLogin: () => { throw new Error('never get here') },
   isOpenAtLogin: () => { throw new Error('never get here') },
   exportSeedPhrase: () => { throw new Error('never get here') },
