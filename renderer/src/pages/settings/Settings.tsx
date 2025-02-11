@@ -6,7 +6,7 @@ import {
   isOpenAtLogin,
   saveModuleLogsAs,
   toggleOpenAtLogin
-} from 'src/lib/station-config'
+} from 'src/lib/config'
 import SettingsGroup, { SettingsGroupItem } from './SettingsGroup'
 import SwitchInput from 'src/components/SwitchInput'
 import Button from 'src/components/Button'

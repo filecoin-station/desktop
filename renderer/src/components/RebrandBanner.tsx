@@ -1,7 +1,7 @@
 import Text from './Text'
 import { useState } from 'react'
 import CloseIcon from 'src/assets/img/icons/close.svg?react'
-import { openExternalURL } from 'src/lib/station-config'
+import { openExternalURL } from 'src/lib/config'
 import { useLocation } from 'react-router'
 import { ROUTES } from 'src/lib/routes'
 

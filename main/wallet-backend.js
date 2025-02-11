@@ -104,7 +104,7 @@ class WalletBackend {
    * @returns {Promise<WalletSeed>}
    */
   async getSeedPhrase () {
-    const service = 'filecoin-station-wallet-0x'
+    const service = 'checker-wallet-0x'
     let seed
     if (!this.disableKeytar) {
       log.info('Reading the seed phrase from the keychain...')

@@ -17,9 +17,9 @@ function formatTokenValue (input) {
 
 const allowedURLs = [
   'https://filspark.com/',
-  'https://github.com/filecoin-station/voyager',
+  'https://github.com/CheckerNetwork/voyager',
   'https://filstation.app/',
-  'https://github.com/filecoin-station/spark',
+  'https://github.com/CheckerNetwork/spark',
   'https://beryx.io',
   'https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4',
   'https://checker.network',

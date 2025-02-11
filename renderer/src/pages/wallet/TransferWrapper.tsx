@@ -1,12 +1,12 @@
 import Text from 'src/components/Text'
-import { Wallet } from 'src/hooks/StationWallet'
+import { Wallet } from 'src/hooks/Wallet'
 import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import Transition from 'src/components/Transition'
 import GridCanvas from './GridCanvas'
-import { openDocsLink } from 'src/lib/station-config'
+import { openDocsLink } from 'src/lib/config'
 
 const SEND_THRESHOLD = 0.01
 

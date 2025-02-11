@@ -5,7 +5,7 @@ export type { Activity, FILTransaction, FILTransactionProcessing }
 declare global {
   interface Window {
     electron: {
-      stationBuildVersion: string;
+      checkerBuildVersion: string;
 
       getActivities(): Promise<Activity[]>;
       getTotalJobsCompleted(): Promise<number>;
@@ -16,14 +16,14 @@ declare global {
 
       getScheduledRewards: () => Promise<string>;
 
-      stationConfig: {
+      config: {
         getOnboardingCompleted: () => Promise<boolean>;
         setOnboardingCompleted: () => Promise<void>;
-        getStationWalletAddress: () => Promise<string>;
+        getWalletAddress: () => Promise<string>;
         getDestinationWalletAddress: () => Promise<string | undefined>;
         setDestinationWalletAddress: (address: string | undefined) => Promise<void>;
-        getStationWalletBalance: () => Promise<string>;
-        getStationWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>;
+        getWalletBalance: () => Promise<string>;
+        getWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>;
         transferAllFundsToDestinationWallet: () => Promise<void>;
         openExternalURL: (url: string) => void;
         toggleOpenAtLogin: () => void;
@@ -32,7 +32,7 @@ declare global {
         saveModuleLogsAs: () => void;
         checkForUpdates: () => void;
       };
-      stationEvents: {
+      events: {
         onActivityLogged: (callback: (activity: Activity) => void) => () => void;
         onJobProcessed: (callback: (value: number) => void) => () => void;
         onEarningsChanged: (callback: (value: number) => void) => () => void;

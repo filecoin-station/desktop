@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import Back from 'src/assets/img/icons/arrow-left.svg?react'
 import Page from 'src/assets/img/icons/paginator-page.svg?react'
 import CurrentPage from 'src/assets/img/icons/paginator-current.svg?react'
-import { showTermsOfService } from 'src/lib/station-config'
+import { showTermsOfService } from 'src/lib/config'
 
 interface FooterProps {
   page: number;

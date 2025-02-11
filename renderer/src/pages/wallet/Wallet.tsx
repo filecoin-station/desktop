@@ -1,4 +1,4 @@
-import useWallet from 'src/hooks/StationWallet'
+import useWallet from 'src/hooks/Wallet'
 import { formatFilValue, openExplorerLink } from 'src/lib/utils'
 import TransactionHistory from './TransactionHistory'
 import BorderedBox from 'src/components/BorderedBox'

@@ -1,4 +1,4 @@
-import useWallet from 'src/hooks/StationWallet'
+import useWallet from 'src/hooks/Wallet'
 import { useDialog } from './DialogProvider'
 import BorderedBox from './BorderedBox'
 import Text from './Text'

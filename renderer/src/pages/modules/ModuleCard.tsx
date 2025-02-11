@@ -1,12 +1,12 @@
 import { ReactNode } from 'react'
 import Tag from 'src/components/Tag'
 import Text from 'src/components/Text'
-import { Module } from 'src/hooks/StationModules'
+import { Module } from 'src/hooks/Subnets'
 import GithubIcon from 'src/assets/img/icons/github.svg?react'
 import DocsIcon from 'src/assets/img/icons/docs.svg?react'
 import ExplorerIcon from 'src/assets/img/icons/explorer.svg?react'
 import { openExplorerLink } from 'src/lib/utils'
-import { openExternalURL } from 'src/lib/station-config'
+import { openExternalURL } from 'src/lib/config'
 
 const ModuleLink = ({ children, onClick }: {children: ReactNode; onClick: () => void}) => (
   <Text

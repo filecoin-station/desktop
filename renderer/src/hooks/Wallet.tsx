@@ -6,7 +6,7 @@ import {
   getStationWalletBalance,
   getStationWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
-} from 'src/lib/station-config'
+} from 'src/lib/config'
 import {
   FILTransaction,
   FILTransactionProcessing,

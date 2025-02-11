@@ -1,6 +1,6 @@
 'use strict'
 
-const { IS_MAC, STATION_VERSION } = require('./consts')
+const { IS_MAC, CHECKER_VERSION } = require('./consts')
 const { Menu, Tray, app, ipcMain, nativeImage } = require('electron')
 const { ipcMainEvents } = require('./ipc')
 const path = require('path')
@@ -48,7 +48,7 @@ function getTrayIcon (readyToUpdate, isOnline) {
 const createContextMenu = (/** @type {Context} */ ctx) => {
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: `Filecoin Station v${STATION_VERSION}`,
+      label: `Filecoin Station v${CHECKER_VERSION}`,
       enabled: false
     },
     {

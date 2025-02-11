@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import Warning from 'src/assets/img/icons/error.svg?react'
-import { openReleaseNotes, restartToUpdate } from 'src/lib/station-config'
+import { openReleaseNotes, restartToUpdate } from 'src/lib/config'
 
 const UpdateBanner = () => {
   const [isReadyToUpdate, setIsReadyToUpdate] = useState<boolean>(false)

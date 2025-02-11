@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getScheduledRewards } from 'src/lib/station-config'
-import useWallet from 'src/hooks/StationWallet'
+import { getScheduledRewards } from 'src/lib/config'
+import useWallet from 'src/hooks/Wallet'
 import { formattedFilToBigInt } from 'src/lib/utils'
 import { voyagerAirdrop } from './voyagerAirdrop'
 

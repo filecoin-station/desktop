@@ -17,7 +17,7 @@ const App = ():JSX.Element => {
   return (
     <HelmetProvider>
       <Helmet>
-        <title>Filecoin Station</title>
+        <title>Checker</title>
       </Helmet>
       <Router>
         <TooltipProvider delayDuration={200}>

@@ -8,7 +8,7 @@ const {
   getTrayOperationExplained,
   setTrayOperationExplained,
   getOnboardingCompleted
-} = require('./station-config')
+} = require('./config')
 const { showDialogSync } = require('./dialog')
 const wallet = require('./wallet')
 

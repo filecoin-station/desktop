@@ -1,7 +1,7 @@
 import BorderedBox from 'src/components/BorderedBox'
 import ActivityInfo from './ActivityInfo'
 import ChartController from './ChartController'
-import useStationRewards from 'src/hooks/StationRewards'
+import useStationRewards from 'src/hooks/Rewards'
 import RewardsInfo from './RewardsInfo'
 import { bigIntFilToNumber } from 'src/lib/utils'
 

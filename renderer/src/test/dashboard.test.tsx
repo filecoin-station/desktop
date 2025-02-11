@@ -8,12 +8,12 @@ import {
   getStationWalletAddress,
   getStationWalletBalance,
   getStationWalletTransactionsHistory
-} from 'src/lib/station-config'
+} from 'src/lib/config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
-import useWallet from 'src/hooks/StationWallet'
-import useStationActivity from 'src/hooks/StationActivity'
+import useWallet from 'src/hooks/Wallet'
+import useStationActivity from 'src/hooks/Activity'
 import { Activity } from '../../../shared/typings'
-import useStationRewards from 'src/hooks/StationRewards'
+import useStationRewards from 'src/hooks/Rewards'
 import { stubGlobalElectron, renderApp } from './helpers'
 import { useEffect, useState } from 'react'
 

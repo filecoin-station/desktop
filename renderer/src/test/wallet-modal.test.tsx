@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { fireEvent, act, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import 'src/lib/station-config'
+import 'src/lib/config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
-import useStationActivity from 'src/hooks/StationActivity'
-import useWallet from 'src/hooks/StationWallet'
-import useStationRewards from 'src/hooks/StationRewards'
+import useStationActivity from 'src/hooks/Activity'
+import useWallet from 'src/hooks/Wallet'
+import useStationRewards from 'src/hooks/Rewards'
 import { renderApp, stubGlobalElectron } from './helpers'
 
 const mockedSetDestinationWalletAddress = vi.fn()

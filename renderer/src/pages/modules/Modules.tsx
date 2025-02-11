@@ -1,4 +1,4 @@
-import { useModules } from 'src/hooks/StationModules'
+import { useModules } from 'src/hooks/Subnets'
 import ModuleCard from './ModuleCard'
 import Text from 'src/components/Text'
 

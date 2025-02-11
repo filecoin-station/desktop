@@ -14,8 +14,8 @@ const log = electronLog.scope('main')
 // store.
 // https://www.npmjs.com/package/electron-store
 // https://www.electronjs.org/docs/latest/api/app#appgetpathname
-if (process.env.STATION_ROOT) {
-  app.setPath('userData', path.join(process.env.STATION_ROOT, 'user-data'))
+if (process.env.CHECKER_ROOT) {
+  app.setPath('userData', path.join(process.env.CHECKER_ROOT, 'user-data'))
 
   // Also set 'localUserData' after this PR is landed & released:
   // We are using localUserData for Saturn L2 cache
@@ -65,7 +65,7 @@ if (app.runningUnderARM64Translation) {
 }
 
 // Expose additional metadata for Electron preload script
-process.env.STATION_BUILD_VERSION = BUILD_VERSION
+process.env.CHECKER_BUILD_VERSION = BUILD_VERSION
 
 function handleError (/** @type {any} */ err) {
   Sentry.captureException(err)
@@ -83,7 +83,7 @@ process.on('unhandledRejection', handleError)
 // appUserModelID
 // See https://www.electronjs.org/docs/tutorial/notifications#windows
 if (process.platform === 'win32') {
-  app.setAppUserModelId('io.filecoin.station')
+  app.setAppUserModelId('network.checker.app')
 }
 
 // Only one instance can run at a time

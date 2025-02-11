@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import {
   getActivities,
   getTotalJobsCompleted
-} from 'src/lib/station-config'
+} from 'src/lib/config'
 import { Activity } from 'src/typings'
 
 interface StationActivity {

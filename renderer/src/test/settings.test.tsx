@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { checkForUpdates, exportSeedPhrase, isOpenAtLogin, saveModuleLogsAs } from 'src/lib/station-config'
+import { checkForUpdates, exportSeedPhrase, isOpenAtLogin, saveModuleLogsAs } from 'src/lib/config'
 import Settings from 'src/pages/settings/Settings'
 import { describe, expect, test, vi } from 'vitest'
 
