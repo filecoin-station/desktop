@@ -65,7 +65,7 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
     {
       label:
         `Wallet Balance: ${
-          formatTokenValue(ctx.getWalletBalance())
+          formatTokenValue(ctx.getCheckerWalletBalance())
         } FIL`,
       enabled: false
     },

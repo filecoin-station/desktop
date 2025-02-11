@@ -27,16 +27,16 @@ contextBridge.exposeInMainWorld('electron', {
       ipcRenderer.invoke('checker:getOnboardingCompleted'),
     setOnboardingCompleted: () =>
       ipcRenderer.invoke('checker:setOnboardingCompleted'),
-    getWalletAddress: () =>
-      ipcRenderer.invoke('checker:getWalletAddress'),
+    getCheckerWalletAddress: () =>
+      ipcRenderer.invoke('checker:getCheckerWalletAddress'),
     getDestinationWalletAddress: () =>
       ipcRenderer.invoke('checker:getDestinationWalletAddress'),
     setDestinationWalletAddress: (/** @type {string | undefined} */ address) =>
       ipcRenderer.invoke('checker:setDestinationWalletAddress', address),
-    getWalletBalance: () =>
-      ipcRenderer.invoke('checker:getWalletBalance'),
-    getWalletTransactionsHistory: () =>
-      ipcRenderer.invoke('checker:getWalletTransactionsHistory'),
+    getCheckerWalletBalance: () =>
+      ipcRenderer.invoke('checker:getCheckerWalletBalance'),
+    getCheckerWalletTransactionsHistory: () =>
+      ipcRenderer.invoke('checker:getCheckerWalletTransactionsHistory'),
     transferAllFundsToDestinationWallet: () =>
       ipcRenderer.invoke('checker:transferAllFundsToDestinationWallet'),
     openExternalURL: (/** @type {string } */ url) =>

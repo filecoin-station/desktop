@@ -35,7 +35,7 @@ export interface Context {
   getScheduledRewardsForAddress(): string;
 
   getScheduledRewards(): string;
-  getWalletBalance(): string;
+  getCheckerWalletBalance(): string;
 
   showUI: () => void;
   isShowingUI: boolean;

@@ -31,7 +31,7 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     (_event) => checkerConfig.setOnboardingCompleted()
   )
   // Wallet-wide config
-  ipcMain.handle('checker:getWalletAddress', wallet.getAddress)
+  ipcMain.handle('checker:getCheckerWalletAddress', wallet.getAddress)
   ipcMain.handle(
     'checker:getDestinationWalletAddress',
     checkerConfig.getDestinationWalletAddress
@@ -40,13 +40,13 @@ function setupIpcMain (/** @type {Context} */ ctx) {
     'checker:setDestinationWalletAddress',
     (_event, address) => checkerConfig.setDestinationWalletAddress(address)
   )
-  ipcMain.handle('checker:getWalletBalance', wallet.getBalance)
+  ipcMain.handle('checker:getCheckerWalletBalance', wallet.getBalance)
   ipcMain.handle(
     'checker:getScheduledRewards',
     ctx.getScheduledRewardsForAddress
   )
   ipcMain.handle(
-    'checker:getWalletTransactionsHistory',
+    'checker:getCheckerWalletTransactionsHistory',
     wallet.listTransactions
   )
   ipcMain.handle(

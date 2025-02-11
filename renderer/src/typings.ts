@@ -19,11 +19,11 @@ declare global {
       config: {
         getOnboardingCompleted: () => Promise<boolean>;
         setOnboardingCompleted: () => Promise<void>;
-        getWalletAddress: () => Promise<string>;
+        getCheckerWalletAddress: () => Promise<string>;
         getDestinationWalletAddress: () => Promise<string | undefined>;
         setDestinationWalletAddress: (address: string | undefined) => Promise<void>;
-        getWalletBalance: () => Promise<string>;
-        getWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>;
+        getCheckerWalletBalance: () => Promise<string>;
+        getCheckerWalletTransactionsHistory: () => Promise<(FILTransaction|FILTransactionProcessing)[]>;
         transferAllFundsToDestinationWallet: () => Promise<void>;
         openExternalURL: (url: string) => void;
         toggleOpenAtLogin: () => void;
