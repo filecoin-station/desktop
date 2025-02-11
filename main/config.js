@@ -57,7 +57,7 @@ const configStore = new Store({
   },
   beforeEachMigration: (_, context) => {
     log.info(
-      `Migrating config from ${context.fromVersion} → ` +
+      `Migrating checker-config from ${context.fromVersion} → ` +
         context.toVersion
     )
   }
