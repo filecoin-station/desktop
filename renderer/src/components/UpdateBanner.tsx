@@ -12,7 +12,7 @@ const UpdateBanner = () => {
     }
 
     reload()
-    const unsubscribeUpdateNotification = window.electron.events.onReadyToUpdate(() => {
+    const unsubscribeUpdateNotification = window.electron.checkerEvents.onReadyToUpdate(() => {
       setIsReadyToUpdate(true)
     })
 

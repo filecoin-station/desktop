@@ -24,14 +24,14 @@ const useCheckerActivity = (): CheckerActivity => {
   }, [])
 
   useEffect(() => {
-    const unsubscribeOnJobProcessed = window.electron.events.onJobProcessed(setTotalJobs)
+    const unsubscribeOnJobProcessed = window.electron.checkerEvents.onJobProcessed(setTotalJobs)
     return () => {
       unsubscribeOnJobProcessed()
     }
   }, [])
 
   useEffect(() => {
-    const unsubscribeOnActivityLogged = window.electron.events.onActivityLogged(activity => {
+    const unsubscribeOnActivityLogged = window.electron.checkerEvents.onActivityLogged(activity => {
       setActivities(activities => {
         const updatedActivities = [activity, ...activities]
         updatedActivities.length = Math.min(updatedActivities.length, 100)
