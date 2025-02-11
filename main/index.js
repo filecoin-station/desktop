@@ -121,7 +121,7 @@ const ctx = {
   },
 
   getScheduledRewards: () => wallet.getScheduledRewards(),
-  getCheckerWalletBalance: () => wallet.getBalance(),
+  getWalletBalance: () => wallet.getBalance(),
 
   manualCheckForUpdates: () => { throw new Error('never get here') },
   saveModuleLogsAs: () => { throw new Error('never get here') },
