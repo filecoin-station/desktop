@@ -20,9 +20,9 @@ vi.mock('src/lib/checker-config', () => ({
   getActivities: () => Promise.resolve([]),
   openBeryx: () => Promise.resolve()
 }))
-vi.mock('src/hooks/StationWallet')
-vi.mock('src/hooks/StationActivity')
-vi.mock('src/hooks/StationRewards')
+vi.mock('src/hooks/CheckerWallet')
+vi.mock('src/hooks/CheckerActivity')
+vi.mock('src/hooks/CheckerRewards')
 
 stubGlobalElectron()
 

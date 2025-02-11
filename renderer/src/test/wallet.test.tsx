@@ -6,7 +6,7 @@ import { renderApp, stubGlobalElectron } from './helpers'
 import Wallet from 'src/pages/wallet/Wallet'
 import { useEffect, useState } from 'react'
 
-vi.mock('src/hooks/StationWallet')
+vi.mock('src/hooks/CheckerWallet')
 vi.mock('src/pages/wallet/GridCanvas')
 
 const mockTransfer = vi.fn()
