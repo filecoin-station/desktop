@@ -11,7 +11,7 @@ import {
 } from 'src/lib/checker-config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import useWallet from 'src/hooks/CheckerWallet'
-import useStationActivity from 'src/hooks/Activity'
+import useStationActivity from 'src/hooks/CheckerActivity'
 import { Activity } from '../../../shared/typings'
 import useStationRewards from 'src/hooks/Rewards'
 import { stubGlobalElectron, renderApp } from './helpers'
