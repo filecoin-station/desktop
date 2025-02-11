@@ -17,8 +17,8 @@ describe('Transfer page', () => {
   describe('Wallet info', () => {
     beforeEach(() => {
       vi.mocked(useWallet).mockReturnValue({
-        stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-        stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+        checkerAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+        checkerAddress0x: '0x000000000000000000000000000000000000dEaD',
         destinationFilAddress: '',
         walletBalance: '0',
         walletTransactions: [],
@@ -47,8 +47,8 @@ describe('Transfer page', () => {
         }
 
         return {
-          stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-          stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+          checkerAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+          checkerAddress0x: '0x000000000000000000000000000000000000dEaD',
           destinationFilAddress,
           walletBalance: '0',
           walletTransactions: [],
@@ -108,8 +108,8 @@ describe('Transfer page', () => {
         }, [])
 
         return {
-          stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-          stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+          checkerAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+          checkerAddress0x: '0x000000000000000000000000000000000000dEaD',
           destinationFilAddress: '0x000000000000000000000000000000000000dEaD',
           walletBalance: balance,
           walletTransactions: [],

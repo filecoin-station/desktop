@@ -11,7 +11,7 @@ const mocks = vi.hoisted(() => {
   }
 })
 
-vi.mock('src/lib/station-config')
+vi.mock('src/lib/checker-config')
 vi.mock('react-router', async () => {
   const router = await vi.importActual('react-router')
 

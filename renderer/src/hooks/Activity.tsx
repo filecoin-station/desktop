@@ -5,11 +5,11 @@ import {
 } from 'src/lib/config'
 import { Activity } from 'src/typings'
 
-interface StationActivity {
+interface CheckerActivity {
   totalJobs: number;
   activities: Activity[] | [];
 }
-const useStationActivity = (): StationActivity => {
+const useCheckerActivity = (): CheckerActivity => {
   const [totalJobs, setTotalJobs] = useState<number>(0)
   const [activities, setActivities] = useState<Activity[]>([])
 
@@ -24,14 +24,14 @@ const useStationActivity = (): StationActivity => {
   }, [])
 
   useEffect(() => {
-    const unsubscribeOnJobProcessed = window.electron.stationEvents.onJobProcessed(setTotalJobs)
+    const unsubscribeOnJobProcessed = window.electron.events.onJobProcessed(setTotalJobs)
     return () => {
       unsubscribeOnJobProcessed()
     }
   }, [])
 
   useEffect(() => {
-    const unsubscribeOnActivityLogged = window.electron.stationEvents.onActivityLogged(activity => {
+    const unsubscribeOnActivityLogged = window.electron.events.onActivityLogged(activity => {
       setActivities(activities => {
         const updatedActivities = [activity, ...activities]
         updatedActivities.length = Math.min(updatedActivities.length, 100)
@@ -46,4 +46,4 @@ const useStationActivity = (): StationActivity => {
   return { totalJobs, activities }
 }
 
-export default useStationActivity
+export default useCheckerActivity

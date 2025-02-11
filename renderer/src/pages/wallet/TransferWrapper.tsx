@@ -11,7 +11,7 @@ import { openDocsLink } from 'src/lib/config'
 const SEND_THRESHOLD = 0.01
 
 const TransferWrapper = ({
-  stationAddress,
+  checkerAddress,
   destinationFilAddress,
   processingTransaction,
   walletBalance,
@@ -20,7 +20,7 @@ const TransferWrapper = ({
 }: {
   walletBalance: Wallet['walletBalance'];
   destinationFilAddress?: Wallet['destinationFilAddress'];
-  stationAddress?: Wallet['stationAddress'];
+  checkerAddress?: Wallet['checkerAddress'];
   processingTransaction: Wallet['processingTransaction'];
   editDestinationAddress: Wallet['editDestinationAddress'];
   transferAllFundsToDestinationWallet: Wallet['transferAllFundsToDestinationWallet'];
@@ -45,7 +45,7 @@ const TransferWrapper = ({
         destinationFilAddress={destinationFilAddress}
         processingTransaction={processingTransaction}
       />
-      {stationAddress && (
+      {checkerAddress && (
         <>
           <Transition
             on={!destinationFilAddress}

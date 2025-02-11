@@ -2,11 +2,11 @@ import { Activity, FILTransaction, FILTransactionProcessing } from 'src/typings'
 import pDebounce from 'p-debounce'
 
 export async function getOnboardingCompleted (): Promise<boolean> {
-  return await window.electron.stationConfig.getOnboardingCompleted()
+  return await window.electron.checkerConfig.getOnboardingCompleted()
 }
 
 export async function setOnboardingCompleted (): Promise<void> {
-  return await window.electron.stationConfig.setOnboardingCompleted()
+  return await window.electron.checkerConfig.setOnboardingCompleted()
 }
 
 export async function getActivities (): Promise<Activity[]> {
@@ -30,68 +30,68 @@ export function openReleaseNotes (): void {
 }
 
 export async function getDestinationWalletAddress (): Promise<string | undefined> {
-  return await window.electron.stationConfig.getDestinationWalletAddress()
+  return await window.electron.checkerConfig.getDestinationWalletAddress()
 }
 
 export async function setDestinationWalletAddress (address: string | undefined): Promise<void> {
-  return await window.electron.stationConfig.setDestinationWalletAddress(address)
+  return await window.electron.checkerConfig.setDestinationWalletAddress(address)
 }
 
-export async function getStationWalletAddress (): Promise<string> {
-  return await window.electron.stationConfig.getStationWalletAddress()
+export async function getCheckerWalletAddress (): Promise<string> {
+  return await window.electron.checkerConfig.getCheckerWalletAddress()
 }
 
-export async function getStationWalletBalance (): Promise<string> {
-  return await window.electron.stationConfig.getStationWalletBalance()
+export async function getCheckerWalletBalance (): Promise<string> {
+  return await window.electron.checkerConfig.getCheckerWalletBalance()
 }
 
-export const getStationWalletTransactionsHistory = pDebounce(
+export const getCheckerWalletTransactionsHistory = pDebounce(
   async function (): Promise<(FILTransaction|FILTransactionProcessing)[]> {
-    return await window.electron.stationConfig.getStationWalletTransactionsHistory()
+    return await window.electron.checkerConfig.getCheckerWalletTransactionsHistory()
   },
   0
 )
 
 export async function transferAllFundsToDestinationWallet (): Promise<void> {
-  return await window.electron.stationConfig.transferAllFundsToDestinationWallet()
+  return await window.electron.checkerConfig.transferAllFundsToDestinationWallet()
 }
 
 export function browseTransactionTracker (transactionHash: string): void {
-  return window.electron.stationConfig.openExternalURL(`https://beryx.zondax.ch/v1/search/fil/mainnet/address/${transactionHash}`)
+  return window.electron.checkerConfig.openExternalURL(`https://beryx.zondax.ch/v1/search/fil/mainnet/address/${transactionHash}`)
 }
 
 export function openExternalURL (url: string): void {
-  return window.electron.stationConfig.openExternalURL(url)
+  return window.electron.checkerConfig.openExternalURL(url)
 }
 
 export function openBeryx (): void {
-  return window.electron.stationConfig.openExternalURL('https://beryx.io/')
+  return window.electron.checkerConfig.openExternalURL('https://beryx.io/')
 }
 
 export function showTermsOfService (): void {
-  return window.electron.stationConfig.openExternalURL('https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4')
+  return window.electron.checkerConfig.openExternalURL('https://pl-strflt.notion.site/Station-Terms-Conditions-e97da76bb89f49e280c2897aebe4c41f?pvs=4')
 }
 
 export function openDocsLink () {
-  return window.electron.stationConfig.openExternalURL('https://docs.filstation.app/your-station-wallet')
+  return window.electron.checkerConfig.openExternalURL('https://docs.filstation.app/your-station-wallet')
 }
 
 export function toggleOpenAtLogin () {
-  return window.electron.stationConfig.toggleOpenAtLogin()
+  return window.electron.checkerConfig.toggleOpenAtLogin()
 }
 
 export function isOpenAtLogin () {
-  return window.electron.stationConfig.isOpenAtLogin()
+  return window.electron.checkerConfig.isOpenAtLogin()
 }
 
 export function exportSeedPhrase () {
-  return window.electron.stationConfig.exportSeedPhrase()
+  return window.electron.checkerConfig.exportSeedPhrase()
 }
 
 export function saveModuleLogsAs () {
-  return window.electron.stationConfig.saveModuleLogsAs()
+  return window.electron.checkerConfig.saveModuleLogsAs()
 }
 
 export function checkForUpdates () {
-  return window.electron.stationConfig.checkForUpdates()
+  return window.electron.checkerConfig.checkForUpdates()
 }

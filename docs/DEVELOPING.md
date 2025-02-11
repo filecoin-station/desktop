@@ -6,8 +6,8 @@
 
 ```mermaid
 graph
-  fil-stat-repo(github.com/CheckerNetwork/app) --> fil-stat-main(Station main process)
-  fil-stat-repo --> fil-stat-webui(Station WebUI)
+  fil-stat-repo(github.com/CheckerNetwork/app) --> fil-stat-main(Checker main process)
+  fil-stat-repo --> fil-stat-webui(Checker WebUI)
 
   saturn-l2-repo(https://github.com/filecoin-project/saturn-l2)
   --> saturn-l2-go(Saturn L2 Node binary)

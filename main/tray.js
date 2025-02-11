@@ -52,7 +52,7 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
       enabled: false
     },
     {
-      label: 'Open Station',
+      label: 'Open Checker',
       click: () => ctx.showUI()
     },
     { type: 'separator' },
@@ -77,7 +77,7 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
     },
     { type: 'separator' },
     {
-      label: 'Quit Station',
+      label: 'Quit Checker',
       click: () => app.quit(),
       accelerator: IS_MAC ? 'Command+Q' : undefined
     }

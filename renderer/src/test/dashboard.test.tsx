@@ -5,9 +5,9 @@ import {
   getActivities,
   getDestinationWalletAddress,
   getScheduledRewards,
-  getStationWalletAddress,
-  getStationWalletBalance,
-  getStationWalletTransactionsHistory
+  getCheckerWalletAddress,
+  getCheckerWalletBalance,
+  getCheckerWalletTransactionsHistory
 } from 'src/lib/config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import useWallet from 'src/hooks/Wallet'
@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react'
 vi.mock('src/hooks/StationWallet')
 vi.mock('src/hooks/StationActivity')
 vi.mock('src/hooks/StationRewards')
-vi.mock('src/lib/station-config')
+vi.mock('src/lib/checker-config')
 
 stubGlobalElectron()
 
@@ -31,9 +31,9 @@ describe('Dashboard page', () => {
 
   describe('Unpopulated', () => {
     beforeAll(() => {
-      vi.mocked(getStationWalletBalance).mockReturnValue(Promise.resolve('0'))
-      vi.mocked(getStationWalletTransactionsHistory).mockReturnValue(Promise.resolve([]))
-      vi.mocked(getStationWalletAddress).mockReturnValue(
+      vi.mocked(getCheckerWalletBalance).mockReturnValue(Promise.resolve('0'))
+      vi.mocked(getCheckerWalletTransactionsHistory).mockReturnValue(Promise.resolve([]))
+      vi.mocked(getCheckerWalletAddress).mockReturnValue(
         Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa')
       )
       vi.mocked(getDestinationWalletAddress).mockReturnValue(Promise.resolve(''))
@@ -43,8 +43,8 @@ describe('Dashboard page', () => {
 
     beforeEach(() => {
       vi.mocked(useWallet).mockReturnValue({
-        stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-        stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+        checkerAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+        checkerAddress0x: '0x000000000000000000000000000000000000dEaD',
         destinationFilAddress: '',
         walletBalance: '0',
         walletTransactions: [],
@@ -85,8 +85,8 @@ describe('Dashboard page', () => {
       vi.useFakeTimers()
 
       vi.mocked(useWallet).mockReturnValue({
-        stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-        stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+        checkerAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+        checkerAddress0x: '0x000000000000000000000000000000000000dEaD',
         destinationFilAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellfff2rg',
         walletBalance: '0',
         walletTransactions: [],

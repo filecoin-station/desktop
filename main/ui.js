@@ -80,7 +80,7 @@ module.exports = async function (ctx) {
     if (app.dock) app.dock.show()
     ui.show()
   }
-  // We want the Station to start hidden in the tray.
+  // We want the Checker to start hidden in the tray.
   // However, when the user did not complete the onboarding flow,
   // we need to show the app to ask them to finish the setup process
   if (!getOnboardingCompleted()) {

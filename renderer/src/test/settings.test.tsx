@@ -3,7 +3,7 @@ import { checkForUpdates, exportSeedPhrase, isOpenAtLogin, saveModuleLogsAs } fr
 import Settings from 'src/pages/settings/Settings'
 import { describe, expect, test, vi } from 'vitest'
 
-vi.mock('src/lib/station-config')
+vi.mock('src/lib/checker-config')
 
 const mocks = vi.hoisted(() => {
   return {

@@ -26,7 +26,7 @@ let nextVersion
 const store = new Store({ name: 'updater' })
 
 function quitAndInstall () {
-  log.info('Restarting Station to install the new version')
+  log.info('Restarting Checker to install the new version')
   beforeQuitCleanup()
   store.set('upgradeToVersion', nextVersion)
   autoUpdater.quitAndInstall()
@@ -202,7 +202,7 @@ function onUpdateDownloaded (ctx, { version /*, releaseNotes */ }) {
   if (checkingManually) {
     // when checking manually, show the dialog immediately
     showUpdateDialog()
-    // also don't trigger the automatic Station restart
+    // also don't trigger the automatic Checker restart
     // showUpdateDialog() offers the user to restart
   } else if (ctx.isShowingUI) {
     // show unobtrusive notification + dialog on click

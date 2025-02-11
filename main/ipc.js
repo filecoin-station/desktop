@@ -21,7 +21,7 @@ const ipcMainEvents = Object.freeze({
 })
 
 function setupIpcMain (/** @type {Context} */ ctx) {
-  // Station-wide config
+  // Checker-wide config
   ipcMain.handle(
     'checker:getOnboardingCompleted',
     config.getOnboardingCompleted

@@ -10,10 +10,10 @@ import { renderApp, stubGlobalElectron } from './helpers'
 
 const mockedSetDestinationWalletAddress = vi.fn()
 
-vi.mock('src/lib/station-config', () => ({
-  getStationWalletBalance: () => Promise.resolve(0),
-  getStationWalletTransactionsHistory: () => Promise.resolve([]),
-  getStationWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
+vi.mock('src/lib/checker-config', () => ({
+  getCheckerWalletBalance: () => Promise.resolve(0),
+  getCheckerWalletTransactionsHistory: () => Promise.resolve([]),
+  getCheckerWalletAddress: () => Promise.resolve('f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa'),
   getDestinationWalletAddress: () => Promise.resolve(''),
   setDestinationWalletAddress: () => mockedSetDestinationWalletAddress,
   getScheduledRewards: () => Promise.resolve('0.0'),
@@ -31,8 +31,8 @@ describe('Dashboard wallet display', () => {
     vi.clearAllMocks()
 
     vi.mocked(useWallet).mockReturnValue({
-      stationAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
-      stationAddress0x: '0x000000000000000000000000000000000000dEaD',
+      checkerAddress: 'f16m5slrkc6zumruuhdzn557a5sdkbkiellron4qa',
+      checkerAddress0x: '0x000000000000000000000000000000000000dEaD',
       destinationFilAddress: '',
       walletBalance: '0',
       walletTransactions: [],

@@ -1,11 +1,11 @@
-# Station module interface
+# Checker module interface
 
 1. A module itself is a long-running executable, which
     - performs its business logic
     - writes informative messages to `stdio`
     - exposes stats via a builtin webserver
 
-1. A module needs to have its __binaries hosted__ on HTTPS accessible URLs, so that Station can download updates. Path patterns are flexible, GitHub Releases would be nice.
+1. A module needs to have its __binaries hosted__ on HTTPS accessible URLs, so that Checker can download updates. Path patterns are flexible, GitHub Releases would be nice.
 
     Example:
     ```
@@ -38,8 +38,8 @@
 
 4. A module communicates activity by writing to its `stdout` stream:
     - `API: $1` The module has launched and `$1` can be queried for fetching module stats (see below)
-    - `INFO: $1` `$1` will be displayed to the user inside Station's Activity Log
-    - `ERROR: $1` `$1` will be displayed to the user inside Station's Activity Log, with a warning icon
+    - `INFO: $1` `$1` will be displayed to the user inside Checker's Activity Log
+    - `ERROR: $1` `$1` will be displayed to the user inside Checker's Activity Log, with a warning icon
     - `$1` all log lines will be stored in a module-specific log file, which can be submitted to Sentry for error handling
 
 5. A module is expected to have provided its `API` URL in `<=500ms`
@@ -61,8 +61,8 @@ the following fields:
     process restarts, somewhere in `ROOT_DIR`.
     
     The module may include additional fields in the JSON response, although
-    these will be ignored by Station.
+    these will be ignored by Checker.
 
 7. A module can be told to shut down via signal `SIGTERM`
 
-8. A module can shut down at any time, which is always considered an error. Its exit will be shown in Station's UI, and the last 100 lines of its output streams forwarded to Sentry. The module won't automatically be restarted by Station (for now).
+8. A module can shut down at any time, which is always considered an error. Its exit will be shown in Checker's UI, and the last 100 lines of its output streams forwarded to Sentry. The module won't automatically be restarted by Checker (for now).
