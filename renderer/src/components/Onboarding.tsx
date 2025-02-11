@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import Back from 'src/assets/img/icons/arrow-left.svg?react'
 import Page from 'src/assets/img/icons/paginator-page.svg?react'
 import CurrentPage from 'src/assets/img/icons/paginator-current.svg?react'
-import { showTermsOfService } from 'src/lib/station-config'
+import { showTermsOfService } from 'src/lib/checker-config'
 
 interface FooterProps {
   page: number;
@@ -64,7 +64,7 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
           <div className='min-h-[372px]'>
             <div className='pb-20 px-20 pt-16 min-h-[250px]'>
               <p className="text-body-s my-3">
-                Station securely connects your computer to Filecoin&apos;s global peer-to-peer network, which
+                Checker securely connects your computer to Filecoin&apos;s global peer-to-peer network, which
                 rewards you for your participation. Once you&apos;ve connected, you will begin completing network
                 jobs.
               </p>
@@ -113,14 +113,14 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
           <div className='min-h-[372px]'>
             <div className='pb-8 px-20 pt-8 min-h-[250px]'>
               <p className="text-body-s my-3">
-                Station asks for your consent to use your personal data to store and/or access information on a
+                Checker asks for your consent to use your personal data to store and/or access information on a
                 device. Your personal data will be processed and information from your device (cookies, unique
                 identifiers, and other device data) may be stored by, accessed by and shared with third party
                 vendors, or used specifically by this app.
               </p>
               <p className="text-body-s my-3">
                 By clicking {'"'}Create Wallet{'"'} or otherwise continuing to use this service, you agree, you
-                have read, understand and accept Station&apos;s
+                have read, understand and accept Checker&apos;s
                 {' '}
                 <span
                   className="text-primary cursor-pointer"
