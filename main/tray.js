@@ -80,7 +80,7 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
 }
 
 module.exports = async function (/** @type {Context} */ ctx) {
-  tray = new Tray(getTrayIcon(false, core.isOnline()))
+  tray = new Tray(getTrayIcon(false, true))
 
   const contextMenu = createContextMenu(ctx)
   tray.setToolTip('Checker')
