@@ -62,7 +62,7 @@ const Settings = () => {
           />
           <SettingsGroupItem
             title='Subnet logs'
-            description={`Saving subnet logs in the Station app helps users track 
+            description={`Saving subnet logs in the Checker app helps users track 
             and diagnose issues, providing insights into the performance of individual 
             components for effective troubleshooting.`}
             input={

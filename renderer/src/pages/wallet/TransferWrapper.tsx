@@ -100,7 +100,7 @@ const TransferWrapper = ({
           onClick={() => openDocsLink()}
           className='focus-visible:outline-slate-400'
         >
-          Learn more about your Station wallet
+          Learn more about your Checker wallet
         </Text>
       </footer>
     </section>

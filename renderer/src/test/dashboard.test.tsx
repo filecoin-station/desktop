@@ -17,9 +17,9 @@ import useCheckerRewards from 'src/hooks/CheckerRewards'
 import { stubGlobalElectron, renderApp } from './helpers'
 import { useEffect, useState } from 'react'
 
-vi.mock('src/hooks/StationWallet')
-vi.mock('src/hooks/StationActivity')
-vi.mock('src/hooks/StationRewards')
+vi.mock('src/hooks/CheckerWallet')
+vi.mock('src/hooks/CheckerActivity')
+vi.mock('src/hooks/CheckerRewards')
 vi.mock('src/lib/checker-config')
 
 stubGlobalElectron()

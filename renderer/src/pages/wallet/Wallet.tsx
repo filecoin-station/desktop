@@ -24,12 +24,12 @@ const Wallet = () => {
       <div className='px-9 mt-28 flex flex-col gap-5 animate-fadeIn'>
         <BorderedBox className='p-5 flex flex-col gap-2'>
           <Text font='mono' size='3xs' color='primary' uppercase>
-              &#47;&#47; Station wallet balance ... :
+              &#47;&#47; Checker wallet balance ... :
           </Text>
           <Text font='mono' size='s'>{formatFilValue(walletBalance)}{' '}FIL</Text>
         </BorderedBox>
         <BorderedBox className='p-5 flex flex-col gap-2'>
-          <Text font='mono' size='3xs' color='primary' uppercase>&#47;&#47; Station address ... :</Text>
+          <Text font='mono' size='3xs' color='primary' uppercase>&#47;&#47; Checker address ... :</Text>
           <div className='flex gap-5 items-center'>
             <Address address={checkerAddress} />
             <Address address={checkerAddress0x} />
