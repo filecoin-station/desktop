@@ -110,7 +110,7 @@ class WalletBackend {
     } catch {}
     let seed
     try {
-      seed = await keytar.getPassword('station-wallet-0x', 'seed')
+      seed = await keytar.getPassword('filecoin-station-wallet-0x', 'seed')
     } catch {}
     if (seed) {
       await keytar.setPassword(service, 'seed', seed)
