@@ -44,7 +44,7 @@ const inTest = (process.env.NODE_ENV === 'test')
 const isDev = !app.isPackaged && !inTest
 
 log.info(format(
-  'Filecoin Station build version: %s %s-%s%s%s',
+  'Checker build version: %s %s-%s%s%s',
   BUILD_VERSION,
   os.platform(),
   os.arch(),

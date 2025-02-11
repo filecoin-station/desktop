@@ -22,7 +22,7 @@ module.exports = async function (ctx) {
 
   const dimensions = screen.getPrimaryDisplay().size
   const ui = new BrowserWindow({
-    title: 'Filecoin Station',
+    title: 'Checker',
     show: false, // we show it via ready-to-show
     width: Math.min(dimensions.width, 1440),
     height: Math.min(dimensions.height, 900),
@@ -94,8 +94,8 @@ module.exports = async function (ctx) {
     event.preventDefault()
     if (!getTrayOperationExplained()) {
       showDialogSync({
-        title: 'Closing Filecoin Station',
-        message: 'Station will continue running in the background.'
+        title: 'Closing Checker',
+        message: 'Checker will continue running in the background.'
       })
       setTrayOperationExplained()
     }

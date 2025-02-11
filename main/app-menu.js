@@ -37,7 +37,7 @@ function setupCheckForUpdatesMenuItem (ctx, menu) {
     visible: false
   })
 
-  // Filecoin Station menu
+  // Checker menu
   menu.items[0].submenu?.insert(1, checkForUpdates)
   menu.items[0].submenu?.insert(2, checkingForUpdates)
 }

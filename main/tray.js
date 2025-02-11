@@ -48,7 +48,7 @@ function getTrayIcon (readyToUpdate, isOnline) {
 const createContextMenu = (/** @type {Context} */ ctx) => {
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: `Filecoin Station v${CHECKER_VERSION}`,
+      label: `Checker v${CHECKER_VERSION}`,
       enabled: false
     },
     {
@@ -89,7 +89,7 @@ module.exports = async function (/** @type {Context} */ ctx) {
   tray = new Tray(getTrayIcon(false, core.isOnline()))
 
   const contextMenu = createContextMenu(ctx)
-  tray.setToolTip('Filecoin Station')
+  tray.setToolTip('Checker')
   tray.setContextMenu(contextMenu)
 
   setupIpcEventListeners(ctx)

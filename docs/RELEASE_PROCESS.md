@@ -1,6 +1,6 @@
 ## Overview
 
-Filecoin Station uses
+Checker uses
 [electron-build/auto-update](https://www.electron.build/auto-update) and a
 modified flow from
 [Electron Builder Action](https://github.com/samuelmeuli/action-electron-builder#electron-builder-action):
