@@ -6,7 +6,7 @@ import {
   getCheckerWalletBalance,
   getCheckerWalletTransactionsHistory,
   transferAllFundsToDestinationWallet
-} from 'src/lib/config'
+} from 'src/lib/checker-config'
 import {
   FILTransaction,
   FILTransactionProcessing,

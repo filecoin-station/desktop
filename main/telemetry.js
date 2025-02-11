@@ -3,7 +3,7 @@
 const { app } = require('electron')
 const { InfluxDB, Point } = require('@influxdata/influxdb-client')
 const { createHash } = require('node:crypto')
-const { getDestinationWalletAddress } = require('./config')
+const { getDestinationWalletAddress } = require('./checker-config')
 const wallet = require('./wallet')
 const Sentry = require('@sentry/node')
 const { platform, arch } = require('node:os')

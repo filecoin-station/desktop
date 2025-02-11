@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { fireEvent, act, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import 'src/lib/config'
+import 'src/lib/checker-config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import useStationActivity from 'src/hooks/Activity'
 import useWallet from 'src/hooks/Wallet'

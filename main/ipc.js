@@ -2,7 +2,7 @@
 
 const { ipcMain } = require('electron')
 
-const config = require('./config')
+const config = require('./checker-config')
 const wallet = require('./wallet')
 
 /** @typedef {import('./typings').Context} Context */

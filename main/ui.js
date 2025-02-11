@@ -8,7 +8,7 @@ const {
   getTrayOperationExplained,
   setTrayOperationExplained,
   getOnboardingCompleted
-} = require('./config')
+} = require('./checker-config')
 const { showDialogSync } = require('./dialog')
 const wallet = require('./wallet')
 

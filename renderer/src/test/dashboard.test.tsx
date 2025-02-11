@@ -8,7 +8,7 @@ import {
   getCheckerWalletAddress,
   getCheckerWalletBalance,
   getCheckerWalletTransactionsHistory
-} from 'src/lib/config'
+} from 'src/lib/checker-config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import useWallet from 'src/hooks/Wallet'
 import useStationActivity from 'src/hooks/Activity'

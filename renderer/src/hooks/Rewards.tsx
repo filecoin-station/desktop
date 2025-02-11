@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { getScheduledRewards } from 'src/lib/config'
+import { getScheduledRewards } from 'src/lib/checker-config'
 import useWallet from 'src/hooks/Wallet'
 import { formattedFilToBigInt } from 'src/lib/utils'
 import { voyagerAirdrop } from './voyagerAirdrop'

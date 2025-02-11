@@ -6,7 +6,7 @@ import EditDestinationAddressForm from './EditDestinationAddressForm'
 import { CSSProperties, useEffect, useRef, useState } from 'react'
 import Transition from 'src/components/Transition'
 import GridCanvas from './GridCanvas'
-import { openDocsLink } from 'src/lib/config'
+import { openDocsLink } from 'src/lib/checker-config'
 
 const SEND_THRESHOLD = 0.01
 

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 
-import { getOnboardingCompleted, setOnboardingCompleted, showTermsOfService } from 'src/lib/config'
+import { getOnboardingCompleted, setOnboardingCompleted, showTermsOfService } from 'src/lib/checker-config'
 import Onboarding from 'src/pages/onboarding/Onboarding'
 import { BrowserRouter } from 'react-router'
 

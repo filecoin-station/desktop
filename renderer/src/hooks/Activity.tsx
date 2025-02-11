@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import {
   getActivities,
   getTotalJobsCompleted
-} from 'src/lib/config'
+} from 'src/lib/checker-config'
 import { Activity } from 'src/typings'
 
 interface CheckerActivity {

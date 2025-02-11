@@ -6,7 +6,7 @@ import GithubIcon from 'src/assets/img/icons/github.svg?react'
 import DocsIcon from 'src/assets/img/icons/docs.svg?react'
 import ExplorerIcon from 'src/assets/img/icons/explorer.svg?react'
 import { openExplorerLink } from 'src/lib/utils'
-import { openExternalURL } from 'src/lib/config'
+import { openExternalURL } from 'src/lib/checker-config'
 
 const ModuleLink = ({ children, onClick }: {children: ReactNode; onClick: () => void}) => (
   <Text
