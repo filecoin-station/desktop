@@ -18,7 +18,7 @@ const ConfigKeys = {
 
 const configStore = new Store({
   migrations: {
-    '>x': store => {
+    '>=3.0.0': store => {
       const migration = [
         {
           from: 'station.OnboardingCompleted',
