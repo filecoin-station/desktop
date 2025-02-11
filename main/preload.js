@@ -22,7 +22,7 @@ contextBridge.exposeInMainWorld('electron', {
   getScheduledRewards: () =>
     ipcRenderer.invoke('checker:getScheduledRewards'),
 
-  config: {
+  checkerConfig: {
     getOnboardingCompleted: () =>
       ipcRenderer.invoke('checker:getOnboardingCompleted'),
     setOnboardingCompleted: () =>
@@ -50,7 +50,7 @@ contextBridge.exposeInMainWorld('electron', {
     saveModuleLogsAs: () => ipcRenderer.invoke('checker:saveModuleLogsAs'),
     checkForUpdates: () => ipcRenderer.invoke('checker:checkForUpdates')
   },
-  events: {
+  checkerEvents: {
     onActivityLogged: (/** @type {(value: Activity) => void} */ callback) => {
       /** @type {(event: IpcRendererEvent, ...args: any[]) => void} */
       const listener = (_event, activities) => callback(activities)
