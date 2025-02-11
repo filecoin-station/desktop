@@ -2,7 +2,7 @@
 
 const { ipcMain } = require('electron')
 
-const config = require('./checker-config')
+const checkerConfig = require('./checker-config')
 const wallet = require('./wallet')
 
 /** @typedef {import('./typings').Context} Context */
@@ -24,21 +24,21 @@ function setupIpcMain (/** @type {Context} */ ctx) {
   // Checker-wide config
   ipcMain.handle(
     'checker:getOnboardingCompleted',
-    config.getOnboardingCompleted
+    checkerConfig.getOnboardingCompleted
   )
   ipcMain.handle(
     'checker:setOnboardingCompleted',
-    (_event) => config.setOnboardingCompleted()
+    (_event) => checkerConfig.setOnboardingCompleted()
   )
   // Wallet-wide config
   ipcMain.handle('checker:getWalletAddress', wallet.getAddress)
   ipcMain.handle(
     'checker:getDestinationWalletAddress',
-    config.getDestinationWalletAddress
+    checkerConfig.getDestinationWalletAddress
   )
   ipcMain.handle(
     'checker:setDestinationWalletAddress',
-    (_event, address) => config.setDestinationWalletAddress(address)
+    (_event, address) => checkerConfig.setDestinationWalletAddress(address)
   )
   ipcMain.handle('checker:getWalletBalance', wallet.getBalance)
   ipcMain.handle(
