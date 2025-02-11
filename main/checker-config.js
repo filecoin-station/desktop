@@ -63,7 +63,7 @@ const configStore = new Store({
   }
 })
 
-log.info('Loading configuration from', configStore.path)
+log.info('Loading Checker configuration from', configStore.path)
 
 let OnboardingCompleted =
   /** @type {boolean} */
