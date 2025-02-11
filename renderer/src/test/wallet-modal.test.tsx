@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 import 'src/lib/checker-config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import useStationActivity from 'src/hooks/Activity'
-import useWallet from 'src/hooks/Wallet'
+import useWallet from 'src/hooks/CheckerWallet'
 import useStationRewards from 'src/hooks/Rewards'
 import { renderApp, stubGlobalElectron } from './helpers'
 

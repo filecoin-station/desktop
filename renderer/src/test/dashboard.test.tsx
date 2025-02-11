@@ -10,7 +10,7 @@ import {
   getCheckerWalletTransactionsHistory
 } from 'src/lib/checker-config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
-import useWallet from 'src/hooks/Wallet'
+import useWallet from 'src/hooks/CheckerWallet'
 import useStationActivity from 'src/hooks/Activity'
 import { Activity } from '../../../shared/typings'
 import useStationRewards from 'src/hooks/Rewards'

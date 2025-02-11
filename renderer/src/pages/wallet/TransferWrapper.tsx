@@ -1,5 +1,5 @@
 import Text from 'src/components/Text'
-import { Wallet } from 'src/hooks/Wallet'
+import { Wallet } from 'src/hooks/CheckerWallet'
 import DestinationAddressForm from './DestinationAddressForm'
 import BalanceControl from './BalanceControl'
 import EditDestinationAddressForm from './EditDestinationAddressForm'

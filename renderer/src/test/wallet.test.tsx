@@ -1,5 +1,5 @@
 import { act, fireEvent, screen, waitFor } from '@testing-library/react'
-import useWallet from 'src/hooks/Wallet'
+import useWallet from 'src/hooks/CheckerWallet'
 import { truncateString } from 'src/lib/utils'
 import { describe, expect, test, vi } from 'vitest'
 import { renderApp, stubGlobalElectron } from './helpers'
