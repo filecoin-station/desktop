@@ -16,7 +16,7 @@ declare global {
 
       getScheduledRewards: () => Promise<string>;
 
-      config: {
+      checkerConfig: {
         getOnboardingCompleted: () => Promise<boolean>;
         setOnboardingCompleted: () => Promise<void>;
         getCheckerWalletAddress: () => Promise<string>;
@@ -32,7 +32,7 @@ declare global {
         saveSubnetLogsAs: () => void;
         checkForUpdates: () => void;
       };
-      events: {
+      checkerEvents: {
         onActivityLogged: (callback: (activity: Activity) => void) => () => void;
         onJobProcessed: (callback: (value: number) => void) => () => void;
         onEarningsChanged: (callback: (value: number) => void) => () => void;
