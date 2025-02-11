@@ -11,9 +11,9 @@ import {
 } from 'src/lib/checker-config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
 import useWallet from 'src/hooks/CheckerWallet'
-import useStationActivity from 'src/hooks/CheckerActivity'
+import useCheckerActivity from 'src/hooks/CheckerActivity'
 import { Activity } from '../../../shared/typings'
-import useStationRewards from 'src/hooks/Rewards'
+import useCheckerRewards from 'src/hooks/Rewards'
 import { stubGlobalElectron, renderApp } from './helpers'
 import { useEffect, useState } from 'react'
 
@@ -54,11 +54,11 @@ describe('Dashboard page', () => {
         processingTransaction: undefined
       })
 
-      vi.mocked(useStationActivity).mockReturnValue({
+      vi.mocked(useCheckerActivity).mockReturnValue({
         totalJobs: 0,
         activities: []
       })
-      vi.mocked(useStationRewards).mockReturnValue({
+      vi.mocked(useCheckerRewards).mockReturnValue({
         totalRewardsReceived: BigInt(1e18),
         scheduledRewards: BigInt(100 * 1e18),
         historicalRewards: []
@@ -96,7 +96,7 @@ describe('Dashboard page', () => {
         processingTransaction: undefined
       })
 
-      vi.mocked(useStationRewards).mockImplementation(() => {
+      vi.mocked(useCheckerRewards).mockImplementation(() => {
         const [mockedRewards, setMockedRewards] = useState(0n)
 
         useEffect(() => {
@@ -112,7 +112,7 @@ describe('Dashboard page', () => {
         }
       })
 
-      vi.mocked(useStationActivity).mockImplementation(() => {
+      vi.mocked(useCheckerActivity).mockImplementation(() => {
         const [mockedActivities, setMockedActivities] = useState<Activity[]>([])
         const [mockedJobs, setMockedJobs] = useState(100)
 

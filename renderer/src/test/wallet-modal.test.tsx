@@ -3,9 +3,9 @@ import { fireEvent, act, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import 'src/lib/checker-config'
 import Dashboard from 'src/pages/dashboard/Dashboard'
-import useStationActivity from 'src/hooks/CheckerActivity'
+import useCheckerActivity from 'src/hooks/CheckerActivity'
 import useWallet from 'src/hooks/CheckerWallet'
-import useStationRewards from 'src/hooks/Rewards'
+import useCheckerRewards from 'src/hooks/Rewards'
 import { renderApp, stubGlobalElectron } from './helpers'
 
 const mockedSetDestinationWalletAddress = vi.fn()
@@ -42,11 +42,11 @@ describe('Dashboard wallet display', () => {
       transferAllFundsToDestinationWallet: async () => undefined
     })
 
-    vi.mocked(useStationActivity).mockReturnValue({
+    vi.mocked(useCheckerActivity).mockReturnValue({
       totalJobs: 0,
       activities: []
     })
-    vi.mocked(useStationRewards).mockReturnValue({
+    vi.mocked(useCheckerRewards).mockReturnValue({
       totalRewardsReceived: BigInt(1e18),
       scheduledRewards: undefined,
       historicalRewards: []
