@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, type JSX } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router'
 import { getOnboardingCompleted, setOnboardingCompleted } from 'src/lib/station-config'
 import Onboarding from 'src/components/Onboarding'

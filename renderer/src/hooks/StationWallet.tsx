@@ -35,7 +35,7 @@ const useWallet = (): Wallet => {
   const [processingTransaction, setProcessingTransaction] = useState<FILTransactionProcessing>()
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
-  const processingTxRef = useRef<typeof processingTransaction>(undefined)
+  const processingTxRef = useRef<typeof processingTransaction>()
   processingTxRef.current = processingTransaction
 
   const setTransactions = useCallback((
