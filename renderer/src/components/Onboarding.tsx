@@ -58,15 +58,14 @@ const Onboarding: FC<OnboardingProps> = ({ onFinish }) => {
         >
           <div className='bg-black px-20 py-16  rounded-t-[10px] min-h-[276px] flex'>
             <h1 className="font-title text-white leading-[3.25rem] text-header-m my-auto">
-              Join the Filecoin Economy.
+              Join the Checker Network.
             </h1>
           </div>
           <div className='min-h-[372px]'>
             <div className='pb-20 px-20 pt-16 min-h-[250px]'>
               <p className="text-body-s my-3">
-                Checker securely connects your computer to Filecoin&apos;s global peer-to-peer network, which
-                rewards you for your participation. Once you&apos;ve connected, you will begin completing network
-                jobs.
+                Checker securely connects your computer to the global peer-to-peer Checker Network, which rewards
+                you for your participation. Once you&apos;ve connected, you will begin completing checker jobs.
               </p>
             </div>
             <div className='pb-20 bottom-0 px-20'>
