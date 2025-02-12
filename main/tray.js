@@ -17,11 +17,13 @@ const { formatTokenValue } = require('./utils')
 let tray = null
 
 const icons = {
-  ok: icon('ok'),
-  attention: icon('attention')
+  on: icon('on'),
+  off: icon('off'),
+  updateOn: icon('update'),
+  updateOff: icon('update-off')
 }
 
-function icon (/** @type {'ok' | 'attention'} */ state) {
+function icon (/** @type {'on' | 'off' | 'update' | 'update-off'} */ state) {
   const dir = path.resolve(path.join(__dirname, '../assets/tray'))
   const file = IS_MAC ? `${state}-macos.png` : `${state}.png`
   const image = nativeImage.createFromPath(path.join(dir, file))
@@ -34,9 +36,13 @@ function icon (/** @type {'ok' | 'attention'} */ state) {
  * @param {boolean} isOnline
  */
 function getTrayIcon (readyToUpdate, isOnline) {
-  return (readyToUpdate || !isOnline)
-    ? icons.attention
-    : icons.ok
+  return readyToUpdate
+    ? isOnline
+      ? icons.updateOn
+      : icons.updateOff
+    : isOnline
+      ? icons.on
+      : icons.off
 }
 
 const createContextMenu = (/** @type {Context} */ ctx) => {
@@ -80,7 +86,7 @@ const createContextMenu = (/** @type {Context} */ ctx) => {
 }
 
 module.exports = async function (/** @type {Context} */ ctx) {
-  tray = new Tray(getTrayIcon(false, true))
+  tray = new Tray(getTrayIcon(false, core.isOnline()))
 
   const contextMenu = createContextMenu(ctx)
   tray.setToolTip('Checker')
