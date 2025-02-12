@@ -11,6 +11,7 @@ import Wallet from 'src/pages/wallet/Wallet'
 import Modules from 'src/pages/modules/Modules'
 import { DialogProvider } from './components/DialogProvider'
 import { TooltipProvider } from '@radix-ui/react-tooltip'
+import type { JSX } from 'react'
 
 const App = ():JSX.Element => {
   return (
